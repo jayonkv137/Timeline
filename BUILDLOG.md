@@ -86,4 +86,23 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P1.S2 — Layout shell
 ---
 
+## 2026-07-08 01:50 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P1.S2 — Layout shell
+- **Did:**
+  - Designed the three-column layout: sidebar (240px width), main chat area (flexible), and right-rail agency panel (360px width) in `web/src/App.tsx`.
+  - Built the `InfoPopover` and `SectionHeader` components in `web/src/components/InfoPopover.tsx` to handle popovers.
+  - Implemented popover interaction logic matching the prototype: mouse-click outside dismissal, Escape-key dismissal, click / Enter/Space key toggling, and proper ARIA role attributes.
+  - Created Zustand state store in `web/src/store.ts` mapping the exact interface properties from Step 2's JSON schemas.
+  - Added visual headers for all five rail panels (Goal, Direction, Decisions, Timeline, How) using verbatim text descriptions from the brief.
+  - Staged and committed changes as `P1.S2`.
+- **Decisions made:**
+  - Placed popover trigger buttons inline and styled them similarly to the prototype's clean circle-info elements to ensure aesthetic symmetry.
+  - Wrote specific inline styles within `App.tsx` and `InfoPopover.tsx` as adapted from the prototype code to reproduce the Figma prototype presentation.
+  - Commented out unused destructured variables (`selectedPairIdx`, `panelBundle`, `activePair`) in `App.tsx` to pass the strict TypeScript compilation checks (`TS6133`).
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Built the project with `npm run build` to confirm zero compiler errors. Manually verified popovers open, focus, and close correctly.
+- **Next:** P1.S3 — Chat column
+---
+
+
 
