@@ -51,3 +51,20 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Verification:** All 5 schemas pass `Draft202012Validator.check_schema()` — valid JSON Schema draft 2020-12
 - **Next:** P0.S3 — Build the fixture (assigned to Claude Code)
 ---
+
+## 2026-07-08 01:35 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P0.S3 — Build the fixture
+- **Did:**
+  - Created `engine/scripts/build_fixture.py` to parse raw input ledger/results and write fixture files.
+  - Generated `data/chats/fixture_pair1/ledger.jsonl`, `snapshots.json`, `panel_bundle.json`, `state.json`, `dialogue.json`, and `README.md`.
+  - Staged and committed changes as `P0.S3`.
+- **Decisions made:**
+  - Joined multi-line action_id patterns (e.g. `U(1,\n1)` to `U(1,1)`) caused by copy-paste table formatting artifacts.
+  - Derived requirement creators using the rule that within a pair, U actions precede A actions in chronological order (user speaks first).
+  - Hardcoded verified panel metrics from `Stage 4 Pair 1 Results.md` into `panel_bundle.json` while verifying the ledger-derived numbers match exactly.
+  - Stubbed missing texts in `state.json` and `dialogue.json` with `"(not captured in fixture)"` to preserve validity against Step 2 schemas.
+- **Spec contradictions/gaps flagged:** none (arithmetic discrepancy between source chat inline calculations and raw ledger rows resolved: source chat calculations had minor summation errors, but the raw ledger rows were correct and matched corrected values in `Stage 4 Pair 1 Results.md`).
+- **Verification:** Custom diagnostic Python script checks that parsed ledger rows sum to Δ_you = 87.0, Δ_AI = 314.0 and yield 4 U / 10 A creator split. All generated files successfully validate against their respective JSON schemas via jsonschema validation.
+- **Next:** P0.S4 — The DoD tests
+---
+
