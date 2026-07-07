@@ -1,0 +1,259 @@
+{
+  "pairs": [
+    {
+      "pair": 1,
+      "direction": {
+        "you_pct": 21.7,
+        "ai_pct": 78.3
+      },
+      "decisions": {
+        "you_count": 4,
+        "ai_count": 10,
+        "latest_ai_example": "Final production scene generations must use the Style Anchor plus a texture crop plus a color swatch as triple-references"
+      },
+      "timeline": {
+        "pair": 1,
+        "delta_you": 87.0,
+        "delta_ai": 314.0,
+        "summary": "adding Style DNA framework",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 1",
+              "label": "R1",
+              "op": "create",
+              "delta_you": 14.0,
+              "delta_ai": 6.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 2",
+              "label": "R2",
+              "op": "create",
+              "delta_you": 15.0,
+              "delta_ai": 23.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 3",
+              "label": "R3",
+              "op": "create",
+              "delta_you": 12.0,
+              "delta_ai": 37.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 4",
+              "label": "R4",
+              "op": "create",
+              "delta_you": 3.0,
+              "delta_ai": 16.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 1",
+              "label": "R5",
+              "op": "create",
+              "delta_you": 10.0,
+              "delta_ai": 33.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 1",
+              "label": "R6",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 55.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 2",
+              "label": "R7",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 33.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 1",
+              "label": "R8",
+              "op": "create",
+              "delta_you": 2.0,
+              "delta_ai": 10.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 2",
+              "label": "R9",
+              "op": "create",
+              "delta_you": 3.0,
+              "delta_ai": 26.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 1",
+              "label": "R10",
+              "op": "create",
+              "delta_you": 1.0,
+              "delta_ai": 18.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 2",
+              "label": "R11",
+              "op": "create",
+              "delta_you": 0.0,
+              "delta_ai": 10.0,
+              "chip": "orange"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 1",
+              "label": "R12",
+              "op": "create",
+              "delta_you": 12.0,
+              "delta_ai": 14.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 2",
+              "label": "R13",
+              "op": "create",
+              "delta_you": 3.0,
+              "delta_ai": 18.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 3",
+              "label": "R14",
+              "op": "create",
+              "delta_you": 2.0,
+              "delta_ai": 15.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "open",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "open",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 2",
+              "origin": "AI",
+              "status": "open",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "open",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 2",
+              "origin": "AI",
+              "status": "open",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Style DNA & Production Bible",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Style DNA & Production Bible",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "(not captured in fixture)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "(not captured in fixture)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "(not captured in fixture)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "(not captured in fixture)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "(not captured in fixture)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 4,
+          "w_ai": 10,
+          "h_you": 47.0,
+          "h_ai": 239.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    }
+  ]
+}

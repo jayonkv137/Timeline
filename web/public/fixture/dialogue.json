@@ -1,0 +1,16 @@
+[
+  {
+    "pair": 1,
+    "speaker": "user",
+    "text": "(not captured in fixture)",
+    "attachments": [],
+    "ts": "2025-01-01T00:00:00Z"
+  },
+  {
+    "pair": 1,
+    "speaker": "ai",
+    "text": "(not captured in fixture)",
+    "attachments": [],
+    "ts": "2025-01-01T00:01:00Z"
+  }
+]
