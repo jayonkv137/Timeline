@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "snapshots.schema.json",
+  "title": "Snapshots",
+  "description": "Per-pair cumulative influence snapshots. Architecture §3 row 4, Pipeline Spec §10.4.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "t": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Pair index."
+      },
+      "delta_you": {
+        "type": "number",
+        "description": "Δ(t, you) — sum of scores where pair_added = t and speaker = U."
+      },
+      "delta_ai": {
+        "type": "number",
+        "description": "Δ(t, AI) — sum of scores where pair_added = t and speaker = A."
+      },
+      "c_you": {
+        "type": "number",
+        "description": "C(t, you) — cumulative sum of Δ(t', you) for t' ≤ t."
+      },
+      "c_ai": {
+        "type": "number",
+        "description": "C(t, AI) — cumulative sum of Δ(t', AI) for t' ≤ t."
+      }
+    },
+    "required": ["t", "delta_you", "delta_ai", "c_you", "c_ai"],
+    "additionalProperties": false
+  }
+}

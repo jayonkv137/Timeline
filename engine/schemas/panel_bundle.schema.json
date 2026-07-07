@@ -1,0 +1,305 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "panel_bundle.schema.json",
+  "title": "Panel Bundle",
+  "description": "Per-pair materialized panel data. Everything Panel Spec §6 names, pre-computed by the engine so the frontend does zero math. Architecture §3 row 5.",
+  "type": "object",
+  "properties": {
+    "pairs": {
+      "type": "array",
+      "description": "One entry per pair processed so far. The frontend scrubs by indexing into this array.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pair": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Pair index."
+          },
+          "direction": {
+            "type": "object",
+            "description": "Cumulative steering split as of this pair. Panel Spec §2.",
+            "properties": {
+              "you_pct": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "C(t,you) / (C(t,you) + C(t,AI)) × 100."
+              },
+              "ai_pct": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "C(t,AI) / (C(t,you) + C(t,AI)) × 100."
+              }
+            },
+            "required": ["you_pct", "ai_pct"],
+            "additionalProperties": false
+          },
+          "decisions": {
+            "type": "object",
+            "description": "Requirement-creator counts as of this pair. Panel Spec §3.",
+            "properties": {
+              "you_count": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Number of requirements whose earliest creation action is user."
+              },
+              "ai_count": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Number of requirements whose earliest creation action is AI."
+              },
+              "latest_ai_example": {
+                "type": ["string", "null"],
+                "description": "Text of the highest-pair AI-created requirement, truncated at a clause boundary. Null if none."
+              }
+            },
+            "required": ["you_count", "ai_count", "latest_ai_example"],
+            "additionalProperties": false
+          },
+          "timeline": {
+            "type": "object",
+            "description": "This pair's timeline row. Panel Spec §4.",
+            "properties": {
+              "pair": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Redundant pair index for self-containment."
+              },
+              "delta_you": {
+                "type": "number",
+                "description": "Δ(t, you) — user mass added this exchange."
+              },
+              "delta_ai": {
+                "type": "number",
+                "description": "Δ(t, AI) — AI mass added this exchange."
+              },
+              "summary": {
+                "type": "string",
+                "description": "≤ 5-word R-SUM summary line per Panel Spec §4.5."
+              },
+              "drawer": {
+                "type": "object",
+                "description": "Expanded drawer content for this exchange.",
+                "properties": {
+                  "requirements": {
+                    "type": "array",
+                    "description": "One per requirement created/revised in this exchange.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "outcome_id": {
+                          "type": "string",
+                          "description": "Which outcome this requirement belongs to."
+                        },
+                        "req_id": {
+                          "type": "string",
+                          "description": "Requirement id within its outcome."
+                        },
+                        "label": {
+                          "type": "string",
+                          "description": "Stable R-label for display, e.g. 'R1', 'R2a'."
+                        },
+                        "op": {
+                          "type": "string",
+                          "enum": ["create", "revise", "delete"],
+                          "description": "What happened to this requirement in this exchange."
+                        },
+                        "delta_you": {
+                          "type": "number",
+                          "description": "Δ(t, you, r) — user mass for this requirement this turn."
+                        },
+                        "delta_ai": {
+                          "type": "number",
+                          "description": "Δ(t, AI, r) — AI mass for this requirement this turn."
+                        },
+                        "chip": {
+                          "type": "string",
+                          "enum": ["blue", "grey", "orange"],
+                          "description": "blue = user-only (M(AI,r)=0), orange = AI-created (M(you,r)=0), grey = straddling. Evaluated as of viewed pair."
+                        }
+                      },
+                      "required": ["outcome_id", "req_id", "label", "op", "delta_you", "delta_ai", "chip"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "slots": {
+                    "type": "array",
+                    "description": "One per slot opened/resolved this exchange.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "slot_id": {
+                          "type": "string",
+                          "description": "Slot identifier."
+                        },
+                        "origin": {
+                          "type": "string",
+                          "enum": ["user", "AI"],
+                          "description": "Who raised the open question."
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": ["open", "resolved", "abandoned"],
+                          "description": "Slot lifecycle state."
+                        },
+                        "resolved_into": {
+                          "type": ["string", "null"],
+                          "description": "If resolved, the req_id it became."
+                        }
+                      },
+                      "required": ["slot_id", "origin", "status", "resolved_into"],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": ["requirements", "slots"],
+                "additionalProperties": false
+              }
+            },
+            "required": ["pair", "delta_you", "delta_ai", "summary", "drawer"],
+            "additionalProperties": false
+          },
+          "goal": {
+            "type": "object",
+            "description": "Goal section data. Panel Spec §1.",
+            "properties": {
+              "default_view": {
+                "type": "array",
+                "description": "The 2–4 nodes shown in collapsed view per the thread-collapse rules.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "outcome_id": {
+                      "type": "string",
+                      "description": "Outcome identifier."
+                    },
+                    "text": {
+                      "type": "string",
+                      "description": "Goal node text."
+                    },
+                    "depth": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "description": "Depth below root in the outcome tree."
+                    },
+                    "is_current": {
+                      "type": "boolean",
+                      "description": "True for exactly one node — the emphasized current goal."
+                    }
+                  },
+                  "required": ["outcome_id", "text", "depth", "is_current"],
+                  "additionalProperties": false
+                }
+              },
+              "full_tree": {
+                "type": "array",
+                "description": "The complete outcome tree for full expansion.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "outcome_id": {
+                      "type": "string"
+                    },
+                    "text": {
+                      "type": "string"
+                    },
+                    "depth": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "parent": {
+                      "type": ["string", "null"]
+                    },
+                    "children": {
+                      "type": "array",
+                      "items": { "type": "string" }
+                    }
+                  },
+                  "required": ["outcome_id", "text", "depth", "parent", "children"],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": ["default_view", "full_tree"],
+            "additionalProperties": false
+          },
+          "how": {
+            "type": "object",
+            "description": "HOW section — usage mode classification. Panel Spec §5, Pipeline Spec §10.5.",
+            "properties": {
+              "mode": {
+                "type": "string",
+                "enum": ["CENTAUR", "COPILOT", "AUTOPILOT", "QUIET"],
+                "description": "This exchange's classified mode."
+              },
+              "signals": {
+                "type": "object",
+                "description": "The raw signals used for mode classification.",
+                "properties": {
+                  "w_you": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Number of requirements created by user (this pair)."
+                  },
+                  "w_ai": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Number of requirements created by AI (this pair)."
+                  },
+                  "h_you": {
+                    "type": "number",
+                    "description": "Non-creation mass added by user (this pair)."
+                  },
+                  "h_ai": {
+                    "type": "number",
+                    "description": "Non-creation mass added by AI (this pair)."
+                  },
+                  "substantive_user": {
+                    "type": "boolean",
+                    "description": "True if any user SHAPER action or any user non-creation row scoring ≥ 2."
+                  }
+                },
+                "required": ["w_you", "w_ai", "h_you", "h_ai", "substantive_user"],
+                "additionalProperties": false
+              },
+              "split": {
+                "type": "object",
+                "description": "Running mode distribution — % of non-quiet exchanges per mode up to this pair.",
+                "properties": {
+                  "centaur_pct": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "description": "Percentage of non-quiet pairs classified as CENTAUR."
+                  },
+                  "copilot_pct": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "description": "Percentage of non-quiet pairs classified as COPILOT."
+                  },
+                  "autopilot_pct": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "description": "Percentage of non-quiet pairs classified as AUTOPILOT."
+                  }
+                },
+                "required": ["centaur_pct", "copilot_pct", "autopilot_pct"],
+                "additionalProperties": false
+              }
+            },
+            "required": ["mode", "signals", "split"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["pair", "direction", "decisions", "timeline", "goal", "how"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["pairs"],
+  "additionalProperties": false
+}

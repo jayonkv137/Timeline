@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ledger_row.schema.json",
+  "title": "Ledger Row",
+  "description": "One JSONL line in the influence ledger. Pipeline Spec §10.3 verbatim: (pair_added, action_id, speaker, role, outcome_id, req_id, score, kind).",
+  "type": "object",
+  "properties": {
+    "pair_added": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The pair whose pipeline pass produced this score row."
+    },
+    "action_id": {
+      "type": "string",
+      "description": "Action identifier, e.g. U(1,3) or A(1,12)."
+    },
+    "speaker": {
+      "type": "string",
+      "enum": ["U", "A"],
+      "description": "U = user, A = AI. Matches the action_id prefix."
+    },
+    "role": {
+      "type": "string",
+      "enum": ["SHAPER", "EXECUTOR", "OTHER"],
+      "description": "The action's role classification from Step 1a."
+    },
+    "outcome_id": {
+      "type": "string",
+      "description": "Which outcome this score belongs to, e.g. 'outcome 1'."
+    },
+    "req_id": {
+      "type": "string",
+      "description": "Which requirement within the outcome, e.g. 'req 1'. Always read as (outcome_id, req_id) together."
+    },
+    "score": {
+      "type": "number",
+      "description": "The influence score I(a→r). Creation actions receive 5 by rule; labeled actions 1–5 by Step 3."
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["creation", "labeled", "slot-origin"],
+      "description": "How this row was produced: creation (Step 2 create op), labeled (Step 3 label), slot-origin (Step 2 resolve op)."
+    }
+  },
+  "required": ["pair_added", "action_id", "speaker", "role", "outcome_id", "req_id", "score", "kind"],
+  "additionalProperties": false
+}

@@ -1,0 +1,271 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "state.schema.json",
+  "title": "State",
+  "description": "Full pipeline state after each pair. Architecture §3 row 2: actions, outcomes tree, intentions, requirements, slots, operations_log.",
+  "type": "object",
+  "properties": {
+    "actions": {
+      "type": "array",
+      "description": "All actions extracted by Step 1a across all pairs so far.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Action identifier: U(pair, seq) for user, A(pair, seq) for AI."
+          },
+          "type": {
+            "type": "string",
+            "description": "Open-vocabulary action type from Step 1a, e.g. 'specifying requirement'."
+          },
+          "text": {
+            "type": "string",
+            "description": "Third-person paraphrase of the action."
+          },
+          "role": {
+            "type": "string",
+            "enum": ["SHAPER", "EXECUTOR", "OTHER"],
+            "description": "Most load-bearing field: determines influence math."
+          },
+          "evidence_quote": {
+            "type": "string",
+            "description": "Verbatim quote from the dialogue that grounds this action."
+          }
+        },
+        "required": ["id", "type", "text", "role", "evidence_quote"],
+        "additionalProperties": false
+      }
+    },
+    "outcomes": {
+      "type": "array",
+      "description": "Goal/outcome tree from Step 1b. Parent/child links form the tree.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Outcome identifier, e.g. 'outcome 1'."
+          },
+          "text": {
+            "type": "string",
+            "description": "The outcome's deliverable description (displayed in Goal section)."
+          },
+          "turn_id": {
+            "type": "string",
+            "description": "Action id of the introducing action, anchoring the outcome in time."
+          },
+          "parent": {
+            "type": ["string", "null"],
+            "description": "Parent outcome_id, or null for root."
+          },
+          "children": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Child outcome_ids. Must agree bidirectionally with parent."
+          },
+          "related": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Related outcome_ids (cross-references)."
+          }
+        },
+        "required": ["id", "text", "turn_id", "parent", "children", "related"],
+        "additionalProperties": false
+      }
+    },
+    "intentions": {
+      "type": "array",
+      "description": "Higher-level intention groupings from Step 1c.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "intention_id": {
+            "type": "string",
+            "description": "Intention identifier, e.g. 'I1'."
+          },
+          "intention": {
+            "type": "string",
+            "description": "Short human-readable label for the intention."
+          },
+          "outcome_ids": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Outcome ids grouped under this intention."
+          }
+        },
+        "required": ["intention_id", "intention", "outcome_ids"],
+        "additionalProperties": false
+      }
+    },
+    "requirements": {
+      "type": "array",
+      "description": "All requirements extracted by Step 2 across all outcomes.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "outcome_id": {
+            "type": "string",
+            "description": "The outcome this requirement belongs to."
+          },
+          "req_id": {
+            "type": "string",
+            "description": "Requirement id unique within its outcome, e.g. 'req 1'. Always read as (outcome_id, req_id)."
+          },
+          "text": {
+            "type": "string",
+            "description": "The testable success-condition statement."
+          },
+          "type": {
+            "type": "string",
+            "enum": ["constraint", "preference", "ranking", "task", "other"],
+            "description": "Kind of requirement."
+          },
+          "status": {
+            "type": "string",
+            "enum": ["active", "revised", "deleted"],
+            "description": "Lifecycle status of this requirement."
+          },
+          "creation_action_ids": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Action ids that introduced this requirement (direct influence trace)."
+          },
+          "contributing_action_ids": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Action ids that supported without introducing (indirect influence trace)."
+          },
+          "implementation_action_ids": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Action ids that implemented this requirement."
+          },
+          "revise_action_ids": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Action ids from Step 3 REVISES labels, distinguishing revision from implementation."
+          },
+          "related_to": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Other req_ids within the same outcome (version-history chain)."
+          },
+          "explicit_or_implicit": {
+            "type": "string",
+            "enum": ["explicit", "implicit"],
+            "description": "Whether the requirement was directly stated or inferred."
+          },
+          "rationale": {
+            "type": "string",
+            "description": "Free-text audit trail for the extraction."
+          },
+          "created_at_pair": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "The pair in which this requirement was first created."
+          }
+        },
+        "required": [
+          "outcome_id", "req_id", "text", "type", "status",
+          "creation_action_ids", "contributing_action_ids",
+          "implementation_action_ids", "revise_action_ids",
+          "related_to", "explicit_or_implicit", "rationale",
+          "created_at_pair"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "slots": {
+      "type": "array",
+      "description": "Open slots (hedged/deferred decisions) from Step 2's open_slot ops.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "slot_id": {
+            "type": "string",
+            "description": "Slot identifier unique within its outcome, e.g. 'slot 1'."
+          },
+          "outcome_id": {
+            "type": "string",
+            "description": "The outcome this slot belongs to."
+          },
+          "text": {
+            "type": "string",
+            "description": "The hedged idea, third person."
+          },
+          "type": {
+            "type": "string",
+            "enum": ["constraint", "preference", "ranking", "task", "other"],
+            "description": "Carries forward on resolve."
+          },
+          "origin": {
+            "type": "string",
+            "enum": ["user", "AI"],
+            "description": "user = ceded decision, AI = hedged proposal."
+          },
+          "status": {
+            "type": "string",
+            "enum": ["open", "resolved", "abandoned"],
+            "description": "Lifecycle status of this slot."
+          },
+          "creation_action_ids": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Action ids that raised the hedge."
+          },
+          "contributing_action_ids": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Action ids adding context without raising the slot."
+          },
+          "resolved_into": {
+            "type": ["string", "null"],
+            "description": "If resolved, the req_id it became. Null if still open or abandoned."
+          }
+        },
+        "required": [
+          "slot_id", "outcome_id", "text", "type", "origin", "status",
+          "creation_action_ids", "contributing_action_ids", "resolved_into"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "operations_log": {
+      "type": "array",
+      "description": "Chronological log of all requirement and slot operations across all pairs.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pair": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "The pair in which this operation occurred."
+          },
+          "outcome_id": {
+            "type": "string",
+            "description": "Which outcome was affected."
+          },
+          "op": {
+            "type": "string",
+            "enum": ["create", "revise", "delete", "open_slot", "resolve", "abandon"],
+            "description": "The operation type (requirement ops + slot ops)."
+          },
+          "target_id": {
+            "type": "string",
+            "description": "The req_id or slot_id this operation targets."
+          },
+          "target_type": {
+            "type": "string",
+            "enum": ["requirement", "slot"],
+            "description": "Whether the target is a requirement or a slot."
+          }
+        },
+        "required": ["pair", "outcome_id", "op", "target_id", "target_type"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["actions", "outcomes", "intentions", "requirements", "slots", "operations_log"],
+  "additionalProperties": false
+}
