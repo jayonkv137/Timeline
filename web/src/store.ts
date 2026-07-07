@@ -61,24 +61,20 @@ export interface GoalData {
   full_tree: GoalNode[];
 }
 
-export interface HowSignals {
-  w_you: number;
-  w_ai: number;
-  h_you: number;
-  h_ai: number;
-  substantive_user: boolean;
-}
-
-export interface HowSplit {
-  centaur_pct: number;
-  copilot_pct: number;
-  autopilot_pct: number;
-}
-
 export interface HowData {
   mode: 'CENTAUR' | 'COPILOT' | 'AUTOPILOT' | 'QUIET';
-  signals: HowSignals;
-  split: HowSplit;
+  signals: {
+    w_you: number;
+    w_ai: number;
+    h_you: number;
+    h_ai: number;
+    substantive_user: boolean;
+  };
+  split: {
+    centaur_pct: number;
+    copilot_pct: number;
+    autopilot_pct: number;
+  };
 }
 
 export interface PairBundle {
@@ -95,6 +91,8 @@ export interface PanelBundle {
 }
 
 interface AppState {
+  activeChatId: string | null;
+  setActiveChatId: (id: string | null) => void;
   selectedPairIdx: number;
   setSelectedPairIdx: (idx: number) => void;
   panelBundle: PanelBundle | null;
@@ -104,6 +102,8 @@ interface AppState {
 }
 
 export const useAppStore = create<AppState>((set) => ({
+  activeChatId: null, // default to clean empty state on startup
+  setActiveChatId: (id) => set({ activeChatId: id }),
   selectedPairIdx: 0,
   setSelectedPairIdx: (idx) => set({ selectedPairIdx: idx }),
   panelBundle: null,

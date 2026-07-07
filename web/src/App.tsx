@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useAppStore } from './store';
 import { SectionHeader } from './components/InfoPopover';
-import { MessageSquare, Paperclip, Send, Plus } from 'lucide-react';
+import { MessageSquare, Paperclip, Send, Plus, Sparkles } from 'lucide-react';
 
 const CHATS = [
   { id: 'conv-1', title: 'React Form Debug Investigation' },
@@ -9,8 +9,16 @@ const CHATS = [
   { id: 'conv-3', title: 'Newsletter Angle — Brainstorm' },
 ];
 
+const SUGGESTIONS = [
+  "What can I ask you to do?",
+  "Which one of my projects is performing the best?",
+  "What projects should I be concerned about right now?"
+];
+
 export const App: React.FC = () => {
   const {
+    activeChatId,
+    setActiveChatId,
     // selectedPairIdx,
     // panelBundle,
     setPanelBundle,
@@ -18,7 +26,7 @@ export const App: React.FC = () => {
     setDialogue,
   } = useAppStore();
 
-  // Load static fixture data synced from S3 (via npm run sync-fixture)
+  // Load static fixture data
   useEffect(() => {
     async function loadFixture() {
       try {
@@ -40,7 +48,7 @@ export const App: React.FC = () => {
     loadFixture();
   }, [setPanelBundle, setDialogue]);
 
-  // const activePair = panelBundle?.pairs?.[selectedPairIdx] || null;
+  const hasChatStarted = activeChatId === 'conv-1';
 
   return (
     <div
@@ -89,6 +97,7 @@ export const App: React.FC = () => {
             Chats
           </span>
           <button
+            onClick={() => setActiveChatId(null)}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -99,9 +108,10 @@ export const App: React.FC = () => {
               border: '1px solid var(--border)',
               backgroundColor: 'var(--card-bg)',
               color: 'var(--text-primary)',
-              cursor: 'not-allowed',
+              cursor: 'pointer',
+              transition: 'background-color 0.2s',
             }}
-            disabled
+            title="Start New Chat"
           >
             <Plus size={14} />
           </button>
@@ -110,10 +120,19 @@ export const App: React.FC = () => {
         {/* Sidebar Chat List */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '8px' }}>
           {CHATS.map((chat) => {
-            const isActive = chat.id === 'conv-1';
+            const isTarget = chat.id === 'conv-1';
+            const isActive = activeChatId === chat.id;
             return (
               <div
                 key={chat.id}
+                onClick={() => {
+                  if (isTarget) {
+                    setActiveChatId('conv-1');
+                  } else {
+                    // Other chats behave as static blank pages for this phase
+                    setActiveChatId(chat.id);
+                  }
+                }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -121,8 +140,9 @@ export const App: React.FC = () => {
                   padding: '10px 12px',
                   borderRadius: '6px',
                   backgroundColor: isActive ? 'rgba(0, 0, 0, 0.04)' : 'transparent',
-                  cursor: isActive ? 'default' : 'not-allowed',
+                  cursor: 'pointer',
                   marginBottom: '4px',
+                  transition: 'background-color 0.2s',
                 }}
               >
                 <MessageSquare size={14} style={{ color: 'var(--text-muted)' }} />
@@ -166,134 +186,299 @@ export const App: React.FC = () => {
           display: 'flex',
           flexDirection: 'column',
           minWidth: 0,
+          backgroundColor: 'var(--bg)',
         }}
       >
-        {/* Chat Header */}
-        <div
-          style={{
-            height: '48px',
-            borderBottom: '1px solid var(--border)',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0 24px',
-          }}
-        >
-          <span style={{ fontSize: '13px', fontWeight: 500 }}>
-            React Form Debug Investigation
-          </span>
-        </div>
+        {hasChatStarted ? (
+          /* Active Chat View */
+          <>
+            {/* Chat Header */}
+            <div
+              style={{
+                height: '48px',
+                borderBottom: '1px solid var(--border)',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '0 24px',
+              }}
+            >
+              <span style={{ fontSize: '13px', fontWeight: 500 }}>
+                React Form Debug Investigation
+              </span>
+            </div>
 
-        {/* Chat History Viewport */}
-        <div
-          style={{
-            flex: 1,
-            overflowY: 'auto',
-            padding: '24px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-          }}
-        >
-          {dialogue.map((turn, index) => {
-            const isUser = turn.speaker === 'user';
-            return (
-              <div
-                key={index}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: isUser ? 'flex-end' : 'flex-start',
-                  gap: '4px',
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: '10px',
-                    color: 'var(--text-muted)',
-                    fontFamily: 'var(--font-mono)',
-                  }}
-                >
-                  {isUser ? 'you' : 'assistant'} · {turn.ts}
-                </span>
-                <div
-                  style={{
-                    maxWidth: '70%',
-                    padding: '12px 16px',
-                    borderRadius: '12px',
-                    fontSize: '13px',
-                    lineHeight: 1.5,
-                    whiteSpace: 'pre-wrap',
-                    textAlign: 'left',
-                    backgroundColor: isUser ? '#1a1a1a' : 'var(--card-bg)',
-                    color: isUser ? '#ffffff' : 'var(--text-primary)',
-                    border: isUser ? 'none' : '1px solid var(--border)',
-                  }}
-                >
-                  {turn.text}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Chat Input Bar */}
-        <div
-          style={{
-            padding: '16px 24px 24px',
-            borderTop: '1px solid var(--border)',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              backgroundColor: 'var(--card-bg)',
-              border: '1px solid var(--border)',
-              borderRadius: '24px',
-              padding: '8px 16px',
-              gap: '12px',
-            }}
-          >
-            <Paperclip size={16} style={{ color: 'var(--text-muted)', cursor: 'not-allowed' }} />
-            <input
-              type="text"
-              placeholder="Message..."
-              disabled
+            {/* Chat History Viewport */}
+            <div
               style={{
                 flex: 1,
-                border: 'none',
-                outline: 'none',
-                fontSize: '13px',
-                backgroundColor: 'transparent',
-                cursor: 'not-allowed',
+                overflowY: 'auto',
+                padding: '24px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
               }}
-            />
-            <button
-              disabled
+            >
+              {dialogue.map((turn, index) => {
+                const isUser = turn.speaker === 'user';
+                return (
+                  <div
+                    key={index}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: isUser ? 'flex-end' : 'flex-start',
+                      gap: '4px',
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: '10px',
+                        color: 'var(--text-muted)',
+                        fontFamily: 'var(--font-mono)',
+                      }}
+                    >
+                      {isUser ? 'you' : 'assistant'} · {turn.ts}
+                    </span>
+                    <div
+                      style={{
+                        maxWidth: '70%',
+                        padding: '12px 16px',
+                        borderRadius: '12px',
+                        fontSize: '13px',
+                        lineHeight: 1.5,
+                        whiteSpace: 'pre-wrap',
+                        textAlign: 'left',
+                        backgroundColor: isUser ? '#1a1a1a' : 'var(--card-bg)',
+                        color: isUser ? '#ffffff' : 'var(--text-primary)',
+                        border: isUser ? 'none' : '1px solid var(--border)',
+                      }}
+                    >
+                      {turn.text}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Chat Input Bar */}
+            <div
               style={{
-                border: 'none',
-                background: 'transparent',
-                color: 'var(--text-muted)',
-                cursor: 'not-allowed',
+                padding: '16px 24px 24px',
+                borderTop: '1px solid var(--border)',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  backgroundColor: 'var(--card-bg)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '24px',
+                  padding: '8px 16px',
+                  gap: '12px',
+                }}
+              >
+                <Paperclip size={16} style={{ color: 'var(--text-muted)', cursor: 'not-allowed' }} />
+                <input
+                  type="text"
+                  placeholder="Message..."
+                  disabled
+                  style={{
+                    flex: 1,
+                    border: 'none',
+                    outline: 'none',
+                    fontSize: '13px',
+                    backgroundColor: 'transparent',
+                    cursor: 'not-allowed',
+                  }}
+                />
+                <button
+                  disabled
+                  style={{
+                    border: 'none',
+                    background: 'transparent',
+                    color: 'var(--text-muted)',
+                    cursor: 'not-allowed',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Send size={14} />
+                </button>
+              </div>
+              <div
+                style={{
+                  fontSize: '10px',
+                  color: 'var(--text-muted)',
+                  marginTop: '6px',
+                  textAlign: 'center',
+                }}
+              >
+                Enter to send · Shift+Enter for new line
+              </div>
+            </div>
+          </>
+        ) : (
+          /* Premium Empty/Starting View */
+          <div
+            style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '40px',
+              maxWidth: '800px',
+              margin: '0 auto',
+              width: '100%',
+            }}
+          >
+            {/* Sparkles Icon */}
+            <div
+              style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '12px',
+                backgroundColor: 'rgba(0, 87, 255, 0.08)',
+                color: 'var(--you)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                marginBottom: '24px',
               }}
             >
-              <Send size={14} />
-            </button>
+              <Sparkles size={24} />
+            </div>
+
+            {/* Prompt Heading */}
+            <h1
+              style={{
+                fontSize: '28px',
+                fontWeight: 500,
+                color: 'var(--text-primary)',
+                marginBottom: '40px',
+                textAlign: 'center',
+                lineHeight: 1.3,
+                letterSpacing: '-0.02em',
+              }}
+            >
+              What do you want to co-create with AI today?
+            </h1>
+
+            {/* Suggestion Cards Container */}
+            <div style={{ width: '100%', marginBottom: '40px' }}>
+              <div
+                style={{
+                  fontSize: '11px',
+                  color: 'var(--text-muted)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  fontFamily: 'var(--font-mono)',
+                  marginBottom: '12px',
+                  textAlign: 'left',
+                }}
+              >
+                Suggestions on what to ask Our AI
+              </div>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                  gap: '12px',
+                  width: '100%',
+                }}
+              >
+                {SUGGESTIONS.map((suggestion, idx) => (
+                  <div
+                    key={idx}
+                    onClick={() => setActiveChatId('conv-1')}
+                    style={{
+                      backgroundColor: 'var(--card-bg)',
+                      border: '1px solid var(--border)',
+                      borderRadius: '12px',
+                      padding: '16px',
+                      fontSize: '12px',
+                      color: 'var(--text-primary)',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      lineHeight: 1.4,
+                      transition: 'all 0.2s ease',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.02)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = 'var(--you)';
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.05)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = 'var(--border)';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.02)';
+                    }}
+                  >
+                    {suggestion}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Center Chat Input */}
+            <div style={{ width: '100%' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  backgroundColor: 'var(--card-bg)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '24px',
+                  padding: '12px 18px',
+                  gap: '12px',
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
+                }}
+              >
+                <Paperclip size={16} style={{ color: 'var(--text-muted)', cursor: 'not-allowed' }} />
+                <input
+                  type="text"
+                  placeholder="Ask me anything..."
+                  disabled
+                  style={{
+                    flex: 1,
+                    border: 'none',
+                    outline: 'none',
+                    fontSize: '13px',
+                    backgroundColor: 'transparent',
+                    cursor: 'not-allowed',
+                  }}
+                />
+                <button
+                  disabled
+                  style={{
+                    border: 'none',
+                    background: 'transparent',
+                    color: 'var(--text-muted)',
+                    cursor: 'not-allowed',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Send size={14} />
+                </button>
+              </div>
+              <div
+                style={{
+                  fontSize: '10px',
+                  color: 'var(--text-muted)',
+                  marginTop: '8px',
+                  textAlign: 'center',
+                }}
+              >
+                Enter to send · Shift+Enter for new line
+              </div>
+            </div>
           </div>
-          <div
-            style={{
-              fontSize: '10px',
-              color: 'var(--text-muted)',
-              marginTop: '6px',
-              textAlign: 'center',
-            }}
-          >
-            Enter to send · Shift+Enter for new line
-          </div>
-        </div>
+        )}
       </main>
 
       {/* 3. Right Agency Panel Rail */}
@@ -330,8 +515,8 @@ export const App: React.FC = () => {
               fontWeight: 600,
               fontFamily: 'var(--font-mono)',
               textTransform: 'uppercase',
-              backgroundColor: 'rgba(34, 160, 90, 0.12)',
-              color: '#1f8f4e',
+              backgroundColor: hasChatStarted ? 'rgba(34, 160, 90, 0.12)' : 'rgba(0, 0, 0, 0.06)',
+              color: hasChatStarted ? '#1f8f4e' : 'var(--text-muted)',
             }}
           >
             <span
@@ -339,11 +524,11 @@ export const App: React.FC = () => {
                 width: '6px',
                 height: '6px',
                 borderRadius: '50%',
-                backgroundColor: '#22a05a',
+                backgroundColor: hasChatStarted ? '#22a05a' : '#888880',
                 display: 'inline-block',
               }}
             />
-            Live
+            {hasChatStarted ? 'Live' : 'Idle'}
           </span>
           <span
             style={{
@@ -352,7 +537,7 @@ export const App: React.FC = () => {
               fontFamily: 'var(--font-mono)',
             }}
           >
-            1/1
+            {hasChatStarted ? '1/1' : '0/0'}
           </span>
         </div>
 
@@ -362,10 +547,15 @@ export const App: React.FC = () => {
           <div style={{ borderBottom: '1px solid var(--border)' }}>
             <SectionHeader label="Goal" sectionKey="GOAL" />
             <div style={{ padding: '0 16px 12px', fontSize: '12px', textAlign: 'left' }}>
-              {/* Goal container shell placeholder */}
-              <div style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                Loading goal tree...
-              </div>
+              {hasChatStarted ? (
+                <div style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                  Loading goal tree...
+                </div>
+              ) : (
+                <div style={{ color: 'var(--text-muted)', fontSize: '11px', fontFamily: 'var(--font-mono)' }}>
+                  Start a new chat
+                </div>
+              )}
             </div>
           </div>
 
@@ -373,9 +563,11 @@ export const App: React.FC = () => {
           <div style={{ borderBottom: '1px solid var(--border)' }}>
             <SectionHeader label="Direction" sectionKey="DIRECTION" />
             <div style={{ padding: '0 16px 12px', fontSize: '12px', textAlign: 'left' }}>
-              <div style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                Loading direction odometer...
-              </div>
+              {hasChatStarted ? (
+                <div style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                  Loading direction odometer...
+                </div>
+              ) : null}
             </div>
           </div>
 
@@ -383,9 +575,11 @@ export const App: React.FC = () => {
           <div style={{ borderBottom: '1px solid var(--border)' }}>
             <SectionHeader label="Decisions" sectionKey="DECISIONS" />
             <div style={{ padding: '0 16px 12px', fontSize: '12px', textAlign: 'left' }}>
-              <div style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                Loading decisions...
-              </div>
+              {hasChatStarted ? (
+                <div style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                  Loading decisions...
+                </div>
+              ) : null}
             </div>
           </div>
 
@@ -393,9 +587,11 @@ export const App: React.FC = () => {
           <div style={{ borderBottom: '1px solid var(--border)' }}>
             <SectionHeader label="Timeline" sectionKey="TIMELINE" />
             <div style={{ padding: '0 16px 12px', fontSize: '12px', textAlign: 'left' }}>
-              <div style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                Loading timeline...
-              </div>
+              {hasChatStarted ? (
+                <div style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                  Loading timeline...
+                </div>
+              ) : null}
             </div>
           </div>
 
@@ -403,9 +599,11 @@ export const App: React.FC = () => {
           <div>
             <SectionHeader label="How You're Working" sectionKey="HOW" />
             <div style={{ padding: '0 16px 12px', fontSize: '12px', textAlign: 'left' }}>
-              <div style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                Loading collaboration mode...
-              </div>
+              {hasChatStarted ? (
+                <div style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                  Loading collaboration mode...
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
