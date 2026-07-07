@@ -68,3 +68,22 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P0.S4 — The DoD tests
 ---
 
+## 2026-07-08 01:45 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P1.S1 — App scaffold
+- **Did:**
+  - Initialized a new React + Vite + TypeScript project inside the `web/` directory.
+  - Installed `zustand` (for state management) and `lucide-react` (for icons).
+  - Created Node sync script `web/scripts/sync-fixture.js` and registered `"sync-fixture"` in `package.json` to mirror fixture data into `web/public/fixture/`.
+  - Configured custom CSS properties for styling variables (`--you`, `--ai`, `--bg`, `--panel`, `--font-sans`, `--font-mono`) and Google Fonts imports in `web/src/index.css`.
+  - Cleaned default template layout rules and successfully ran `npm run build`.
+  - Staged and committed changes as `P1.S1`.
+- **Decisions made:**
+  - Handled the existing directory by using the `--overwrite` flag with `create-vite`.
+  - Created a modular Node sync script `sync-fixture.js` to ensure the static fixture asset copying is cross-platform.
+  - Cleared `web/src/App.css` to prevent default Vite styling styles from interfering with the custom layout.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Ran `npm run sync-fixture` to confirm successful replication of dialogue, state, snapshot, and panel_bundle JSON files. Verified clean production build using `npm run build`.
+- **Next:** P1.S2 — Layout shell
+---
+
+
