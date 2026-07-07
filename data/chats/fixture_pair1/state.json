@@ -1,0 +1,865 @@
+{
+  "actions": [
+    {
+      "id": "A(1,10)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,11)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,12)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,13)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,14)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,15)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,16)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,17)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,18)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,19)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,2)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,20)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,21)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,22)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,23)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,24)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,25)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,26)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,27)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,28)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,29)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,3)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,30)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,31)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,32)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,33)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,34)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,35)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,36)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,37)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,38)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,39)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,4)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,40)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,41)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,42)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,5)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,6)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,7)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,8)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "A(1,9)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "EXECUTOR",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "U(1,1)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "OTHER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "U(1,2)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "U(1,3)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "U(1,4)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "U(1,5)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "U(1,6)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "U(1,7)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "U(1,8)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    },
+    {
+      "id": "U(1,9)",
+      "type": "(not captured in fixture)",
+      "text": "(not captured in fixture)",
+      "role": "SHAPER",
+      "evidence_quote": "(not captured in fixture)"
+    }
+  ],
+  "outcomes": [
+    {
+      "id": "outcome 1",
+      "text": "Style DNA & Production Bible",
+      "turn_id": "U(1,1)",
+      "parent": null,
+      "children": [
+        "outcome 2",
+        "outcome 3",
+        "outcome 4",
+        "outcome 5",
+        "outcome 6"
+      ],
+      "related": []
+    },
+    {
+      "id": "outcome 2",
+      "text": "(not captured in fixture)",
+      "turn_id": "(not captured in fixture)",
+      "parent": "outcome 1",
+      "children": [],
+      "related": []
+    },
+    {
+      "id": "outcome 3",
+      "text": "(not captured in fixture)",
+      "turn_id": "(not captured in fixture)",
+      "parent": "outcome 1",
+      "children": [],
+      "related": []
+    },
+    {
+      "id": "outcome 4",
+      "text": "(not captured in fixture)",
+      "turn_id": "(not captured in fixture)",
+      "parent": "outcome 1",
+      "children": [],
+      "related": []
+    },
+    {
+      "id": "outcome 5",
+      "text": "(not captured in fixture)",
+      "turn_id": "(not captured in fixture)",
+      "parent": "outcome 1",
+      "children": [],
+      "related": []
+    },
+    {
+      "id": "outcome 6",
+      "text": "(not captured in fixture)",
+      "turn_id": "(not captured in fixture)",
+      "parent": "outcome 1",
+      "children": [],
+      "related": []
+    }
+  ],
+  "intentions": [
+    {
+      "intention_id": "I1",
+      "intention": "(not captured in fixture)",
+      "outcome_ids": [
+        "outcome 1",
+        "outcome 2",
+        "outcome 3",
+        "outcome 4",
+        "outcome 5",
+        "outcome 6"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "outcome_id": "outcome 1",
+      "req_id": "req 1",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "status": "active",
+      "creation_action_ids": [
+        "U(1,1)",
+        "U(1,2)"
+      ],
+      "contributing_action_ids": [],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "(not captured in fixture)",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 1",
+      "req_id": "req 2",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "status": "active",
+      "creation_action_ids": [
+        "U(1,5)",
+        "U(1,9)",
+        "A(1,2)",
+        "A(1,18)",
+        "A(1,19)"
+      ],
+      "contributing_action_ids": [],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "(not captured in fixture)",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 1",
+      "req_id": "req 3",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "status": "active",
+      "creation_action_ids": [
+        "A(1,18)",
+        "A(1,19)"
+      ],
+      "contributing_action_ids": [],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "(not captured in fixture)",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 1",
+      "req_id": "req 4",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "status": "active",
+      "creation_action_ids": [
+        "A(1,31)"
+      ],
+      "contributing_action_ids": [],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "(not captured in fixture)",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 2",
+      "req_id": "req 1",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "status": "active",
+      "creation_action_ids": [
+        "U(1,3)",
+        "U(1,4)"
+      ],
+      "contributing_action_ids": [],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "(not captured in fixture)",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 3",
+      "req_id": "req 1",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "status": "active",
+      "creation_action_ids": [
+        "A(1,21)",
+        "A(1,42)"
+      ],
+      "contributing_action_ids": [],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "(not captured in fixture)",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 3",
+      "req_id": "req 2",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "status": "active",
+      "creation_action_ids": [
+        "A(1,27)"
+      ],
+      "contributing_action_ids": [],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "(not captured in fixture)",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 4",
+      "req_id": "req 1",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "status": "active",
+      "creation_action_ids": [
+        "A(1,30)"
+      ],
+      "contributing_action_ids": [],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "(not captured in fixture)",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 4",
+      "req_id": "req 2",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "status": "active",
+      "creation_action_ids": [
+        "A(1,30)"
+      ],
+      "contributing_action_ids": [],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "(not captured in fixture)",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 5",
+      "req_id": "req 1",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "status": "active",
+      "creation_action_ids": [
+        "A(1,33)"
+      ],
+      "contributing_action_ids": [],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "(not captured in fixture)",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 5",
+      "req_id": "req 2",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "status": "active",
+      "creation_action_ids": [
+        "A(1,35)"
+      ],
+      "contributing_action_ids": [],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "(not captured in fixture)",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 6",
+      "req_id": "req 1",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "status": "active",
+      "creation_action_ids": [
+        "U(1,6)",
+        "U(1,7)"
+      ],
+      "contributing_action_ids": [],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "(not captured in fixture)",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 6",
+      "req_id": "req 2",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "status": "active",
+      "creation_action_ids": [
+        "A(1,40)"
+      ],
+      "contributing_action_ids": [],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "(not captured in fixture)",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 6",
+      "req_id": "req 3",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "status": "active",
+      "creation_action_ids": [
+        "A(1,41)"
+      ],
+      "contributing_action_ids": [],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "(not captured in fixture)",
+      "created_at_pair": 1
+    }
+  ],
+  "slots": [
+    {
+      "slot_id": "slot 1",
+      "outcome_id": "outcome 1",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "origin": "AI",
+      "status": "open",
+      "creation_action_ids": [],
+      "contributing_action_ids": [],
+      "resolved_into": null
+    },
+    {
+      "slot_id": "slot 1",
+      "outcome_id": "outcome 3",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "origin": "AI",
+      "status": "open",
+      "creation_action_ids": [],
+      "contributing_action_ids": [],
+      "resolved_into": null
+    },
+    {
+      "slot_id": "slot 2",
+      "outcome_id": "outcome 3",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "origin": "AI",
+      "status": "open",
+      "creation_action_ids": [],
+      "contributing_action_ids": [],
+      "resolved_into": null
+    },
+    {
+      "slot_id": "slot 1",
+      "outcome_id": "outcome 5",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "origin": "AI",
+      "status": "open",
+      "creation_action_ids": [],
+      "contributing_action_ids": [],
+      "resolved_into": null
+    },
+    {
+      "slot_id": "slot 2",
+      "outcome_id": "outcome 5",
+      "text": "(not captured in fixture)",
+      "type": "other",
+      "origin": "AI",
+      "status": "open",
+      "creation_action_ids": [],
+      "contributing_action_ids": [],
+      "resolved_into": null
+    }
+  ],
+  "operations_log": [
+    {
+      "pair": 1,
+      "outcome_id": "outcome 1",
+      "op": "create",
+      "target_id": "req 1",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 1",
+      "op": "create",
+      "target_id": "req 2",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 1",
+      "op": "create",
+      "target_id": "req 3",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 1",
+      "op": "create",
+      "target_id": "req 4",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 2",
+      "op": "create",
+      "target_id": "req 1",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 3",
+      "op": "create",
+      "target_id": "req 1",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 3",
+      "op": "create",
+      "target_id": "req 2",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 4",
+      "op": "create",
+      "target_id": "req 1",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 4",
+      "op": "create",
+      "target_id": "req 2",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 5",
+      "op": "create",
+      "target_id": "req 1",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 5",
+      "op": "create",
+      "target_id": "req 2",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 6",
+      "op": "create",
+      "target_id": "req 1",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 6",
+      "op": "create",
+      "target_id": "req 2",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 6",
+      "op": "create",
+      "target_id": "req 3",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 1",
+      "op": "open_slot",
+      "target_id": "slot 1",
+      "target_type": "slot"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 3",
+      "op": "open_slot",
+      "target_id": "slot 1",
+      "target_type": "slot"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 3",
+      "op": "open_slot",
+      "target_id": "slot 2",
+      "target_type": "slot"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 5",
+      "op": "open_slot",
+      "target_id": "slot 1",
+      "target_type": "slot"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 5",
+      "op": "open_slot",
+      "target_id": "slot 2",
+      "target_type": "slot"
+    }
+  ]
+}
