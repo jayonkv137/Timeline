@@ -36,7 +36,7 @@ interface TimelineSectionProps {
   onSelectPair: (idx: number) => void;
 }
 
-// Full requirement details for Level-2 expansion
+// Requirement details dictionary for Level-2 accordion expansion
 const REQ_DETAILS: Record<string, { title: string; text: string; rationale: string }> = {
   'R1': {
     title: 'R1 · 3D Interactive Scene',
@@ -244,200 +244,201 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
               </button>
             </div>
 
-            {/* Expanded Turn Drawer (Diverging Bar Chart in Light Theme) */}
+            {/* Expanded Turn Drawer (Diverging Bar Chart with HTML Accordions) */}
             {drawerOpen && (
               <div
                 style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.01)',
+                  backgroundColor: 'rgba(0, 0, 0, 0.015)',
                   borderTop: '1px solid var(--border)',
                   borderBottom: '1px solid var(--border)',
-                  padding: '12px 12px',
+                  padding: '12px 0',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '8px',
-                  position: 'relative',
-                  overflowX: 'hidden',
+                  gap: '4px',
                 }}
               >
-                {/* Visual SVG Diverging Bar Chart */}
-                <svg
-                  viewBox="0 0 328 385"
-                  width="100%"
-                  height="100%"
-                  style={{
-                    overflow: 'visible',
-                    backgroundColor: 'transparent',
-                    userSelect: 'none',
-                  }}
-                >
-                  {/* Central axis spine (dashed vertical line) */}
-                  <line
-                    x1={145}
-                    y1={5}
-                    x2={145}
-                    y2={375}
-                    stroke="var(--border)"
-                    strokeWidth={1.5}
-                    strokeDasharray="3,3"
-                  />
+                {pair.drawer.requirements.map((req, rIdx) => {
+                  const isExpanded = expandedReq === req.label;
 
-                  {/* Diverging Rows (R1 through R14) */}
-                  {pair.drawer.requirements.map((req, rIdx) => {
-                    const centerY = 16 + rIdx * 26;
-                    
-                    // Chip Background Colors
-                    const chipColor =
-                      req.chip === 'blue'
-                        ? '#0057FF'
-                        : req.chip === 'orange'
-                        ? '#E85A0A'
-                        : '#777777'; // Straddling Grey
+                  // Chip Background Colors
+                  const chipColor =
+                    req.chip === 'blue'
+                      ? '#0057FF'
+                      : req.chip === 'orange'
+                      ? '#E85A0A'
+                      : '#777777'; // Straddling Grey
 
-                    // Proportional scaling for diverging bars (Max delta = 55px width)
-                    const reqMaxVal = 55.0;
-                    const leftBarW = Math.min(65, (req.delta_you / reqMaxVal) * 65);
-                    const rightBarW = Math.min(65, (req.delta_ai / reqMaxVal) * 65);
-                    
-                    // Check if selected for details highlight
-                    const isExpanded = expandedReq === req.label;
+                  // Proportional scaling for diverging bars (Max delta = 55.0, max width = 90px)
+                  const reqMaxVal = 55.0;
+                  const leftBarW = Math.min(90, (req.delta_you / reqMaxVal) * 90);
+                  const rightBarW = Math.min(90, (req.delta_ai / reqMaxVal) * 90);
 
-                    return (
-                      <g
-                        key={req.req_id + rIdx}
+                  return (
+                    <div
+                      key={req.req_id + rIdx}
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        width: '100%',
+                      }}
+                    >
+                      {/* Row Clickable Trigger */}
+                      <div
                         onClick={() => setExpandedReq(isExpanded ? null : req.label)}
-                        style={{ cursor: 'pointer' }}
-                        opacity={expandedReq && !isExpanded ? 0.35 : 1}
-                      >
-                        {/* Hover/Selection background highlight */}
-                        {isExpanded && (
-                          <rect
-                            x={2}
-                            y={centerY - 12}
-                            width={324}
-                            height={24}
-                            rx={4}
-                            fill="rgba(0, 0, 0, 0.03)"
-                            stroke="var(--border)"
-                            strokeWidth={0.5}
-                          />
-                        )}
-
-                        {/* Left side text label (ends right-aligned to user's blue bar) */}
-                        {req.delta_you > 0 && (
-                          <text
-                            x={145 - leftBarW - 16}
-                            y={centerY + 3}
-                            textAnchor="end"
-                            fill={isExpanded ? 'var(--text-primary)' : 'var(--text-muted)'}
-                            fontSize="9"
-                            fontFamily="var(--font-sans)"
-                          >
-                            {REQ_DETAILS[req.label]?.text ? `${req.label} ${REQ_DETAILS[req.label].text}` : req.label}
-                          </text>
-                        )}
-
-                        {/* Left Blue Bar (User Delta) */}
-                        {req.delta_you > 0 && (
-                          <rect
-                            x={145 - 10 - leftBarW}
-                            y={centerY - 5}
-                            width={leftBarW}
-                            height={10}
-                            rx={2}
-                            fill="#0057FF"
-                          />
-                        )}
-
-                        {/* Centered R-badge Circle */}
-                        <circle
-                          cx={145}
-                          cy={centerY}
-                          r={10}
-                          fill={chipColor}
-                          stroke="var(--card-bg)"
-                          strokeWidth={1.5}
-                        />
-                        <text
-                          x={145}
-                          y={centerY + 3}
-                          textAnchor="middle"
-                          fill="#ffffff"
-                          fontSize="8"
-                          fontWeight={700}
-                          fontFamily="var(--font-mono)"
-                        >
-                          {req.label}
-                        </text>
-
-                        {/* Right Orange Bar (AI Delta) */}
-                        {req.delta_ai > 0 && (
-                          <rect
-                            x={145 + 10}
-                            y={centerY - 5}
-                            width={rightBarW}
-                            height={10}
-                            rx={2}
-                            fill="#E85A0A"
-                          />
-                        )}
-
-                        {/* Right side text label (if AI-authored only, sits right of orange bar) */}
-                        {req.delta_you === 0 && (
-                          <text
-                            x={145 + rightBarW + 16}
-                            y={centerY + 3}
-                            textAnchor="start"
-                            fill={isExpanded ? 'var(--text-primary)' : 'var(--text-muted)'}
-                            fontSize="9"
-                            fontFamily="var(--font-sans)"
-                          >
-                            {REQ_DETAILS[req.label]?.text ? `${req.label} ${REQ_DETAILS[req.label].text}` : req.label}
-                          </text>
-                        )}
-                      </g>
-                    );
-                  })}
-                </svg>
-
-                {/* Level-2 expanded detail container (Dynamic on row tap) */}
-                {expandedReq && REQ_DETAILS[expandedReq] && (
-                  <div
-                    style={{
-                      marginTop: '8px',
-                      backgroundColor: 'var(--card-bg)',
-                      border: '1px solid var(--border)',
-                      borderRadius: '6px',
-                      padding: '12px',
-                      textAlign: 'left',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)',
-                      animation: 'fadeIn 0.2s ease-in-out',
-                    }}
-                  >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '6px' }}>
-                      <span
                         style={{
-                          fontSize: '11px',
-                          fontWeight: 700,
-                          color: expandedReq === 'R11' ? '#E85A0A' : '#0057FF',
-                          fontFamily: 'var(--font-mono)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          minHeight: '28px',
+                          width: '100%',
+                          position: 'relative',
+                          cursor: 'pointer',
+                          backgroundColor: isExpanded ? 'rgba(0, 0, 0, 0.02)' : 'transparent',
+                          transition: 'background-color 0.15s ease',
                         }}
                       >
-                        {REQ_DETAILS[expandedReq].title}
-                      </span>
-                      <span style={{ fontSize: '9px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-                        Mass: {pair.drawer.requirements.find(r => r.label === expandedReq)?.delta_you} you / {pair.drawer.requirements.find(r => r.label === expandedReq)?.delta_ai} AI
-                      </span>
-                    </div>
+                        {/* Continuous spine vertical line behind the center circle */}
+                        <div
+                          style={{
+                            position: 'absolute',
+                            left: '50%',
+                            top: 0,
+                            bottom: 0,
+                            width: '1.5px',
+                            marginLeft: '-0.75px',
+                            borderLeft: '1.5px dashed var(--border)',
+                            zIndex: 0,
+                          }}
+                        />
 
-                    <p style={{ fontSize: '11px', color: 'var(--text-primary)', lineHeight: '1.4', margin: '0 0 6px 0' }}>
-                      {REQ_DETAILS[expandedReq].text}
-                    </p>
+                        {/* Left bar container (growing left from center circle) */}
+                        <div
+                          style={{
+                            flex: 1,
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            alignItems: 'center',
+                            paddingRight: '12px',
+                            zIndex: 1,
+                          }}
+                        >
+                          {req.delta_you > 0 && (
+                            <div
+                              style={{
+                                width: `${leftBarW}px`,
+                                height: '10px',
+                                backgroundColor: '#0057FF',
+                                borderRadius: '2px',
+                                transition: 'width 0.3s ease',
+                              }}
+                            />
+                          )}
+                        </div>
 
-                    <div style={{ fontSize: '9px', color: 'var(--text-muted)', borderTop: '1px solid var(--border)', paddingTop: '6px', fontStyle: 'italic' }}>
-                      <strong>Rationale:</strong> {REQ_DETAILS[expandedReq].rationale}
+                        {/* Center Circle R-badge */}
+                        <div
+                          style={{
+                            width: '20px',
+                            height: '20px',
+                            borderRadius: '50%',
+                            backgroundColor: chipColor,
+                            color: '#ffffff',
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '8px',
+                            fontWeight: 700,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            zIndex: 2,
+                            boxShadow: '0 0 0 2px var(--card-bg)',
+                          }}
+                        >
+                          {req.label}
+                        </div>
+
+                        {/* Right bar container (growing right from center circle) */}
+                        <div
+                          style={{
+                            flex: 1,
+                            display: 'flex',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            paddingLeft: '12px',
+                            zIndex: 1,
+                          }}
+                        >
+                          {req.delta_ai > 0 && (
+                            <div
+                              style={{
+                                width: `${rightBarW}px`,
+                                height: '10px',
+                                backgroundColor: '#E85A0A',
+                                borderRadius: '2px',
+                                transition: 'width 0.3s ease',
+                              }}
+                            />
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Dropdown Requirement Text Details Component */}
+                      {isExpanded && REQ_DETAILS[req.label] && (
+                        <div
+                          style={{
+                            margin: '4px 12px 8px 12px',
+                            padding: '10px 12px',
+                            backgroundColor: 'var(--card-bg)',
+                            border: '1px solid var(--border)',
+                            borderRadius: '6px',
+                            fontSize: '11px',
+                            textAlign: 'left',
+                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)',
+                            animation: 'fadeIn 0.2s ease-in-out',
+                            zIndex: 10,
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'baseline',
+                              marginBottom: '6px',
+                            }}
+                          >
+                            <span
+                              style={{
+                                fontSize: '11px',
+                                fontWeight: 700,
+                                color: req.chip === 'orange' ? '#E85A0A' : '#0057FF',
+                                fontFamily: 'var(--font-mono)',
+                              }}
+                            >
+                              {REQ_DETAILS[req.label].title}
+                            </span>
+                            <span style={{ fontSize: '9px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                              Mass: {req.delta_you} you / {req.delta_ai} AI
+                            </span>
+                          </div>
+
+                          <p style={{ fontSize: '11px', color: 'var(--text-primary)', lineHeight: '1.4', margin: '0 0 6px 0' }}>
+                            {REQ_DETAILS[req.label].text}
+                          </p>
+
+                          <div
+                            style={{
+                              fontSize: '9px',
+                              color: 'var(--text-muted)',
+                              borderTop: '1px solid var(--border)',
+                              paddingTop: '6px',
+                              fontStyle: 'italic',
+                            }}
+                          >
+                            <strong>Rationale:</strong> {REQ_DETAILS[req.label].rationale}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                )}
+                  );
+                })}
               </div>
             )}
           </div>
