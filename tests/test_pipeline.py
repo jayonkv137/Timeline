@@ -32,8 +32,13 @@ from engine.pipeline import (
     step_1a,
     step_1b,
     step_1c,
+    format_prior_requirements,
+    format_prior_slots,
+    step_2,
+    run_level2,
 )
 from engine.state import State
+
 
 
 # ---------------------------------------------------------------- mock LLM
@@ -57,6 +62,9 @@ class MockLLMClient:
 class MockConfig:
     model_fast: str = "mock-fast"
     model_main: str = "mock-main"
+    model_step2: str = "mock-main"
+    model_step3: str = "mock-main"
+
 
 
 # ------------------------------------------------------------- test data
@@ -688,3 +696,394 @@ def test_run_level1_outcome_tree_replaced_not_merged():
         config, state, 2, "more", "ok",
     )
     assert state.outcomes[0]["text"] == "Responsive website with dark mode"
+
+
+# -------------------------------------------------------- Step 2 formatting
+
+def test_format_prior_requirements_and_slots():
+    reqs = [
+        {
+            "req_id": "req 1", "outcome_id": "outcome 1",
+            "text": "must exist", "type": "constraint", "status": "active",
+            "creation_action_ids": ["U(1,1)"], "contributing_action_ids": [],
+            "implementation_action_ids": [], "revise_action_ids": [],
+            "related_to": [], "explicit_or_implicit": "explicit",
+            "rationale": "r", "created_at_pair": 1
+        },
+        {
+            "req_id": "req 2", "outcome_id": "outcome 1",
+            "text": "should be fast", "type": "preference", "status": "revised",
+            "creation_action_ids": ["U(1,2)"], "contributing_action_ids": [],
+            "implementation_action_ids": [], "revise_action_ids": [],
+            "related_to": [], "explicit_or_implicit": "explicit",
+            "rationale": "r", "created_at_pair": 1
+        }
+    ]
+    formatted_reqs = format_prior_requirements(reqs)
+    parsed_reqs = json.loads(formatted_reqs)
+    assert len(parsed_reqs) == 1  # Only the active one is formatted
+    assert parsed_reqs[0]["req id"] == "req 1"
+    assert parsed_reqs[0]["fields"]["text"] == "must exist"
+
+    slots = [
+        {
+            "slot_id": "slot 1", "outcome_id": "outcome 1",
+            "text": "maybe fast", "type": "preference", "origin": "AI",
+            "status": "open", "creation_action_ids": ["A(1,1)"],
+            "contributing_action_ids": [], "resolved_into": None
+        },
+        {
+            "slot_id": "slot 2", "outcome_id": "outcome 1",
+            "text": "maybe slow", "type": "preference", "origin": "AI",
+            "status": "resolved", "creation_action_ids": ["A(1,2)"],
+            "contributing_action_ids": [], "resolved_into": "req 1"
+        }
+    ]
+    formatted_slots = format_prior_slots(slots)
+    parsed_slots = json.loads(formatted_slots)
+    assert len(parsed_slots) == 1  # Only the open one is formatted
+    assert parsed_slots[0]["slot id"] == "slot 1"
+    assert parsed_slots[0]["origin"] == "AI"
+
+
+# -------------------------------------------------------- Step 2 test helpers
+
+def _setup_step2_state():
+    state = State()
+    state.add_action({"id": "U(1,1)", "type": "Ask", "text": "asks", "role": "SHAPER", "evidence_quote": "q"})
+    state.add_action({"id": "A(1,1)", "type": "Draft", "text": "drafts", "role": "EXECUTOR", "evidence_quote": "q"})
+    state.add_action({"id": "U(1,2)", "type": "Refine", "text": "refines", "role": "SHAPER", "evidence_quote": "q"})
+    state.outcomes = [{
+        "id": "outcome 1", "text": "Responsive website",
+        "turn_id": "U(1,1)", "parent": None, "children": [], "related": [],
+    }]
+    state.run["action_to_outcome"] = {
+        "U(1,1)": "outcome 1",
+        "A(1,1)": "outcome 1",
+        "U(1,2)": "outcome 1",
+    }
+    return state
+
+
+# -------------------------------------------------------- Step 2 tests
+
+def test_step_2_happy_path(tmp_path):
+    from engine.artifacts import LedgerWriter
+    state = _setup_step2_state()
+    config = MockConfig(model_step2="mock-step2")
+    ledger_writer = LedgerWriter(tmp_path / "ledger.jsonl")
+
+    response = {
+        "requirement ops": [{
+            "op": "create",
+            "req id": "req 1",
+            "bound outcome id": "outcome 1",
+            "fields": {"text": "site must be mobile-friendly", "type": "constraint"},
+            "creation action ids": ["U(1,1)"],
+            "contributing action ids": ["U(1,2)"],
+            "explicit or implicit": "explicit",
+            "rationale": "explicitly requested"
+        }],
+        "open_slot ops": [{
+            "op": "open_slot",
+            "slot id": "slot 1",
+            "bound outcome id": "outcome 1",
+            "fields": {"text": "what styling library to use", "type": "preference"},
+            "origin": "AI",
+            "creation action ids": ["A(1,1)"],
+            "contributing action ids": [],
+            "explicit or implicit": "explicit",
+            "rationale": "AI asked which framework"
+        }]
+    }
+
+    client = MockLLMClient({"2:outcome 1": response})
+    
+    new_reqs = step_2(client, config, state, ledger_writer, 1, "outcome 1")
+    
+    # Verify new requirement in state
+    assert len(new_reqs) == 1
+    assert state.requirements[0]["req_id"] == "req 1"
+    assert state.requirements[0]["status"] == "active"
+    assert state.requirements[0]["created_at_pair"] == 1
+    
+    # Verify new slot in state
+    assert len(state.slots) == 1
+    assert state.slots[0]["slot_id"] == "slot 1"
+    assert state.slots[0]["status"] == "open"
+    assert state.run["slot_opened_at_pair"]["outcome 1||slot 1"] == 1
+
+    # Verify operations log
+    ops = state.operations_log
+    assert len(ops) == 2
+    assert ops[0]["op"] == "create"
+    assert ops[0]["target_id"] == "req 1"
+    assert ops[1]["op"] == "open_slot"
+    assert ops[1]["target_id"] == "slot 1"
+
+    # Verify ledger row
+    rows = ledger_writer.rows
+    assert len(rows) == 1
+    assert rows[0]["req_id"] == "req 1"
+    assert rows[0]["score"] == 5.0
+    assert rows[0]["kind"] == "creation"
+    assert rows[0]["speaker"] == "U"
+    assert rows[0]["role"] == "SHAPER"
+
+
+def test_step_2_revise_op(tmp_path):
+    from engine.artifacts import LedgerWriter
+    state = _setup_step2_state()
+    # Add pre-existing requirement
+    state.requirements.append({
+        "outcome_id": "outcome 1", "req_id": "req 1",
+        "text": "original text", "type": "constraint", "status": "active",
+        "creation_action_ids": ["U(1,1)"], "contributing_action_ids": [],
+        "implementation_action_ids": [], "revise_action_ids": [],
+        "related_to": [], "explicit_or_implicit": "explicit",
+        "rationale": "r", "created_at_pair": 1
+    })
+    
+    config = MockConfig()
+    ledger_writer = LedgerWriter(tmp_path / "ledger.jsonl")
+
+    response = {
+        "requirement ops": [{
+            "op": "revise",
+            "req id": "req 2",
+            "bound outcome id": "outcome 1",
+            "fields": {"text": "revised text", "type": "constraint"},
+            "creation action ids": ["U(1,2)"],
+            "contributing action ids": [],
+            "related to": ["req 1"],
+            "explicit or implicit": "explicit",
+            "rationale": "updated"
+        }]
+    }
+
+    client = MockLLMClient({"2:outcome 1": response})
+    step_2(client, config, state, ledger_writer, 2, "outcome 1")
+
+    # req 1 should be revised
+    req1 = state.find_requirement("outcome 1", "req 1")
+    assert req1["status"] == "revised"
+
+    # req 2 should be active
+    req2 = state.find_requirement("outcome 1", "req 2")
+    assert req2["status"] == "active"
+    assert req2["related_to"] == ["req 1"]
+
+    # check revise operation in log
+    assert any(o["op"] == "revise" and o["target_id"] == "req 1" for o in state.operations_log)
+
+
+def test_step_2_delete_op(tmp_path):
+    from engine.artifacts import LedgerWriter
+    state = _setup_step2_state()
+    state.requirements.append({
+        "outcome_id": "outcome 1", "req_id": "req 1",
+        "text": "original text", "type": "constraint", "status": "active",
+        "creation_action_ids": ["U(1,1)"], "contributing_action_ids": [],
+        "implementation_action_ids": [], "revise_action_ids": [],
+        "related_to": [], "explicit_or_implicit": "explicit",
+        "rationale": "r", "created_at_pair": 1
+    })
+    
+    config = MockConfig()
+    ledger_writer = LedgerWriter(tmp_path / "ledger.jsonl")
+
+    response = {
+        "requirement ops": [{
+            "op": "delete",
+            "req id": "req 1",
+            "bound outcome id": "outcome 1"
+        }]
+    }
+
+    client = MockLLMClient({"2:outcome 1": response})
+    step_2(client, config, state, ledger_writer, 2, "outcome 1")
+
+    # req 1 should be deleted
+    req1 = state.find_requirement("outcome 1", "req 1")
+    assert req1["status"] == "deleted"
+    assert any(o["op"] == "delete" and o["target_id"] == "req 1" for o in state.operations_log)
+
+
+def test_step_2_resolve_op(tmp_path):
+    from engine.artifacts import LedgerWriter
+    state = _setup_step2_state()
+    state.slots.append({
+        "slot_id": "slot 1", "outcome_id": "outcome 1",
+        "text": "maybe fast", "type": "preference", "origin": "AI",
+        "status": "open", "creation_action_ids": ["A(1,1)"],
+        "contributing_action_ids": [], "resolved_into": None
+    })
+    
+    config = MockConfig()
+    ledger_writer = LedgerWriter(tmp_path / "ledger.jsonl")
+
+    response = {
+        "requirement ops": [{
+            "op": "create",
+            "req id": "req 1",
+            "bound outcome id": "outcome 1",
+            "fields": {"text": "resolved requirement text", "type": "preference"},
+            "creation action ids": ["U(1,2)"],
+            "contributing action ids": [],
+            "related to": ["slot 1"],
+            "explicit or implicit": "explicit",
+            "rationale": "resolved slot 1"
+        }],
+        "open_slot ops": [{
+            "op": "resolve",
+            "slot id": "slot 1",
+            "bound outcome id": "outcome 1"
+        }]
+    }
+
+    client = MockLLMClient({"2:outcome 1": response})
+    step_2(client, config, state, ledger_writer, 2, "outcome 1")
+
+    # slot 1 should be resolved into req 1
+    slot = state.find_slot("outcome 1", "slot 1")
+    assert slot["status"] == "resolved"
+    assert slot["resolved_into"] == "req 1"
+    assert any(o["op"] == "resolve" and o["target_id"] == "slot 1" for o in state.operations_log)
+
+
+def test_step_2_abandon_op(tmp_path):
+    from engine.artifacts import LedgerWriter
+    state = _setup_step2_state()
+    state.slots.append({
+        "slot_id": "slot 1", "outcome_id": "outcome 1",
+        "text": "maybe fast", "type": "preference", "origin": "AI",
+        "status": "open", "creation_action_ids": ["A(1,1)"],
+        "contributing_action_ids": [], "resolved_into": None
+    })
+    
+    config = MockConfig()
+    ledger_writer = LedgerWriter(tmp_path / "ledger.jsonl")
+
+    response = {
+        "open_slot ops": [{
+            "op": "abandon",
+            "slot id": "slot 1",
+            "bound outcome id": "outcome 1"
+        }]
+    }
+
+    client = MockLLMClient({"2:outcome 1": response})
+    step_2(client, config, state, ledger_writer, 2, "outcome 1")
+
+    # slot 1 should be abandoned
+    slot = state.find_slot("outcome 1", "slot 1")
+    assert slot["status"] == "abandoned"
+    assert any(o["op"] == "abandon" and o["target_id"] == "slot 1" for o in state.operations_log)
+
+
+def test_run_level2_abandonment_sweep(tmp_path):
+    from engine.artifacts import LedgerWriter
+    state = _setup_step2_state()
+    state.slots.append({
+        "slot_id": "slot 1", "outcome_id": "outcome 1",
+        "text": "maybe fast", "type": "preference", "origin": "AI",
+        "status": "open", "creation_action_ids": ["A(1,1)"],
+        "contributing_action_ids": [], "resolved_into": None
+    })
+    # Slot was opened at pair 1
+    state.run["slot_opened_at_pair"]["outcome 1||slot 1"] = 1
+    
+    config = MockConfig()
+    ledger_writer = LedgerWriter(tmp_path / "ledger.jsonl")
+
+    # Pair 2 - not abandoned
+    run_level2(MockLLMClient({}), config, state, ledger_writer, 2, [])
+    assert state.find_slot("outcome 1", "slot 1")["status"] == "open"
+
+    # Pair 3 - not abandoned
+    run_level2(MockLLMClient({}), config, state, ledger_writer, 3, [])
+    assert state.find_slot("outcome 1", "slot 1")["status"] == "open"
+
+    # Pair 4 - 3 consecutive pairs passed (4 - 1 = 3) -> ABANDONED
+    run_level2(MockLLMClient({}), config, state, ledger_writer, 4, [])
+    assert state.find_slot("outcome 1", "slot 1")["status"] == "abandoned"
+    assert any(o["op"] == "abandon" and o["target_id"] == "slot 1" for o in state.operations_log)
+
+
+def test_step_2_validation_failures(tmp_path):
+    from engine.artifacts import LedgerWriter
+    state = _setup_step2_state()
+    config = MockConfig()
+    ledger_writer = LedgerWriter(tmp_path / "ledger.jsonl")
+
+    # Case 1: Bound outcome ID mismatch
+    client1 = MockLLMClient({"2:outcome 1": {
+        "requirement ops": [{
+            "op": "create", "req id": "req 1",
+            "bound outcome id": "outcome 99",  # mismatch
+            "fields": {"text": "t", "type": "constraint"},
+            "creation action ids": ["U(1,1)"], "contributing action ids": [],
+            "explicit or implicit": "explicit", "rationale": "r"
+        }]
+    }})
+    with pytest.raises(PipelineError, match="bound outcome id.*match"):
+        step_2(client1, config, state, ledger_writer, 1, "outcome 1")
+
+    # Case 2: Invalid requirement type
+    client2 = MockLLMClient({"2:outcome 1": {
+        "requirement ops": [{
+            "op": "create", "req id": "req 1", "bound outcome id": "outcome 1",
+            "fields": {"text": "t", "type": "BOGUS"},  # invalid type
+            "creation action ids": ["U(1,1)"], "contributing action ids": [],
+            "explicit or implicit": "explicit", "rationale": "r"
+        }]
+    }})
+    with pytest.raises(PipelineError, match="invalid requirement type"):
+        step_2(client2, config, state, ledger_writer, 1, "outcome 1")
+
+    # Case 3: Unknown action ID
+    client3 = MockLLMClient({"2:outcome 1": {
+        "requirement ops": [{
+            "op": "create", "req id": "req 1", "bound outcome id": "outcome 1",
+            "fields": {"text": "t", "type": "constraint"},
+            "creation action ids": ["U(9,9)"],  # unknown action
+            "contributing action ids": [],
+            "explicit or implicit": "explicit", "rationale": "r"
+        }]
+    }})
+    with pytest.raises(PipelineError, match="unknown creation action id"):
+        step_2(client3, config, state, ledger_writer, 1, "outcome 1")
+
+    # Case 4: Action ID bound to a different outcome
+    state.add_action({"id": "U(1,3)", "type": "Ask", "text": "asks", "role": "SHAPER", "evidence_quote": "q"})
+    state.run["action_to_outcome"]["U(1,3)"] = "outcome 99"  # different outcome
+    client4 = MockLLMClient({"2:outcome 1": {
+        "requirement ops": [{
+            "op": "create", "req id": "req 1", "bound outcome id": "outcome 1",
+            "fields": {"text": "t", "type": "constraint"},
+            "creation action ids": ["U(1,3)"],  # bound to outcome 99
+            "contributing action ids": [],
+            "explicit or implicit": "explicit", "rationale": "r"
+        }]
+    }})
+    with pytest.raises(PipelineError, match="not bound to outcome"):
+        step_2(client4, config, state, ledger_writer, 1, "outcome 1")
+
+    # Case 5: Disjointness violation (same action in both active req and open slot)
+    client5 = MockLLMClient({"2:outcome 1": {
+        "requirement ops": [{
+            "op": "create", "req id": "req 1", "bound outcome id": "outcome 1",
+            "fields": {"text": "t", "type": "constraint"},
+            "creation action ids": ["U(1,1)"], "contributing action ids": [],
+            "explicit or implicit": "explicit", "rationale": "r"
+        }],
+        "open_slot ops": [{
+            "op": "open_slot", "slot id": "slot 1", "bound outcome id": "outcome 1",
+            "fields": {"text": "t", "type": "constraint"}, "origin": "AI",
+            "creation action ids": ["U(1,1)"],  # same action
+            "contributing action ids": [],
+            "explicit or implicit": "explicit", "rationale": "r"
+        }]
+    }})
+    with pytest.raises(PipelineError, match="action/slot action overlap"):
+        step_2(client5, config, state, ledger_writer, 1, "outcome 1")

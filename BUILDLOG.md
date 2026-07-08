@@ -591,6 +591,27 @@ ENTRY TEMPLATE (copy, fill, append):
   rows; 3-pair abandonment sweep).
 ---
 
+## 2026-07-08 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P2.S4 — Step 2 per touched outcome (§9.2 Level 2)
+- **Did:**
+  - Implemented formatting helpers `format_prior_requirements` and `format_prior_slots` in `engine/pipeline.py` to correctly serialize active requirements and open slots using spec-shaped keys.
+  - Implemented `step_2` in `engine/pipeline.py` performing all lifecycle operations on requirements (`create`, `revise`, `delete`) and slots (`open_slot`, `resolve`, `abandon`).
+  - Added structural validation checks to reject mismatched bound outcome IDs, invalid types, and unknown or unbound action IDs.
+  - Added ledger writing for creation actions (writing row with score 5.0 and kind `"creation"`).
+  - Wired slot resolution to link slots to requirements using `resolved_into` pointers.
+  - Enforced disjointness validation (ensuring no action ID justifies both active requirements and open slots within the same outcome).
+  - Implemented `run_level2` orchestration with the 3-pair slot abandonment sweep and outcome touching detection.
+  - Added 8 tests in `tests/test_pipeline.py` validating formatting helpers, happy path, revise, delete, resolve, abandon, validation failures, disjointness checks, and 3-pair abandonment sweep.
+- **Decisions made:**
+  - Formatting helpers filter to requirements with `"active"` status and slots with `"open"` status, ensuring only current binding success conditions are sent to the LLM.
+  - 3-pair abandonment sweep runs globally at the start of `run_level2` prior to LLM calls, avoiding carrying abandoned slots forward.
+  - Tracked down that `engine/pipeline.py` was left untracked from the previous session; staged and tracked it.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:** `pytest -v` → **60/60 passed** (12 Phase 0 + 10 State + 38 Pipeline). All tests pass successfully.
+- **Next:** P2.S5 — Step 3 Triggers A+B per §9.3 (origin turn, Section A filter minus exclusions, Section B incremental, batching, labels → ledger rows, revises → revise_action_ids).
+---
+
+
 
 
 
