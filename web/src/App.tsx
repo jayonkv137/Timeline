@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useAppStore } from './store';
 import { SectionHeader } from './components/InfoPopover';
+import { GoalSection } from './components/GoalSection';
 import { MessageSquare, Paperclip, Send, Plus, Sparkles } from 'lucide-react';
 
 const SUGGESTIONS = [
@@ -591,20 +592,7 @@ export const App: React.FC = () => {
         {/* Panel Section Cards Container */}
         <div style={{ flex: 1, overflowY: 'auto' }}>
           {/* Section 1: GOAL */}
-          <div style={{ borderBottom: '1px solid var(--border)' }}>
-            <SectionHeader label="Goal" sectionKey="GOAL" />
-            <div style={{ padding: '0 16px 12px', fontSize: '12px', textAlign: 'left' }}>
-              {hasChatStarted ? (
-                <div style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                  Loading goal tree...
-                </div>
-              ) : (
-                <div style={{ color: 'var(--text-muted)', fontSize: '11px', fontFamily: 'var(--font-mono)' }}>
-                  Start a new chat
-                </div>
-              )}
-            </div>
-          </div>
+          <GoalSection goal={hasChatStarted && activePair ? activePair.goal : null} />
 
           {/* Section 2: DIRECTION */}
           <div style={{ borderBottom: '1px solid var(--border)' }}>
