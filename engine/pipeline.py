@@ -581,7 +581,274 @@ def run_level2(client, config, state, ledger_writer, pair_number, new_actions):
     return all_new_reqs
 
 
+# ---------------------------------------------------------------- Step 3
+
+def format_action_list_for_step3(actions):
+    """Format actions for Step 3 prompts block:
+    action_id | action_type | role | action_text | evidence: "quote"
+    """
+    if not actions:
+        return ""
+    lines = []
+    for a in actions:
+        line = f"{a['id']} | {a['type']} | {a['role']} | {a['text']} | evidence: \"{a['evidence_quote']}\""
+        lines.append(line)
+    return "\n".join(lines)
+
+
+def step_3_for_req(client, config, state, ledger_writer, pair_number, req, is_trigger_b=False):
+    """Step 3: Influence labeling for one requirement.
+    Handles Slot Origin, Section A preceding actions, and Section B subsequent actions in batches.
+    """
+    outcome_id = req["outcome_id"]
+    req_id = req["req_id"]
+    outcome = state.get_outcome(outcome_id)
+    batch_size = config.step3_batch_size
+
+    # 1. Determine origin turn
+    origin_turn = min(req["creation_action_ids"], key=action_sort_key)
+
+    # 2. Determine slot and slot actions
+    slot = None
+    slot_actions = []
+    slot_action_ids = set()
+    
+    if not is_trigger_b:
+        # Check if resolved from open slot
+        for slot_id in req.get("related_to", []):
+            s = state.find_slot(outcome_id, slot_id)
+            if s:
+                slot = s
+                break
+        if slot:
+            slot_action_ids = set(slot["creation_action_ids"] + slot["contributing_action_ids"])
+            slot_actions = [state.get_action(aid) for aid in sorted(slot_action_ids, key=action_sort_key)]
+
+    # 3. Determine preceding and subsequent actions
+    preceding_actions = []
+    subsequent_actions = []
+
+    labeled_key = f"{outcome_id}||{req_id}"
+    if labeled_key not in state.run["labeled_action_ids"]:
+        state.run["labeled_action_ids"][labeled_key] = []
+    
+    already_labeled = set(state.run["labeled_action_ids"][labeled_key])
+
+    if not is_trigger_b:
+        # Section A: Preceding actions
+        for act in state.actions:
+            if action_sort_key(act["id"]) < action_sort_key(origin_turn):
+                if act["id"] not in req["creation_action_ids"] and act["id"] not in slot_action_ids:
+                    preceding_actions.append(act)
+        
+        # Trigger A Section B: all subsequent actions bound to outcome after origin_turn up to pair_number
+        for act in state.actions:
+            if state.run["action_to_outcome"].get(act["id"]) == outcome_id:
+                if action_sort_key(act["id"]) > action_sort_key(origin_turn):
+                    if act["id"] not in req["creation_action_ids"] and act["id"] not in slot_action_ids:
+                        subsequent_actions.append(act)
+    else:
+        # Trigger B Section B: only newly bound actions in the current pair that are not yet labeled
+        for act in state.actions:
+            m = ACTION_ID_RE.match(act["id"])
+            if m and int(m.group(2)) == pair_number:
+                if state.run["action_to_outcome"].get(act["id"]) == outcome_id:
+                    if action_sort_key(act["id"]) > action_sort_key(origin_turn):
+                        if act["id"] not in req["creation_action_ids"] and act["id"] not in already_labeled:
+                            subsequent_actions.append(act)
+
+    # 4. Run step 3 for slot origin batches
+    if slot_actions:
+        slot_batches = [slot_actions[i:i + batch_size] for i in range(0, len(slot_actions), batch_size)]
+        for idx, batch in enumerate(slot_batches):
+            template = prompts.STEP_3
+            slot_creation_turn = min(slot["creation_action_ids"], key=action_sort_key)
+            
+            # The placeholder in STEP_3 prompt has a literal newline before "role"
+            action_list_placeholder = "slot's creation + contributing actions, each as: action_id | action_type |\nrole | action_text | evidence: \"quote\""
+            
+            prompt_text = prompts.fill(template, {
+                "outcome description": outcome["text"],
+                "req id": req_id,
+                "req text": req["text"],
+                "req origin turn": origin_turn,
+                "slot id": slot["slot_id"],
+                "user|AI": slot["origin"],
+                "slot creation turn": slot_creation_turn,
+                "slot text": slot["text"],
+                action_list_placeholder: format_action_list_for_step3(batch),
+                "preceding block": "",
+                "subsequent block": "",
+            })
+            
+            model = config.model_step3 if config.model_step3 else config.model_main
+            response = client.call_json(f"3:{req_id}:slot_origin:batch{idx}", model, prompt_text)
+            
+            labels = response.get("slot origin labels") or []
+            if len(labels) != len(batch):
+                raise PipelineError(f"step 3: expected {len(batch)} slot origin labels, got {len(labels)}")
+            
+            for label in labels:
+                act_id = _require(label, "action id", "slot origin label")
+                rel_type = _require(label, "relationship type", "slot origin label")
+                if rel_type not in ("DIRECT CONNECTION", "IMPLICIT CONNECTION", "IMPLEMENTS", "REVISES", "CONTRIBUTES", "NO CONNECTION"):
+                    raise PipelineError(f"step 3: invalid relationship type: {rel_type!r}")
+                score = label.get("relationship score")
+                if rel_type != "NO CONNECTION" and score is not None:
+                    act = state.get_action(act_id)
+                    ledger_writer.append({
+                        "pair_added": pair_number,
+                        "action_id": act_id,
+                        "speaker": act_id[0],
+                        "role": act["role"],
+                        "outcome_id": outcome_id,
+                        "req_id": req_id,
+                        "score": float(score),
+                        "kind": "slot-origin",
+                    })
+                if act_id not in state.run["labeled_action_ids"][labeled_key]:
+                    state.run["labeled_action_ids"][labeled_key].append(act_id)
+
+    # 5. Run step 3 for preceding batches
+    if preceding_actions:
+        preceding_batches = [preceding_actions[i:i + batch_size] for i in range(0, len(preceding_actions), batch_size)]
+        for idx, batch in enumerate(preceding_batches):
+            template = prompts.STEP_3
+            
+            # Remove slot origin section since Origin = directly created
+            start_marker = "=== KNOWN SLOT ORIGIN === (include only if Origin = resolved from open slot)"
+            end_marker = "=== SECTION A:"
+            if start_marker in template and end_marker in template:
+                parts = template.split(start_marker)
+                before = parts[0]
+                after = parts[1].split(end_marker)[1]
+                template = before + end_marker + after
+            
+            prompt_text = prompts.fill(template, {
+                "outcome description": outcome["text"],
+                "req id": req_id,
+                "req text": req["text"],
+                "req origin turn": origin_turn,
+                "preceding block": format_action_list_for_step3(batch),
+                "subsequent block": "",
+            })
+            
+            model = config.model_step3 if config.model_step3 else config.model_main
+            response = client.call_json(f"3:{req_id}:preceding:batch{idx}", model, prompt_text)
+            
+            labels = response.get("preceding labels") or []
+            if len(labels) != len(batch):
+                raise PipelineError(f"step 3: expected {len(batch)} preceding labels, got {len(labels)}")
+            
+            for label in labels:
+                act_id = _require(label, "action id", "preceding label")
+                rel_type = _require(label, "relationship type", "preceding label")
+                if rel_type not in ("DIRECT CONNECTION", "IMPLICIT CONNECTION", "IMPLEMENTS", "REVISES", "CONTRIBUTES", "NO CONNECTION"):
+                    raise PipelineError(f"step 3: invalid relationship type: {rel_type!r}")
+                score = label.get("relationship score")
+                if rel_type != "NO CONNECTION" and score is not None:
+                    act = state.get_action(act_id)
+                    ledger_writer.append({
+                        "pair_added": pair_number,
+                        "action_id": act_id,
+                        "speaker": act_id[0],
+                        "role": act["role"],
+                        "outcome_id": outcome_id,
+                        "req_id": req_id,
+                        "score": float(score),
+                        "kind": "labeled",
+                    })
+                if act_id not in state.run["labeled_action_ids"][labeled_key]:
+                    state.run["labeled_action_ids"][labeled_key].append(act_id)
+
+    # 6. Run step 3 for subsequent batches
+    if subsequent_actions:
+        subsequent_batches = [subsequent_actions[i:i + batch_size] for i in range(0, len(subsequent_actions), batch_size)]
+        for idx, batch in enumerate(subsequent_batches):
+            template = prompts.STEP_3
+            
+            # Remove slot origin section since Origin = directly created
+            start_marker = "=== KNOWN SLOT ORIGIN === (include only if Origin = resolved from open slot)"
+            end_marker = "=== SECTION A:"
+            if start_marker in template and end_marker in template:
+                parts = template.split(start_marker)
+                before = parts[0]
+                after = parts[1].split(end_marker)[1]
+                template = before + end_marker + after
+            
+            prompt_text = prompts.fill(template, {
+                "outcome description": outcome["text"],
+                "req id": req_id,
+                "req text": req["text"],
+                "req origin turn": origin_turn,
+                "preceding block": "",
+                "subsequent block": format_action_list_for_step3(batch),
+            })
+            
+            model = config.model_step3 if config.model_step3 else config.model_main
+            response = client.call_json(f"3:{req_id}:subsequent:batch{idx}", model, prompt_text)
+            
+            labels = response.get("subsequent labels") or []
+            if len(labels) != len(batch):
+                raise PipelineError(f"step 3: expected {len(batch)} subsequent labels, got {len(labels)}")
+            
+            for label in labels:
+                act_id = _require(label, "action id", "subsequent label")
+                rel_type = _require(label, "relationship type", "subsequent label")
+                if rel_type not in ("DIRECT CONNECTION", "IMPLICIT CONNECTION", "IMPLEMENTS", "REVISES", "CONTRIBUTES", "NO CONNECTION"):
+                    raise PipelineError(f"step 3: invalid relationship type: {rel_type!r}")
+                score = label.get("relationship score")
+                if rel_type != "NO CONNECTION" and score is not None:
+                    act = state.get_action(act_id)
+                    ledger_writer.append({
+                        "pair_added": pair_number,
+                        "action_id": act_id,
+                        "speaker": act_id[0],
+                        "role": act["role"],
+                        "outcome_id": outcome_id,
+                        "req_id": req_id,
+                        "score": float(score),
+                        "kind": "labeled",
+                    })
+                if rel_type == "REVISES":
+                    if act_id not in req["revise_action_ids"]:
+                        req["revise_action_ids"].append(act_id)
+                if act_id not in state.run["labeled_action_ids"][labeled_key]:
+                    state.run["labeled_action_ids"][labeled_key].append(act_id)
+
+    # 7. Add creation action IDs to labeled list so they are never processed in Trigger B
+    for aid in req["creation_action_ids"]:
+        if aid not in state.run["labeled_action_ids"][labeled_key]:
+            state.run["labeled_action_ids"][labeled_key].append(aid)
+
+
+def run_level3(client, config, state, ledger_writer, pair_number, new_reqs, new_actions):
+    """Level 3 iteration mechanism (§9.3):
+    1. Run Trigger A for newly created/resolved requirements in this pair.
+    2. Run Trigger B for existing requirements if the outcome got new actions.
+    """
+    # 1. Trigger A
+    for req in new_reqs:
+        step_3_for_req(client, config, state, ledger_writer, pair_number, req, is_trigger_b=False)
+
+    # 2. Trigger B
+    touched_outcomes = set()
+    for act in new_actions:
+        oid = state.run["action_to_outcome"].get(act["id"])
+        if oid:
+            touched_outcomes.add(oid)
+
+    for outcome_id in sorted(touched_outcomes):
+        existing_reqs = [
+            r for r in state.requirements_for_outcome(outcome_id)
+            if r["created_at_pair"] < pair_number and r["status"] in ("active", "revised")
+        ]
+        for req in existing_reqs:
+            step_3_for_req(client, config, state, ledger_writer, pair_number, req, is_trigger_b=True)
+
+
 # ------------------------------------------------------------ orchestration
+
 
 def run_level1(client, config, state, pair_number, user_text, ai_text):
     """§9.1: 1a → 1b → 1c for one pair. Returns the new actions (the pair's

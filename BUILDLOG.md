@@ -611,6 +611,26 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P2.S5 — Step 3 Triggers A+B per §9.3 (origin turn, Section A filter minus exclusions, Section B incremental, batching, labels → ledger rows, revises → revise_action_ids).
 ---
 
+## 2026-07-08 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P2.S5 — Step 3 Triggers A+B per §9.3 (Level 3)
+- **Did:**
+  - Implemented `format_action_list_for_step3` to format action blocks with spec-shaped strings (separated by `|` delimiters).
+  - Implemented `step_3_for_req` handling KNOWN SLOT ORIGIN, preceding Section A, and subsequent Section B actions.
+  - Implemented automatic template modification to omit the `KNOWN SLOT ORIGIN` block when the requirement is `directly created` rather than `resolved from open slot`.
+  - Added batching logic based on `STEP3_BATCH_SIZE` for Slot Origin, preceding, and subsequent actions to limit context size per LLM call.
+  - Wired relationship labeling to append scores and actions to the ledger (with kinds `"slot-origin"` or `"labeled"`) and to track labeled action IDs in state.
+  - Wired `"REVISES"` labels to append the action ID to the requirement's `revise_action_ids` list.
+  - Implemented `run_level3` orchestration with Trigger A (fired for newly created or resolved requirements) and Trigger B (fired for existing requirements when an outcome gets a new action).
+  - Added 5 comprehensive tests in `tests/test_pipeline.py` validating action list formatting, Trigger A directly created, Trigger A resolved from open slot, Trigger B incremental, and batching logic.
+- **Decisions made:**
+  - Standardized on passing empty fields for missing sections during batched calls to ensure validation gates always have exactly the actions they expect.
+  - Removed the `KNOWN SLOT ORIGIN` template section dynamically in memory to avoid sending empty template brackets to the LLM.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:** `pytest -v` → **65/65 passed** (12 Phase 0 + 10 State + 43 Pipeline). All tests pass successfully.
+- **Next:** P2.S6 — Live-rail runner + recovery loop (§9.4: --resume state-reload, full 3-phase sequence per pair, persistence of contract state + run-internal state, recovery of ledger).
+---
+
+
 
 
 

@@ -36,8 +36,12 @@ from engine.pipeline import (
     format_prior_slots,
     step_2,
     run_level2,
+    format_action_list_for_step3,
+    step_3_for_req,
+    run_level3,
 )
 from engine.state import State
+
 
 
 
@@ -64,6 +68,8 @@ class MockConfig:
     model_main: str = "mock-main"
     model_step2: str = "mock-main"
     model_step3: str = "mock-main"
+    step3_batch_size: int = 3
+
 
 
 
@@ -1087,3 +1093,283 @@ def test_step_2_validation_failures(tmp_path):
     }})
     with pytest.raises(PipelineError, match="action/slot action overlap"):
         step_2(client5, config, state, ledger_writer, 1, "outcome 1")
+
+
+# -------------------------------------------------------- Step 3 formatting
+
+def test_format_action_list_for_step3():
+    assert format_action_list_for_step3([]) == ""
+    
+    actions = [
+        {"id": "U(1,1)", "type": "Ask", "role": "SHAPER", "text": "asks", "evidence_quote": "why"}
+    ]
+    formatted = format_action_list_for_step3(actions)
+    assert formatted == 'U(1,1) | Ask | SHAPER | asks | evidence: "why"'
+
+
+# -------------------------------------------------------- Step 3 tests
+
+def _setup_step3_state():
+    state = State()
+    state.add_action({"id": "U(1,1)", "type": "Ask", "text": "asks for feature", "role": "SHAPER", "evidence_quote": "need X"})
+    state.add_action({"id": "A(1,1)", "type": "Draft", "text": "drafts X", "role": "EXECUTOR", "evidence_quote": "here is X"})
+    state.add_action({"id": "U(2,1)", "type": "Ask", "text": "asks for Y", "role": "SHAPER", "evidence_quote": "need Y"})
+    state.add_action({"id": "A(2,1)", "type": "Draft", "text": "drafts Y", "role": "EXECUTOR", "evidence_quote": "here is Y"})
+    
+    state.outcomes = [{
+        "id": "outcome 1", "text": "Responsive website",
+        "turn_id": "U(1,1)", "parent": None, "children": [], "related": [],
+    }]
+    
+    state.run["action_to_outcome"] = {
+        "U(1,1)": "outcome 1",
+        "A(1,1)": "outcome 1",
+        "U(2,1)": "outcome 1",
+        "A(2,1)": "outcome 1",
+    }
+    return state
+
+
+def test_step_3_trigger_a_directly_created(tmp_path):
+    from engine.artifacts import LedgerWriter
+    state = _setup_step3_state()
+    ledger_writer = LedgerWriter(tmp_path / "ledger.jsonl")
+    config = MockConfig(step3_batch_size=3)
+
+    req = {
+        "outcome_id": "outcome 1",
+        "req_id": "req 1",
+        "text": "X must be fast",
+        "type": "constraint",
+        "status": "active",
+        "creation_action_ids": ["A(1,1)"],
+        "contributing_action_ids": [],
+        "implementation_action_ids": [],
+        "revise_action_ids": [],
+        "related_to": [],
+        "explicit_or_implicit": "explicit",
+        "rationale": "r",
+        "created_at_pair": 1
+    }
+    state.requirements.append(req)
+
+    # Preceding action is U(1,1)
+    # Subsequent action is U(2,1), A(2,1)
+    preceding_response = {
+        "preceding labels": [{
+            "index": 0, "action id": "U(1,1)",
+            "relationship type": "IMPLICIT CONNECTION", "relationship score": 2,
+            "explanation": "asks for feature leads to speed req", "contribution role": "SHAPER"
+        }]
+    }
+
+    subsequent_response = {
+        "subsequent labels": [
+            {
+                "index": 0, "action id": "U(2,1)",
+                "relationship type": "NO CONNECTION", "relationship score": None,
+                "explanation": "unrelated", "contribution role": "SHAPER"
+            },
+            {
+                "index": 1, "action id": "A(2,1)",
+                "relationship type": "IMPLEMENTS", "relationship score": 5,
+                "explanation": "drafts Y implements req 1", "contribution role": "EXECUTOR"
+            }
+        ]
+    }
+
+    client = MockLLMClient({
+        "3:req 1:preceding:batch0": preceding_response,
+        "3:req 1:subsequent:batch0": subsequent_response
+    })
+
+    step_3_for_req(client, config, state, ledger_writer, 1, req, is_trigger_b=False)
+
+    # Check preceding log and ledger rows
+    rows = ledger_writer.rows
+    assert len(rows) == 2  # U(1,1) implicit (2), A(2,1) implements (5). U(2,1) is NO CONNECTION -> no row.
+    
+    assert rows[0]["action_id"] == "U(1,1)"
+    assert rows[0]["score"] == 2.0
+    assert rows[0]["kind"] == "labeled"
+
+    assert rows[1]["action_id"] == "A(2,1)"
+    assert rows[1]["score"] == 5.0
+    assert rows[1]["kind"] == "labeled"
+
+    # Check that labeled list contains creation ID and labeled IDs
+    labeled_list = state.run["labeled_action_ids"]["outcome 1||req 1"]
+    assert "A(1,1)" in labeled_list  # creation
+    assert "U(1,1)" in labeled_list  # preceding
+    assert "U(2,1)" in labeled_list  # subsequent (even though NO CONNECTION)
+    assert "A(2,1)" in labeled_list  # subsequent
+
+
+def test_step_3_trigger_a_resolved_from_slot(tmp_path):
+    from engine.artifacts import LedgerWriter
+    state = _setup_step3_state()
+    ledger_writer = LedgerWriter(tmp_path / "ledger.jsonl")
+    config = MockConfig(step3_batch_size=3)
+
+    state.slots.append({
+        "slot_id": "slot 1", "outcome_id": "outcome 1",
+        "text": "maybe fast", "type": "preference", "origin": "AI",
+        "status": "resolved", "creation_action_ids": ["U(1,1)"],
+        "contributing_action_ids": [], "resolved_into": "req 1"
+    })
+
+    req = {
+        "outcome_id": "outcome 1",
+        "req_id": "req 1",
+        "text": "X must be fast",
+        "type": "constraint",
+        "status": "active",
+        "creation_action_ids": ["A(1,1)"],
+        "contributing_action_ids": [],
+        "implementation_action_ids": [],
+        "revise_action_ids": [],
+        "related_to": ["slot 1"],
+        "explicit_or_implicit": "explicit",
+        "rationale": "r",
+        "created_at_pair": 1
+    }
+    state.requirements.append(req)
+
+    slot_origin_response = {
+        "slot origin labels": [{
+            "index": 0, "action id": "U(1,1)",
+            "relationship type": "IMPLICIT CONNECTION", "relationship score": 3,
+            "explanation": "slot origin", "contribution role": "SHAPER"
+        }]
+    }
+
+    # Since U(1,1) is slot origin, it's excluded from preceding block.
+    # Therefore preceding block has 0 actions, so no preceding batch is executed.
+    client = MockLLMClient({
+        "3:req 1:slot_origin:batch0": slot_origin_response,
+        "3:req 1:subsequent:batch0": {"subsequent labels": [
+            {"index": 0, "action id": "U(2,1)", "relationship type": "NO CONNECTION", "relationship score": None, "explanation": "x", "contribution role": "SHAPER"},
+            {"index": 1, "action id": "A(2,1)", "relationship type": "NO CONNECTION", "relationship score": None, "explanation": "x", "contribution role": "AI"}
+        ]}
+    })
+
+
+    step_3_for_req(client, config, state, ledger_writer, 1, req, is_trigger_b=False)
+
+    rows = ledger_writer.rows
+    assert len(rows) == 1
+    assert rows[0]["action_id"] == "U(1,1)"
+    assert rows[0]["score"] == 3.0
+    assert rows[0]["kind"] == "slot-origin"
+
+
+def test_step_3_trigger_b_incremental(tmp_path):
+    from engine.artifacts import LedgerWriter
+    state = _setup_step3_state()
+    ledger_writer = LedgerWriter(tmp_path / "ledger.jsonl")
+    config = MockConfig(step3_batch_size=3)
+
+    req = {
+        "outcome_id": "outcome 1",
+        "req_id": "req 1",
+        "text": "X must be fast",
+        "type": "constraint",
+        "status": "active",
+        "creation_action_ids": ["A(1,1)"],
+        "contributing_action_ids": [],
+        "implementation_action_ids": [],
+        "revise_action_ids": [],
+        "related_to": [],
+        "explicit_or_implicit": "explicit",
+        "rationale": "r",
+        "created_at_pair": 1
+    }
+    state.requirements.append(req)
+    
+    # Pre-populate labeled list for Trigger B
+    state.run["labeled_action_ids"]["outcome 1||req 1"] = ["A(1,1)", "U(1,1)"]
+
+    # Current pair is 2. New actions are U(2,1) and A(2,1).
+    response = {
+        "subsequent labels": [
+            {
+                "index": 0, "action id": "U(2,1)",
+                "relationship type": "IMPLEMENTS", "relationship score": 4,
+                "explanation": "implements", "contribution role": "SHAPER"
+            },
+            {
+                "index": 1, "action id": "A(2,1)",
+                "relationship type": "REVISES", "relationship score": 5,
+                "explanation": "revises", "contribution role": "AI"
+            }
+        ]
+    }
+
+    client = MockLLMClient({
+        "3:req 1:subsequent:batch0": response
+    })
+
+    step_3_for_req(client, config, state, ledger_writer, 2, req, is_trigger_b=True)
+
+    rows = ledger_writer.rows
+    assert len(rows) == 2
+    assert rows[0]["action_id"] == "U(2,1)"
+    assert rows[0]["kind"] == "labeled"
+    assert rows[1]["action_id"] == "A(2,1)"
+    assert rows[1]["kind"] == "labeled"
+
+    # Verify A(2,1) is appended to revise_action_ids
+    assert "A(2,1)" in req["revise_action_ids"]
+    assert "U(2,1)" not in req["revise_action_ids"]
+
+
+def test_step_3_batching(tmp_path):
+    from engine.artifacts import LedgerWriter
+    state = _setup_step3_state()
+    ledger_writer = LedgerWriter(tmp_path / "ledger.jsonl")
+    # Batch size = 2.
+    # Preceding actions has 1: U(1,1)
+    # Subsequent actions has 3: U(1,1) is preceding, but A(1,1), U(2,1), A(2,1) are subsequent.
+    # Wait, creation is A(1,1), so subsequent is U(2,1) and A(2,1). Length of subsequent is 2.
+    # Let's add more subsequent actions to force multiple batches:
+    state.add_action({"id": "U(2,2)", "type": "Ask", "text": "asks again", "role": "SHAPER", "evidence_quote": "q"})
+    state.run["action_to_outcome"]["U(2,2)"] = "outcome 1"
+    
+    # Now subsequent actions has: U(2,1), A(2,1), U(2,2) (length 3).
+    # Since batch size = 2, it should split subsequent actions into 2 batches.
+    config = MockConfig(step3_batch_size=2)
+
+    req = {
+        "outcome_id": "outcome 1",
+        "req_id": "req 1",
+        "text": "X must be fast",
+        "type": "constraint",
+        "status": "active",
+        "creation_action_ids": ["A(1,1)"],
+        "contributing_action_ids": [],
+        "implementation_action_ids": [],
+        "revise_action_ids": [],
+        "related_to": [],
+        "explicit_or_implicit": "explicit",
+        "rationale": "r",
+        "created_at_pair": 1
+    }
+    state.requirements.append(req)
+
+    client = MockLLMClient({
+        "3:req 1:preceding:batch0": {"preceding labels": [{"index": 0, "action id": "U(1,1)", "relationship type": "IMPLICIT CONNECTION", "relationship score": 2, "explanation": "x", "contribution role": "SHAPER"}]},
+        "3:req 1:subsequent:batch0": {"subsequent labels": [
+            {"index": 0, "action id": "U(2,1)", "relationship type": "NO CONNECTION", "relationship score": None, "explanation": "x", "contribution role": "SHAPER"},
+            {"index": 1, "action id": "A(2,1)", "relationship type": "NO CONNECTION", "relationship score": None, "explanation": "x", "contribution role": "AI"}
+        ]},
+        "3:req 1:subsequent:batch1": {"subsequent labels": [
+            {"index": 0, "action id": "U(2,2)", "relationship type": "NO CONNECTION", "relationship score": None, "explanation": "x", "contribution role": "SHAPER"}
+        ]}
+    })
+
+    step_3_for_req(client, config, state, ledger_writer, 2, req, is_trigger_b=False)
+
+    # Verify that the client was called for batch0 and batch1 of subsequent
+    assert any(c[0] == "3:req 1:subsequent:batch0" for c in client.calls)
+    assert any(c[0] == "3:req 1:subsequent:batch1" for c in client.calls)
+
