@@ -251,7 +251,7 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                   backgroundColor: 'rgba(0, 0, 0, 0.015)',
                   borderTop: '1px solid var(--border)',
                   borderBottom: '1px solid var(--border)',
-                  padding: '12px 0',
+                  padding: '16px 0',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '4px',
@@ -268,10 +268,10 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                       ? '#E85A0A'
                       : '#777777'; // Straddling Grey
 
-                  // Proportional scaling for diverging bars (Max delta = 55.0, max width = 90px)
+                  // Proportional scaling for diverging bars (Max delta = 55.0, max width = 135px to stretch fully)
                   const reqMaxVal = 55.0;
-                  const leftBarW = Math.min(90, (req.delta_you / reqMaxVal) * 90);
-                  const rightBarW = Math.min(90, (req.delta_ai / reqMaxVal) * 90);
+                  const leftBarW = Math.min(135, (req.delta_you / reqMaxVal) * 135);
+                  const rightBarW = Math.min(135, (req.delta_ai / reqMaxVal) * 135);
 
                   return (
                     <div
@@ -296,7 +296,7 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                           transition: 'background-color 0.15s ease',
                         }}
                       >
-                        {/* Continuous spine vertical line behind the center circle */}
+                        {/* Continuous spine vertical line (crisp solid gray) running exactly behind center circle */}
                         <div
                           style={{
                             position: 'absolute',
@@ -305,19 +305,18 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                             bottom: 0,
                             width: '1.5px',
                             marginLeft: '-0.75px',
-                            borderLeft: '1.5px dashed var(--border)',
+                            backgroundColor: 'rgba(0, 0, 0, 0.22)',
                             zIndex: 0,
                           }}
                         />
 
-                        {/* Left bar container (growing left from center circle) */}
+                        {/* Left bar container: starts EXACTLY at the center vertical line (50%) and grows left */}
                         <div
                           style={{
-                            flex: 1,
+                            width: '50%',
                             display: 'flex',
                             justifyContent: 'flex-end',
                             alignItems: 'center',
-                            paddingRight: '12px',
                             zIndex: 1,
                           }}
                         >
@@ -327,14 +326,15 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                                 width: `${leftBarW}px`,
                                 height: '10px',
                                 backgroundColor: '#0057FF',
-                                borderRadius: '2px',
+                                borderTopLeftRadius: '2px',
+                                borderBottomLeftRadius: '2px',
                                 transition: 'width 0.3s ease',
                               }}
                             />
                           )}
                         </div>
 
-                        {/* Center Circle R-badge */}
+                        {/* Center Circle R-badge - overlays the bars and vertical spine */}
                         <div
                           style={{
                             width: '20px',
@@ -349,20 +349,23 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                             alignItems: 'center',
                             justifyContent: 'center',
                             zIndex: 2,
-                            boxShadow: '0 0 0 2px var(--card-bg)',
+                            position: 'absolute',
+                            left: '50%',
+                            top: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            boxShadow: '0 0 0 2px var(--panel)', // Masks spine and bars nicely
                           }}
                         >
                           {req.label}
                         </div>
 
-                        {/* Right bar container (growing right from center circle) */}
+                        {/* Right bar container: starts EXACTLY at the center vertical line (50%) and grows right */}
                         <div
                           style={{
-                            flex: 1,
+                            width: '50%',
                             display: 'flex',
                             justifyContent: 'flex-start',
                             alignItems: 'center',
-                            paddingLeft: '12px',
                             zIndex: 1,
                           }}
                         >
@@ -372,7 +375,8 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                                 width: `${rightBarW}px`,
                                 height: '10px',
                                 backgroundColor: '#E85A0A',
-                                borderRadius: '2px',
+                                borderTopRightRadius: '2px',
+                                borderBottomRightRadius: '2px',
                                 transition: 'width 0.3s ease',
                               }}
                             />
