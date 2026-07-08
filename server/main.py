@@ -2,13 +2,26 @@ import json
 import logging
 from pathlib import Path
 import uuid
+import os
+import datetime
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
+from openai import AsyncOpenAI
 
 from engine.state import State
 from engine.artifacts import write_json_artifact, read_ledger
 from engine.quant import compute_stage4, write_stage4_artifacts
+from engine.config import load_config, _load_dotenv, REPO_ROOT
+
+config = load_config()
+dotenv = _load_dotenv(REPO_ROOT / ".env")
+CHAT_MODEL = os.environ.get("CHAT_MODEL") or dotenv.get("CHAT_MODEL") or config.model_main
+
+async_client = None
+if config.llm_api_key:
+    async_client = AsyncOpenAI(api_key=config.llm_api_key, base_url=config.llm_base_url)
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -182,3 +195,111 @@ def update_chat_title(chat_id: str, payload: TitleUpdate):
         "id": chat_id,
         "title": new_title
     }
+
+class MessageRequest(BaseModel):
+    text: str
+    attachments: list[str] = []
+
+@app.post("/chats/{chat_id}/messages")
+async def post_message(chat_id: str, request: MessageRequest):
+    global async_client
+    chat_dir = CHATS_DIR / chat_id
+    if not chat_dir.exists():
+        raise HTTPException(status_code=404, detail="Chat not found")
+
+    dialogue_path = chat_dir / "dialogue.json"
+    if not dialogue_path.exists():
+        raise HTTPException(status_code=404, detail="Dialogue file not found")
+
+    # Load existing dialogue
+    try:
+        with open(dialogue_path) as f:
+            dialogue = json.load(f)
+    except Exception as e:
+        logger.error(f"Error reading dialogue.json: {e}")
+        raise HTTPException(status_code=500, detail="Failed to read dialogue history")
+
+    # Calculate new pair number
+    max_pair = 0
+    last_speaker = None
+    for turn in dialogue:
+        max_pair = max(max_pair, turn["pair"])
+        last_speaker = turn["speaker"]
+
+    if last_speaker == "ai":
+        pair_number = max_pair + 1
+    elif last_speaker == "user":
+        pair_number = max_pair
+    else:
+        pair_number = 1
+
+    # Create user turn
+    user_turn = {
+        "pair": pair_number,
+        "speaker": "user",
+        "text": request.text,
+        "attachments": request.attachments,
+        "ts": datetime.datetime.now(datetime.timezone.utc).isoformat()
+    }
+    
+    dialogue.append(user_turn)
+    
+    # Save dialogue with user turn (validated)
+    try:
+        write_json_artifact(dialogue_path, dialogue, "dialogue")
+    except Exception as e:
+        logger.error(f"Failed to save user turn: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to save user turn: {str(e)}")
+
+    if not async_client:
+        if config.llm_api_key:
+            async_client = AsyncOpenAI(api_key=config.llm_api_key, base_url=config.llm_base_url)
+        else:
+            raise HTTPException(status_code=500, detail="LLM_API_KEY is not set (check .env at repo root)")
+
+    async def sse_generator():
+        # Map dialogue turns to OpenAI message roles
+        messages = []
+        for turn in dialogue:
+            role = "user" if turn["speaker"] == "user" else "assistant"
+            messages.append({"role": role, "content": turn["text"]})
+
+        ai_response_text = ""
+        try:
+            response_stream = await async_client.chat.completions.create(
+                model=CHAT_MODEL,
+                messages=messages,
+                temperature=0.7,
+                stream=True
+            )
+            async for chunk in response_stream:
+                content = chunk.choices[0].delta.content or ""
+                if content:
+                    ai_response_text += content
+                    yield f"data: {json.dumps({'token': content})}\n\n"
+        except Exception as e:
+            logger.error(f"Error during stream generation: {e}")
+            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+            return
+        
+        # Stream completed successfully. Now save the AI turn.
+        ai_turn = {
+            "pair": pair_number,
+            "speaker": "ai",
+            "text": ai_response_text,
+            "attachments": [],
+            "ts": datetime.datetime.now(datetime.timezone.utc).isoformat()
+        }
+        
+        # Load dialogue again to prevent concurrency overwrites, append, and save
+        try:
+            with open(dialogue_path) as f:
+                current_dialogue = json.load(f)
+            current_dialogue.append(ai_turn)
+            write_json_artifact(dialogue_path, current_dialogue, "dialogue")
+        except Exception as e:
+            logger.error(f"Error saving AI turn: {e}")
+            
+        yield "data: [DONE]\n\n"
+
+    return StreamingResponse(sse_generator(), media_type="text/event-stream")
