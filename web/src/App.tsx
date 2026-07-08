@@ -734,7 +734,7 @@ export const App: React.FC = () => {
 
           {/* Section 5: HOW */}
           <div>
-            <SectionHeader label="How You're Working" sectionKey="HOW" />
+            <SectionHeader label="How You're Working" sectionKey="HOW" verticalAlign="top" />
             <div style={{ padding: '0 16px 12px', fontSize: '12px', textAlign: 'left' }}>
               {hasChatStarted ? (
                 <div style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>

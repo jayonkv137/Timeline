@@ -36,9 +36,15 @@ interface InfoPopoverProps {
   sectionKey: string;
   align?: 'left' | 'right' | 'left-outer';
   width?: string;
+  verticalAlign?: 'top' | 'bottom';
 }
 
-export const InfoPopover: React.FC<InfoPopoverProps> = ({ sectionKey, align = 'right', width = '240px' }) => {
+export const InfoPopover: React.FC<InfoPopoverProps> = ({
+  sectionKey,
+  align = 'right',
+  width = '240px',
+  verticalAlign = 'bottom'
+}) => {
   const [open, setOpen] = useState(false);
   const btnRef = useRef<HTMLButtonElement>(null);
   const popRef = useRef<HTMLDivElement>(null);
@@ -188,13 +194,13 @@ export const InfoPopover: React.FC<InfoPopoverProps> = ({ sectionKey, align = 'r
           style={{
             position: 'absolute',
             zIndex: 999,
-            top: '20px',
             width: width,
             backgroundColor: 'var(--card-bg)',
             border: '1px solid var(--border)',
             borderRadius: '8px',
             boxShadow: '0 6px 24px rgba(0,0,0,0.12)',
             padding: '12px 14px',
+            ...(verticalAlign === 'top' ? { bottom: '24px' } : { top: '24px' }),
             ...(align === 'left-outer' ? { right: '100%', marginRight: '8px', top: '-10px' } : {}),
             ...(align === 'left' ? { left: 0 } : {}),
             ...(align === 'right' ? { right: 0 } : {}),
@@ -237,9 +243,10 @@ export const InfoPopover: React.FC<InfoPopoverProps> = ({ sectionKey, align = 'r
 interface SectionHeaderProps {
   label: string;
   sectionKey: string;
+  verticalAlign?: 'top' | 'bottom';
 }
 
-export const SectionHeader: React.FC<SectionHeaderProps> = ({ label, sectionKey }) => {
+export const SectionHeader: React.FC<SectionHeaderProps> = ({ label, sectionKey, verticalAlign }) => {
   return (
     <div
       style={{
@@ -264,7 +271,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({ label, sectionKey 
       >
         {label}
       </span>
-      <InfoPopover sectionKey={sectionKey} />
+      <InfoPopover sectionKey={sectionKey} verticalAlign={verticalAlign} />
     </div>
   );
 };
