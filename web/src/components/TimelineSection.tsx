@@ -148,7 +148,7 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
 
         return (
           <div key={pair.pair} style={{ display: 'flex', flexDirection: 'column' }}>
-            {/* Collapsed Turn Row with spine centered at exactly 71px */}
+            {/* Collapsed Turn Row - Spine aligned exactly at center (50%) */}
             <div
               onClick={() => onSelectPair(idx)}
               style={{
@@ -163,37 +163,32 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                 position: 'relative',
               }}
             >
-              {/* Left Column (aligned right to 61px, ends right before spine) */}
-              <div
+              {/* Left Column P1 Label */}
+              <span
                 style={{
-                  width: '61px',
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  alignItems: 'center',
-                  paddingRight: '6px',
+                  position: 'absolute',
+                  left: '16px',
+                  fontSize: '10px',
+                  color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
+                  fontFamily: 'var(--font-mono)',
+                  fontWeight: isActive ? 600 : 400,
                 }}
               >
-                <span
-                  style={{
-                    fontSize: '10px',
-                    color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
-                    fontFamily: 'var(--font-mono)',
-                    fontWeight: isActive ? 600 : 400,
-                  }}
-                >
-                  P{pair.pair}
-                </span>
-              </div>
+                P{pair.pair}
+              </span>
 
-              {/* Center Column (centered exactly at 71px, width 20px) */}
+              {/* Centered Spine (50%) in Collapsed row */}
               <div
                 style={{
+                  position: 'absolute',
+                  left: '50%',
+                  top: 0,
+                  bottom: 0,
                   width: '20px',
-                  height: '100%',
+                  marginLeft: '-10px',
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  position: 'relative',
                 }}
               >
                 {/* Continuous spine line in the header row */}
@@ -237,11 +232,12 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                 </svg>
               </div>
 
-              {/* Right Column (starts after spine line) */}
+              {/* Right Column Summary Text (placed to the right of centered spine) */}
               <span
                 style={{
-                  flex: 1,
-                  marginLeft: '12px',
+                  position: 'absolute',
+                  left: 'calc(50% + 20px)',
+                  right: '48px',
                   fontSize: '11px',
                   fontWeight: isActive ? 500 : 400,
                   color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
@@ -249,7 +245,6 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                  paddingRight: '36px',
                 }}
                 title={pair.summary}
               >
@@ -279,7 +274,7 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
               </button>
             </div>
 
-            {/* Expanded Turn Drawer (Seamless flow, spine aligned at 71px) */}
+            {/* Expanded Turn Drawer (Seamless flow, spine aligned exactly at 50%) */}
             {drawerOpen && (
               <div
                 style={{
@@ -288,6 +283,7 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '4px',
+                  position: 'relative',
                 }}
               >
                 {/* Sub-heading row inside drawer with spine continuity */}
@@ -301,11 +297,11 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                     padding: '2px 0',
                   }}
                 >
-                  {/* Spine line running behind */}
+                  {/* Spine line running behind center (50%) */}
                   <div
                     style={{
                       position: 'absolute',
-                      left: '71px',
+                      left: '50%',
                       top: 0,
                       bottom: 0,
                       width: '1.5px',
@@ -314,11 +310,11 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                       zIndex: 0,
                     }}
                   />
-                  {/* Heading label placed on the right of the spine line */}
+                  {/* Heading label placed on the right of the spine line (aligned with summary text above) */}
                   <div
                     style={{
                       position: 'absolute',
-                      left: '86px',
+                      left: 'calc(50% + 20px)',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '6px',
@@ -381,11 +377,11 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                           transition: 'background-color 0.15s ease',
                         }}
                       >
-                        {/* Continuous spine vertical line running exactly at 71px */}
+                        {/* Continuous spine vertical line running exactly at 50% */}
                         <div
                           style={{
                             position: 'absolute',
-                            left: '71px',
+                            left: '50%',
                             top: 0,
                             bottom: 0,
                             width: '1.5px',
@@ -395,22 +391,21 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                           }}
                         />
 
-                        {/* Left bar container: starts EXACTLY at the center vertical line (71px) and grows left */}
+                        {/* Left bar container: starts EXACTLY at 50% and grows left */}
                         <div
                           style={{
-                            position: 'absolute',
-                            left: `${71 - 10 - leftBarW}px`,
-                            width: `${leftBarW}px`,
-                            height: '10px',
+                            width: '50%',
                             display: 'flex',
+                            justifyContent: 'flex-end',
                             alignItems: 'center',
+                            paddingRight: '10px',
                             zIndex: 1,
                           }}
                         >
                           {req.delta_you > 0 && (
                             <div
                               style={{
-                                width: '100%',
+                                width: `${leftBarW}px`,
                                 height: '10px',
                                 backgroundColor: '#0057FF',
                                 borderTopLeftRadius: '2px',
@@ -421,7 +416,7 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                           )}
                         </div>
 
-                        {/* Center Circle R-badge - overlays the bars and vertical spine at exactly 71px */}
+                        {/* Center Circle R-badge - overlays the bars and vertical spine at exactly 50% */}
                         <div
                           style={{
                             width: '20px',
@@ -437,7 +432,7 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                             justifyContent: 'center',
                             zIndex: 2,
                             position: 'absolute',
-                            left: '71px',
+                            left: '50%',
                             top: '50%',
                             transform: 'translate(-50%, -50%)',
                             boxShadow: '0 0 0 2px var(--panel)', // Masks spine and bars nicely
@@ -446,22 +441,21 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                           {req.label}
                         </div>
 
-                        {/* Right bar container: starts EXACTLY at the center vertical line (71px) and grows right */}
+                        {/* Right bar container: starts EXACTLY at 50% and grows right */}
                         <div
                           style={{
-                            position: 'absolute',
-                            left: `${71 + 10}px`,
-                            width: `${rightBarW}px`,
-                            height: '10px',
+                            width: '50%',
                             display: 'flex',
+                            justifyContent: 'flex-start',
                             alignItems: 'center',
+                            paddingLeft: '10px',
                             zIndex: 1,
                           }}
                         >
                           {req.delta_ai > 0 && (
                             <div
                               style={{
-                                width: '100%',
+                                width: `${rightBarW}px`,
                                 height: '10px',
                                 backgroundColor: '#E85A0A',
                                 borderTopRightRadius: '2px',
