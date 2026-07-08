@@ -239,6 +239,23 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P1.S7 — HOW
 ---
 
+## 2026-07-08 02:43 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P1.S6 — TIMELINE (Color Scheme Refinement & Cleanup)
+- **Did:**
+  - Removed dark background colors (`#121212`) from the expanded Timeline drawer to match the rest of the application's light panel color scheme.
+  - Removed extra header elements (`9 refs + whiteboard` pill and the `Exchange 1` banner) per user instructions.
+  - Removed the visual legend block from the top right corner.
+  - Removed the `OPEN QUESTIONS` slots (`S1` through `S5`) section.
+  - Shifted the SVG viewport size to fit only the vertical spine line and the diverging bar rows (R1 to R14).
+  - Staged and committed changes as `P1.S6` light theme update.
+- **Decisions made:**
+  - Conformed layout precisely to the user's annotated red-line corrections.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Built and verified the dev app compiles with zero errors. Renders perfectly in the light layout.
+- **Next:** P1.S7 — HOW
+---
+
+
 
 
 
