@@ -472,6 +472,50 @@ ENTRY TEMPLATE (copy, fill, append):
   P2.S1 (Skeleton + LLM layer) per PHASE2_BRIEF.md.
 ---
 
+## 2026-07-08 · Claude Code · Fable 5
+- **Phase/Step:** P2.S1 — Skeleton + LLM layer
+- **Did:**
+  - `engine/__init__.py`, `engine/config.py` — env-driven config (`.env` at repo root,
+    process env wins; minimal built-in .env parser, no dotenv dependency):
+    `LLM_API_KEY`, `LLM_BASE_URL`, `MODEL_FAST` (Step 1a, default gemini-3.1-flash-lite),
+    `MODEL_MAIN` (1b/1c, default gemini-3.5-flash), `MODEL_STEP2`/`MODEL_STEP3`
+    (fall back to `MODEL_MAIN`), `STEP3_BATCH_SIZE` (default 3).
+  - `engine/llm.py` — `LLMClient.call_json()` on the OpenAI SDK with configurable
+    `base_url` (per Q1 amendment): 4 attempts, exponential backoff (2/4/8s) on
+    connection/timeout/rate-limit/5xx, non-retryable 4xx raises immediately; EVERY
+    attempt (success or error) appended to `<out>/run/llm_monitor.txt` with full
+    prompt, full response, model, timing, token usage; parse chain = strip code
+    fences → `json.loads` → `json_repair` → `LLMParseError` (hard error, never a
+    warning; empty-repair results also raise).
+  - `engine/prompts.py` — FROZEN header; STEP_1A/1B/1C/2/3 copied from
+    COTRACE_PIPELINE_SPEC v5 §3.1/§4.1/§5.1/§6.1/§7.1; `fill()` helper does literal
+    `{name}` replacement (prompts contain literal JSON braces, so str.format is
+    unusable) and raises on a missing placeholder.
+  - `requirements.txt` (runtime: openai, json-repair) — dev deps stay in
+    requirements-dev.txt. Installed into `.venv`.
+  - Created `data/exports/` (empty, `.gitkeep`) — owner adds the chat export before
+    S8(c); export loader deferred accordingly (SPEC_QUESTIONS.md Q2).
+  - `SPEC_QUESTIONS.md` created: Q1 = Anthropic→OpenAI-SDK/Gemini substitution
+    (RESOLVED, owner-approved, recorded for other agents); Q2 = loader deferral.
+- **Decisions made:**
+  - No `python-dotenv`: not on the Playbook §5 allowlist; a 12-line parser in
+    config.py covers KEY=VALUE lines.
+  - `temperature=0` on all calls (determinism bias; spec is silent on sampling).
+  - Runtime vs. dev requirements split into two files.
+- **Spec contradictions/gaps flagged:** none new (Q1/Q2 recorded in SPEC_QUESTIONS.md).
+- **Verification:**
+  - Prompt verbatim-ness proven programmatically: extracted the five fenced blocks
+    from the spec by regex and compared to the code constants — ALL FIVE BYTE-IDENTICAL
+    (2310/2430/596/4855/5867 chars).
+  - Parse layer: plain JSON, fenced JSON, repairable JSON, and hard-error path all
+    exercised; fill() replacement + missing-placeholder guard exercised.
+  - One REAL Gemini call via LLMClient (model gemini-3.1-flash-lite) returned parsed
+    JSON `{"status": "ok", "sum": 5}`; llm_monitor.txt written with full prompt +
+    response (to a scratch out-dir, not the repo).
+- **Next:** P2.S2 — STATE + artifact writers (state.json round-trip, ledger.jsonl
+  append-only writer, snapshots.json, schema validation on every write).
+---
+
 
 
 
