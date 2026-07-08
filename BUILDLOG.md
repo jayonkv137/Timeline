@@ -357,6 +357,20 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P1.S7 — HOW
 ---
 
+## 2026-07-08 03:06 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P1.S6 — TIMELINE (Narrow Popover Fitting)
+- **Did:**
+  - Configured the `"Requirements"` info popover box width to exactly 145px and aligned it to `'left'`.
+  - The popover now fits perfectly in the left blank column of the expanded drawer, remaining completely inside the rail boundary (preventing browser screen edge clipping) and sitting clear of the centered spine and bars (preventing chart overlap).
+  - Staged and committed changes as `P1.S6` narrow popover update.
+- **Decisions made:**
+  - Standardized on narrow popovers (145px) for sub-sections inside the rail to ensure clean alignment within columns.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Built and verified the dev app compiles with zero errors, and displays the popover unclipped and clear of the chart.
+- **Next:** P1.S7 — HOW
+---
+
+
 
 
 
