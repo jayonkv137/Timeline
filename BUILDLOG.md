@@ -741,6 +741,20 @@ ENTRY TEMPLATE (copy, fill, append):
   - Ran `pytest tests/test_server.py` → **4/4 passed**.
   - All mock-based engine tests passed. (Live smoke test `test_smoke.py` skipped/failed due to external free-tier Gemini API request rate limit, which is expected for free-tier keys).
 - **Next:** P3.S5 — Swap data source (Frontend integration: read from server API, sidebar listing, new chat, and editable titles)
+---
+
+## 2026-07-08 08:48 · Antigravity · Gemini 3.5 Flash (High)
+- **Phase/Step:** P3.S5 — Swap data source
+- **Did:**
+  - `web/src/store.ts` — added `setConversations` and `updateConversationTitle` state actions.
+  - `web/src/App.tsx` — added dynamic API data fetching on mount (`/chats`) and chat selection (`/chats/{id}/bundle`), enqueued new chats (`POST /chats`), and implemented inline title editing (`PATCH /chats/{id}/title`). Added a fallback checking `?fixture=1` for static data.
+- **Decisions made:**
+  - Supported double-clicking the title in the middle chat header to toggle inline title editing. Blurring or pressing Enter fires the PATCH API request to the backend and propagates the updated text to the goal section outcome tree.
+  - Sinks all dynamic active chat states (`hasChatStarted = activeChatId !== null`) and replaces the hardcoded `1/1` counter with dynamic lengths computed from the retrieved bundle `pairs` array.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:**
+  - Compiled and built Vite client bundle successfully via `npm run build` with zero compiler warnings or errors.
+- **Next:** P3.S6 — The choreography (typing indicators, streaming assistant bubbles, rail loading states, and atomic rail updates)
 
 
 
