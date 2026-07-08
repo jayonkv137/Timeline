@@ -3,6 +3,7 @@ import { useAppStore } from './store';
 import { SectionHeader } from './components/InfoPopover';
 import { GoalSection } from './components/GoalSection';
 import { TimelineSection } from './components/TimelineSection';
+import { HowSection } from './components/HowSection';
 import { MessageSquare, Paperclip, Send, Plus, Sparkles } from 'lucide-react';
 
 const SUGGESTIONS = [
@@ -735,13 +736,13 @@ export const App: React.FC = () => {
           {/* Section 5: HOW */}
           <div>
             <SectionHeader label="How You're Working" sectionKey="HOW" verticalAlign="top" />
-            <div style={{ padding: '0 16px 12px', fontSize: '12px', textAlign: 'left' }}>
-              {hasChatStarted ? (
-                <div style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                  Loading collaboration mode...
-                </div>
-              ) : null}
-            </div>
+            <HowSection
+              howData={
+                hasChatStarted && panelBundle && panelBundle.pairs[selectedPairIdx]
+                  ? panelBundle.pairs[selectedPairIdx].how
+                  : null
+              }
+            />
           </div>
         </div>
       </section>
