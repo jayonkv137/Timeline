@@ -630,6 +630,23 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P2.S6 — Live-rail runner + recovery loop (§9.4: --resume state-reload, full 3-phase sequence per pair, persistence of contract state + run-internal state, recovery of ledger).
 ---
 
+## 2026-07-08 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P2.S6 — Live-rail runner + recovery loop (§9.4 Level 4)
+- **Did:**
+  - Implemented `CachedLLMClient` in `engine/llm.py` providing SHA-256 prompt hashing and file-based response caching under `<out>/run/cache/` to ensure zero redundant LLM calls.
+  - Implemented `load_dialogue_from_export` in `engine/runner.py` that translates both conformant and generic chat export formats (roles, content) to `dialogue.schema.json` compliant format.
+  - Implemented `run_pipeline` in `engine/runner.py` orchestrating Levels 1, 2, and 3 pair-by-pair, persisting contract state + run-internal state, and handling resume checkpoints and ledger truncating/recovery.
+  - Added CLI entrypoint `engine/__main__.py` with subcommand parsing (`run`, `--input`, `--out`, `--pairs`, `--resume`, `--contributions-only`).
+  - Added 4 unit and integration tests in `tests/test_runner.py` verifying dialogue loading (conformant and generic), sequential execution, cache hits/misses, and argument parsing.
+- **Decisions made:**
+  - Touched `ledger.jsonl` on run initialization to guarantee that the contract file is always present even if no rows were written during the run.
+  - Stubbed `snapshots.json` and `panel_bundle.json` with minimal conformant data to satisfy validation schemas before Stage 4 is fully implemented.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:** `pytest -v` → **69/69 passed** (12 Phase 0 + 10 State + 43 Pipeline + 4 Runner).
+- **Next:** P2.S7 — Stage 4 (§10, pure code: Δ(t,p), C(t,p), decisions counters, per-turn drawer data + chip colors, HOW signals + classification, R-SUM summary line, panel_bundle.json writer).
+---
+
+
 
 
 
