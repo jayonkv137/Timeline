@@ -679,6 +679,21 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** End of Phase 2 offline CLI. Ready for Phase 3 web visual panel integration.
 ---
 
+## 2026-07-08 08:42 · Antigravity · Gemini 3.5 Flash (High)
+- **Phase/Step:** P3.S1 — FastAPI app
+- **Did:**
+  - `requirements.txt` — added fastapi, uvicorn
+  - `requirements-dev.txt` — added httpx
+  - `server/main.py` — created FastAPI application with CORS middleware and CRUD endpoints (GET /chats, POST /chats, GET /chats/{chat_id}/bundle, PATCH /chats/{chat_id}/title)
+- **Decisions made:**
+  - Allowed all origins (`"*"`) for local development convenience (avoiding origin mismatches between standard Vite port 5173/5174 or custom hostnames).
+  - Designed title patching to load the existing `State` model via `State.load()`, update the text of the parentless root outcome (creating one if outcomes is empty), and then run the Stage 4 quantizer to refresh the snapshots and panel bundle immediately.
+  - Initialized a brand new chat folder with completely schema-conformant empty artifacts (empty list `[]` for dialogue/snapshots, `{"pairs": []}` for panel bundle, and empty `State` structure for `state.json`) to keep the filesystem clean but completely valid.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:**
+  - Verified local imports and compilation of `server/main.py` successfully.
+  - Will write automated HTTP client tests for these endpoints in step S4.
+- **Next:** P3.S2 — POST /chats/{id}/messages (streaming LLM reply + dialogue appends)
 
 
 
