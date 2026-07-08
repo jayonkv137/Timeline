@@ -416,6 +416,20 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** User review
 ---
 
+## 2026-07-08 07:37 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** Config Update — OpenAI SDK Transition
+- **Did:**
+  - Updated `.env.example` to standardized provider-agnostic, OpenAI-compatible Gemini environment variables.
+  - Confirmed `.gitignore` covers `.env` properly.
+  - Copied `.env.example` template to `.env` locally without entering API credentials.
+- **Decisions made:**
+  - Config switched to provider-agnostic OpenAI-compatible env scheme (Gemini free tier default; MODEL_STEP2/MODEL_STEP3 optional per-step overrides falling back to MODEL_MAIN; Anthropic would need a separate adapter — deferred).
+  - This note serves as the standing amendment for Phase 2's `llm.py`: build on the OpenAI SDK with configurable `base_url`, NOT the Anthropic SDK.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Verified model ID strings against docs page. Verified gitignore.
+- **Next:** Phase 2 implementation
+
+
 
 
 
