@@ -771,6 +771,22 @@ ENTRY TEMPLATE (copy, fill, append):
   - Checked build with `npm run build` → **success with 0 compiler warnings/errors**.
   - Checked backend tests with `pytest tests/test_server.py` → **4/4 passed**.
 - **Next:** P3.S7 — Manual Rerun integration (wiring the manual rerun button to trigger reruns and update panel values)
+---
+
+## 2026-07-08 08:59 · Antigravity · Gemini 3.5 Flash (High)
+- **Phase/Step:** P3.S7 — Manual Rerun integration
+- **Did:**
+  - `server/main.py` — added optional template loading to `POST /chats`. Added pre-populated mock dataset initialization for "website" (1 pair), "trip" (2 pairs), and "fantasy" (3 pairs) templates to support demo previewing and testing.
+  - `web/src/components/TimelineSection.tsx` — added `onRerunPair` callback to props and rendered the premium "Rerun Pair" button at the bottom of each timeline drawer.
+  - `web/src/App.tsx` — passed the rerun callback to `TimelineSection` to trigger `POST /chats/{id}/pairs/{pair}/rerun`, activating the loading bar and letting the SSE events handle atomic UI refresh upon background completion.
+- **Decisions made:**
+  - Decided to structure the pre-populated demo templates on the backend to keep the client codebase clean and compile-safe.
+  - Coupled manual rerun actions with the existing SSE status pipeline: the rerun trigger initiates background execution and sets `isRailLoading` to true, which seamlessly updates once the server fires `pair_ready` and the client re-fetches the bundle.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:**
+  - Ran `npm run build` → built successfully with 0 warnings or TypeScript compilation errors.
+  - Ran `pytest tests/test_server.py` → 4/4 passed.
+- **Next:** Phase 3 completed successfully.
 
 
 
