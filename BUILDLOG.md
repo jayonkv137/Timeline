@@ -285,6 +285,21 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P1.S7 — HOW
 ---
 
+## 2026-07-08 02:57 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P1.S6 — TIMELINE (Interaction Indicators & Sub-Header Info)
+- **Did:**
+  - Added a visual sub-heading `"Requirements"` at the top of the expanded timeline drawer.
+  - Registered and integrated a new info popover key `"REQUIREMENTS"` in `InfoPopover.tsx` explaining bar directions, R-badges, and click-to-expand details.
+  - Positioned tiny chevron indicators (`ChevronDown` / `ChevronUp`) on the far right of each requirement row to clarify that they are clickable and collapsible.
+  - Staged and committed changes as `P1.S6` interaction affordance update.
+- **Decisions made:**
+  - Placed the chevrons on the absolute right margin (`right: 12px`) to prevent visual overlap with long horizontal bars.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Built and verified the dev app compiles with zero errors, and renders the popovers and indicator chevrons perfectly.
+- **Next:** P1.S7 — HOW
+---
+
+
 
 
 
