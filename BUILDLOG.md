@@ -694,6 +694,23 @@ ENTRY TEMPLATE (copy, fill, append):
   - Verified local imports and compilation of `server/main.py` successfully.
   - Will write automated HTTP client tests for these endpoints in step S4.
 - **Next:** P3.S2 — POST /chats/{id}/messages (streaming LLM reply + dialogue appends)
+---
+
+## 2026-07-08 08:44 · Antigravity · Gemini 3.5 Flash (High)
+- **Phase/Step:** P3.S2 — `POST /chats/{id}/messages`
+- **Did:**
+  - `server/main.py` — added `AsyncOpenAI` client initialization, `MessageRequest` model, and `POST /chats/{chat_id}/messages` streaming endpoint.
+- **Decisions made:**
+  - Used `AsyncOpenAI` for native async streaming of response tokens inside the FastAPI event loop, ensuring non-blocking execution.
+  - Automatically mapped `dialogue` speakers to chat completions roles (`"user"` for user, `"assistant"` for ai).
+  - Derived the new pair number correctly based on the last speaker (incrementing if the last speaker was AI, keeping same if user).
+  - Safely saved the complete generated AI reply to `dialogue.json` at the end of the generator (after validating against schema), and yielded a standard SSE `[DONE]` signal to let the client know the generation is complete.
+  - Instantiated `AsyncOpenAI` lazily inside the endpoint on demand to prevent import-time crashes if API keys are not set during unrelated tests.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:**
+  - Verified local imports and compilation of `server/main.py` successfully.
+  - Will verify end-to-end integration via tests in step S4.
+- **Next:** P3.S3 — The pipeline job (concurrency, sequential asyncio.Lock, pipeline runner, SSE status updates, rerun endpoint)
 
 
 
