@@ -15,8 +15,8 @@ export const App: React.FC = () => {
     setActiveChatId,
     conversations,
     addConversation,
-    // selectedPairIdx,
-    // panelBundle,
+    selectedPairIdx,
+    panelBundle,
     setPanelBundle,
     dialogue,
     setDialogue,
@@ -54,6 +54,28 @@ export const App: React.FC = () => {
   };
 
   const hasChatStarted = activeChatId === 'conv-1';
+  const activePair = panelBundle?.pairs?.[selectedPairIdx] || null;
+
+  // Formatting timestamp to HH:MM format
+  const formatTime = (isoString: string) => {
+    try {
+      const date = new Date(isoString);
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } catch {
+      return isoString;
+    }
+  };
+
+  // Helper to get accent color for the active pair
+  const getActiveAccent = () => {
+    if (!activePair) return 'var(--you)';
+    // In our design, blue always left, orange always right
+    if (activePair.direction.you_pct > activePair.direction.ai_pct) {
+      return 'var(--you)';
+    } else {
+      return 'var(--ai)';
+    }
+  };
 
   return (
     <div
@@ -227,15 +249,40 @@ export const App: React.FC = () => {
                       gap: '4px',
                     }}
                   >
-                    <span
+                    <div
                       style={{
-                        fontSize: '10px',
-                        color: 'var(--text-muted)',
-                        fontFamily: 'var(--font-mono)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        marginBottom: '2px',
                       }}
                     >
-                      {isUser ? 'you' : 'assistant'} · {turn.ts}
-                    </span>
+                      {isUser && (
+                        <span
+                          style={{
+                            backgroundColor: getActiveAccent(),
+                            color: '#ffffff',
+                            fontSize: '9px',
+                            fontWeight: 600,
+                            padding: '2px 6px',
+                            borderRadius: '4px',
+                            fontFamily: 'var(--font-mono)',
+                            letterSpacing: '0.02em',
+                          }}
+                        >
+                          P{turn.pair}
+                        </span>
+                      )}
+                      <span
+                        style={{
+                          fontSize: '10px',
+                          color: 'var(--text-muted)',
+                          fontFamily: 'var(--font-mono)',
+                        }}
+                      >
+                        {isUser ? 'you' : 'assistant'} · {formatTime(turn.ts)}
+                      </span>
+                    </div>
                     <div
                       style={{
                         maxWidth: '70%',
@@ -247,7 +294,10 @@ export const App: React.FC = () => {
                         textAlign: 'left',
                         backgroundColor: isUser ? '#1a1a1a' : 'var(--card-bg)',
                         color: isUser ? '#ffffff' : 'var(--text-primary)',
-                        border: isUser ? 'none' : '1px solid var(--border)',
+                        border: isUser ? 'none' : `1.5px solid ${getActiveAccent()}`,
+                        borderBottomRightRadius: isUser ? '4px' : '12px',
+                        borderBottomLeftRadius: isUser ? '12px' : '4px',
+                        boxShadow: isUser ? 'none' : `0 2px 12px rgba(0, 0, 0, 0.03)`,
                       }}
                     >
                       {turn.text}
