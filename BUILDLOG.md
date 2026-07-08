@@ -728,6 +728,19 @@ ENTRY TEMPLATE (copy, fill, append):
   - Verified compilation and package imports successfully.
   - Will verify end-to-end integration via tests in step S4.
 - **Next:** P3.S4 — Server tests (mocking LLM and pipeline logic to verify API responses, event pushes, and error recoveries)
+---
+
+## 2026-07-08 08:47 · Antigravity · Gemini 3.5 Flash (High)
+- **Phase/Step:** P3.S4 — Server tests
+- **Did:**
+  - `tests/test_server.py` — created integration tests covering the chat CRUD endpoints, token streaming, background tasks, locking, and status updates.
+- **Decisions made:**
+  - Designed test synchronization by intercepting the server's global `chat_event_listeners` map and mocking `asyncio.create_task` to run enqueued pipeline tasks synchronously using `asyncio.run`. This ensures deterministic event asserts without blocking the HTTP client thread or relying on thread sleeps.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:**
+  - Ran `pytest tests/test_server.py` → **4/4 passed**.
+  - All mock-based engine tests passed. (Live smoke test `test_smoke.py` skipped/failed due to external free-tier Gemini API request rate limit, which is expected for free-tier keys).
+- **Next:** P3.S5 — Swap data source (Frontend integration: read from server API, sidebar listing, new chat, and editable titles)
 
 
 
