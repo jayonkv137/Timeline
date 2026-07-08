@@ -370,6 +370,20 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P1.S7 — HOW
 ---
 
+## 2026-07-08 03:07 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P1.S6 — TIMELINE (Bottom Section Popover Upward Floating)
+- **Did:**
+  - Integrated `verticalAlign` prop into `SectionHeader` and `InfoPopover` components.
+  - Set the `HOW` section header popover to float upwards (`verticalAlign="top"`, `bottom: 24px`) to prevent bottom clipping at the browser window edge.
+  - Staged and committed changes as `P1.S6` vertical popover update.
+- **Decisions made:**
+  - Enabled absolute positioned popovers to float upwards when rendered in bottom layout sections (e.g., Section 5 HOW).
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Built and verified the dev app compiles with zero errors, and displays the HOW popover card floating upwards unclipped.
+- **Next:** P1.S7 — HOW
+---
+
+
 
 
 
