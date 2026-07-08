@@ -383,6 +383,23 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P1.S7 — HOW
 ---
 
+## 2026-07-08 07:08 · Antigravity · Claude Opus 4.6
+- **Phase/Step:** P1.S7 — HOW
+- **Did:**
+  - Created `HowSection.tsx` component implementing Panel Spec §5.
+  - Renders **mode sentence** per LOCKED metaphor strings: Centaur → "You're driving", Copilot → "Copilot — you're flying this together", Autopilot → "Autopilot — the AI is flying", Quiet → "Quiet exchange".
+  - Renders **running distribution bar** — a segmented horizontal bar showing centaur/copilot/autopilot percentages with dot-legend labels.
+  - Wired into `App.tsx` reading `panelBundle.pairs[selectedPairIdx].how` from the fixture data.
+  - Zero-state: clean mono text "Collaboration mode will build as you chat."
+- **Decisions made:**
+  - Used Blue (#0057FF) for Centaur/Driving, Grey (#777) for Copilot, Orange (#E85A0A) for Autopilot — consistent with the You/AI color scheme.
+  - Neutral tone per spec: "none is wrong" — no preaching, just descriptive mirror.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Built with zero errors. Fixture pair 1 shows "Copilot — you're flying this together" and 100% copilot bar.
+- **Next:** Phase 1 Complete — review
+---
+
+
 
 
 
