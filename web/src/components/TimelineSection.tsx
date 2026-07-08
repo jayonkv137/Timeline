@@ -148,96 +148,68 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
 
         return (
           <div key={pair.pair} style={{ display: 'flex', flexDirection: 'column' }}>
-            {/* Collapsed Turn Row - Spine aligned exactly at center (50%) */}
+            {/* Collapsed Turn Row - Original layout restored */}
             <div
               onClick={() => onSelectPair(idx)}
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                height: '32px',
-                width: '100%',
+                padding: '8px 16px',
                 cursor: 'pointer',
                 backgroundColor: isActive ? 'rgba(0, 0, 0, 0.02)' : 'transparent',
                 borderLeft: isActive ? '3px solid var(--you)' : '3px solid transparent',
                 transition: 'background-color 0.2s, border-color 0.2s',
-                position: 'relative',
               }}
             >
-              {/* Left Column P1 Label */}
+              {/* Pair Label */}
               <span
                 style={{
-                  position: 'absolute',
-                  left: '16px',
+                  width: '28px',
                   fontSize: '10px',
                   color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
                   fontFamily: 'var(--font-mono)',
                   fontWeight: isActive ? 600 : 400,
+                  textAlign: 'left',
                 }}
               >
                 P{pair.pair}
               </span>
 
-              {/* Centered Spine (50%) in Collapsed row */}
-              <div
-                style={{
-                  position: 'absolute',
-                  left: '50%',
-                  top: 0,
-                  bottom: 0,
-                  width: '20px',
-                  marginLeft: '-10px',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                {/* Continuous spine line in the header row */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    left: '50%',
-                    top: 0,
-                    bottom: 0,
-                    width: '1.5px',
-                    marginLeft: '-0.75px',
-                    backgroundColor: 'rgba(0, 0, 0, 0.22)',
-                    zIndex: 0,
-                  }}
-                />
+              {/* Turn-Delta Micro-Spine Bar Canvas */}
+              <svg width={CANVAS_W} height={16} style={{ flexShrink: 0, overflow: 'visible', marginLeft: '4px' }}>
+                {/* Center spine marker */}
+                <line x1={TICK_X} y1={0} x2={TICK_X} y2={16} stroke="var(--border)" strokeWidth={1.5} />
+                {/* User delta bar (growing left) */}
+                {pair.delta_you > 0 && (
+                  <rect
+                    x={TICK_X - BAR_GAP - leftW}
+                    y={4}
+                    width={leftW}
+                    height={8}
+                    rx={1.5}
+                    fill="var(--you)"
+                    opacity={isActive ? 0.95 : 0.6}
+                  />
+                )}
+                {/* AI delta bar (growing right) */}
+                {pair.delta_ai > 0 && (
+                  <rect
+                    x={TICK_X + BAR_GAP}
+                    y={4}
+                    width={rightW}
+                    height={8}
+                    rx={1.5}
+                    fill="var(--ai)"
+                    opacity={isActive ? 0.95 : 0.6}
+                  />
+                )}
+              </svg>
 
-                {/* SVG delta bars overlaying spine */}
-                <svg width={CANVAS_W} height={32} style={{ position: 'absolute', left: -10, top: 0, flexShrink: 0, overflow: 'visible', zIndex: 1 }}>
-                  {pair.delta_you > 0 && (
-                    <rect
-                      x={TICK_X - BAR_GAP - leftW}
-                      y={12}
-                      width={leftW}
-                      height={8}
-                      rx={1.5}
-                      fill="var(--you)"
-                      opacity={isActive ? 0.95 : 0.6}
-                    />
-                  )}
-                  {pair.delta_ai > 0 && (
-                    <rect
-                      x={TICK_X + BAR_GAP}
-                      y={12}
-                      width={rightW}
-                      height={8}
-                      rx={1.5}
-                      fill="var(--ai)"
-                      opacity={isActive ? 0.95 : 0.6}
-                    />
-                  )}
-                </svg>
-              </div>
-
-              {/* Right Column Summary Text (placed to the right of centered spine) */}
+              {/* Summary description */}
               <span
                 style={{
-                  position: 'absolute',
-                  left: 'calc(50% + 20px)',
-                  right: '48px',
+                  flex: 1,
+                  marginLeft: '12px',
                   fontSize: '11px',
                   fontWeight: isActive ? 500 : 400,
                   color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
@@ -258,8 +230,6 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                   setDrawerOpen(!drawerOpen);
                 }}
                 style={{
-                  position: 'absolute',
-                  right: '16px',
                   background: 'none',
                   border: 'none',
                   color: 'var(--text-muted)',
@@ -310,11 +280,11 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                       zIndex: 0,
                     }}
                   />
-                  {/* Heading label placed on the right of the spine line (aligned with summary text above) */}
+                  {/* Heading label placed on the left side of the spine line */}
                   <div
                     style={{
                       position: 'absolute',
-                      left: 'calc(50% + 20px)',
+                      left: '16px',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '6px',
