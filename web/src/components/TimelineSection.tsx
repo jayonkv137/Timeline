@@ -244,14 +244,14 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
               </button>
             </div>
 
-            {/* Expanded Turn Drawer (Diverging Bar Chart) */}
+            {/* Expanded Turn Drawer (Diverging Bar Chart in Light Theme) */}
             {drawerOpen && (
               <div
                 style={{
-                  backgroundColor: '#121212',
-                  borderTop: '1px solid #222',
-                  borderBottom: '1px solid #222',
-                  padding: '16px 12px',
+                  backgroundColor: 'rgba(0, 0, 0, 0.01)',
+                  borderTop: '1px solid var(--border)',
+                  borderBottom: '1px solid var(--border)',
+                  padding: '12px 12px',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '8px',
@@ -261,7 +261,7 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
               >
                 {/* Visual SVG Diverging Bar Chart */}
                 <svg
-                  viewBox="0 0 328 510"
+                  viewBox="0 0 328 385"
                   width="100%"
                   height="100%"
                   style={{
@@ -273,58 +273,17 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                   {/* Central axis spine (dashed vertical line) */}
                   <line
                     x1={145}
-                    y1={35}
+                    y1={5}
                     x2={145}
-                    y2={440}
-                    stroke="#333"
+                    y2={375}
+                    stroke="var(--border)"
                     strokeWidth={1.5}
                     strokeDasharray="3,3"
                   />
 
-                  {/* 1. Header Refs Pill */}
-                  <g transform="translate(90, 8)" style={{ cursor: 'default' }}>
-                    <rect width="110" height="18" rx="9" fill="rgba(255, 255, 255, 0.06)" stroke="#333" strokeWidth={1} />
-                    <text x="55" y="12" textAnchor="middle" fill="#aaa" fontSize="8" fontFamily="var(--font-mono)" fontWeight={600}>
-                      📎 9 refs + whiteboard
-                    </text>
-                  </g>
-
-                  {/* 2. Legend Box (Top Right overlay space) */}
-                  <g transform="translate(205, 10)" fontSize="8" fontFamily="var(--font-mono)" fill="#aaa">
-                    <rect width="115" height="92" rx="6" fill="#181818" stroke="#2c2c2c" strokeWidth={1} />
-                    
-                    {/* User-shaped color */}
-                    <rect x="8" y="8" width="8" height="8" rx="1.5" fill="#0057FF" />
-                    <text x="20" y="15" fill="#ccc">User-shaped</text>
-                    
-                    {/* Straddling color */}
-                    <rect x="8" y="22" width="8" height="8" rx="1.5" fill="#9aa0a6" />
-                    <text x="20" y="29" fill="#ccc">Straddling (both)</text>
-                    
-                    {/* AI-created color */}
-                    <rect x="8" y="36" width="8" height="8" rx="1.5" fill="#E85A0A" />
-                    <text x="20" y="43" fill="#ccc">AI-created</text>
-                    
-                    {/* Open Slot */}
-                    <circle cx="12" cy="54" r="4.5" fill="none" stroke="#E85A0A" strokeWidth={1.5} strokeDasharray="2,2" />
-                    <text x="20" y="57" fill="#ccc">Open slot</text>
-
-                    {/* Scale */}
-                    <text x="8" y="74" fill="#666" fontSize="7" fontWeight={600}>SCALE: 1 unit = 8px</text>
-                    <text x="8" y="84" fill="#e28743" fontSize="7" fontWeight={600}>AI-lean ↑</text>
-                  </g>
-
-                  {/* 3. Exchange Label Banner */}
-                  <g transform="translate(10, 36)">
-                    <rect width="180" height="18" rx="4" fill="#1c1c1c" stroke="#333" strokeWidth={1} />
-                    <text x="8" y="12" fill="#888" fontSize="8" fontFamily="var(--font-mono)">
-                      Exchange 1 · 12 reqs CREATED
-                    </text>
-                  </g>
-
-                  {/* 4. Diverging Rows (R1 through R14) */}
+                  {/* Diverging Rows (R1 through R14) */}
                   {pair.drawer.requirements.map((req, rIdx) => {
-                    const centerY = 75 + rIdx * 26;
+                    const centerY = 16 + rIdx * 26;
                     
                     // Chip Background Colors
                     const chipColor =
@@ -332,7 +291,7 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                         ? '#0057FF'
                         : req.chip === 'orange'
                         ? '#E85A0A'
-                        : '#555555'; // Straddling Grey
+                        : '#777777'; // Straddling Grey
 
                     // Proportional scaling for diverging bars (Max delta = 55px width)
                     const reqMaxVal = 55.0;
@@ -357,8 +316,8 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                             width={324}
                             height={24}
                             rx={4}
-                            fill="rgba(255, 255, 255, 0.03)"
-                            stroke="rgba(255, 255, 255, 0.08)"
+                            fill="rgba(0, 0, 0, 0.03)"
+                            stroke="var(--border)"
                             strokeWidth={0.5}
                           />
                         )}
@@ -369,7 +328,7 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                             x={145 - leftBarW - 16}
                             y={centerY + 3}
                             textAnchor="end"
-                            fill={isExpanded ? '#fff' : '#888'}
+                            fill={isExpanded ? 'var(--text-primary)' : 'var(--text-muted)'}
                             fontSize="9"
                             fontFamily="var(--font-sans)"
                           >
@@ -395,7 +354,7 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                           cy={centerY}
                           r={10}
                           fill={chipColor}
-                          stroke="#121212"
+                          stroke="var(--card-bg)"
                           strokeWidth={1.5}
                         />
                         <text
@@ -428,7 +387,7 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                             x={145 + rightBarW + 16}
                             y={centerY + 3}
                             textAnchor="start"
-                            fill={isExpanded ? '#fff' : '#888'}
+                            fill={isExpanded ? 'var(--text-primary)' : 'var(--text-muted)'}
                             fontSize="9"
                             fontFamily="var(--font-sans)"
                           >
@@ -438,47 +397,6 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                       </g>
                     );
                   })}
-
-                  {/* 5. Open Questions (Dashed Circles) */}
-                  <g transform="translate(0, 440)">
-                    {/* Header */}
-                    <text x="10" y="10" fill="#666" fontSize="8" fontFamily="var(--font-mono)" fontWeight={600}>
-                      OPEN QUESTIONS
-                    </text>
-
-                    {/* Sequential Dashed Question Slots */}
-                    {pair.drawer.slots.map((slot, sIdx) => {
-                      const circleX = 22 + sIdx * 35;
-                      const label = `S${sIdx + 1}`;
-                      const isAi = slot.origin === 'AI';
-                      const themeColor = isAi ? '#E85A0A' : '#0057FF';
-
-                      return (
-                        <g key={slot.slot_id + sIdx} transform={`translate(${circleX}, 20)`}>
-                          <circle
-                            cx="0"
-                            cy="0"
-                            r="11"
-                            fill="none"
-                            stroke={themeColor}
-                            strokeWidth={1.5}
-                            strokeDasharray="2,2"
-                          />
-                          <text
-                            x="0"
-                            y="3"
-                            textAnchor="middle"
-                            fill={themeColor}
-                            fontSize="9"
-                            fontWeight={700}
-                            fontFamily="var(--font-mono)"
-                          >
-                            {label}
-                          </text>
-                        </g>
-                      );
-                    })}
-                  </g>
                 </svg>
 
                 {/* Level-2 expanded detail container (Dynamic on row tap) */}
@@ -486,12 +404,12 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                   <div
                     style={{
                       marginTop: '8px',
-                      backgroundColor: '#181818',
-                      border: '1.5px solid #2a2a2a',
+                      backgroundColor: 'var(--card-bg)',
+                      border: '1px solid var(--border)',
                       borderRadius: '6px',
                       padding: '12px',
                       textAlign: 'left',
-                      boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)',
                       animation: 'fadeIn 0.2s ease-in-out',
                     }}
                   >
@@ -506,16 +424,16 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                       >
                         {REQ_DETAILS[expandedReq].title}
                       </span>
-                      <span style={{ fontSize: '9px', color: '#666', fontFamily: 'var(--font-mono)' }}>
-                        Mass contribution: {pair.drawer.requirements.find(r => r.label === expandedReq)?.delta_you} you / {pair.drawer.requirements.find(r => r.label === expandedReq)?.delta_ai} AI
+                      <span style={{ fontSize: '9px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                        Mass: {pair.drawer.requirements.find(r => r.label === expandedReq)?.delta_you} you / {pair.drawer.requirements.find(r => r.label === expandedReq)?.delta_ai} AI
                       </span>
                     </div>
 
-                    <p style={{ fontSize: '11px', color: '#ccc', lineHeight: '1.4', margin: '0 0 6px 0' }}>
+                    <p style={{ fontSize: '11px', color: 'var(--text-primary)', lineHeight: '1.4', margin: '0 0 6px 0' }}>
                       {REQ_DETAILS[expandedReq].text}
                     </p>
 
-                    <div style={{ fontSize: '9px', color: '#777', borderTop: '1px solid #2a2a2a', paddingTop: '6px', fontStyle: 'italic' }}>
+                    <div style={{ fontSize: '9px', color: 'var(--text-muted)', borderTop: '1px solid var(--border)', paddingTop: '6px', fontStyle: 'italic' }}>
                       <strong>Rationale:</strong> {REQ_DETAILS[expandedReq].rationale}
                     </div>
                   </div>
