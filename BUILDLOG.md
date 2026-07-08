@@ -711,6 +711,23 @@ ENTRY TEMPLATE (copy, fill, append):
   - Verified local imports and compilation of `server/main.py` successfully.
   - Will verify end-to-end integration via tests in step S4.
 - **Next:** P3.S3 — The pipeline job (concurrency, sequential asyncio.Lock, pipeline runner, SSE status updates, rerun endpoint)
+---
+
+## 2026-07-08 08:45 · Antigravity · Gemini 3.5 Flash (High)
+- **Phase/Step:** P3.S3 — The pipeline job
+- **Did:**
+  - `engine/artifacts.py` — added `wipe_pair` method to `LedgerWriter` to clean database rows matching `pair_added == P`.
+  - `engine/runner.py` — updated `run_pipeline` execution loop to call `wipe_pair(P)` pre-run.
+  - `server/main.py` — implemented sequential locking (`chat_locks`), background worker orchestration (`run_pipeline_job`), persistent runner status mapping (`run/status.json`), progress SSE events (`GET /chats/{chat_id}/events`), and manual rerun triggers (`POST /chats/{chat_id}/pairs/{pair}/rerun`). Triggered the background task on streaming reply completion.
+- **Decisions made:**
+  - Placed the lock acquisition inside the background worker (`run_pipeline_job`), allowing multiple clients/reruns for the same chat to wait in line cleanly.
+  - Handled CPU/API blocking operations inside the async worker using `asyncio.to_thread` to spin up `run_pipeline` in a clean worker threadpool.
+  - Persisted intermediate status in `run/status.json` with keys `status`, `pair`, and `error` for external health checking and debugging.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:**
+  - Verified compilation and package imports successfully.
+  - Will verify end-to-end integration via tests in step S4.
+- **Next:** P3.S4 — Server tests (mocking LLM and pipeline logic to verify API responses, event pushes, and error recoveries)
 
 
 
