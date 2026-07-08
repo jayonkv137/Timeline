@@ -205,6 +205,24 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P1.S6 — TIMELINE
 ---
 
+## 2026-07-08 02:20 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P1.S6 — TIMELINE
+- **Did:**
+  - Created component `web/src/components/TimelineSection.tsx` and integrated it in `web/src/App.tsx`.
+  - Rendered the collapsed turn row with the `P1` label, turn-delta micro-spine (horizontal proportional bars), turn summary text, and open/close drawer chevrons.
+  - Implemented the expanded drawer:
+    - Requirements Changed: vertical timeline spine with absolute-positioned colored R-chips (13 grey, 1 orange `R11` for `o5/r2`) and inline proportional influence bars.
+    - Open Questions: 5 dashed circles with `S1` through `S5` labels showing AI-origin open slots.
+  - Wired row clicks to update the store `selectedPairIdx` state.
+  - Staged and committed changes as `P1.S6`.
+- **Decisions made:**
+  - Standardized slot labels to sequential indices (`S1` to `S5`) to render distinct question nodes.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Built and verified the dev app compiles with zero errors, and runs dynamically. Confirmed expand/collapse chevrons toggle the drawer properly.
+- **Next:** P1.S7 — HOW
+---
+
+
 
 
 
