@@ -222,6 +222,24 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P1.S7 — HOW
 ---
 
+## 2026-07-08 02:38 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P1.S6 — TIMELINE (Chart Redesign)
+- **Did:**
+  - Redesigned the expanded Timeline drawer layout into a diverging bar chart matching the Spotify timeline SVG references.
+  - Centered circular R-badges (R1 through R14) directly on the dashed vertical timeline axis.
+  - Rendered blue user bars growing left, and orange AI bars growing right, proportional to each requirement's delta mass values.
+  - Placed requirement name labels next to the bars: user-weighted labels on the left, and AI-only labels on the right.
+  - Added a visual legend box in the top right outlining User-shaped, Straddling, AI-created, Open slot styles, and scale info.
+  - Implemented Level-2 expansion details inline card below the SVG chart that dynamically loads requirement texts and extraction rationales upon clicking any requirement row.
+  - Staged and committed changes as `P1.S6` chart update.
+- **Decisions made:**
+  - Statically mapped descriptive text labels (e.g. "squid anim", "workflow rules") to R1..R14 indices matching the user's Figma prototype mockups.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Built and verified the dev app compiles with zero errors. Tested clicks on requirements to confirm Level-2 details show/hide smoothly.
+- **Next:** P1.S7 — HOW
+---
+
+
 
 
 
