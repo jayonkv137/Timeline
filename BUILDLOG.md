@@ -192,6 +192,20 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P1.S6 — TIMELINE
 ---
 
+## 2026-07-08 02:18 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P1.S5 — DIRECTION + DECISIONS (Locked to Var A)
+- **Did:**
+  - Removed the visual switcher pill toggles (`Var A`, `Var B`, `Var C`) and cleaned up the `decisionsVar` React state.
+  - Locked the DECISIONS card representation to **Variation A (Big Split Cards)**: side-by-side user and AI metric widgets displaying large numbers (`4` and `10`) inside low-opacity tinted cards, followed by a shaded card highlighting the latest AI requirement.
+  - Staged and committed changes as `P1.S5` lock.
+- **Decisions made:**
+  - Standardized the decisions card layout based on the user's explicit preference for Variation A.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Built and verified the dev app compiles with zero errors, and displays only Variation A in the rail.
+- **Next:** P1.S6 — TIMELINE
+---
+
+
 
 
 
