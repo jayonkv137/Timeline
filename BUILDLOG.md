@@ -270,6 +270,22 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P1.S7 — HOW
 ---
 
+## 2026-07-08 02:49 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P1.S6 — TIMELINE (Layout Spacing & Spine Refinements)
+- **Did:**
+  - Removed empty visual gaps between the horizontal diverging bars and the central R-badge circles. Bars now extend directly to the center line (50%).
+  - Enhanced the central vertical timeline spine to be a solid gray line (`rgba(0, 0, 0, 0.22)`) making it clearly visible in the light theme.
+  - Sized circular R-badge masks with a matching panel outline border to sit cleanly on top of the vertical spine line.
+  - Increased the maximum horizontal bar width scaling factor to 135px to fill the space cleanly and improve readability.
+  - Staged and committed changes as `P1.S6` layout alignment update.
+- **Decisions made:**
+  - Standardized on absolute vertical spine line layouts behind center-aligned HTML flex containers to simulate a gap-free continuous timeline trace.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Built and verified the dev app compiles with zero errors, and renders the gap-free diverging chart cleanly.
+- **Next:** P1.S7 — HOW
+---
+
+
 
 
 
