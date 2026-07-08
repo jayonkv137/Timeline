@@ -24,3 +24,23 @@
 - **Taken:** Conservative deferral — loader will be written when the export lands
   (owner said before S8(c), the only step that needs it). No format invented.
 - **Status:** OPEN until the export file appears. Not a spec problem, a sequencing note.
+
+## Q3 — state.schema.json has no home for cross-pair working data
+- **What:** The pipeline needs several pieces of cross-pair working data that
+  `state.schema.json` (additionalProperties: false) cannot hold: Step 1b's
+  `action_to_outcome` mapping (consumed by Step 2's per-outcome FILTER), the rolling
+  `dialogue_summary` (Step 1b SELF-REFERENCE), Trigger B's per-requirement
+  labeled-action-id tracking (§9.3: send only NEW subsequent actions), and slot age
+  counters for the 3-pair abandonment sweep. ARCHITECTURE §3's state.json contract has
+  no fields for these.
+- **Options considered:** (a) extend state.schema.json — rejected: schemas are frozen
+  Phase 0 contracts, and the frozen fixture's state.json would no longer be the same
+  shape; (b) recompute from scratch each run — impossible for dialogue_summary and
+  Trigger-B tracking, which are genuinely stateful; (c) persist them in an internal,
+  non-contract file under `<out>/run/` (already gitignored, already designated for
+  run-internal artifacts like caches and llm_monitor.txt).
+- **Taken:** (c) — `<out>/run/pipeline_state.json`, written by `engine/state.py`
+  alongside every state.json save, read on `--resume`. The five contract artifacts are
+  untouched; this file is engine-internal and carries no panel-facing data.
+- **Status:** REVISIT — if the command center wants this data in the contract, a spec
+  amendment can move it into state.schema.json later; the engine change would be small.

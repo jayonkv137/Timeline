@@ -516,6 +516,45 @@ ENTRY TEMPLATE (copy, fill, append):
   append-only writer, snapshots.json, schema validation on every write).
 ---
 
+## 2026-07-08 · Claude Code · Fable 5
+- **Phase/Step:** P2.S2 — STATE + artifact writers
+- **Did:**
+  - `engine/artifacts.py` — the validation gate: `validate_artifact(instance,
+    schema_name)` on cached `Draft202012Validator`s over `engine/schemas/*`; failure
+    RAISES, and raises BEFORE any bytes hit disk. `write_json_artifact` (state /
+    snapshots / dialogue / panel_bundle); `LedgerWriter` (append-only — never rewrites
+    the file, validates each row pre-write, keeps all rows in memory for Stage 4,
+    reloads existing rows on open for --resume); `read_ledger` for read-only paths.
+  - `engine/state.py` — `State`: in-memory container exactly mirroring
+    state.schema.json (actions/outcomes/intentions/requirements/slots/operations_log)
+    with the lookups later steps need (action by id, per-outcome actions via
+    action_to_outcome, per-outcome requirements/slots with status filter, find_req/
+    find_slot, log_operation). `save()`/`load()` round-trips `<out>/state.json`
+    (validated both directions) plus `<out>/run/pipeline_state.json` for cross-pair
+    working data (action_to_outcome, dialogue_summary, outcome_to_intention,
+    Trigger-B labeled-action tracking, slot age counters, last_completed_pair).
+  - `pytest.ini` (pythonpath=., testpaths=tests) — makes `engine` importable in tests.
+  - `tests/test_state.py` — 10 tests: STATE round-trip equality (incl. run-state);
+    save of an invalid STATE raises AND leaves no file; lookup helpers; ledger
+    append+reload; append-only proof (prior bytes byte-identical after second
+    append); invalid row raises with nothing recorded; snapshots writer + its
+    failure path; frozen-fixture compatibility read-only (state.json loads → 14
+    reqs/5 slots; ledger.jsonl reads → 157 rows).
+- **Decisions made:**
+  - Cross-pair working data lives in `<out>/run/pipeline_state.json`, NOT in
+    state.json — state.schema.json is additionalProperties:false and frozen; see
+    SPEC_QUESTIONS.md Q3 (REVISIT) for options considered.
+  - Validation failures happen before file writes, so a crashed run never leaves a
+    half-written invalid artifact.
+- **Spec contradictions/gaps flagged:** Q3 (state schema has no home for
+  action_to_outcome / dialogue_summary / Trigger-B tracking) — conservative
+  workaround recorded in SPEC_QUESTIONS.md.
+- **Verification:** `pytest` → **22/22 passed** (12 Phase 0 + 10 new). Frozen fixture
+  folder confirmed untouched (git status clean under data/chats/fixture_pair1/).
+- **Next:** P2.S3 — Steps 1a/1b/1c per pair (§9.1: B=1, dialogue_summary
+  SELF-REFERENCE, {all actions block} ACCUMULATE, U(x,y)/A(x,y) regex enforcement).
+---
+
 
 
 
