@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useAppStore } from './store';
 import { SectionHeader } from './components/InfoPopover';
 import { GoalSection } from './components/GoalSection';
+import { TimelineSection } from './components/TimelineSection';
 import { MessageSquare, Paperclip, Send, Plus, Sparkles } from 'lucide-react';
 
 const SUGGESTIONS = [
@@ -17,6 +18,7 @@ export const App: React.FC = () => {
     conversations,
     addConversation,
     selectedPairIdx,
+    setSelectedPairIdx,
     panelBundle,
     setPanelBundle,
     dialogue,
@@ -724,16 +726,11 @@ export const App: React.FC = () => {
           </div>
 
           {/* Section 4: TIMELINE */}
-          <div style={{ borderBottom: '1px solid var(--border)' }}>
-            <SectionHeader label="Timeline" sectionKey="TIMELINE" />
-            <div style={{ padding: '0 16px 12px', fontSize: '12px', textAlign: 'left' }}>
-              {hasChatStarted ? (
-                <div style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                  Loading timeline...
-                </div>
-              ) : null}
-            </div>
-          </div>
+          <TimelineSection
+            pairs={hasChatStarted && panelBundle ? panelBundle.pairs.map((p) => p.timeline) : []}
+            selectedPairIdx={selectedPairIdx}
+            onSelectPair={setSelectedPairIdx}
+          />
 
           {/* Section 5: HOW */}
           <div>
