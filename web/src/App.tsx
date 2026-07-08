@@ -17,7 +17,9 @@ export const App: React.FC = () => {
     activeChatId,
     setActiveChatId,
     conversations,
+    setConversations,
     addConversation,
+    updateConversationTitle,
     selectedPairIdx,
     setSelectedPairIdx,
     panelBundle,
@@ -26,38 +28,151 @@ export const App: React.FC = () => {
     setDialogue,
   } = useAppStore();
 
-  // Load static fixture data
-  useEffect(() => {
-    async function loadFixture() {
-      try {
-        const bundleRes = await fetch('/fixture/panel_bundle.json');
-        if (bundleRes.ok) {
-          const bundleData = await bundleRes.json();
-          setPanelBundle(bundleData);
-        }
+  const isFixtureMode = new URLSearchParams(window.location.search).get('fixture') === '1';
 
-        const dialogueRes = await fetch('/fixture/dialogue.json');
-        if (dialogueRes.ok) {
-          const dialogueData = await dialogueRes.json();
-          setDialogue(dialogueData);
+  // 1. Load active chat list/conversations
+  useEffect(() => {
+    if (isFixtureMode) {
+      setConversations([{
+        id: 'conv-1',
+        title: 'React Form Debug Investigation'
+      }]);
+      setActiveChatId('conv-1');
+    } else {
+      async function fetchChats() {
+        try {
+          const res = await fetch('/chats');
+          if (res.ok) {
+            const data = await res.json();
+            setConversations(data);
+          }
+        } catch (error) {
+          console.error('Error listing chats:', error);
+        }
+      }
+      fetchChats();
+    }
+  }, [isFixtureMode, setConversations, setActiveChatId]);
+
+  // 2. Load bundle when activeChatId changes
+  useEffect(() => {
+    if (!activeChatId) {
+      setPanelBundle(null);
+      setDialogue([]);
+      setSelectedPairIdx(0);
+      return;
+    }
+
+    if (isFixtureMode) {
+      if (activeChatId === 'conv-1') {
+        async function loadFixture() {
+          try {
+            const bundleRes = await fetch('/fixture/panel_bundle.json');
+            if (bundleRes.ok) {
+              const bundleData = await bundleRes.json();
+              setPanelBundle(bundleData);
+            }
+            const dialogueRes = await fetch('/fixture/dialogue.json');
+            if (dialogueRes.ok) {
+              const dialogueData = await dialogueRes.json();
+              setDialogue(dialogueData);
+            }
+          } catch (error) {
+            console.error('Error loading fixture:', error);
+          }
+        }
+        loadFixture();
+      }
+    } else {
+      async function loadChatBundle() {
+        try {
+          const res = await fetch(`/chats/${activeChatId}/bundle`);
+          if (res.ok) {
+            const data = await res.json();
+            setDialogue(data.dialogue);
+            setPanelBundle(data.panel_bundle);
+            if (data.panel_bundle && data.panel_bundle.pairs && data.panel_bundle.pairs.length > 0) {
+              setSelectedPairIdx(data.panel_bundle.pairs.length - 1);
+            } else {
+              setSelectedPairIdx(0);
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching chat bundle:', error);
+        }
+      }
+      loadChatBundle();
+    }
+  }, [activeChatId, isFixtureMode, setPanelBundle, setDialogue, setSelectedPairIdx]);
+
+  const handleStartChat = async () => {
+    if (isFixtureMode) {
+      const newChatId = 'conv-1';
+      addConversation({
+        id: newChatId,
+        title: 'React Form Debug Investigation'
+      });
+      setActiveChatId(newChatId);
+    } else {
+      try {
+        const res = await fetch('/chats', { method: 'POST' });
+        if (res.ok) {
+          const newChat = await res.json();
+          addConversation(newChat);
+          setActiveChatId(newChat.id);
         }
       } catch (error) {
-        console.error('Error loading fixture data:', error);
+        console.error('Error starting new chat:', error);
       }
     }
-    loadFixture();
-  }, [setPanelBundle, setDialogue]);
-
-  const handleStartChat = () => {
-    const newChatId = 'conv-1';
-    addConversation({
-      id: newChatId,
-      title: 'React Form Debug Investigation'
-    });
-    setActiveChatId(newChatId);
   };
 
-  const hasChatStarted = activeChatId === 'conv-1';
+  const hasChatStarted = activeChatId !== null;
+
+  // Title editing state
+  const [isEditingTitle, setIsEditingTitle] = React.useState(false);
+  const [tempTitle, setTempTitle] = React.useState('');
+
+  const activeChat = conversations.find(c => c.id === activeChatId);
+  const chatTitle = activeChat ? activeChat.title : 'New Chat';
+
+  useEffect(() => {
+    if (chatTitle) {
+      setTempTitle(chatTitle);
+    }
+  }, [chatTitle]);
+
+  const handleSaveTitle = async () => {
+    if (!activeChatId || !tempTitle.trim() || tempTitle.trim() === chatTitle) {
+      setIsEditingTitle(false);
+      return;
+    }
+    if (isFixtureMode) {
+      updateConversationTitle(activeChatId, tempTitle.trim());
+      setIsEditingTitle(false);
+      return;
+    }
+    try {
+      const res = await fetch(`/chats/${activeChatId}/title`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: tempTitle.trim() }),
+      });
+      if (res.ok) {
+        updateConversationTitle(activeChatId, tempTitle.trim());
+        // Reload bundle to reflect updated root outcome in UI
+        const bundleRes = await fetch(`/chats/${activeChatId}/bundle`);
+        if (bundleRes.ok) {
+          const bundleData = await bundleRes.json();
+          setPanelBundle(bundleData.panel_bundle);
+        }
+      }
+    } catch (err) {
+      console.error('Error saving title:', err);
+    }
+    setIsEditingTitle(false);
+  };
+
   const activePair = panelBundle?.pairs?.[selectedPairIdx] || null;
 
   // Formatting timestamp to HH:MM format
@@ -242,9 +357,44 @@ export const App: React.FC = () => {
                 padding: '0 24px',
               }}
             >
-              <span style={{ fontSize: '13px', fontWeight: 500 }}>
-                React Form Debug Investigation
-              </span>
+              {isEditingTitle ? (
+                <input
+                  type="text"
+                  value={tempTitle}
+                  onChange={(e) => setTempTitle(e.target.value)}
+                  onBlur={handleSaveTitle}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleSaveTitle();
+                    if (e.key === 'Escape') {
+                      setTempTitle(chatTitle);
+                      setIsEditingTitle(false);
+                    }
+                  }}
+                  autoFocus
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: 500,
+                    border: '1px solid var(--border)',
+                    borderRadius: '4px',
+                    padding: '2px 6px',
+                    outline: 'none',
+                    width: '300px',
+                    fontFamily: 'var(--font-sans)',
+                  }}
+                />
+              ) : (
+                <span
+                  onDoubleClick={() => setIsEditingTitle(true)}
+                  title="Double click to edit title"
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {chatTitle}
+                </span>
+              )}
             </div>
 
             {/* Chat History Viewport */}
@@ -605,7 +755,9 @@ export const App: React.FC = () => {
               fontFamily: 'var(--font-mono)',
             }}
           >
-            {hasChatStarted ? '1/1' : '0/0'}
+            {hasChatStarted && panelBundle && panelBundle.pairs && panelBundle.pairs.length > 0
+              ? `${selectedPairIdx + 1}/${panelBundle.pairs.length}`
+              : '0/0'}
           </span>
         </div>
 
