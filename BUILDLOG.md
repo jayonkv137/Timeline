@@ -299,6 +299,24 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P1.S7 — HOW
 ---
 
+## 2026-07-08 02:59 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P1.S6 — TIMELINE (Spine Alignment & Popover Relocation)
+- **Did:**
+  - Standardized the horizontal coordinate of the vertical axis spine to exactly 71px.
+  - Aligned the collapsed row micro-spine and the expanded drawer requirement spine on the same 71px line, creating a single continuous vertical axis line.
+  - Removed borders and margins separating the header row and drawer to make the visual flow seamless.
+  - Positioned the `"Requirements"` sub-heading to sit on the right of the spine (`left: 86px`) inside the drawer to prevent spine overlap.
+  - Added an `align` prop to `InfoPopover.tsx` to force left-alignment (`align="left"`) for the Requirements popover so it opens to the right and stays inside the rail boundaries, preventing layout blockage.
+  - Adjusted row-hover carets with lower default opacity.
+  - Staged and committed changes as `P1.S6` spine alignment update.
+- **Decisions made:**
+  - Aligned spines at 71px calculated directly from the collapsed header left content widths to create a seamless vertical line.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Built and verified the dev app compiles with zero errors, and displays the continuous vertical spine cleanly.
+- **Next:** P1.S7 — HOW
+---
+
+
 
 
 
