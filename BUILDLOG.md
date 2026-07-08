@@ -755,6 +755,22 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Verification:**
   - Compiled and built Vite client bundle successfully via `npm run build` with zero compiler warnings or errors.
 - **Next:** P3.S6 — The choreography (typing indicators, streaming assistant bubbles, rail loading states, and atomic rail updates)
+---
+
+## 2026-07-08 08:51 · Antigravity · Gemini 3.5 Flash (High)
+- **Phase/Step:** P3.S6 — The choreography
+- **Did:**
+  - `web/src/index.css` — added custom CSS keyframe animations and styling classes for the bouncing typing dots and the rail loading bar.
+  - `web/src/App.tsx` — implemented the end-to-end messaging pipeline: typing indicators, streaming assistant tokens, active input states, SSE listeners, atomic panel refreshes, the Back-to-latest pill, and bubble highlight borders.
+- **Decisions made:**
+  - Designed local state buffering (`isAiTyping`, `streamingText`) to seamlessly render LLM streaming replies chunk-by-chunk in real-time, replacing the local placeholder immediately upon the first returned token to avoid jitter.
+  - Intercepted Server-Sent Events to toggle `isRailLoading` during the backend pipeline run, keeping existing values visible until `pair_ready` fires, which updates the panels atomically and increments the counters.
+  - Implemented the no-yank rule: if the user is scrolling history, the denominator of the strip increments (`2/3` -> `2/4`), but the view is not forced to jump. A floating `● Back to latest ↓` button is rendered to allow manual return.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:**
+  - Checked build with `npm run build` → **success with 0 compiler warnings/errors**.
+  - Checked backend tests with `pytest tests/test_server.py` → **4/4 passed**.
+- **Next:** P3.S7 — Manual Rerun integration (wiring the manual rerun button to trigger reruns and update panel values)
 
 
 
