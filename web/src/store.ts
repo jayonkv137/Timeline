@@ -90,9 +90,17 @@ export interface PanelBundle {
   pairs: PairBundle[];
 }
 
+export interface ChatSession {
+  id: string;
+  title: string;
+}
+
 interface AppState {
   activeChatId: string | null;
   setActiveChatId: (id: string | null) => void;
+  conversations: ChatSession[];
+  addConversation: (chat: ChatSession) => void;
+  clearConversations: () => void;
   selectedPairIdx: number;
   setSelectedPairIdx: (idx: number) => void;
   panelBundle: PanelBundle | null;
@@ -102,8 +110,15 @@ interface AppState {
 }
 
 export const useAppStore = create<AppState>((set) => ({
-  activeChatId: null, // default to clean empty state on startup
+  activeChatId: null,
   setActiveChatId: (id) => set({ activeChatId: id }),
+  conversations: [], // start with completely blank sidebar
+  addConversation: (chat) => set((state) => {
+    // Avoid duplicates
+    if (state.conversations.some(c => c.id === chat.id)) return {};
+    return { conversations: [...state.conversations, chat] };
+  }),
+  clearConversations: () => set({ conversations: [], activeChatId: null }),
   selectedPairIdx: 0,
   setSelectedPairIdx: (idx) => set({ selectedPairIdx: idx }),
   panelBundle: null,

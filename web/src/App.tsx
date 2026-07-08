@@ -3,22 +3,18 @@ import { useAppStore } from './store';
 import { SectionHeader } from './components/InfoPopover';
 import { MessageSquare, Paperclip, Send, Plus, Sparkles } from 'lucide-react';
 
-const CHATS = [
-  { id: 'conv-1', title: 'React Form Debug Investigation' },
-  { id: 'conv-2', title: 'Cover Letter — Lumen' },
-  { id: 'conv-3', title: 'Newsletter Angle — Brainstorm' },
-];
-
 const SUGGESTIONS = [
-  "What can I ask you to do?",
-  "Which one of my projects is performing the best?",
-  "What projects should I be concerned about right now?"
+  "want to help you build a website",
+  "want to help you plan a trip",
+  "wanna help you writing a fantasy story"
 ];
 
 export const App: React.FC = () => {
   const {
     activeChatId,
     setActiveChatId,
+    conversations,
+    addConversation,
     // selectedPairIdx,
     // panelBundle,
     setPanelBundle,
@@ -47,6 +43,15 @@ export const App: React.FC = () => {
     }
     loadFixture();
   }, [setPanelBundle, setDialogue]);
+
+  const handleStartChat = () => {
+    const newChatId = 'conv-1';
+    addConversation({
+      id: newChatId,
+      title: 'React Form Debug Investigation'
+    });
+    setActiveChatId(newChatId);
+  };
 
   const hasChatStarted = activeChatId === 'conv-1';
 
@@ -117,22 +122,14 @@ export const App: React.FC = () => {
           </button>
         </div>
 
-        {/* Sidebar Chat List */}
+        {/* Sidebar Chat List (initially completely empty) */}
         <div style={{ flex: 1, overflowY: 'auto', padding: '8px' }}>
-          {CHATS.map((chat) => {
-            const isTarget = chat.id === 'conv-1';
+          {conversations.map((chat) => {
             const isActive = activeChatId === chat.id;
             return (
               <div
                 key={chat.id}
-                onClick={() => {
-                  if (isTarget) {
-                    setActiveChatId('conv-1');
-                  } else {
-                    // Other chats behave as static blank pages for this phase
-                    setActiveChatId(chat.id);
-                  }
-                }}
+                onClick={() => setActiveChatId(chat.id)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -392,7 +389,7 @@ export const App: React.FC = () => {
                 {SUGGESTIONS.map((suggestion, idx) => (
                   <div
                     key={idx}
-                    onClick={() => setActiveChatId('conv-1')}
+                    onClick={handleStartChat}
                     style={{
                       backgroundColor: 'var(--card-bg)',
                       border: '1px solid var(--border)',
