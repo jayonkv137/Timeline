@@ -23,8 +23,6 @@ export const App: React.FC = () => {
     setDialogue,
   } = useAppStore();
 
-  const [decisionsVar, setDecisionsVar] = React.useState<'A' | 'B' | 'C'>('A');
-
   // Load static fixture data
   useEffect(() => {
     async function loadFixture() {
@@ -652,220 +650,72 @@ export const App: React.FC = () => {
 
           {/* Section 3: DECISIONS */}
           <div style={{ borderBottom: '1px solid var(--border)' }}>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                paddingRight: '16px',
-              }}
-            >
-              <SectionHeader label="Decisions" sectionKey="DECISIONS" />
-              {hasChatStarted && activePair && (
-                <div style={{ display: 'flex', gap: '4px', alignSelf: 'center', marginTop: '6px' }}>
-                  {(['A', 'B', 'C'] as const).map((v) => (
-                    <button
-                      key={v}
-                      onClick={() => setDecisionsVar(v)}
-                      style={{
-                        fontSize: '9px',
-                        fontWeight: 600,
-                        padding: '2px 6px',
-                        borderRadius: '4px',
-                        border: '1px solid var(--border)',
-                        background: decisionsVar === v ? 'var(--text-primary)' : 'var(--card-bg)',
-                        color: decisionsVar === v ? 'var(--card-bg)' : 'var(--text-primary)',
-                        cursor: 'pointer',
-                        transition: 'all 0.15s ease',
-                      }}
-                    >
-                      Var {v}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+            <SectionHeader label="Decisions" sectionKey="DECISIONS" />
 
             <div style={{ padding: '0 16px 12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {hasChatStarted && activePair ? (
                 <>
-                  {/* Variation A: Big Split Cards (Metric Focus) */}
-                  {decisionsVar === 'A' && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      <div style={{ display: 'flex', gap: '8px' }}>
-                        <div
-                          style={{
-                            flex: 1,
-                            backgroundColor: 'rgba(0, 87, 255, 0.04)',
-                            border: '1px solid rgba(0, 87, 255, 0.12)',
-                            borderRadius: '8px',
-                            padding: '10px 6px',
-                            textAlign: 'center',
-                          }}
-                        >
-                          <div style={{ fontSize: '22px', fontWeight: 700, color: 'var(--you)', lineHeight: 1.1 }}>
-                            {activePair.decisions.you_count}
-                          </div>
-                          <div style={{ fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
-                            By You
-                          </div>
-                        </div>
-
-                        <div
-                          style={{
-                            flex: 1,
-                            backgroundColor: 'rgba(232, 90, 10, 0.04)',
-                            border: '1px solid rgba(232, 90, 10, 0.12)',
-                            borderRadius: '8px',
-                            padding: '10px 6px',
-                            textAlign: 'center',
-                          }}
-                        >
-                          <div style={{ fontSize: '22px', fontWeight: 700, color: 'var(--ai)', lineHeight: 1.1 }}>
-                            {activePair.decisions.ai_count}
-                          </div>
-                          <div style={{ fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
-                            By AI
-                          </div>
-                        </div>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    {/* User decisions card */}
+                    <div
+                      style={{
+                        flex: 1,
+                        backgroundColor: 'rgba(0, 87, 255, 0.04)',
+                        border: '1px solid rgba(0, 87, 255, 0.12)',
+                        borderRadius: '8px',
+                        padding: '10px 6px',
+                        textAlign: 'center',
+                      }}
+                    >
+                      <div style={{ fontSize: '22px', fontWeight: 700, color: 'var(--you)', lineHeight: 1.1 }}>
+                        {activePair.decisions.you_count}
                       </div>
-
-                      {activePair.decisions.latest_ai_example && (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '4px' }}>
-                          <span style={{ fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', textAlign: 'left' }}>
-                            Latest AI Decision
-                          </span>
-                          <div
-                            style={{
-                              backgroundColor: 'rgba(0, 0, 0, 0.02)',
-                              borderLeft: '3px solid var(--ai)',
-                              borderRadius: '4px',
-                              padding: '8px 10px',
-                              fontSize: '11px',
-                              fontStyle: 'italic',
-                              color: 'var(--text-primary)',
-                              textAlign: 'left',
-                              lineHeight: '1.4',
-                            }}
-                          >
-                            "{truncateClause(activePair.decisions.latest_ai_example)}"
-                          </div>
-                        </div>
-                      )}
+                      <div style={{ fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
+                        By You
+                      </div>
                     </div>
-                  )}
 
-                  {/* Variation B: Visual Progress Bar (Odometer Style) */}
-                  {decisionsVar === 'B' && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <span style={{ fontSize: '20px', fontWeight: 700, color: 'var(--you)', fontFamily: 'var(--font-mono)' }}>
-                          {activePair.decisions.you_count}
-                        </span>
-                        
-                        {/* Segmented Split Bar */}
-                        <div style={{ flex: 1, height: '8px', display: 'flex', gap: '2px', backgroundColor: 'transparent' }}>
-                          {Array.from({ length: 14 }).map((_, idx) => {
-                            const isUser = idx < activePair.decisions.you_count;
-                            return (
-                              <div
-                                key={idx}
-                                style={{
-                                  flex: 1,
-                                  height: '100%',
-                                  borderRadius: '1.5px',
-                                  backgroundColor: isUser ? 'var(--you)' : 'var(--ai)',
-                                  opacity: isUser ? 0.95 : 0.85,
-                                }}
-                              />
-                            );
-                          })}
-                        </div>
-
-                        <span style={{ fontSize: '20px', fontWeight: 700, color: 'var(--ai)', fontFamily: 'var(--font-mono)' }}>
-                          {activePair.decisions.ai_count}
-                        </span>
+                    {/* AI decisions card */}
+                    <div
+                      style={{
+                        flex: 1,
+                        backgroundColor: 'rgba(232, 90, 10, 0.04)',
+                        border: '1px solid rgba(232, 90, 10, 0.12)',
+                        borderRadius: '8px',
+                        padding: '10px 6px',
+                        textAlign: 'center',
+                      }}
+                    >
+                      <div style={{ fontSize: '22px', fontWeight: 700, color: 'var(--ai)', lineHeight: 1.1 }}>
+                        {activePair.decisions.ai_count}
                       </div>
-
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-                        <span>YOU DECISIONS</span>
-                        <span>AI DECISIONS</span>
+                      <div style={{ fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
+                        By AI
                       </div>
-
-                      {activePair.decisions.latest_ai_example && (
-                        <div
-                          style={{
-                            display: 'flex',
-                            gap: '8px',
-                            alignItems: 'flex-start',
-                            fontSize: '11px',
-                            color: 'var(--text-muted)',
-                            textAlign: 'left',
-                            lineHeight: '1.4',
-                            borderTop: '1px dashed var(--border)',
-                            paddingTop: '8px',
-                          }}
-                        >
-                          <span style={{ color: 'var(--ai)', fontSize: '12px', lineHeight: 1 }}>●</span>
-                          <span>
-                            <strong>Latest AI requirement:</strong> "{truncateClause(activePair.decisions.latest_ai_example)}"
-                          </span>
-                        </div>
-                      )}
                     </div>
-                  )}
+                  </div>
 
-                  {/* Variation C: Minimal Checklist Ledger (Clean Grid) */}
-                  {decisionsVar === 'C' && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {/* Latest AI Decision example */}
+                  {activePair.decisions.latest_ai_example && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '4px' }}>
+                      <span style={{ fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase', fontFamily: 'var(--font-mono)', textAlign: 'left' }}>
+                        Latest AI Decision
+                      </span>
                       <div
                         style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          border: '1px solid var(--border)',
-                          borderRadius: '6px',
-                          overflow: 'hidden',
+                          backgroundColor: 'rgba(0, 0, 0, 0.02)',
+                          borderLeft: '3px solid var(--ai)',
+                          borderRadius: '4px',
+                          padding: '8px 10px',
                           fontSize: '11px',
+                          fontStyle: 'italic',
+                          color: 'var(--text-primary)',
+                          textAlign: 'left',
+                          lineHeight: '1.4',
                         }}
                       >
-                        {/* Table Row 1 */}
-                        <div style={{ display: 'flex', borderBottom: '1px solid var(--border)', padding: '6px 10px', justifyContent: 'space-between', backgroundColor: 'rgba(0,0,0,0.01)' }}>
-                          <span style={{ color: 'var(--you)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--you)' }} />
-                            You (User-led)
-                          </span>
-                          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{activePair.decisions.you_count} decisions</span>
-                        </div>
-                        {/* Table Row 2 */}
-                        <div style={{ display: 'flex', padding: '6px 10px', justifyContent: 'space-between' }}>
-                          <span style={{ color: 'var(--ai)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--ai)' }} />
-                            AI (AI-authored)
-                          </span>
-                          <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{activePair.decisions.ai_count} decisions</span>
-                        </div>
+                        "{truncateClause(activePair.decisions.latest_ai_example)}"
                       </div>
-
-                      {activePair.decisions.latest_ai_example && (
-                        <div
-                          style={{
-                            backgroundColor: 'var(--card-bg)',
-                            border: '1.5px solid var(--border)',
-                            borderRadius: '6px',
-                            padding: '8px 12px',
-                            textAlign: 'left',
-                            fontSize: '11px',
-                            boxShadow: '0 1px 4px rgba(0,0,0,0.02)',
-                          }}
-                        >
-                          <span style={{ fontSize: '9px', fontWeight: 600, color: 'var(--ai)', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', display: 'block', marginBottom: '2px' }}>
-                            [Latest AI Requirement]
-                          </span>
-                          <span style={{ color: 'var(--text-primary)' }}>
-                            "{truncateClause(activePair.decisions.latest_ai_example)}"
-                          </span>
-                        </div>
-                      )}
                     </div>
                   )}
                 </>
