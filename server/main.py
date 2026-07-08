@@ -5,7 +5,8 @@ import uuid
 import os
 import datetime
 import asyncio
-from typing import Dict, Set
+import shutil
+from typing import Dict, Set, Optional
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
@@ -112,33 +113,624 @@ def list_chats():
     chats.sort(key=lambda x: x["id"])
     return chats
 
+class ChatCreateRequest(BaseModel):
+    template: Optional[str] = None
+
 @app.post("/chats")
-def create_chat():
+def create_chat(payload: ChatCreateRequest = ChatCreateRequest()):
+    template = payload.template
     chat_id = str(uuid.uuid4())
     chat_dir = CHATS_DIR / chat_id
     chat_dir.mkdir(parents=True, exist_ok=True)
     
     try:
-        # Empty artifacts matching schemas
-        # 1. dialogue.json -> []
-        write_json_artifact(chat_dir / "dialogue.json", [], "dialogue")
-        # 2. snapshots.json -> []
-        write_json_artifact(chat_dir / "snapshots.json", [], "snapshots")
-        # 3. panel_bundle.json -> {"pairs": []}
-        write_json_artifact(chat_dir / "panel_bundle.json", {"pairs": []}, "panel_bundle")
-        
-        # 4. state.json -> empty State
-        state = State()
-        state.save(chat_dir)
-        
-        # 5. ledger.jsonl -> touch it empty
-        ledger_path = chat_dir / "ledger.jsonl"
-        ledger_path.touch(exist_ok=True)
+        if template == "website":
+            # Copy all files from fixture_pair1 if it exists
+            fixture_dir = CHATS_DIR / "fixture_pair1"
+            if fixture_dir.exists():
+                for item in fixture_dir.iterdir():
+                    if item.is_file():
+                        shutil.copy(item, chat_dir)
+            else:
+                # Default empty creation if fixture doesn't exist
+                write_json_artifact(chat_dir / "dialogue.json", [], "dialogue")
+                write_json_artifact(chat_dir / "snapshots.json", [], "snapshots")
+                write_json_artifact(chat_dir / "panel_bundle.json", {"pairs": []}, "panel_bundle")
+                state = State()
+                state.save(chat_dir)
+                (chat_dir / "ledger.jsonl").touch(exist_ok=True)
+        elif template == "trip":
+            # Write 2-pair trip plan templates
+            dialogue_data = [
+                {
+                    "pair": 1,
+                    "speaker": "user",
+                    "text": "I want to help you plan a trip to Tokyo.",
+                    "attachments": [],
+                    "ts": "2026-07-08T08:00:00Z"
+                },
+                {
+                    "pair": 1,
+                    "speaker": "ai",
+                    "text": "Excellent! Goal: Tokyo Exploration Itinerary. We require Shinjuku visits and a day-trip to Mount Fuji.",
+                    "attachments": [],
+                    "ts": "2026-07-08T08:01:00Z"
+                },
+                {
+                    "pair": 2,
+                    "speaker": "user",
+                    "text": "Add a Tsukiji food tour to the itinerary.",
+                    "attachments": [],
+                    "ts": "2026-07-08T08:02:00Z"
+                },
+                {
+                    "pair": 2,
+                    "speaker": "ai",
+                    "text": "Added Tsukiji food tour and selected fresh sushi stalls.",
+                    "attachments": [],
+                    "ts": "2026-07-08T08:03:00Z"
+                }
+            ]
+            write_json_artifact(chat_dir / "dialogue.json", dialogue_data, "dialogue")
+            
+            panel_bundle_data = {
+              "pairs": [
+                {
+                  "pair": 1,
+                  "direction": {
+                    "you_pct": 30.0,
+                    "ai_pct": 70.0
+                  },
+                  "decisions": {
+                    "you_count": 1,
+                    "ai_count": 2,
+                    "latest_ai_example": "Mount Fuji day-trip"
+                  },
+                  "timeline": {
+                    "pair": 1,
+                    "delta_you": 10.0,
+                    "delta_ai": 30.0,
+                    "summary": "added Mount Fuji day-trip requirement",
+                    "drawer": {
+                      "requirements": [
+                        {
+                          "outcome_id": "outcome 1",
+                          "req_id": "req 1",
+                          "label": "R1",
+                          "op": "create",
+                          "delta_you": 10.0,
+                          "delta_ai": 0.0,
+                          "chip": "blue"
+                        },
+                        {
+                          "outcome_id": "outcome 1",
+                          "req_id": "req 2",
+                          "label": "R2",
+                          "op": "create",
+                          "delta_you": 0.0,
+                          "delta_ai": 30.0,
+                          "chip": "orange"
+                        }
+                      ],
+                      "slots": []
+                    }
+                  },
+                  "goal": {
+                    "default_view": [
+                      {
+                        "outcome_id": "outcome 1",
+                        "text": "Tokyo Exploration Itinerary",
+                        "depth": 0,
+                        "is_current": true
+                      }
+                    ],
+                    "full_tree": [
+                      {
+                        "outcome_id": "outcome 1",
+                        "text": "Tokyo Exploration Itinerary",
+                        "depth": 0,
+                        "parent": None,
+                        "children": []
+                      }
+                    ]
+                  },
+                  "how": {
+                    "mode": "COPILOT",
+                    "signals": {
+                      "w_you": 1,
+                      "w_ai": 2,
+                      "h_you": 10.0,
+                      "h_ai": 30.0,
+                      "substantive_user": True
+                    },
+                    "split": {
+                      "centaur_pct": 0.0,
+                      "copilot_pct": 100.0,
+                      "autopilot_pct": 0.0
+                    }
+                  }
+                },
+                {
+                  "pair": 2,
+                  "direction": {
+                    "you_pct": 45.0,
+                    "ai_pct": 55.0
+                  },
+                  "decisions": {
+                    "you_count": 2,
+                    "ai_count": 3,
+                    "latest_ai_example": "Tsukiji Food Tour selection"
+                  },
+                  "timeline": {
+                    "pair": 2,
+                    "delta_you": 20.0,
+                    "delta_ai": 15.0,
+                    "summary": "added Tsukiji food tour",
+                    "drawer": {
+                      "requirements": [
+                        {
+                          "outcome_id": "outcome 1",
+                          "req_id": "req 3",
+                          "label": "R3",
+                          "op": "create",
+                          "delta_you": 20.0,
+                          "delta_ai": 0.0,
+                          "chip": "blue"
+                        },
+                        {
+                          "outcome_id": "outcome 1",
+                          "req_id": "req 4",
+                          "label": "R4",
+                          "op": "create",
+                          "delta_you": 0.0,
+                          "delta_ai": 15.0,
+                          "chip": "orange"
+                        }
+                      ],
+                      "slots": []
+                    }
+                  },
+                  "goal": {
+                    "default_view": [
+                      {
+                        "outcome_id": "outcome 1",
+                        "text": "Tokyo Exploration Itinerary",
+                        "depth": 0,
+                        "is_current": true
+                      }
+                    ],
+                    "full_tree": [
+                      {
+                        "outcome_id": "outcome 1",
+                        "text": "Tokyo Exploration Itinerary",
+                        "depth": 0,
+                        "parent": None,
+                        "children": []
+                      }
+                    ]
+                  },
+                  "how": {
+                    "mode": "COPILOT",
+                    "signals": {
+                      "w_you": 2,
+                      "w_ai": 3,
+                      "h_you": 30.0,
+                      "h_ai": 45.0,
+                      "substantive_user": True
+                    },
+                    "split": {
+                      "centaur_pct": 0.0,
+                      "copilot_pct": 100.0,
+                      "autopilot_pct": 0.0
+                    }
+                  }
+                }
+              ]
+            }
+            write_json_artifact(chat_dir / "panel_bundle.json", panel_bundle_data, "panel_bundle")
+            
+            snapshots_data = [
+                {"t": 1, "delta_you": 10.0, "delta_ai": 30.0, "c_you": 10.0, "c_ai": 30.0},
+                {"t": 2, "delta_you": 20.0, "delta_ai": 15.0, "c_you": 30.0, "c_ai": 45.0}
+            ]
+            write_json_artifact(chat_dir / "snapshots.json", snapshots_data, "snapshots")
+            
+            state_data = {
+              "actions": [
+                {"id": "U(1,1)", "type": "Request", "text": "Plan trip", "role": "SHAPER", "evidence_quote": "plan"},
+                {"id": "A(1,1)", "type": "Accept", "text": "Will do", "role": "EXECUTOR", "evidence_quote": "Exploration"},
+                {"id": "U(2,1)", "type": "Request", "text": "Add food tour", "role": "SHAPER", "evidence_quote": "food tour"},
+                {"id": "A(2,1)", "type": "Accept", "text": "Added Tsukiji", "role": "EXECUTOR", "evidence_quote": "Added Tsukiji"}
+              ],
+              "outcomes": [
+                {
+                  "id": "outcome 1",
+                  "text": "Tokyo Exploration Itinerary",
+                  "turn_id": "U(1,1)",
+                  "parent": None,
+                  "children": [],
+                  "related": []
+                }
+              ],
+              "intentions": [
+                {"intention_id": "I1", "intention": "Tokyo Trip Plan", "outcome_ids": ["outcome 1"]}
+              ],
+              "requirements": [
+                {"outcome_id": "outcome 1", "req_id": "req 1", "text": "Visit Shinjuku", "type": "other", "status": "active", "creation_action_ids": ["U(1,1)"], "contributing_action_ids": [], "implementation_action_ids": [], "revise_action_ids": [], "related_to": [], "explicit_or_implicit": "explicit", "rationale": "essential", "created_at_pair": 1},
+                {"outcome_id": "outcome 1", "req_id": "req 2", "text": "Mount Fuji day-trip", "type": "other", "status": "active", "creation_action_ids": ["A(1,1)"], "contributing_action_ids": [], "implementation_action_ids": [], "revise_action_ids": [], "related_to": [], "explicit_or_implicit": "explicit", "rationale": "popular request", "created_at_pair": 1},
+                {"outcome_id": "outcome 1", "req_id": "req 3", "text": "Tsukiji Food Tour", "type": "other", "status": "active", "creation_action_ids": ["U(2,1)"], "contributing_action_ids": [], "implementation_action_ids": [], "revise_action_ids": [], "related_to": [], "explicit_or_implicit": "explicit", "rationale": "explore local food", "created_at_pair": 2},
+                {"outcome_id": "outcome 1", "req_id": "req 4", "text": "Fresh Sushi stalls", "type": "other", "status": "active", "creation_action_ids": ["A(2,1)"], "contributing_action_ids": [], "implementation_action_ids": [], "revise_action_ids": [], "related_to": [], "explicit_or_implicit": "explicit", "rationale": "Tsukiji specialty", "created_at_pair": 2}
+              ],
+              "slots": [],
+              "operations_log": [
+                {"pair": 1, "outcome_id": "outcome 1", "op": "create", "target_id": "req 1", "target_type": "requirement"},
+                {"pair": 1, "outcome_id": "outcome 1", "op": "create", "target_id": "req 2", "target_type": "requirement"},
+                {"pair": 2, "outcome_id": "outcome 1", "op": "create", "target_id": "req 3", "target_type": "requirement"},
+                {"pair": 2, "outcome_id": "outcome 1", "op": "create", "target_id": "req 4", "target_type": "requirement"}
+              ]
+            }
+            write_json_artifact(chat_dir / "state.json", state_data, "state")
+            
+            ledger_lines = [
+                {"pair_added": 1, "action_id": "U(1,1)", "speaker": "U", "role": "SHAPER", "outcome_id": "outcome 1", "req_id": "req 1", "score": 10.0, "kind": "creation"},
+                {"pair_added": 1, "action_id": "A(1,1)", "speaker": "A", "role": "EXECUTOR", "outcome_id": "outcome 1", "req_id": "req 2", "score": 30.0, "kind": "creation"},
+                {"pair_added": 2, "action_id": "U(2,1)", "speaker": "U", "role": "SHAPER", "outcome_id": "outcome 1", "req_id": "req 3", "score": 20.0, "kind": "creation"},
+                {"pair_added": 2, "action_id": "A(2,1)", "speaker": "A", "role": "EXECUTOR", "outcome_id": "outcome 1", "req_id": "req 4", "score": 15.0, "kind": "creation"}
+            ]
+            with open(chat_dir / "ledger.jsonl", "w") as f:
+                for line in ledger_lines:
+                    f.write(json.dumps(line) + "\n")
+        elif template == "fantasy":
+            # Write 3-pair fantasy story templates
+            dialogue_data = [
+                {
+                    "pair": 1,
+                    "speaker": "user",
+                    "text": "I want to write a fantasy story about a floating island.",
+                    "attachments": [],
+                    "ts": "2026-07-08T08:00:00Z"
+                },
+                {
+                    "pair": 1,
+                    "speaker": "ai",
+                    "text": "Excellent. Goal: Floating Island Worldbuilding. We require that the island is powered by glowing crystals.",
+                    "attachments": [],
+                    "ts": "2026-07-08T08:01:00Z"
+                },
+                {
+                    "pair": 2,
+                    "speaker": "user",
+                    "text": "Add a faction of sky pirates.",
+                    "attachments": [],
+                    "ts": "2026-07-08T08:02:00Z"
+                },
+                {
+                    "pair": 2,
+                    "speaker": "ai",
+                    "text": "Added sky pirate faction as requested under worldbuilding.",
+                    "attachments": [],
+                    "ts": "2026-07-08T08:03:00Z"
+                },
+                {
+                    "pair": 3,
+                    "speaker": "user",
+                    "text": "Let's require a giant leviathan monster in the clouds.",
+                    "attachments": [],
+                    "ts": "2026-07-08T08:04:00Z"
+                },
+                {
+                    "pair": 3,
+                    "speaker": "ai",
+                    "text": "Added Cloud Leviathan as a legendary creature requirement.",
+                    "attachments": [],
+                    "ts": "2026-07-08T08:05:00Z"
+                }
+            ]
+            write_json_artifact(chat_dir / "dialogue.json", dialogue_data, "dialogue")
+            
+            panel_bundle_data = {
+              "pairs": [
+                {
+                  "pair": 1,
+                  "direction": {
+                    "you_pct": 50.0,
+                    "ai_pct": 50.0
+                  },
+                  "decisions": {
+                    "you_count": 1,
+                    "ai_count": 1,
+                    "latest_ai_example": "glowing crystal power source"
+                  },
+                  "timeline": {
+                    "pair": 1,
+                    "delta_you": 10.0,
+                    "delta_ai": 10.0,
+                    "summary": "crystal power source",
+                    "drawer": {
+                      "requirements": [
+                        {
+                          "outcome_id": "outcome 1",
+                          "req_id": "req 1",
+                          "label": "R1",
+                          "op": "create",
+                          "delta_you": 10.0,
+                          "delta_ai": 0.0,
+                          "chip": "blue"
+                        },
+                        {
+                          "outcome_id": "outcome 1",
+                          "req_id": "req 2",
+                          "label": "R2",
+                          "op": "create",
+                          "delta_you": 0.0,
+                          "delta_ai": 10.0,
+                          "chip": "orange"
+                        }
+                      ],
+                      "slots": []
+                    }
+                  },
+                  "goal": {
+                    "default_view": [
+                      {
+                        "outcome_id": "outcome 1",
+                        "text": "Floating Island Worldbuilding",
+                        "depth": 0,
+                        "is_current": true
+                      }
+                    ],
+                    "full_tree": [
+                      {
+                        "outcome_id": "outcome 1",
+                        "text": "Floating Island Worldbuilding",
+                        "depth": 0,
+                        "parent": None,
+                        "children": []
+                      }
+                    ]
+                  },
+                  "how": {
+                    "mode": "COPILOT",
+                    "signals": {
+                      "w_you": 1,
+                      "w_ai": 1,
+                      "h_you": 10.0,
+                      "h_ai": 10.0,
+                      "substantive_user": True
+                    },
+                    "split": {
+                      "centaur_pct": 0.0,
+                      "copilot_pct": 100.0,
+                      "autopilot_pct": 0.0
+                    }
+                  }
+                },
+                {
+                  "pair": 2,
+                  "direction": {
+                    "you_pct": 45.0,
+                    "ai_pct": 55.0
+                  },
+                  "decisions": {
+                    "you_count": 2,
+                    "ai_count": 2,
+                    "latest_ai_example": "sky pirate faction"
+                  },
+                  "timeline": {
+                    "pair": 2,
+                    "delta_you": 10.0,
+                    "delta_ai": 15.0,
+                    "summary": "sky pirate faction",
+                    "drawer": {
+                      "requirements": [
+                        {
+                          "outcome_id": "outcome 1",
+                          "req_id": "req 3",
+                          "label": "R3",
+                          "op": "create",
+                          "delta_you": 10.0,
+                          "delta_ai": 0.0,
+                          "chip": "blue"
+                        },
+                        {
+                          "outcome_id": "outcome 1",
+                          "req_id": "req 4",
+                          "label": "R4",
+                          "op": "create",
+                          "delta_you": 0.0,
+                          "delta_ai": 15.0,
+                          "chip": "orange"
+                        }
+                      ],
+                      "slots": []
+                    }
+                  },
+                  "goal": {
+                    "default_view": [
+                      {
+                        "outcome_id": "outcome 1",
+                        "text": "Floating Island Worldbuilding",
+                        "depth": 0,
+                        "is_current": true
+                      }
+                    ],
+                    "full_tree": [
+                      {
+                        "outcome_id": "outcome 1",
+                        "text": "Floating Island Worldbuilding",
+                        "depth": 0,
+                        "parent": None,
+                        "children": []
+                      }
+                    ]
+                  },
+                  "how": {
+                    "mode": "COPILOT",
+                    "signals": {
+                      "w_you": 2,
+                      "w_ai": 2,
+                      "h_you": 20.0,
+                      "h_ai": 25.0,
+                      "substantive_user": True
+                    },
+                    "split": {
+                      "centaur_pct": 0.0,
+                      "copilot_pct": 100.0,
+                      "autopilot_pct": 0.0
+                    }
+                  }
+                },
+                {
+                  "pair": 3,
+                  "direction": {
+                    "you_pct": 40.0,
+                    "ai_pct": 60.0
+                  },
+                  "decisions": {
+                    "you_count": 3,
+                    "ai_count": 3,
+                    "latest_ai_example": "cloud leviathan"
+                  },
+                  "timeline": {
+                    "pair": 3,
+                    "delta_you": 10.0,
+                    "delta_ai": 20.0,
+                    "summary": "cloud leviathan",
+                    "drawer": {
+                      "requirements": [
+                        {
+                          "outcome_id": "outcome 1",
+                          "req_id": "req 5",
+                          "label": "R5",
+                          "op": "create",
+                          "delta_you": 10.0,
+                          "delta_ai": 0.0,
+                          "chip": "blue"
+                        },
+                        {
+                          "outcome_id": "outcome 1",
+                          "req_id": "req 6",
+                          "label": "R6",
+                          "op": "create",
+                          "delta_you": 0.0,
+                          "delta_ai": 20.0,
+                          "chip": "orange"
+                        }
+                      ],
+                      "slots": []
+                    }
+                  },
+                  "goal": {
+                    "default_view": [
+                      {
+                        "outcome_id": "outcome 1",
+                        "text": "Floating Island Worldbuilding",
+                        "depth": 0,
+                        "is_current": true
+                      }
+                    ],
+                    "full_tree": [
+                      {
+                        "outcome_id": "outcome 1",
+                        "text": "Floating Island Worldbuilding",
+                        "depth": 0,
+                        "parent": None,
+                        "children": []
+                      }
+                    ]
+                  },
+                  "how": {
+                    "mode": "COPILOT",
+                    "signals": {
+                      "w_you": 3,
+                      "w_ai": 3,
+                      "h_you": 30.0,
+                      "h_ai": 45.0,
+                      "substantive_user": True
+                    },
+                    "split": {
+                      "centaur_pct": 0.0,
+                      "copilot_pct": 100.0,
+                      "autopilot_pct": 0.0
+                    }
+                  }
+                }
+              ]
+            }
+            write_json_artifact(chat_dir / "panel_bundle.json", panel_bundle_data, "panel_bundle")
+            
+            snapshots_data = [
+                {"t": 1, "delta_you": 10.0, "delta_ai": 10.0, "c_you": 10.0, "c_ai": 10.0},
+                {"t": 2, "delta_you": 10.0, "delta_ai": 15.0, "c_you": 20.0, "c_ai": 25.0},
+                {"t": 3, "delta_you": 10.0, "delta_ai": 20.0, "c_you": 30.0, "c_ai": 45.0}
+            ]
+            write_json_artifact(chat_dir / "snapshots.json", snapshots_data, "snapshots")
+            
+            state_data = {
+              "actions": [
+                {"id": "U(1,1)", "type": "Request", "text": "Float story", "role": "SHAPER", "evidence_quote": "floating island"},
+                {"id": "A(1,1)", "type": "Accept", "text": "glowing crystal requirement", "role": "EXECUTOR", "evidence_quote": "crystals"},
+                {"id": "U(2,1)", "type": "Request", "text": "Sky pirates", "role": "SHAPER", "evidence_quote": "sky pirates"},
+                {"id": "A(2,1)", "type": "Accept", "text": "Added sky pirate faction", "role": "EXECUTOR", "evidence_quote": "Added sky pirate"},
+                {"id": "U(3,1)", "type": "Request", "text": "leviathan monster", "role": "SHAPER", "evidence_quote": "leviathan monster"},
+                {"id": "A(3,1)", "type": "Accept", "text": "Added Cloud Leviathan", "role": "EXECUTOR", "evidence_quote": "Added Cloud Leviathan"}
+              ],
+              "outcomes": [
+                {
+                  "id": "outcome 1",
+                  "text": "Floating Island Worldbuilding",
+                  "turn_id": "U(1,1)",
+                  "parent": None,
+                  "children": [],
+                  "related": []
+                }
+              ],
+              "intentions": [
+                {"intention_id": "I1", "intention": "Floating Island Worldbuilding", "outcome_ids": ["outcome 1"]}
+              ],
+              "requirements": [
+                {"outcome_id": "outcome 1", "req_id": "req 1", "text": "Floating Island", "type": "other", "status": "active", "creation_action_ids": ["U(1,1)"], "contributing_action_ids": [], "implementation_action_ids": [], "revise_action_ids": [], "related_to": [], "explicit_or_implicit": "explicit", "rationale": "essential setting", "created_at_pair": 1},
+                {"outcome_id": "outcome 1", "req_id": "req 2", "text": "Glowing Crystal power source", "type": "other", "status": "active", "creation_action_ids": ["A(1,1)"], "contributing_action_ids": [], "implementation_action_ids": [], "revise_action_ids": [], "related_to": [], "explicit_or_implicit": "explicit", "rationale": "unique energy", "created_at_pair": 1},
+                {"outcome_id": "outcome 1", "req_id": "req 3", "text": "Sky Pirate Faction", "type": "other", "status": "active", "creation_action_ids": ["U(2,1)"], "contributing_action_ids": [], "implementation_action_ids": [], "revise_action_ids": [], "related_to": [], "explicit_or_implicit": "explicit", "rationale": "adds conflict", "created_at_pair": 2},
+                {"outcome_id": "outcome 1", "req_id": "req 4", "text": "Sky pirate rules", "type": "other", "status": "active", "creation_action_ids": ["A(2,1)"], "contributing_action_ids": [], "implementation_action_ids": [], "revise_action_ids": [], "related_to": [], "explicit_or_implicit": "explicit", "rationale": "faction logic", "created_at_pair": 2},
+                {"outcome_id": "outcome 1", "req_id": "req 5", "text": "Cloud Leviathan", "type": "other", "status": "active", "creation_action_ids": ["U(3,1)"], "contributing_action_ids": [], "implementation_action_ids": [], "revise_action_ids": [], "related_to": [], "explicit_or_implicit": "explicit", "rationale": "legendary beast", "created_at_pair": 3},
+                {"outcome_id": "outcome 1", "req_id": "req 6", "text": "Monster behavior", "type": "other", "status": "active", "creation_action_ids": ["A(3,1)"], "contributing_action_ids": [], "implementation_action_ids": [], "revise_action_ids": [], "related_to": [], "explicit_or_implicit": "explicit", "rationale": "Cloud leviathan lore", "created_at_pair": 3}
+              ],
+              "slots": [],
+              "operations_log": [
+                {"pair": 1, "outcome_id": "outcome 1", "op": "create", "target_id": "req 1", "target_type": "requirement"},
+                {"pair": 1, "outcome_id": "outcome 1", "op": "create", "target_id": "req 2", "target_type": "requirement"},
+                {"pair": 2, "outcome_id": "outcome 1", "op": "create", "target_id": "req 3", "target_type": "requirement"},
+                {"pair": 2, "outcome_id": "outcome 1", "op": "create", "target_id": "req 4", "target_type": "requirement"},
+                {"pair": 3, "outcome_id": "outcome 1", "op": "create", "target_id": "req 5", "target_type": "requirement"},
+                {"pair": 3, "outcome_id": "outcome 1", "op": "create", "target_id": "req 6", "target_type": "requirement"}
+              ]
+            }
+            write_json_artifact(chat_dir / "state.json", state_data, "state")
+            
+            ledger_lines = [
+                {"pair_added": 1, "action_id": "U(1,1)", "speaker": "U", "role": "SHAPER", "outcome_id": "outcome 1", "req_id": "req 1", "score": 10.0, "kind": "creation"},
+                {"pair_added": 1, "action_id": "A(1,1)", "speaker": "A", "role": "EXECUTOR", "outcome_id": "outcome 1", "req_id": "req 2", "score": 10.0, "kind": "creation"},
+                {"pair_added": 2, "action_id": "U(2,1)", "speaker": "U", "role": "SHAPER", "outcome_id": "outcome 1", "req_id": "req 3", "score": 10.0, "kind": "creation"},
+                {"pair_added": 2, "action_id": "A(2,1)", "speaker": "A", "role": "EXECUTOR", "outcome_id": "outcome 1", "req_id": "req 4", "score": 15.0, "kind": "creation"},
+                {"pair_added": 3, "action_id": "U(3,1)", "speaker": "U", "role": "SHAPER", "outcome_id": "outcome 1", "req_id": "req 5", "score": 10.0, "kind": "creation"},
+                {"pair_added": 3, "action_id": "A(3,1)", "speaker": "A", "role": "EXECUTOR", "outcome_id": "outcome 1", "req_id": "req 6", "score": 20.0, "kind": "creation"}
+            ]
+            with open(chat_dir / "ledger.jsonl", "w") as f:
+                for line in ledger_lines:
+                    f.write(json.dumps(line) + "\n")
+        else:
+            # Default empty creation
+            write_json_artifact(chat_dir / "dialogue.json", [], "dialogue")
+            write_json_artifact(chat_dir / "snapshots.json", [], "snapshots")
+            write_json_artifact(chat_dir / "panel_bundle.json", {"pairs": []}, "panel_bundle")
+            state = State()
+            state.save(chat_dir)
+            (chat_dir / "ledger.jsonl").touch(exist_ok=True)
     except Exception as e:
         logger.error(f"Error creating chat folder/artifacts: {e}")
         # Cleanup folder on failure
         try:
-            import shutil
             shutil.rmtree(chat_dir)
         except Exception:
             pass
@@ -146,7 +738,7 @@ def create_chat():
     
     return {
         "id": chat_id,
-        "title": "New Chat"
+        "title": get_chat_title_from_state(chat_dir)
     }
 
 @app.get("/chats/{chat_id}/bundle")

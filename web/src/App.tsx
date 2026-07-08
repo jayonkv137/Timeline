@@ -105,6 +105,32 @@ export const App: React.FC = () => {
     }
   }, [activeChatId, isFixtureMode, setPanelBundle, setDialogue, setSelectedPairIdx]);
 
+  const handleStartChatWithTemplate = async (template: string) => {
+    if (isFixtureMode) {
+      const newChatId = 'conv-1';
+      addConversation({
+        id: newChatId,
+        title: 'React Form Debug Investigation'
+      });
+      setActiveChatId(newChatId);
+    } else {
+      try {
+        const res = await fetch('/chats', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ template })
+        });
+        if (res.ok) {
+          const newChat = await res.json();
+          addConversation(newChat);
+          setActiveChatId(newChat.id);
+        }
+      } catch (error) {
+        console.error('Error starting chat with template:', error);
+      }
+    }
+  };
+
   const hasChatStarted = activeChatId !== null;
 
   // Title editing state
@@ -887,7 +913,10 @@ export const App: React.FC = () => {
                 {SUGGESTIONS.map((suggestion, idx) => (
                   <div
                     key={idx}
-                    onClick={() => handleSendMessage(suggestion)}
+                    onClick={() => {
+                      const templates = ["website", "trip", "fantasy"];
+                      handleStartChatWithTemplate(templates[idx]);
+                    }}
                     style={{
                       backgroundColor: 'var(--card-bg)',
                       border: '1px solid var(--border)',
