@@ -34,6 +34,7 @@ interface TimelineSectionProps {
   pairs: TimelinePair[];
   selectedPairIdx: number;
   onSelectPair: (idx: number) => void;
+  onRerunPair: (pairNumber: number) => void;
 }
 
 // Requirement details dictionary for Level-2 accordion expansion
@@ -114,6 +115,7 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
   pairs,
   selectedPairIdx,
   onSelectPair,
+  onRerunPair,
 }) => {
   const [drawerOpen, setDrawerOpen] = useState<boolean>(true);
   const [expandedReq, setExpandedReq] = useState<string | null>(null);
@@ -512,6 +514,39 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                     </div>
                   );
                 })}
+                
+                {/* Rerun Button */}
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '4px', zIndex: 1 }}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onRerunPair(pair.pair);
+                    }}
+                    style={{
+                      fontSize: '10px',
+                      fontWeight: 500,
+                      backgroundColor: 'var(--card-bg)',
+                      border: '1px solid var(--border)',
+                      borderRadius: '4px',
+                      padding: '4px 10px',
+                      cursor: 'pointer',
+                      color: 'var(--text-primary)',
+                      fontFamily: 'var(--font-sans)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      transition: 'background-color 0.2s',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.03)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'var(--card-bg)';
+                    }}
+                  >
+                    <span>Rerun Pair {pair.pair}</span>
+                  </button>
+                </div>
               </div>
             )}
           </div>

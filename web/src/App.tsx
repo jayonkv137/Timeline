@@ -1222,6 +1222,21 @@ export const App: React.FC = () => {
             pairs={hasChatStarted && panelBundle ? panelBundle.pairs.map((p) => p.timeline) : []}
             selectedPairIdx={selectedPairIdx}
             onSelectPair={setSelectedPairIdx}
+            onRerunPair={async (pairNumber) => {
+              if (isFixtureMode) return;
+              try {
+                setIsRailLoading(true);
+                const res = await fetch(`/chats/${activeChatId}/pairs/${pairNumber}/rerun`, {
+                  method: 'POST'
+                });
+                if (!res.ok) {
+                  setIsRailLoading(false);
+                }
+              } catch (error) {
+                console.error('Error triggering rerun:', error);
+                setIsRailLoading(false);
+              }
+            }}
           />
         </div>
 
