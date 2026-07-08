@@ -609,8 +609,8 @@ export const App: React.FC = () => {
           </span>
         </div>
 
-        {/* Panel Section Cards Container */}
-        <div style={{ flex: 1, overflowY: 'auto' }}>
+        {/* ═══ ZONE 1: Upper sections (natural height, never scroll) ═══ */}
+        <div style={{ flexShrink: 0 }}>
           {/* Section 1: GOAL */}
           <GoalSection goal={hasChatStarted && activePair ? activePair.goal : null} />
 
@@ -725,25 +725,32 @@ export const App: React.FC = () => {
               ) : null}
             </div>
           </div>
+        </div>
 
-          {/* Section 4: TIMELINE */}
+        {/* ═══ ZONE 2: Timeline (fills remaining space, scrolls internally) ═══ */}
+        <div style={{ flex: 1, overflowY: 'auto', minHeight: 0 }}>
           <TimelineSection
             pairs={hasChatStarted && panelBundle ? panelBundle.pairs.map((p) => p.timeline) : []}
             selectedPairIdx={selectedPairIdx}
             onSelectPair={setSelectedPairIdx}
           />
+        </div>
 
-          {/* Section 5: HOW */}
-          <div>
-            <SectionHeader label="How You're Working" sectionKey="HOW" verticalAlign="top" />
-            <HowSection
-              howData={
-                hasChatStarted && panelBundle && panelBundle.pairs[selectedPairIdx]
-                  ? panelBundle.pairs[selectedPairIdx].how
-                  : null
-              }
-            />
-          </div>
+        {/* ═══ ZONE 3: HOW (pinned to bottom, aligned with chat input) ═══ */}
+        <div
+          style={{
+            flexShrink: 0,
+            borderTop: '1px solid var(--border)',
+          }}
+        >
+          <SectionHeader label="How You're Working" sectionKey="HOW" verticalAlign="top" />
+          <HowSection
+            howData={
+              hasChatStarted && panelBundle && panelBundle.pairs[selectedPairIdx]
+                ? panelBundle.pairs[selectedPairIdx].how
+                : null
+            }
+          />
         </div>
       </section>
     </div>
