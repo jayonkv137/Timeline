@@ -78,6 +78,23 @@ export const App: React.FC = () => {
     }
   };
 
+  // Truncate text at a clause boundary if it exceeds maxLength
+  const truncateClause = (text: string | null) => {
+    if (!text) return '';
+    const maxLength = 60;
+    if (text.length <= maxLength) return text;
+    const separators = ['.', ';', ',', '—'];
+    let splitIdx = -1;
+    for (const sep of separators) {
+      const idx = text.lastIndexOf(sep, maxLength);
+      if (idx > splitIdx) splitIdx = idx;
+    }
+    if (splitIdx > 15) {
+      return text.substring(0, splitIdx).trim() + '...';
+    }
+    return text.substring(0, maxLength).trim() + '...';
+  };
+
   return (
     <div
       style={{
@@ -597,11 +614,36 @@ export const App: React.FC = () => {
           {/* Section 2: DIRECTION */}
           <div style={{ borderBottom: '1px solid var(--border)' }}>
             <SectionHeader label="Direction" sectionKey="DIRECTION" />
-            <div style={{ padding: '0 16px 12px', fontSize: '12px', textAlign: 'left' }}>
-              {hasChatStarted ? (
-                <div style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                  Loading direction odometer...
-                </div>
+            <div style={{ padding: '0 16px 12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {hasChatStarted && activePair ? (
+                <>
+                  {/* Split bar */}
+                  <div
+                    style={{
+                      height: '6px',
+                      width: '100%',
+                      borderRadius: '3px',
+                      overflow: 'hidden',
+                      display: 'flex',
+                      backgroundColor: 'rgba(0,0,0,0.05)',
+                    }}
+                  >
+                    <div style={{ width: `${activePair.direction.you_pct}%`, backgroundColor: 'var(--you)', transition: 'width 0.3s' }} />
+                    <div style={{ width: `${activePair.direction.ai_pct}%`, backgroundColor: 'var(--ai)', transition: 'width 0.3s' }} />
+                  </div>
+                  {/* Readouts + badge */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: '11px', color: 'var(--you)', fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
+                      You — {activePair.direction.you_pct}%
+                    </span>
+                    <span style={{ fontSize: '9px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                      @ P{activePair.pair}
+                    </span>
+                    <span style={{ fontSize: '11px', color: 'var(--ai)', fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
+                      AI — {activePair.direction.ai_pct}%
+                    </span>
+                  </div>
+                </>
               ) : null}
             </div>
           </div>
@@ -609,11 +651,44 @@ export const App: React.FC = () => {
           {/* Section 3: DECISIONS */}
           <div style={{ borderBottom: '1px solid var(--border)' }}>
             <SectionHeader label="Decisions" sectionKey="DECISIONS" />
-            <div style={{ padding: '0 16px 12px', fontSize: '12px', textAlign: 'left' }}>
-              {hasChatStarted ? (
-                <div style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                  Loading decisions...
-                </div>
+            <div style={{ padding: '0 16px 12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {hasChatStarted && activePair ? (
+                <>
+                  {/* Counter: "Decisions — 4 you vs 10 AI" */}
+                  <div
+                    style={{
+                      fontSize: '11px',
+                      color: 'var(--text-muted)',
+                      fontFamily: 'var(--font-mono)',
+                      display: 'flex',
+                      alignItems: 'baseline',
+                      gap: '4px',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <span>Decisions —</span>
+                    <span style={{ color: 'var(--you)', fontWeight: 600 }}>{activePair.decisions.you_count} you</span>
+                    <span style={{ color: 'var(--text-muted)' }}>vs</span>
+                    <span style={{ color: 'var(--ai)', fontWeight: 600 }}>{activePair.decisions.ai_count} AI</span>
+                  </div>
+                  {/* Latest AI-created requirement example */}
+                  {activePair.decisions.latest_ai_example && (
+                    <div
+                      style={{
+                        borderLeft: '2px solid rgba(232, 90, 10, 0.25)',
+                        paddingLeft: '8px',
+                        fontSize: '11px',
+                        fontStyle: 'italic',
+                        color: 'var(--text-muted)',
+                        textAlign: 'left',
+                        lineHeight: '1.4',
+                        margin: '4px 0 0 0',
+                      }}
+                    >
+                      {truncateClause(activePair.decisions.latest_ai_example)}
+                    </div>
+                  )}
+                </>
               ) : null}
             </div>
           </div>
