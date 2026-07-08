@@ -255,6 +255,22 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P1.S7 — HOW
 ---
 
+## 2026-07-08 02:45 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P1.S6 — TIMELINE (HTML Accordions & Silent Chart Refactoring)
+- **Did:**
+  - Removed all text labels from the diverging bar chart to keep the visual representation clean and quiet.
+  - Refactored the chart layout from SVG to HTML flex row blocks for better layout responsiveness and layout integrity.
+  - Implemented an accordion dropdown mechanism on each requirement row: clicking a row toggles a details block right below it.
+  - Re-positioned the dashed vertical timeline axis to run continuously through the center of all HTML rows.
+  - Staged and committed changes as `P1.S6` accordion update.
+- **Decisions made:**
+  - Standardized on HTML flex columns instead of SVGs for diverging timeline rows to allow easy dropdown transitions.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Built and verified the dev app compiles with zero errors. Tested row clicks to ensure the details card slides open smoothly.
+- **Next:** P1.S7 — HOW
+---
+
+
 
 
 
