@@ -36,12 +36,87 @@ interface TimelineSectionProps {
   onSelectPair: (idx: number) => void;
 }
 
+// Full requirement details for Level-2 expansion
+const REQ_DETAILS: Record<string, { title: string; text: string; rationale: string }> = {
+  'R1': {
+    title: 'R1 · 3D Interactive Scene',
+    text: 'Implement a 3D interactive viewport using Three.js / WebGL.',
+    rationale: 'User requested an interactive 3D layout in the initial prompt.'
+  },
+  'R2': {
+    title: 'R2 · Black Box Sandbox',
+    text: 'Sandbox the LLM execution environment as a secure black box.',
+    rationale: 'Security requirement to isolate untrusted code generation.'
+  },
+  'R3': {
+    title: 'R3 · Squid Animation',
+    text: 'Add custom micro-animations for the squid character states.',
+    rationale: 'User requested playful character feedback for loading/idle states.'
+  },
+  'R4': {
+    title: 'R4 · Brain Canvas Page',
+    text: 'A visual canvas mapping connections between ideas in a brain layout.',
+    rationale: 'User wants a visual mapping view for structured ideas.'
+  },
+  'R5': {
+    title: 'R5 · Split Screen Layout',
+    text: 'Resizable split viewport between code editor and preview.',
+    rationale: 'Developer tool requirement for layout flexibility.'
+  },
+  'R6': {
+    title: 'R6 · Hover Reveal Interaction',
+    text: 'Hovering on requirement displays trace connections and evidence quotes.',
+    rationale: 'Core visual requirement for trace details Popovers.'
+  },
+  'R7': {
+    title: 'R7 · Dot Grid Background',
+    text: 'Subtle dot-grid blueprint background for visual structure.',
+    rationale: 'Aesthetic constraint to look like a premium canvas.'
+  },
+  'R8': {
+    title: 'R8 · Graph Grid System',
+    text: '2D coordinates grid system for timeline canvas navigation.',
+    rationale: 'Required for positioning timeline coordinate nodes.'
+  },
+  'R9': {
+    title: 'R9 · Face → About Page Transition',
+    text: 'Smooth morph transition when clicking the author portrait.',
+    rationale: 'Micro-animation requirement to wow the user.'
+  },
+  'R10': {
+    title: 'R10 · Figjam Export Integration',
+    text: 'Ability to export the workspace state into a Figjam whiteboard format.',
+    rationale: 'Collaboration feature requested by the product manager.'
+  },
+  'R11': {
+    title: 'R11 · Workflow Validation Rules',
+    text: 'Final production scene generations must use the Style Anchor plus a texture crop plus a color swatch as triple-references.',
+    rationale: 'Strict validation constraint set by user to guide LLM styling.'
+  },
+  'R12': {
+    title: 'R12 · Design System Tokens',
+    text: 'Centralized token repository in index.css for fonts, borders, and margins.',
+    rationale: 'Core styling requirement for premium design alignment.'
+  },
+  'R13': {
+    title: 'R13 · Phased Plan (AI)',
+    text: 'AI-generated plan splitting development into distinct checkpoint phases.',
+    rationale: 'AI suggestion to organize coding workflow systematically.'
+  },
+  'R14': {
+    title: 'R14 · Deployment Config',
+    text: 'Production build configuration for static edge deployments.',
+    rationale: 'AI suggestion to ensure clean build distribution.'
+  },
+};
+
 export const TimelineSection: React.FC<TimelineSectionProps> = ({
   pairs,
   selectedPairIdx,
   onSelectPair,
 }) => {
   const [drawerOpen, setDrawerOpen] = useState<boolean>(true);
+  const [expandedReq, setExpandedReq] = useState<string | null>(null);
 
   if (pairs.length === 0) {
     return (
@@ -169,186 +244,279 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
               </button>
             </div>
 
-            {/* Expanded Turn Drawer */}
+            {/* Expanded Turn Drawer (Diverging Bar Chart) */}
             {drawerOpen && (
               <div
                 style={{
-                  backgroundColor: 'rgba(0, 0, 0, 0.015)',
-                  borderTop: '1px solid var(--border)',
-                  borderBottom: '1px solid var(--border)',
-                  padding: '12px 16px',
+                  backgroundColor: '#121212',
+                  borderTop: '1px solid #222',
+                  borderBottom: '1px solid #222',
+                  padding: '16px 12px',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '12px',
+                  gap: '8px',
+                  position: 'relative',
+                  overflowX: 'hidden',
                 }}
               >
-                {/* Requirements Sub-section */}
-                {pair.drawer.requirements.length > 0 && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <div
-                      style={{
-                        fontSize: '9px',
-                        color: 'var(--text-muted)',
-                        fontFamily: 'var(--font-mono)',
-                        textTransform: 'uppercase',
-                        fontWeight: 600,
-                        textAlign: 'left',
-                        letterSpacing: '0.04em',
-                      }}
-                    >
-                      Requirements Changed
-                    </div>
+                {/* Visual SVG Diverging Bar Chart */}
+                <svg
+                  viewBox="0 0 328 510"
+                  width="100%"
+                  height="100%"
+                  style={{
+                    overflow: 'visible',
+                    backgroundColor: 'transparent',
+                    userSelect: 'none',
+                  }}
+                >
+                  {/* Central axis spine (dashed vertical line) */}
+                  <line
+                    x1={145}
+                    y1={35}
+                    x2={145}
+                    y2={440}
+                    stroke="#333"
+                    strokeWidth={1.5}
+                    strokeDasharray="3,3"
+                  />
 
-                    <div style={{ display: 'flex', flexDirection: 'column', position: 'relative', paddingLeft: '22px' }}>
-                      {/* Vertical spine timeline line */}
-                      <div
-                        style={{
-                          position: 'absolute',
-                          left: '8px',
-                          top: '6px',
-                          bottom: '6px',
-                          width: '1.5px',
-                          backgroundColor: 'rgba(0, 0, 0, 0.08)',
-                        }}
-                      />
+                  {/* 1. Header Refs Pill */}
+                  <g transform="translate(90, 8)" style={{ cursor: 'default' }}>
+                    <rect width="110" height="18" rx="9" fill="rgba(255, 255, 255, 0.06)" stroke="#333" strokeWidth={1} />
+                    <text x="55" y="12" textAnchor="middle" fill="#aaa" fontSize="8" fontFamily="var(--font-mono)" fontWeight={600}>
+                      📎 9 refs + whiteboard
+                    </text>
+                  </g>
 
-                      {pair.drawer.requirements.map((req, rIdx) => {
-                        const chipColor =
-                          req.chip === 'blue'
-                            ? 'var(--you)'
-                            : req.chip === 'orange'
-                            ? 'var(--ai)'
-                            : '#9aa0a6'; // grey
+                  {/* 2. Legend Box (Top Right overlay space) */}
+                  <g transform="translate(205, 10)" fontSize="8" fontFamily="var(--font-mono)" fill="#aaa">
+                    <rect width="115" height="92" rx="6" fill="#181818" stroke="#2c2c2c" strokeWidth={1} />
+                    
+                    {/* User-shaped color */}
+                    <rect x="8" y="8" width="8" height="8" rx="1.5" fill="#0057FF" />
+                    <text x="20" y="15" fill="#ccc">User-shaped</text>
+                    
+                    {/* Straddling color */}
+                    <rect x="8" y="22" width="8" height="8" rx="1.5" fill="#9aa0a6" />
+                    <text x="20" y="29" fill="#ccc">Straddling (both)</text>
+                    
+                    {/* AI-created color */}
+                    <rect x="8" y="36" width="8" height="8" rx="1.5" fill="#E85A0A" />
+                    <text x="20" y="43" fill="#ccc">AI-created</text>
+                    
+                    {/* Open Slot */}
+                    <circle cx="12" cy="54" r="4.5" fill="none" stroke="#E85A0A" strokeWidth={1.5} strokeDasharray="2,2" />
+                    <text x="20" y="57" fill="#ccc">Open slot</text>
 
-                        // Draw visual influence bars representing delta mass
-                        const reqMax = 55.0; // max delta in individual req lists
-                        const reqLeftW = Math.max(1, Math.min(24, (req.delta_you / reqMax) * 24));
-                        const reqRightW = Math.max(1, Math.min(24, (req.delta_ai / reqMax) * 24));
+                    {/* Scale */}
+                    <text x="8" y="74" fill="#666" fontSize="7" fontWeight={600}>SCALE: 1 unit = 8px</text>
+                    <text x="8" y="84" fill="#e28743" fontSize="7" fontWeight={600}>AI-lean ↑</text>
+                  </g>
 
-                        return (
-                          <div
-                            key={`${req.req_id}-${rIdx}`}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              minHeight: '26px',
-                              position: 'relative',
-                              marginBottom: rIdx < pair.drawer.requirements.length - 1 ? '4px' : 0,
-                            }}
+                  {/* 3. Exchange Label Banner */}
+                  <g transform="translate(10, 36)">
+                    <rect width="180" height="18" rx="4" fill="#1c1c1c" stroke="#333" strokeWidth={1} />
+                    <text x="8" y="12" fill="#888" fontSize="8" fontFamily="var(--font-mono)">
+                      Exchange 1 · 12 reqs CREATED
+                    </text>
+                  </g>
+
+                  {/* 4. Diverging Rows (R1 through R14) */}
+                  {pair.drawer.requirements.map((req, rIdx) => {
+                    const centerY = 75 + rIdx * 26;
+                    
+                    // Chip Background Colors
+                    const chipColor =
+                      req.chip === 'blue'
+                        ? '#0057FF'
+                        : req.chip === 'orange'
+                        ? '#E85A0A'
+                        : '#555555'; // Straddling Grey
+
+                    // Proportional scaling for diverging bars (Max delta = 55px width)
+                    const reqMaxVal = 55.0;
+                    const leftBarW = Math.min(65, (req.delta_you / reqMaxVal) * 65);
+                    const rightBarW = Math.min(65, (req.delta_ai / reqMaxVal) * 65);
+                    
+                    // Check if selected for details highlight
+                    const isExpanded = expandedReq === req.label;
+
+                    return (
+                      <g
+                        key={req.req_id + rIdx}
+                        onClick={() => setExpandedReq(isExpanded ? null : req.label)}
+                        style={{ cursor: 'pointer' }}
+                        opacity={expandedReq && !isExpanded ? 0.35 : 1}
+                      >
+                        {/* Hover/Selection background highlight */}
+                        {isExpanded && (
+                          <rect
+                            x={2}
+                            y={centerY - 12}
+                            width={324}
+                            height={24}
+                            rx={4}
+                            fill="rgba(255, 255, 255, 0.03)"
+                            stroke="rgba(255, 255, 255, 0.08)"
+                            strokeWidth={0.5}
+                          />
+                        )}
+
+                        {/* Left side text label (ends right-aligned to user's blue bar) */}
+                        {req.delta_you > 0 && (
+                          <text
+                            x={145 - leftBarW - 16}
+                            y={centerY + 3}
+                            textAnchor="end"
+                            fill={isExpanded ? '#fff' : '#888'}
+                            fontSize="9"
+                            fontFamily="var(--font-sans)"
                           >
-                            {/* R-chip centered on the timeline spine */}
-                            <div
-                              style={{
-                                position: 'absolute',
-                                left: '-22px',
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '4px',
-                                backgroundColor: chipColor,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                fontSize: '8px',
-                                fontWeight: 700,
-                                color: '#ffffff',
-                                fontFamily: 'var(--font-mono)',
-                                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                              }}
-                            >
-                              {req.label}
-                            </div>
+                            {REQ_DETAILS[req.label]?.text ? `${req.label} ${REQ_DETAILS[req.label].text}` : req.label}
+                          </text>
+                        )}
 
-                            {/* Label: req_id / outcome context */}
-                            <span
-                              style={{
-                                fontSize: '10px',
-                                fontFamily: 'var(--font-mono)',
-                                color: 'var(--text-primary)',
-                                width: '56px',
-                                textAlign: 'left',
-                                flexShrink: 0,
-                                paddingLeft: '4px',
-                              }}
-                            >
-                              {req.label} {req.op === 'create' ? 'new' : 'rev'}
-                            </span>
+                        {/* Left Blue Bar (User Delta) */}
+                        {req.delta_you > 0 && (
+                          <rect
+                            x={145 - 10 - leftBarW}
+                            y={centerY - 5}
+                            width={leftBarW}
+                            height={10}
+                            rx={2}
+                            fill="#0057FF"
+                          />
+                        )}
 
-                            {/* Influence Bars */}
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flex: 1 }}>
-                              <div style={{ display: 'flex', width: '56px', height: '6px', backgroundColor: 'rgba(0,0,0,0.03)', borderRadius: '2px', overflow: 'hidden' }}>
-                                {/* User segment (blue, left-aligned) */}
-                                <div style={{ width: `${(reqLeftW / 48) * 100}%`, backgroundColor: 'var(--you)' }} />
-                                {/* AI segment (orange, right-aligned) */}
-                                <div style={{ flex: 1 }} />
-                                <div style={{ width: `${(reqRightW / 48) * 100}%`, backgroundColor: 'var(--ai)' }} />
-                              </div>
+                        {/* Centered R-badge Circle */}
+                        <circle
+                          cx={145}
+                          cy={centerY}
+                          r={10}
+                          fill={chipColor}
+                          stroke="#121212"
+                          strokeWidth={1.5}
+                        />
+                        <text
+                          x={145}
+                          y={centerY + 3}
+                          textAnchor="middle"
+                          fill="#ffffff"
+                          fontSize="8"
+                          fontWeight={700}
+                          fontFamily="var(--font-mono)"
+                        >
+                          {req.label}
+                        </text>
 
-                              {/* Numeric labels for mass delta details */}
-                              <span
-                                style={{
-                                  fontSize: '9px',
-                                  fontFamily: 'var(--font-mono)',
-                                  color: 'var(--text-muted)',
-                                  marginLeft: '4px',
-                                }}
-                              >
-                                {req.delta_you > 0 ? `+${req.delta_you}` : '0'} / {req.delta_ai > 0 ? `+${req.delta_ai}` : '0'}
-                              </span>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
+                        {/* Right Orange Bar (AI Delta) */}
+                        {req.delta_ai > 0 && (
+                          <rect
+                            x={145 + 10}
+                            y={centerY - 5}
+                            width={rightBarW}
+                            height={10}
+                            rx={2}
+                            fill="#E85A0A"
+                          />
+                        )}
 
-                {/* Open slots sub-section */}
-                {pair.drawer.slots.length > 0 && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', borderTop: '1px dashed var(--border)', paddingTop: '10px' }}>
-                    <div
-                      style={{
-                        fontSize: '9px',
-                        color: 'var(--text-muted)',
-                        fontFamily: 'var(--font-mono)',
-                        textTransform: 'uppercase',
-                        fontWeight: 600,
-                        textAlign: 'left',
-                        letterSpacing: '0.04em',
-                      }}
-                    >
-                      Open Questions
-                    </div>
+                        {/* Right side text label (if AI-authored only, sits right of orange bar) */}
+                        {req.delta_you === 0 && (
+                          <text
+                            x={145 + rightBarW + 16}
+                            y={centerY + 3}
+                            textAnchor="start"
+                            fill={isExpanded ? '#fff' : '#888'}
+                            fontSize="9"
+                            fontFamily="var(--font-sans)"
+                          >
+                            {REQ_DETAILS[req.label]?.text ? `${req.label} ${REQ_DETAILS[req.label].text}` : req.label}
+                          </text>
+                        )}
+                      </g>
+                    );
+                  })}
 
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', paddingLeft: '4px' }}>
-                      {pair.drawer.slots.map((slot, sIdx) => {
-                        const label = `S${sIdx + 1}`;
-                        const isAi = slot.origin === 'AI';
-                        const themeColor = isAi ? 'var(--ai)' : 'var(--you)';
+                  {/* 5. Open Questions (Dashed Circles) */}
+                  <g transform="translate(0, 440)">
+                    {/* Header */}
+                    <text x="10" y="10" fill="#666" fontSize="8" fontFamily="var(--font-mono)" fontWeight={600}>
+                      OPEN QUESTIONS
+                    </text>
 
-                        return (
-                          <div
-                            key={`${slot.slot_id}-${sIdx}`}
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              width: '26px',
-                              height: '26px',
-                              borderRadius: '50%',
-                              border: `1.5px dashed ${themeColor}`,
-                              fontSize: '10px',
-                              fontFamily: 'var(--font-mono)',
-                              fontWeight: 700,
-                              color: themeColor,
-                              backgroundColor: isAi ? 'rgba(232, 90, 10, 0.02)' : 'rgba(0, 87, 255, 0.02)',
-                              cursor: 'default',
-                            }}
-                            title={`${label} raised by ${slot.origin}`}
+                    {/* Sequential Dashed Question Slots */}
+                    {pair.drawer.slots.map((slot, sIdx) => {
+                      const circleX = 22 + sIdx * 35;
+                      const label = `S${sIdx + 1}`;
+                      const isAi = slot.origin === 'AI';
+                      const themeColor = isAi ? '#E85A0A' : '#0057FF';
+
+                      return (
+                        <g key={slot.slot_id + sIdx} transform={`translate(${circleX}, 20)`}>
+                          <circle
+                            cx="0"
+                            cy="0"
+                            r="11"
+                            fill="none"
+                            stroke={themeColor}
+                            strokeWidth={1.5}
+                            strokeDasharray="2,2"
+                          />
+                          <text
+                            x="0"
+                            y="3"
+                            textAnchor="middle"
+                            fill={themeColor}
+                            fontSize="9"
+                            fontWeight={700}
+                            fontFamily="var(--font-mono)"
                           >
                             {label}
-                          </div>
-                        );
-                      })}
+                          </text>
+                        </g>
+                      );
+                    })}
+                  </g>
+                </svg>
+
+                {/* Level-2 expanded detail container (Dynamic on row tap) */}
+                {expandedReq && REQ_DETAILS[expandedReq] && (
+                  <div
+                    style={{
+                      marginTop: '8px',
+                      backgroundColor: '#181818',
+                      border: '1.5px solid #2a2a2a',
+                      borderRadius: '6px',
+                      padding: '12px',
+                      textAlign: 'left',
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
+                      animation: 'fadeIn 0.2s ease-in-out',
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '6px' }}>
+                      <span
+                        style={{
+                          fontSize: '11px',
+                          fontWeight: 700,
+                          color: expandedReq === 'R11' ? '#E85A0A' : '#0057FF',
+                          fontFamily: 'var(--font-mono)',
+                        }}
+                      >
+                        {REQ_DETAILS[expandedReq].title}
+                      </span>
+                      <span style={{ fontSize: '9px', color: '#666', fontFamily: 'var(--font-mono)' }}>
+                        Mass contribution: {pair.drawer.requirements.find(r => r.label === expandedReq)?.delta_you} you / {pair.drawer.requirements.find(r => r.label === expandedReq)?.delta_ai} AI
+                      </span>
+                    </div>
+
+                    <p style={{ fontSize: '11px', color: '#ccc', lineHeight: '1.4', margin: '0 0 6px 0' }}>
+                      {REQ_DETAILS[expandedReq].text}
+                    </p>
+
+                    <div style={{ fontSize: '9px', color: '#777', borderTop: '1px solid #2a2a2a', paddingTop: '6px', fontStyle: 'italic' }}>
+                      <strong>Rationale:</strong> {REQ_DETAILS[expandedReq].rationale}
                     </div>
                   </div>
                 )}
@@ -357,6 +525,13 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
           </div>
         );
       })}
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-4px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </div>
   );
 };
