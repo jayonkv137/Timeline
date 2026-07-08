@@ -35,9 +35,10 @@ const SECTION_INFO: Record<string, { text: string; bold?: boolean }[]> = {
 interface InfoPopoverProps {
   sectionKey: string;
   align?: 'left' | 'right' | 'left-outer';
+  width?: string;
 }
 
-export const InfoPopover: React.FC<InfoPopoverProps> = ({ sectionKey, align = 'right' }) => {
+export const InfoPopover: React.FC<InfoPopoverProps> = ({ sectionKey, align = 'right', width = '240px' }) => {
   const [open, setOpen] = useState(false);
   const btnRef = useRef<HTMLButtonElement>(null);
   const popRef = useRef<HTMLDivElement>(null);
@@ -188,7 +189,7 @@ export const InfoPopover: React.FC<InfoPopoverProps> = ({ sectionKey, align = 'r
             position: 'absolute',
             zIndex: 999,
             top: '20px',
-            width: '240px',
+            width: width,
             backgroundColor: 'var(--card-bg)',
             border: '1px solid var(--border)',
             borderRadius: '8px',

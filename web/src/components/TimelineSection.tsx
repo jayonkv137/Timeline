@@ -303,7 +303,7 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                     >
                       Requirements
                     </span>
-                    <InfoPopover sectionKey="REQUIREMENTS" align="left-outer" />
+                    <InfoPopover sectionKey="REQUIREMENTS" align="left" width="145px" />
                   </div>
                 </div>
 
