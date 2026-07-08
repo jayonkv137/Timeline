@@ -330,6 +330,21 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P1.S7 — HOW
 ---
 
+## 2026-07-08 03:04 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P1.S6 — TIMELINE (Header Restoration & Sub-Header Alignment)
+- **Did:**
+  - Reverted the collapsed `P1` row layout to its original flex layout (left-aligned coordinate, offset micro-spine, next summary description).
+  - Left-aligned the expanded `"Requirements"` sub-header in the drawer to `left: 16px` to keep it clean and offset from the centered timeline spine.
+  - Kept the requirement rows' vertical spine centered at exactly 50% width of the panel.
+  - Staged and committed changes as `P1.S6` header restore.
+- **Decisions made:**
+  - Standardized on restoring standard sidebar headers to maintain visual consistency across all panel sections.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Built and verified the dev app compiles with zero errors, and displays the original collapsed header layout alongside the centered timeline chart.
+- **Next:** P1.S7 — HOW
+---
+
+
 
 
 
