@@ -555,6 +555,41 @@ ENTRY TEMPLATE (copy, fill, append):
   SELF-REFERENCE, {all actions block} ACCUMULATE, U(x,y)/A(x,y) regex enforcement).
 ---
 
+## 2026-07-08 · Antigravity · Claude Opus 4.6 (Thinking)
+- **Phase/Step:** P2.S3 — Steps 1a/1b/1c per pair (§9.1 Level 1)
+- **Did:**
+  - Verified `engine/pipeline.py` (written in the prior session) implements all P2.S3
+    requirements: `step_1a` (MODEL_FAST, regex `^[UA]\(\d+,\d+\)$` on every turn id,
+    pair-number consistency, role validation, no partial append on error, spec→schema key
+    translation), `step_1b` (MODEL_MAIN, SELF-REFERENCE dialogue summary, ACCUMULATE all
+    actions, full outcome tree replacement per §4.7, action_to_outcome completeness check,
+    parent/children bidirectional normalization, confidence dropped per §12.4, duplicate
+    outcome id detection), `step_1c` (MODEL_MAIN, outcome→intention completeness check,
+    duplicate intention ids detection), `run_level1` orchestrator (exactly 3 calls per pair).
+  - Created `tests/test_pipeline.py` — **30 tests** with mocked LLM client (zero API cost):
+    formatting helpers (spec-shaped keys), `action_sort_key` (U-before-A, pair ordering,
+    malformed → raises), Step 1a (happy path, bad format, wrong pair, invalid role, empty
+    actions, missing key, no partial append), Step 1b (happy path, incomplete
+    action_to_outcome, unknown outcome in mapping, duplicate outcome ids, unknown parent,
+    parent/children bidirectional proof), Step 1c (happy path, incomplete mapping, duplicate
+    outcome mapping, unknown outcome, unknown intention, duplicate intention ids),
+    `run_level1` integration (2-pair accumulation + summary loop, SELF-REFERENCE verified in
+    prompt, ACCUMULATE verified in prompt, outcome tree replaced not merged).
+- **Decisions made:**
+  - No speaker-prefix consistency check (U turns from user, A from AI) — the spec treats both
+    `x` (DERIVED ID) and `y` (ASSIGNED ID) as model-assigned, and Step 1a's response doesn't
+    structurally separate which actions came from which raw turn. The existing pair-number
+    check + format regex is sufficient.
+  - Real smoke call deferred — requires API key configuration and would duplicate the
+    verification already done in P2.S1 (one real Gemini call confirmed the prompt/parse loop
+    works). Will run as part of S8(c) full-pipeline smoke.
+- **Spec contradictions/gaps flagged:** none new.
+- **Verification:** `pytest -v` → **52/52 passed** (12 Phase 0 + 10 State + 30 Pipeline).
+  Zero regressions.
+- **Next:** P2.S4 — Step 2 per touched outcome (§9.2: per-outcome prior-requirements and
+  prior-open-slots blocks; ops applied to STATE; creation rows → ledger; resolve → slot-origin
+  rows; 3-pair abandonment sweep).
+---
 
 
 
