@@ -32,13 +32,18 @@ def main():
         config = load_config()
         
         if args.contributions_only:
-            # Stage 4 contributions-only mode: will be fully supported after Stage 4 is written.
-            # For now, print a stub notice or we can implement it as a pass-through.
-            print("Contributions-only mode will be executed. Stage 4 recomputation skeleton.")
-            # Stub for Stage 4 recomputation:
-            # We would read existing ledger, recompute, and write panel_bundle/snapshots.
-            # We'll leave it as a pass-through/stub for now.
+            from engine.state import State
+            from engine.artifacts import read_ledger
+            from engine.quant import compute_stage4, write_stage4_artifacts
+            
+            out_path = Path(args.out)
+            state = State.load(out_path)
+            ledger_rows = read_ledger(out_path / "ledger.jsonl")
+            snapshots, panel_bundle = compute_stage4(state, ledger_rows)
+            write_stage4_artifacts(out_path, snapshots, panel_bundle)
+            print(f"Stage 4 recomputed from existing ledger. Outputs written to {args.out}")
             sys.exit(0)
+
             
         dialogue = load_dialogue_from_export(args.input)
         run_pipeline(

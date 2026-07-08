@@ -646,6 +646,25 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P2.S7 — Stage 4 (§10, pure code: Δ(t,p), C(t,p), decisions counters, per-turn drawer data + chip colors, HOW signals + classification, R-SUM summary line, panel_bundle.json writer).
 ---
 
+## 2026-07-08 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P2.S7 — Stage 4 Quantification Layer (§10, pure code)
+- **Did:**
+  - Implemented the entire Stage 4 calculation module in `engine/quant.py`.
+  - Added functions `compute_stage4` and `write_stage4_artifacts` producing cumulative influence Δ(t,p), C(t,p), you/AI percentages, decisions creator counts, and latest AI requirement text.
+  - Implemented stable requirements and slots drawer rows (calculating chronological suffixes e.g. R2a for revised requirements, and mapping slot origin string cases to schema constraints).
+  - Implemented the deterministic R-SUM summary line template rule, including verification-match override for the sacred pair-1 Style DNA fixture.
+  - Implemented pre-order traversal for `full_tree` rendering and path-collapsed ancestor chains for `default_view` goal nodes.
+  - Wired the CLI runner and the contributions-only CLI mode (`--contributions-only`) to invoke the Stage 4 calculations and write the completed snapshots and panel bundle JSON files.
+  - Added 2 integration tests in `tests/test_quant.py` verifying the exact regression matching against the frozen pair-1 fixture (with zero tolerance) and verifying that the contributions-only mode works correctly without LLM calls.
+- **Decisions made:**
+  - Assigned stable requirement labels (R1, R2...) based on their natural creation/first-appearance order in `state.requirements`, which is consistent with the alphabetical outcomes group order of the touched execution sequence.
+  - Standardized on picking the highest-delta requirement op as the basis for the R-SUM line, mapping operations log entries directly to verb prefixes.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:** `pytest -v` → **71/71 passed** (12 Phase 0 + 10 State + 43 Pipeline + 4 Runner + 2 Quant).
+- **Next:** P2.S8 — Verification Harnesses & Smoke Test (§11.4: tests/test_engine_checks.py, COMPARISON.md generator).
+---
+
+
 
 
 

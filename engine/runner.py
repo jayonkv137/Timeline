@@ -140,8 +140,10 @@ def run_pipeline(config, dialogue, out_dir, limit_pairs=None, resume=False):
         state.run["last_completed_pair"] = P
         state.save(out_dir)
 
-    # 7. Write Stage 4 stub outputs (to be fully implemented in Stage 4 step)
-    write_json_artifact(out_dir / "snapshots.json", [], "snapshots")
-    write_json_artifact(out_dir / "panel_bundle.json", {"pairs": []}, "panel_bundle")
+    # 7. Write Stage 4 outputs
+    from engine.quant import compute_stage4, write_stage4_artifacts
+    snapshots, panel_bundle = compute_stage4(state, ledger_writer.rows)
+    write_stage4_artifacts(out_dir, snapshots, panel_bundle)
+
 
     return state
