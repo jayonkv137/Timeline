@@ -177,6 +177,22 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P1.S6 — TIMELINE
 ---
 
+## 2026-07-08 02:16 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P1.S5 — DIRECTION + DECISIONS (Redesign Variations)
+- **Did:**
+  - Implemented a live interactive toggle switcher (`Var A`, `Var B`, `Var C`) in the Decisions section header.
+  - Implemented **Variation A (Big Split Cards)**: High contrast dashboards blocks displaying `4` and `10` in large typography inside user-vs-AI styled boxes, with a separate highlighted block for the latest decision.
+  - Implemented **Variation B (Visual Progress Bar)**: Linear split tick bar with numbers on the left and right sides and bulleted timeline notes below.
+  - Implemented **Variation C (Checklist Ledger)**: Structured 2-row table listing counts and creator origins with a light gray documentation snippet callout.
+  - Staged and committed changes as `P1.S5` variations update.
+- **Decisions made:**
+  - Added live toggle switchers directly in the page to allow the user to preview all three designs live in their browser.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Built and verified the dev app compiles with zero errors, and runs dynamically. Clicked through `Var A`, `Var B`, and `Var C` to confirm correct toggling.
+- **Next:** P1.S6 — TIMELINE
+---
+
+
 
 
 
