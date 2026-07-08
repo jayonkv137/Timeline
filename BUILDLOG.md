@@ -399,6 +399,24 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** Phase 1 Complete — review
 ---
 
+## 2026-07-08 07:16 · Antigravity · Claude Opus 4.6
+- **Phase/Step:** Layout — 3-Zone Rail Restructure
+- **Did:**
+  - Restructured the right rail into 3 flex zones:
+    - **Zone 1 (top):** Goal, Direction, Decisions — `flexShrink: 0`, natural height, never scrolls.
+    - **Zone 2 (middle):** Timeline — `flex: 1`, `overflowY: auto`, `minHeight: 0` — fills remaining space, scrolls internally when expanded.
+    - **Zone 3 (bottom):** HOW — `flexShrink: 0`, `borderTop` separator — pinned to bottom, aligned with chat input bar.
+  - HOW section stays at the bottom regardless of timeline content length.
+  - Timeline drawer (expanded requirements) scrolls within its own container.
+- **Decisions made:**
+  - Used `minHeight: 0` on Zone 2 to enable flex-child scrolling (CSS flexbox requires this for overflow to work inside flex items).
+  - Added `borderTop` to Zone 3 for visual separation from the scrollable timeline area.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Built with zero errors. HOW section stays pinned at bottom, timeline scrolls internally.
+- **Next:** User review
+---
+
+
 
 
 
