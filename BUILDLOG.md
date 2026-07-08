@@ -163,6 +163,21 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P1.S5 — DIRECTION + DECISIONS
 ---
 
+## 2026-07-08 02:12 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P1.S5 — DIRECTION + DECISIONS
+- **Did:**
+  - Implemented the user-vs-AI split bar (proportionally sized to you_pct/ai_pct in `direction`) and `@ P1` badge in the DIRECTION section card.
+  - Implemented the decisions counter showing count of requirements created (`4 you vs 10 AI`), styled with brand colors (blue for you, orange for AI) and without separating dots per user preferences.
+  - Added visual presentation for the latest AI-created decision statement, styled with a left border block in orange with 25% opacity.
+  - Staged and committed changes as `P1.S5`.
+- **Decisions made:**
+  - Wrote a custom string helper `truncateClause` inside `App.tsx` that searches for common punctuation split markers (comma, period, semicolon, em-dash) to cleanly slice long decision strings at clause boundaries.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Built and verified the dev app compiles with zero errors, and renders the numbers: 21.7% / 78.3% split, @ P1 badge, and 4 you vs 10 AI decisions dynamically.
+- **Next:** P1.S6 — TIMELINE
+---
+
+
 
 
 
