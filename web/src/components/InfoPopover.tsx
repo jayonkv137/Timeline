@@ -26,6 +26,10 @@ const SECTION_INFO: Record<string, { text: string; bold?: boolean }[]> = {
     { text: "Autopilot", bold: true },
     { text: " — the AI is mostly deciding and doing." },
   ],
+  REQUIREMENTS: [
+    { text: "Displays the design decisions and requirements shaped during this turn." },
+    { text: "Blue bars show user shaping effort; orange bars show AI shaping effort. Tap any row to view its exact text and extraction rationale." }
+  ],
 };
 
 interface InfoPopoverProps {

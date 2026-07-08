@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { SectionHeader } from './InfoPopover';
+import { SectionHeader, InfoPopover } from './InfoPopover';
 
 interface RequirementItem {
   outcome_id: string;
@@ -251,12 +251,43 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                   backgroundColor: 'rgba(0, 0, 0, 0.015)',
                   borderTop: '1px solid var(--border)',
                   borderBottom: '1px solid var(--border)',
-                  padding: '16px 0',
+                  padding: '12px 0 16px 0',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '4px',
                 }}
               >
+                {/* Section Header inside the drawer */}
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '0 16px 8px 16px',
+                    borderBottom: '1px solid var(--border)',
+                    marginBottom: '8px',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span
+                      style={{
+                        fontSize: '10px',
+                        fontWeight: 600,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        color: 'var(--text-muted)',
+                        fontFamily: 'var(--font-mono)',
+                      }}
+                    >
+                      Requirements
+                    </span>
+                    <InfoPopover sectionKey="REQUIREMENTS" />
+                  </div>
+                  <span style={{ fontSize: '9px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+                    Click rows to expand details
+                  </span>
+                </div>
+
                 {pair.drawer.requirements.map((req, rIdx) => {
                   const isExpanded = expandedReq === req.label;
 
@@ -381,6 +412,21 @@ export const TimelineSection: React.FC<TimelineSectionProps> = ({
                               }}
                             />
                           )}
+                        </div>
+
+                        {/* Right-aligned accordion indicator chevron */}
+                        <div
+                          style={{
+                            position: 'absolute',
+                            right: '12px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            color: 'var(--text-muted)',
+                            opacity: 0.5,
+                            pointerEvents: 'none',
+                          }}
+                        >
+                          {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
                         </div>
                       </div>
 
