@@ -344,6 +344,20 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Next:** P1.S7 — HOW
 ---
 
+## 2026-07-08 03:05 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** P1.S6 — TIMELINE (Popover Non-Blocking Placement)
+- **Did:**
+  - Placed the `"Requirements"` info popover box completely outside the right rail bounds (`align="left-outer"`).
+  - The popover now hovers to the left of the button, overlaying the main chat history workspace instead of covering the timeline chart bars inside the rail.
+  - Staged and committed changes as `P1.S6` popover update.
+- **Decisions made:**
+  - Positioned popovers that sit on the left edge of the rail to slide leftwards (`right: 100%`) rather than rightwards.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** Built and verified the dev app compiles with zero errors, and displays the popovers cleanly without overlapping the graph circles or bars.
+- **Next:** P1.S7 — HOW
+---
+
+
 
 
 
