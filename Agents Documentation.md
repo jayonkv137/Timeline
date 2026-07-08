@@ -59,6 +59,10 @@ quote. It is a mirror, not a judge.
   schemas, configs), pause for owner review before building on top of it.
 
 ## Current phase
-PHASE 0 — Contracts & scaffold. DoD: `data/chats/fixture_pair1/` validates against the
-five schemas via pytest, and the canonical-numbers check passes.
+PHASE 2 — The Engine (offline CLI). Phase 0 DoD closed 2026-07-08 (tag `phase-0-done`):
+`tests/test_phase0.py` — fixture schema validation + canonical-numbers recomputation
+(ΣU=87.0, ΣA=314.0, 14 distinct reqs, creator split 4 you/10 AI, zero overlap/dup rows,
+direction match) — all green. Phase 1 (right-rail UI) built separately, not yet formally
+gate-closed per Playbook §3. Phase 2 DoD: PHASE2_BRIEF S1–S8 fixture regression EXACT +
+checks green (see PHASE2_BRIEF.md).
 (Update this line when a phase closes.)

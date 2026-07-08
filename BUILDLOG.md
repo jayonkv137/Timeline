@@ -428,6 +428,49 @@ ENTRY TEMPLATE (copy, fill, append):
 - **Spec contradictions/gaps flagged:** none
 - **Verification:** Verified model ID strings against docs page. Verified gitignore.
 - **Next:** Phase 2 implementation
+---
+
+## 2026-07-08 · Claude Code · Sonnet 5
+- **Phase/Step:** P0.S4 (retroactive) — Phase 0 DoD test suite, inserted as "STEP 0" before P2.S1
+- **Did:**
+  - Created `tests/test_phase0.py`: schema validation for all 5 `data/chats/fixture_pair1/`
+    artifacts (dialogue, state, ledger rows, snapshots, panel_bundle) against
+    `engine/schemas/*.schema.json` via `Draft202012Validator`; PIPELINE_SPEC §11.4
+    mechanical checks as pytest — ΣU scores == 87.0, ΣA scores == 314.0, 14 distinct
+    (outcome_id, req_id), creator split 4 you/10 AI by earliest-creation-action rule,
+    zero creation/labeled overlap per requirement, zero duplicate (action_id, req) rows;
+    plus Phase 0 Brief's panel_bundle-direction-matches-ledger check (within 0.1).
+  - Created `.venv/` (gitignored), installed `requirements-dev.txt` (pytest, jsonschema).
+  - Ran `pytest tests/test_phase0.py` — **12 passed**.
+  - Updated AGENTS.md "Current phase" line: PHASE 0 closed → PHASE 2.
+- **Decisions made:**
+  - The creator-split "earliest creation action" rule is NOT a plain numeric sort of
+    `action_id` across speakers — verified against `data/fixtures/Stage 4 Pair 1
+    Results.md` and the fixture's own README: within one pair, ALL user actions
+    chronologically precede ALL AI actions (one pair = one full user turn, then one full
+    AI reply), so the sort key is `(pair, 0 if speaker==U else 1, seq)`. A naive
+    `(pair, seq)` sort gives 3 you/11 AI — wrong. This one requirement (o1/req2) has
+    creation rows from both speakers; U-before-A tie-break resolves it to U, reproducing
+    the canonical 4/10 split exactly. Documented as a comment in the test file.
+  - Included Phase 0 Brief Step 4(c) (panel_bundle direction vs. ledger-derived, within
+    0.1) even though the user's STEP 0 instruction only named (a)+(b) — cheap, part of
+    the same brief's DoD, no reason to leave it out.
+- **Spec contradictions/gaps flagged:**
+  - Found an **uncommitted, unrelated local diff** to `.env.example` (from a prior
+    Antigravity/Gemini session per its own BUILDLOG entry above) that removes
+    `ANTHROPIC_API_KEY` entirely and switches to `LLM_API_KEY`/`LLM_BASE_URL` pointed at
+    Gemini, with a note claiming to be "the standing amendment" for Phase 2's `llm.py` to
+    use the OpenAI SDK instead of Anthropic. This contradicts PHASE2_BRIEF S1 (`MODEL_FAST
+    claude-haiku-4-5`, `MODEL_MAIN claude-sonnet-4-6`), Playbook §5's dependency allowlist
+    (`anthropic`, not `openai`), and AGENTS.md rule 1 (specs are read-only from the coding
+    side; amendments happen at the command center, not via a BUILDLOG note). Left
+    `.env.example` untouched — not committed, not reverted. Flagged to the owner before
+    proceeding to P2.S1; this must be resolved before the LLM layer is built.
+- **Verification:** `pytest tests/test_phase0.py -v` → 12/12 passed. Output captured in
+  session; no failures, no skips.
+- **Next:** Owner resolves the `.env.example` / Anthropic-vs-Gemini contradiction, then
+  P2.S1 (Skeleton + LLM layer) per PHASE2_BRIEF.md.
+---
 
 
 
