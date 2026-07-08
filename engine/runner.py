@@ -127,6 +127,10 @@ def run_pipeline(config, dialogue, out_dir, limit_pairs=None, resume=False):
         user_text = turns_by_pair[P]["user"]
         ai_text = turns_by_pair[P]["ai"]
 
+        # Wipe any existing rows for this pair in the ledger before we start writing new ones.
+        # This makes re-runs idempotent and safe.
+        ledger_writer.wipe_pair(P)
+
         # Level 1 (Steps 1a, 1b, 1c)
         new_actions = run_level1(client, config, state, P, user_text, ai_text)
 

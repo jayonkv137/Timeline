@@ -4,6 +4,8 @@ from pathlib import Path
 import uuid
 import os
 import datetime
+import asyncio
+from typing import Dict, Set
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
@@ -28,6 +30,39 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("server")
 
 app = FastAPI(title="Timeline Web Server")
+
+# In-memory registries for chat-level execution and events
+chat_locks: Dict[str, asyncio.Lock] = {}
+chat_event_listeners: Dict[str, Set[asyncio.Queue]] = {}
+
+def broadcast_event(chat_id: str, payload: str):
+    """Sends SSE payload to all active queues for this chat_id."""
+    if chat_id in chat_event_listeners:
+        for q in list(chat_event_listeners[chat_id]):
+            q.put_nowait(payload)
+
+def send_pipeline_status(chat_id: str, phase: str, pair: int):
+    """Broadcasts pipeline status change."""
+    data = json.dumps({"phase": phase, "pair": pair})
+    msg = f"event: pipeline_status\ndata: {data}\n\n"
+    broadcast_event(chat_id, msg)
+
+def send_pair_ready(chat_id: str, pair: int):
+    """Broadcasts pair completion event."""
+    msg = f"event: pair_ready\ndata: {json.dumps({'pair': pair})}\n\n"
+    broadcast_event(chat_id, msg)
+
+def write_run_status(chat_dir: Path, status: str, pair: int, error: str = None):
+    """Saves persistent execution status to run/status.json."""
+    status_path = chat_dir / "run" / "status.json"
+    status_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(status_path, "w") as f:
+        json.dump({
+            "status": status,
+            "pair": pair,
+            "error": error
+        }, f, indent=2, ensure_ascii=False)
+        f.write("\n")
 
 # CORS middleware for Vite development server
 app.add_middleware(
@@ -300,6 +335,81 @@ async def post_message(chat_id: str, request: MessageRequest):
         except Exception as e:
             logger.error(f"Error saving AI turn: {e}")
             
+        # Trigger pipeline job in the background
+        asyncio.create_task(run_pipeline_job(chat_id, pair_number))
+            
         yield "data: [DONE]\n\n"
 
     return StreamingResponse(sse_generator(), media_type="text/event-stream")
+
+async def run_pipeline_job(chat_id: str, pair: int):
+    # Get/Create lock for chat_id
+    if chat_id not in chat_locks:
+        chat_locks[chat_id] = asyncio.Lock()
+    lock = chat_locks[chat_id]
+
+    async with lock:
+        chat_dir = CHATS_DIR / chat_id
+        write_run_status(chat_dir, "running", pair, None)
+        send_pipeline_status(chat_id, "running", pair)
+        
+        try:
+            from engine.runner import run_pipeline
+            
+            # Load dialogue
+            dialogue_path = chat_dir / "dialogue.json"
+            with open(dialogue_path) as f:
+                dialogue = json.load(f)
+                
+            # Run the pipeline synchronously in a thread pool to not block event loop
+            await asyncio.to_thread(
+                run_pipeline,
+                config=config,
+                dialogue=dialogue,
+                out_dir=chat_dir,
+                limit_pairs=pair,
+                resume=True
+            )
+            
+            write_run_status(chat_dir, "done", pair, None)
+            send_pipeline_status(chat_id, "done", pair)
+            send_pair_ready(chat_id, pair)
+            
+        except Exception as e:
+            logger.error(f"Pipeline failed for chat {chat_id} pair {pair}: {e}")
+            write_run_status(chat_dir, "failed", pair, str(e))
+            send_pipeline_status(chat_id, "failed", pair)
+
+@app.get("/chats/{chat_id}/events")
+async def get_events(chat_id: str):
+    chat_dir = CHATS_DIR / chat_id
+    if not chat_dir.exists():
+        raise HTTPException(status_code=404, detail="Chat not found")
+
+    queue = asyncio.Queue()
+    chat_event_listeners.setdefault(chat_id, set()).add(queue)
+
+    async def event_generator():
+        try:
+            while True:
+                data = await queue.get()
+                yield data
+        except asyncio.CancelledError:
+            pass
+        finally:
+            if chat_id in chat_event_listeners:
+                chat_event_listeners[chat_id].discard(queue)
+                if not chat_event_listeners[chat_id]:
+                    del chat_event_listeners[chat_id]
+
+    return StreamingResponse(event_generator(), media_type="text/event-stream")
+
+@app.post("/chats/{chat_id}/pairs/{pair}/rerun")
+async def rerun_pair(chat_id: str, pair: int):
+    chat_dir = CHATS_DIR / chat_id
+    if not chat_dir.exists():
+        raise HTTPException(status_code=404, detail="Chat not found")
+        
+    # Queue task in background
+    asyncio.create_task(run_pipeline_job(chat_id, pair))
+    return {"status": "queued", "pair": pair}
