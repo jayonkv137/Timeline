@@ -11,6 +11,8 @@
 
 **Agency Panel** is a live AI chat application featuring a powerful right-rail agency panel. Powered by **The Comprehensible Engine**, this system visualizes complex AI interactions, making the hidden workflows of large language models completely transparent and interactive.
 
+![Agency Panel Interface](assets/ui_screenshot.png)
+
 ## ✨ Features
 
 - **🎯 Goal Tracking**: Visualizes what you are currently working on and provides context on the larger goal. Expand the tree to see the full structure of your tasks.
