@@ -75,17 +75,6 @@ class LedgerWriter:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
         self.rows.append(row)
 
-    def wipe_pair(self, P):
-        """Idempotency helper: filters out any existing rows where pair_added == P
-        both in memory and on disk.
-        """
-        self.rows = [row for row in self.rows if row.get("pair_added") != P]
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        # Rewrite the ledger file completely to remove the wiped rows
-        with open(self.path, "w") as f:
-            for row in self.rows:
-                f.write(json.dumps(row, ensure_ascii=False) + "\n")
-
 
 def read_ledger(path):
     """Read + validate all rows of a ledger.jsonl without opening it for

@@ -99,14 +99,12 @@ interface AppState {
   activeChatId: string | null;
   setActiveChatId: (id: string | null) => void;
   conversations: ChatSession[];
-  setConversations: (chats: ChatSession[]) => void;
   addConversation: (chat: ChatSession) => void;
-  updateConversationTitle: (id: string, title: string) => void;
   clearConversations: () => void;
   selectedPairIdx: number;
   setSelectedPairIdx: (idx: number) => void;
   panelBundle: PanelBundle | null;
-  setPanelBundle: (pb: PanelBundle | null) => void;
+  setPanelBundle: (pb: PanelBundle) => void;
   dialogue: DialogueTurn[];
   setDialogue: (dlg: DialogueTurn[]) => void;
 }
@@ -115,15 +113,11 @@ export const useAppStore = create<AppState>((set) => ({
   activeChatId: null,
   setActiveChatId: (id) => set({ activeChatId: id }),
   conversations: [], // start with completely blank sidebar
-  setConversations: (chats) => set({ conversations: chats }),
   addConversation: (chat) => set((state) => {
     // Avoid duplicates
     if (state.conversations.some(c => c.id === chat.id)) return {};
     return { conversations: [...state.conversations, chat] };
   }),
-  updateConversationTitle: (id, title) => set((state) => ({
-    conversations: state.conversations.map(c => c.id === id ? { ...c, title } : c)
-  })),
   clearConversations: () => set({ conversations: [], activeChatId: null }),
   selectedPairIdx: 0,
   setSelectedPairIdx: (idx) => set({ selectedPairIdx: idx }),
