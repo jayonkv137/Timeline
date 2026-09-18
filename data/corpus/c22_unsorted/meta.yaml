@@ -5,6 +5,7 @@ source_file: "Hemelingen Room Inquiry Move-in Verification Sept 17 2026.json"
 source_kind: claude_web_json
 pairs: 65
 length_band: long
+fidelity_grade: unusable
 contains: [images]
 
 # TO BE COMPLETED BY THE OWNER

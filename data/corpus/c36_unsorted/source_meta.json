@@ -10,7 +10,7 @@
     "updated": "5/22/2026 19:27:44",
     "exported": "9/17/2026 0:51:51"
   },
-  "imported_at": "2026-09-18T09:27:38Z",
+  "imported_at": "2026-09-18T11:05:50Z",
   "import_spec_version": "1.0",
   "pairs": 46,
   "turns": 92,
@@ -23,7 +23,9 @@
     "empty_turns": 0,
     "merged_turns": 0,
     "dropped_trailing_user_turn": false,
-    "dropped_leading_ai_turn": false
+    "dropped_leading_ai_turn": false,
+    "grade": "degraded",
+    "image_ratio": 0.26
   },
   "turn_meta": [
     {

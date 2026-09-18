@@ -5,6 +5,7 @@ source_file: "Figma Components Audit Sept 17 2026.json"
 source_kind: claude_web_json
 pairs: 3
 length_band: short
+fidelity_grade: clean
 contains: [long_message]
 
 # TO BE COMPLETED BY THE OWNER

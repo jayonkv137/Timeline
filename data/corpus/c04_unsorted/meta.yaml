@@ -5,6 +5,7 @@ source_file: "AI Automation Analogies Sept 17.json"
 source_kind: claude_web_json
 pairs: 4
 length_band: short
+fidelity_grade: clean
 contains: []
 
 # TO BE COMPLETED BY THE OWNER

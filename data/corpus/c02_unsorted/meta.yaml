@@ -5,6 +5,7 @@ source_file: "3D Portfolio Design Claude.json"
 source_kind: claude_web_json
 pairs: 40
 length_band: long
+fidelity_grade: unusable
 contains: [images, long_message]
 
 # TO BE COMPLETED BY THE OWNER

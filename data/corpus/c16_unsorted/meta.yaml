@@ -5,6 +5,7 @@ source_file: "Co-creative Systems Design Timeline Analogies Sept 2026.json"
 source_kind: claude_web_json
 pairs: 1
 length_band: short
+fidelity_grade: clean
 contains: [long_message]
 
 # TO BE COMPLETED BY THE OWNER

@@ -5,6 +5,7 @@ source_file: "Datafied Society Research Topics.md"
 source_kind: claude_web_md
 pairs: 1
 length_band: short
+fidelity_grade: clean
 contains: []
 
 # TO BE COMPLETED BY THE OWNER

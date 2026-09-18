@@ -5,6 +5,7 @@ source_file: "3D Portfolio Setup Continuation.json"
 source_kind: claude_web_json
 pairs: 3
 length_band: short
+fidelity_grade: degraded
 contains: [images, long_message]
 
 # TO BE COMPLETED BY THE OWNER

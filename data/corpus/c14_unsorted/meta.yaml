@@ -5,6 +5,7 @@ source_file: "Claude Dialogue Action Extraction Framework Sept 17 2026.json"
 source_kind: claude_web_json
 pairs: 14
 length_band: medium
+fidelity_grade: clean
 contains: [long_message]
 
 # TO BE COMPLETED BY THE OWNER

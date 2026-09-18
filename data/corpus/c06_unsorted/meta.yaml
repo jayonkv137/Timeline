@@ -5,6 +5,7 @@ source_file: "AI Creativity Task Clarification Sept 17.json"
 source_kind: claude_web_json
 pairs: 93
 length_band: long
+fidelity_grade: degraded
 contains: [images, long_message]
 
 # TO BE COMPLETED BY THE OWNER

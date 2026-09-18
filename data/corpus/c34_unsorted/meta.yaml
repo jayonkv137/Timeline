@@ -5,6 +5,7 @@ source_file: "Phase 2 Workflow Context Sept 17 2026.json"
 source_kind: claude_web_json
 pairs: 64
 length_band: long
+fidelity_grade: degraded
 contains: [code_blocks, images, long_message]
 
 # TO BE COMPLETED BY THE OWNER

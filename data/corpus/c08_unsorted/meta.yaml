@@ -5,6 +5,7 @@ source_file: "Adidas Product Video Content.json"
 source_kind: claude_web_json
 pairs: 3
 length_band: short
+fidelity_grade: unusable
 contains: [images]
 
 # TO BE COMPLETED BY THE OWNER

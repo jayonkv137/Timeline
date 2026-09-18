@@ -321,10 +321,24 @@ def validate(dialogue: list[dict], turn_meta: list[dict], schema_path: str | Non
 
 
 # --------------------------------------------------------------------------
-# meta.yaml skeleton (IMPORT_SPEC section 8)
+# meta.yaml skeleton (IMPORT_SPEC section 8) & fidelity grading (V7)
 # --------------------------------------------------------------------------
 
-def meta_yaml(chat_id: str, title: str, source_file: str, source_kind: str, pairs: int, contains: list[str]) -> str:
+def compute_fidelity_grade(images_dropped: int, pairs: int) -> str:
+    """Classify corpus entry fidelity per TEST_STRATEGY / V7:
+    clean    : images_dropped / pairs <= 0.05
+    degraded : <= 0.5
+    unusable : > 0.5
+    """
+    ratio = images_dropped / max(pairs, 1)
+    if ratio <= 0.05:
+        return "clean"
+    if ratio <= 0.5:
+        return "degraded"
+    return "unusable"
+
+
+def meta_yaml(chat_id: str, title: str, source_file: str, source_kind: str, pairs: int, fidelity_grade: str, contains: list[str]) -> str:
     if pairs <= 5:
         band = "short"
     elif pairs <= 20:
@@ -340,6 +354,7 @@ source_file: "{source_file}"
 source_kind: {source_kind}
 pairs: {pairs}
 length_band: {band}
+fidelity_grade: {fidelity_grade}
 contains: {contains_str}
 
 # TO BE COMPLETED BY THE OWNER
@@ -355,6 +370,7 @@ notes: >
   One paragraph: what this conversation was, who drove it, and anything that
   makes it an unusual test case.
 """
+
 
 
 # --------------------------------------------------------------------------
@@ -395,9 +411,14 @@ def ingest(path: str, chat_id: str, out_root: str, dry_run: bool, force: bool,
     source_filename = os.path.basename(path)
     chat_title = header.get("source_title", "") or os.path.splitext(source_filename)[0]
 
+    grade = compute_fidelity_grade(fid["images_dropped"], n_pairs)
+    fid["grade"] = grade
+    fid["image_ratio"] = round(fid["images_dropped"] / max(n_pairs, 1), 2)
+
     print(f"  title           : {chat_title}")
     print(f"  turns in source : {len(raw_turns)}")
     print(f"  pairs after rules: {n_pairs}")
+    print(f"  fidelity grade  : {grade} (ratio: {fid['image_ratio']})")
     print(f"  typed / injected : "
           f"{sum(1 for m in turn_meta if m['origin'] == 'typed')} / "
           f"{sum(1 for m in turn_meta if m['origin'] == 'injected')}")
@@ -421,8 +442,11 @@ def ingest(path: str, chat_id: str, out_root: str, dry_run: bool, force: bool,
             "source_kind": fmt,
             "pairs": n_pairs,
             "images_dropped": fid["images_dropped"],
+            "image_ratio": fid["image_ratio"],
             "injected_turns": fid["injected_turns"],
             "tool_narration_turns": fid["tool_narration_turns"],
+            "empty_turns": fid["empty_turns"],
+            "fidelity_grade": grade,
         })
 
     if dry_run:
@@ -473,7 +497,7 @@ def ingest(path: str, chat_id: str, out_root: str, dry_run: bool, force: bool,
     meta_path = os.path.join(dest, "meta.yaml")
     if not os.path.exists(meta_path) or force:
         with open(meta_path, "w", encoding="utf-8") as f:
-            f.write(meta_yaml(chat_id, chat_title, source_filename, fmt, n_pairs, contains))
+            f.write(meta_yaml(chat_id, chat_title, source_filename, fmt, n_pairs, grade, contains))
 
     print(f"  written -> {dest}")
     print("  NEXT: open meta.yaml and fill in the owner fields.")
@@ -518,6 +542,19 @@ def main() -> int:
             manifest = {
                 "import_spec_version": IMPORT_SPEC_VERSION,
                 "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "total_chats": len(manifest_chats),
+                "total_pairs": sum(c["pairs"] for c in manifest_chats),
+                "fidelity_totals": {
+                    "images_dropped": sum(c["images_dropped"] for c in manifest_chats),
+                    "injected_turns": sum(c["injected_turns"] for c in manifest_chats),
+                    "tool_narration_turns": sum(c["tool_narration_turns"] for c in manifest_chats),
+                    "empty_turns": sum(c.get("empty_turns", 0) for c in manifest_chats),
+                    "grades": {
+                        "clean": sum(1 for c in manifest_chats if c["fidelity_grade"] == "clean"),
+                        "degraded": sum(1 for c in manifest_chats if c["fidelity_grade"] == "degraded"),
+                        "unusable": sum(1 for c in manifest_chats if c["fidelity_grade"] == "unusable"),
+                    },
+                },
                 "chats": manifest_chats,
             }
             manifest_path = os.path.join(args.out, "manifest.json")

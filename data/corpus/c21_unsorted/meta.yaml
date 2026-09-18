@@ -5,6 +5,7 @@ source_file: "Fixing Stuttering Box Animation Sept 17 2026.json"
 source_kind: claude_web_json
 pairs: 12
 length_band: medium
+fidelity_grade: degraded
 contains: [images, long_message]
 
 # TO BE COMPLETED BY THE OWNER

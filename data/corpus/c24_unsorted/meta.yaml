@@ -5,6 +5,7 @@ source_file: "Hybrid AI Filmmaking Action Short Film.json"
 source_kind: claude_web_json
 pairs: 5
 length_band: short
+fidelity_grade: unusable
 contains: [images, long_message]
 
 # TO BE COMPLETED BY THE OWNER

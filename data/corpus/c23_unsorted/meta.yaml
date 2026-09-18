@@ -5,6 +5,7 @@ source_file: "Honey Product Showcase Video.json"
 source_kind: claude_web_json
 pairs: 14
 length_band: medium
+fidelity_grade: unusable
 contains: [images, long_message]
 
 # TO BE COMPLETED BY THE OWNER

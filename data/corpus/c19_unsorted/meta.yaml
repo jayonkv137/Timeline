@@ -5,6 +5,7 @@ source_file: "Exporting Clips for AI Film Reference Sept 17 2026.json"
 source_kind: claude_web_json
 pairs: 47
 length_band: long
+fidelity_grade: unusable
 contains: [images, long_message]
 
 # TO BE COMPLETED BY THE OWNER

@@ -1,6 +1,19 @@
 {
   "import_spec_version": "1.0",
-  "generated_at": "2026-09-18T09:27:38Z",
+  "generated_at": "2026-09-18T11:05:50Z",
+  "total_chats": 36,
+  "total_pairs": 909,
+  "fidelity_totals": {
+    "images_dropped": 829,
+    "injected_turns": 1,
+    "tool_narration_turns": 69,
+    "empty_turns": 6,
+    "grades": {
+      "clean": 10,
+      "degraded": 7,
+      "unusable": 19
+    }
+  },
   "chats": [
     {
       "id": "c01_unsorted",
@@ -9,8 +22,11 @@
       "source_kind": "claude_web_json",
       "pairs": 60,
       "images_dropped": 76,
+      "image_ratio": 1.27,
       "injected_turns": 0,
-      "tool_narration_turns": 0
+      "tool_narration_turns": 0,
+      "empty_turns": 0,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c02_unsorted",
@@ -19,8 +35,11 @@
       "source_kind": "claude_web_json",
       "pairs": 40,
       "images_dropped": 59,
+      "image_ratio": 1.48,
       "injected_turns": 1,
-      "tool_narration_turns": 4
+      "tool_narration_turns": 4,
+      "empty_turns": 0,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c03_unsorted",
@@ -29,8 +48,11 @@
       "source_kind": "claude_web_json",
       "pairs": 3,
       "images_dropped": 1,
+      "image_ratio": 0.33,
       "injected_turns": 0,
-      "tool_narration_turns": 1
+      "tool_narration_turns": 1,
+      "empty_turns": 0,
+      "fidelity_grade": "degraded"
     },
     {
       "id": "c04_unsorted",
@@ -39,8 +61,11 @@
       "source_kind": "claude_web_json",
       "pairs": 4,
       "images_dropped": 0,
+      "image_ratio": 0.0,
       "injected_turns": 0,
-      "tool_narration_turns": 2
+      "tool_narration_turns": 2,
+      "empty_turns": 0,
+      "fidelity_grade": "clean"
     },
     {
       "id": "c05_unsorted",
@@ -49,8 +74,11 @@
       "source_kind": "claude_web_json",
       "pairs": 7,
       "images_dropped": 0,
+      "image_ratio": 0.0,
       "injected_turns": 0,
-      "tool_narration_turns": 1
+      "tool_narration_turns": 1,
+      "empty_turns": 0,
+      "fidelity_grade": "clean"
     },
     {
       "id": "c06_unsorted",
@@ -59,8 +87,11 @@
       "source_kind": "claude_web_json",
       "pairs": 93,
       "images_dropped": 35,
+      "image_ratio": 0.38,
       "injected_turns": 0,
-      "tool_narration_turns": 17
+      "tool_narration_turns": 17,
+      "empty_turns": 0,
+      "fidelity_grade": "degraded"
     },
     {
       "id": "c07_unsorted",
@@ -69,8 +100,11 @@
       "source_kind": "claude_web_md",
       "pairs": 4,
       "images_dropped": 0,
+      "image_ratio": 0.0,
       "injected_turns": 0,
-      "tool_narration_turns": 4
+      "tool_narration_turns": 4,
+      "empty_turns": 0,
+      "fidelity_grade": "clean"
     },
     {
       "id": "c08_unsorted",
@@ -79,8 +113,11 @@
       "source_kind": "claude_web_json",
       "pairs": 3,
       "images_dropped": 2,
+      "image_ratio": 0.67,
       "injected_turns": 0,
-      "tool_narration_turns": 0
+      "tool_narration_turns": 0,
+      "empty_turns": 0,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c09_unsorted",
@@ -89,8 +126,11 @@
       "source_kind": "claude_web_json",
       "pairs": 4,
       "images_dropped": 6,
+      "image_ratio": 1.5,
       "injected_turns": 0,
-      "tool_narration_turns": 1
+      "tool_narration_turns": 1,
+      "empty_turns": 0,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c10_unsorted",
@@ -99,8 +139,11 @@
       "source_kind": "claude_web_json",
       "pairs": 1,
       "images_dropped": 0,
+      "image_ratio": 0.0,
       "injected_turns": 0,
-      "tool_narration_turns": 0
+      "tool_narration_turns": 0,
+      "empty_turns": 0,
+      "fidelity_grade": "clean"
     },
     {
       "id": "c11_unsorted",
@@ -109,8 +152,11 @@
       "source_kind": "claude_web_json",
       "pairs": 7,
       "images_dropped": 12,
+      "image_ratio": 1.71,
       "injected_turns": 0,
-      "tool_narration_turns": 0
+      "tool_narration_turns": 0,
+      "empty_turns": 1,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c12_unsorted",
@@ -119,8 +165,11 @@
       "source_kind": "claude_web_json",
       "pairs": 18,
       "images_dropped": 22,
+      "image_ratio": 1.22,
       "injected_turns": 0,
-      "tool_narration_turns": 3
+      "tool_narration_turns": 3,
+      "empty_turns": 1,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c13_unsorted",
@@ -129,8 +178,11 @@
       "source_kind": "claude_web_json",
       "pairs": 76,
       "images_dropped": 90,
+      "image_ratio": 1.18,
       "injected_turns": 0,
-      "tool_narration_turns": 0
+      "tool_narration_turns": 0,
+      "empty_turns": 0,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c14_unsorted",
@@ -139,8 +191,11 @@
       "source_kind": "claude_web_json",
       "pairs": 14,
       "images_dropped": 0,
+      "image_ratio": 0.0,
       "injected_turns": 0,
-      "tool_narration_turns": 0
+      "tool_narration_turns": 0,
+      "empty_turns": 0,
+      "fidelity_grade": "clean"
     },
     {
       "id": "c15_unsorted",
@@ -149,8 +204,11 @@
       "source_kind": "claude_web_json",
       "pairs": 8,
       "images_dropped": 1,
+      "image_ratio": 0.12,
       "injected_turns": 0,
-      "tool_narration_turns": 0
+      "tool_narration_turns": 0,
+      "empty_turns": 0,
+      "fidelity_grade": "degraded"
     },
     {
       "id": "c16_unsorted",
@@ -159,8 +217,11 @@
       "source_kind": "claude_web_json",
       "pairs": 1,
       "images_dropped": 0,
+      "image_ratio": 0.0,
       "injected_turns": 0,
-      "tool_narration_turns": 0
+      "tool_narration_turns": 0,
+      "empty_turns": 0,
+      "fidelity_grade": "clean"
     },
     {
       "id": "c17_unsorted",
@@ -169,8 +230,11 @@
       "source_kind": "claude_web_md",
       "pairs": 1,
       "images_dropped": 0,
+      "image_ratio": 0.0,
       "injected_turns": 0,
-      "tool_narration_turns": 1
+      "tool_narration_turns": 1,
+      "empty_turns": 0,
+      "fidelity_grade": "clean"
     },
     {
       "id": "c18_unsorted",
@@ -179,8 +243,11 @@
       "source_kind": "claude_web_json",
       "pairs": 59,
       "images_dropped": 7,
+      "image_ratio": 0.12,
       "injected_turns": 0,
-      "tool_narration_turns": 17
+      "tool_narration_turns": 17,
+      "empty_turns": 0,
+      "fidelity_grade": "degraded"
     },
     {
       "id": "c19_unsorted",
@@ -189,8 +256,11 @@
       "source_kind": "claude_web_json",
       "pairs": 47,
       "images_dropped": 49,
+      "image_ratio": 1.04,
       "injected_turns": 0,
-      "tool_narration_turns": 2
+      "tool_narration_turns": 2,
+      "empty_turns": 2,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c20_unsorted",
@@ -199,8 +269,11 @@
       "source_kind": "claude_web_json",
       "pairs": 3,
       "images_dropped": 0,
+      "image_ratio": 0.0,
       "injected_turns": 0,
-      "tool_narration_turns": 0
+      "tool_narration_turns": 0,
+      "empty_turns": 0,
+      "fidelity_grade": "clean"
     },
     {
       "id": "c21_unsorted",
@@ -209,8 +282,11 @@
       "source_kind": "claude_web_json",
       "pairs": 12,
       "images_dropped": 3,
+      "image_ratio": 0.25,
       "injected_turns": 0,
-      "tool_narration_turns": 0
+      "tool_narration_turns": 0,
+      "empty_turns": 0,
+      "fidelity_grade": "degraded"
     },
     {
       "id": "c22_unsorted",
@@ -219,8 +295,11 @@
       "source_kind": "claude_web_json",
       "pairs": 65,
       "images_dropped": 65,
+      "image_ratio": 1.0,
       "injected_turns": 0,
-      "tool_narration_turns": 0
+      "tool_narration_turns": 0,
+      "empty_turns": 0,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c23_unsorted",
@@ -229,8 +308,11 @@
       "source_kind": "claude_web_json",
       "pairs": 14,
       "images_dropped": 24,
+      "image_ratio": 1.71,
       "injected_turns": 0,
-      "tool_narration_turns": 0
+      "tool_narration_turns": 0,
+      "empty_turns": 0,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c24_unsorted",
@@ -239,8 +321,11 @@
       "source_kind": "claude_web_json",
       "pairs": 5,
       "images_dropped": 4,
+      "image_ratio": 0.8,
       "injected_turns": 0,
-      "tool_narration_turns": 0
+      "tool_narration_turns": 0,
+      "empty_turns": 0,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c25_unsorted",
@@ -249,8 +334,11 @@
       "source_kind": "claude_web_json",
       "pairs": 26,
       "images_dropped": 74,
+      "image_ratio": 2.85,
       "injected_turns": 0,
-      "tool_narration_turns": 1
+      "tool_narration_turns": 1,
+      "empty_turns": 0,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c26_unsorted",
@@ -259,8 +347,11 @@
       "source_kind": "claude_web_json",
       "pairs": 15,
       "images_dropped": 8,
+      "image_ratio": 0.53,
       "injected_turns": 0,
-      "tool_narration_turns": 2
+      "tool_narration_turns": 2,
+      "empty_turns": 0,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c27_unsorted",
@@ -269,8 +360,11 @@
       "source_kind": "claude_web_json",
       "pairs": 2,
       "images_dropped": 0,
+      "image_ratio": 0.0,
       "injected_turns": 0,
-      "tool_narration_turns": 0
+      "tool_narration_turns": 0,
+      "empty_turns": 0,
+      "fidelity_grade": "clean"
     },
     {
       "id": "c28_unsorted",
@@ -279,8 +373,11 @@
       "source_kind": "claude_web_json",
       "pairs": 16,
       "images_dropped": 20,
+      "image_ratio": 1.25,
       "injected_turns": 0,
-      "tool_narration_turns": 1
+      "tool_narration_turns": 1,
+      "empty_turns": 0,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c29_unsorted",
@@ -289,8 +386,11 @@
       "source_kind": "claude_web_json",
       "pairs": 18,
       "images_dropped": 23,
+      "image_ratio": 1.28,
       "injected_turns": 0,
-      "tool_narration_turns": 2
+      "tool_narration_turns": 2,
+      "empty_turns": 0,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c30_unsorted",
@@ -299,8 +399,11 @@
       "source_kind": "claude_web_json",
       "pairs": 2,
       "images_dropped": 0,
+      "image_ratio": 0.0,
       "injected_turns": 0,
-      "tool_narration_turns": 0
+      "tool_narration_turns": 0,
+      "empty_turns": 0,
+      "fidelity_grade": "clean"
     },
     {
       "id": "c31_unsorted",
@@ -309,8 +412,11 @@
       "source_kind": "claude_web_json",
       "pairs": 56,
       "images_dropped": 98,
+      "image_ratio": 1.75,
       "injected_turns": 0,
-      "tool_narration_turns": 1
+      "tool_narration_turns": 1,
+      "empty_turns": 0,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c32_unsorted",
@@ -319,8 +425,11 @@
       "source_kind": "claude_web_json",
       "pairs": 28,
       "images_dropped": 38,
+      "image_ratio": 1.36,
       "injected_turns": 0,
-      "tool_narration_turns": 1
+      "tool_narration_turns": 1,
+      "empty_turns": 1,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c33_unsorted",
@@ -329,8 +438,11 @@
       "source_kind": "claude_web_json",
       "pairs": 19,
       "images_dropped": 24,
+      "image_ratio": 1.26,
       "injected_turns": 0,
-      "tool_narration_turns": 1
+      "tool_narration_turns": 1,
+      "empty_turns": 1,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c34_unsorted",
@@ -339,8 +451,11 @@
       "source_kind": "claude_web_json",
       "pairs": 64,
       "images_dropped": 16,
+      "image_ratio": 0.25,
       "injected_turns": 0,
-      "tool_narration_turns": 4
+      "tool_narration_turns": 4,
+      "empty_turns": 0,
+      "fidelity_grade": "degraded"
     },
     {
       "id": "c35_unsorted",
@@ -349,8 +464,11 @@
       "source_kind": "claude_web_json",
       "pairs": 68,
       "images_dropped": 60,
+      "image_ratio": 0.88,
       "injected_turns": 0,
-      "tool_narration_turns": 2
+      "tool_narration_turns": 2,
+      "empty_turns": 0,
+      "fidelity_grade": "unusable"
     },
     {
       "id": "c36_unsorted",
@@ -359,8 +477,11 @@
       "source_kind": "claude_web_json",
       "pairs": 46,
       "images_dropped": 12,
+      "image_ratio": 0.26,
       "injected_turns": 0,
-      "tool_narration_turns": 1
+      "tool_narration_turns": 1,
+      "empty_turns": 0,
+      "fidelity_grade": "degraded"
     }
   ]
 }

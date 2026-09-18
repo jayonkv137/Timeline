@@ -5,6 +5,7 @@ source_file: "AI Plans vs User Requirements Sept 17 2026.md"
 source_kind: claude_web_md
 pairs: 4
 length_band: short
+fidelity_grade: clean
 contains: [code_blocks]
 
 # TO BE COMPLETED BY THE OWNER
