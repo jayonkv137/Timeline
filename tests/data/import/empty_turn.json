@@ -1,0 +1,14 @@
+{
+  "messages": [
+    {
+      "role": "human",
+      "time": "2026-05-18T13:00:00Z",
+      "say": "   "
+    },
+    {
+      "role": "assistant",
+      "time": "2026-05-18T13:01:00Z",
+      "say": "You sent an empty message."
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "messages": [
+    {
+      "role": "human",
+      "time": "2026-05-18T13:00:00Z",
+      "say": "<command-name>/help</command-name>"
+    },
+    {
+      "role": "assistant",
+      "time": "2026-05-18T13:01:00Z",
+      "say": "Help options."
+    },
+    {
+      "role": "human",
+      "time": "2026-05-18T13:02:00Z",
+      "say": "<task-notification>Task done <task-id>123</task-id></task-notification>"
+    },
+    {
+      "role": "assistant",
+      "time": "2026-05-18T13:03:00Z",
+      "say": "Acknowledged."
+    },
+    {
+      "role": "human",
+      "time": "2026-05-18T13:04:00Z",
+      "say": "Skill /data-analysis is already loaded into context."
+    },
+    {
+      "role": "assistant",
+      "time": "2026-05-18T13:05:00Z",
+      "say": "Ready."
+    },
+    {
+      "role": "human",
+      "time": "2026-05-18T13:06:00Z",
+      "say": "continue"
+    },
+    {
+      "role": "assistant",
+      "time": "2026-05-18T13:07:00Z",
+      "say": "Continuing."
+    },
+    {
+      "role": "human",
+      "time": "2026-05-18T13:08:00Z",
+      "say": "[system] System notification."
+    },
+    {
+      "role": "assistant",
+      "time": "2026-05-18T13:09:00Z",
+      "say": "Understood."
+    }
+  ]
+}

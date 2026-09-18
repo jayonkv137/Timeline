@@ -178,7 +178,7 @@ def parse_claude_web_md(path: str) -> tuple[list[dict], dict]:
         role = parts[i].strip().lower()
         chunk = parts[i + 1]
         ts_raw = ""
-        mts = re.match(r"\s*>\s*([0-9/: ]+)\s*\n", chunk)
+        mts = re.match(r"\s*>\s*([0-9/:\- ]+)\s*\n", chunk)
         if mts:
             ts_raw = mts.group(1).strip()
             chunk = chunk[mts.end():]

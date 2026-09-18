@@ -1,0 +1,2 @@
+{"type": "user", "sessionId": "sess_123", "message": "hello"}
+{"type": "assistant", "sessionId": "sess_123", "message": "world"}

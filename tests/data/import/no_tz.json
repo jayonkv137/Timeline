@@ -1,0 +1,14 @@
+{
+  "messages": [
+    {
+      "role": "human",
+      "time": "5/18/2026 13:27:25",
+      "say": "Local time without timezone"
+    },
+    {
+      "role": "assistant",
+      "time": "5/18/2026 13:27:52",
+      "say": "Understood"
+    }
+  ]
+}

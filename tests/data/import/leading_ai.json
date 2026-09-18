@@ -1,0 +1,19 @@
+{
+  "messages": [
+    {
+      "role": "assistant",
+      "time": "2026-05-18T13:00:00Z",
+      "say": "Hello, how can I help you today?"
+    },
+    {
+      "role": "human",
+      "time": "2026-05-18T13:01:00Z",
+      "say": "I need help with Python."
+    },
+    {
+      "role": "assistant",
+      "time": "2026-05-18T13:02:00Z",
+      "say": "Sure, what Python question do you have?"
+    }
+  ]
+}

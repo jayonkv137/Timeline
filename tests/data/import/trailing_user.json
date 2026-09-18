@@ -1,0 +1,19 @@
+{
+  "messages": [
+    {
+      "role": "human",
+      "time": "2026-05-18T13:00:00Z",
+      "say": "Pair 1 user."
+    },
+    {
+      "role": "assistant",
+      "time": "2026-05-18T13:01:00Z",
+      "say": "Pair 1 AI."
+    },
+    {
+      "role": "human",
+      "time": "2026-05-18T13:02:00Z",
+      "say": "Trailing user with no response."
+    }
+  ]
+}

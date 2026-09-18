@@ -1,0 +1,19 @@
+{
+  "messages": [
+    {
+      "role": "human",
+      "time": "2026-05-18T13:00:00Z",
+      "say": "First message from user."
+    },
+    {
+      "role": "human",
+      "time": "2026-05-18T13:00:10Z",
+      "say": "Second consecutive message from user."
+    },
+    {
+      "role": "assistant",
+      "time": "2026-05-18T13:01:00Z",
+      "say": "I see both your messages."
+    }
+  ]
+}

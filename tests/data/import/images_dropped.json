@@ -1,0 +1,14 @@
+{
+  "messages": [
+    {
+      "role": "human",
+      "time": "2026-05-18T13:00:00Z",
+      "say": "[Image: test_diagram.png]\n[Attachment: spec_doc.pdf]\nCheck these attachments."
+    },
+    {
+      "role": "assistant",
+      "time": "2026-05-18T13:01:00Z",
+      "say": "Used tool\n- Reading file...\nDone\n\nI reviewed the diagram."
+    }
+  ]
+}

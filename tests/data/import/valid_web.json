@@ -1,0 +1,29 @@
+{
+  "metadata": {
+    "title": "Synthetic Test Chat",
+    "link": "https://claude.ai/chat/test-1",
+    "powered_by": "Claude Exporter"
+  },
+  "messages": [
+    {
+      "role": "human",
+      "time": "2026-05-18T13:27:25Z",
+      "say": "Hello assistant, write a quick outline."
+    },
+    {
+      "role": "assistant",
+      "time": "2026-05-18T13:27:52Z",
+      "say": "Here is the quick outline for you."
+    },
+    {
+      "role": "human",
+      "time": "2026-05-18T13:28:10Z",
+      "say": "Now add a summary section."
+    },
+    {
+      "role": "assistant",
+      "time": "2026-05-18T13:28:30Z",
+      "say": "Here is the summary section."
+    }
+  ]
+}
