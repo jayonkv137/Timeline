@@ -1,0 +1,130 @@
+{
+  "chat_id": "c05_unsorted",
+  "source_kind": "claude_web_json",
+  "source_file": "source.json",
+  "exporter": "Claude Exporter (https://www.ai-chat-exporter.net)",
+  "source_title": "Finding research papers on AI creativity and design",
+  "source_link": "https://claude.ai/chat/7fb5e8be-e1c6-489d-b666-fdc09136de40",
+  "source_dates": {
+    "created": "4/18/2026 10:28:35",
+    "updated": "4/20/2026 11:51:29",
+    "exported": "9/17/2026 0:54:49"
+  },
+  "imported_at": "2026-09-18T09:14:41Z",
+  "import_spec_version": "1.0",
+  "pairs": 7,
+  "turns": 14,
+  "assumed_utc": true,
+  "fidelity": {
+    "images_dropped": 0,
+    "attachments_dropped": 0,
+    "tool_narration_turns": 1,
+    "injected_turns": 0,
+    "empty_turns": 0,
+    "merged_turns": 0,
+    "dropped_trailing_user_turn": false,
+    "dropped_leading_ai_turn": false
+  },
+  "turn_meta": [
+    {
+      "pair": 1,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 1,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 2,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 2,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 3,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 3,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 4,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 4,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 5,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 5,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 6,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 6,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 7,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 7,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    }
+  ]
+}

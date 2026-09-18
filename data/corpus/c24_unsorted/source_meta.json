@@ -1,0 +1,105 @@
+{
+  "chat_id": "c24_unsorted",
+  "source_kind": "claude_web_json",
+  "source_file": "source.json",
+  "exporter": "Claude Exporter (https://www.ai-chat-exporter.net)",
+  "source_title": "Hybrid AI filmmaking for action short film",
+  "source_link": "https://claude.ai/chat/6cda6f6f-4d5b-4b0c-b56c-5cf963d99237",
+  "source_dates": {
+    "created": "4/28/2026 22:22:24",
+    "updated": "5/1/2026 0:06:07",
+    "exported": "9/17/2026 0:53:44"
+  },
+  "imported_at": "2026-09-18T09:14:41Z",
+  "import_spec_version": "1.0",
+  "pairs": 5,
+  "turns": 10,
+  "assumed_utc": true,
+  "fidelity": {
+    "images_dropped": 4,
+    "attachments_dropped": 0,
+    "tool_narration_turns": 0,
+    "injected_turns": 0,
+    "empty_turns": 0,
+    "merged_turns": 0,
+    "dropped_trailing_user_turn": false,
+    "dropped_leading_ai_turn": false
+  },
+  "turn_meta": [
+    {
+      "pair": 1,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 1,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 2,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 2,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 3,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 3,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 4,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 4,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 5,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "IMG_4660.PNG",
+        "IMG_4662.PNG",
+        "IMG_4661.PNG",
+        "IMG_4663.PNG"
+      ]
+    },
+    {
+      "pair": 5,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    }
+  ]
+}

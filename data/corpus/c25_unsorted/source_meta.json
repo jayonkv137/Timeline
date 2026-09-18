@@ -1,0 +1,488 @@
+{
+  "chat_id": "c25_unsorted",
+  "source_kind": "claude_web_json",
+  "source_file": "source.json",
+  "exporter": "Claude Exporter (https://www.ai-chat-exporter.net)",
+  "source_title": "Creating hybrid art style for AI short film",
+  "source_link": "https://claude.ai/chat/1f3c61f1-bb01-4650-a01e-844c48c34c74",
+  "source_dates": {
+    "created": "5/1/2026 0:20:10",
+    "updated": "5/3/2026 9:29:56",
+    "exported": "9/17/2026 0:53:37"
+  },
+  "imported_at": "2026-09-18T09:14:41Z",
+  "import_spec_version": "1.0",
+  "pairs": 26,
+  "turns": 52,
+  "assumed_utc": true,
+  "fidelity": {
+    "images_dropped": 74,
+    "attachments_dropped": 0,
+    "tool_narration_turns": 1,
+    "injected_turns": 0,
+    "empty_turns": 0,
+    "merged_turns": 0,
+    "dropped_trailing_user_turn": false,
+    "dropped_leading_ai_turn": false
+  },
+  "turn_meta": [
+    {
+      "pair": 1,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 1,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 2,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 2,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 3,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 3,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 4,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "shot1.1.png",
+        "shot2.1.png",
+        "shot3.1.png",
+        "shot3.2.png",
+        "shot3.3.png",
+        "shot3.4.png"
+      ]
+    },
+    {
+      "pair": 4,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 5,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 5,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 6,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 6,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 7,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Modern University Class (1).png",
+        "Modern University Class (2).png",
+        "Modern University Class (3).png",
+        "Modern University Class.png"
+      ]
+    },
+    {
+      "pair": 7,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 8,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Medium Wide Classroom Interior (1).png",
+        "Medium Wide Classroom Interior (2).png",
+        "Medium Wide Classroom Interior (3).png",
+        "Medium Wide Classroom Interior.png",
+        "Main sequence.00_00_12_08.Still030.png",
+        "Main sequence.00_00_16_13.Still031.png",
+        "Main sequence.00_00_19_09.Still032.png",
+        "Main sequence.00_00_23_03.Still033.png"
+      ]
+    },
+    {
+      "pair": 8,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 9,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Portrait of a Young Man with Glasses (1).png",
+        "IMG 4675.jpg"
+      ]
+    },
+    {
+      "pair": 9,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 10,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 10,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 11,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Young Man Portrait (1).png",
+        "Young Man Portrait (2).png",
+        "Young Man Portrait (3).png",
+        "Young Man Portrait.png"
+      ]
+    },
+    {
+      "pair": 11,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 12,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Three Quarter View Young Man.png",
+        "Young Man Portrait.png"
+      ]
+    },
+    {
+      "pair": 12,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 13,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "1777639647724-l4avijkvj8k_qr2210n5c.png",
+        "FlashBoards Creative AI Canvas (2).png",
+        "FlashBoards Creative AI Canvas (3).png",
+        "FlashBoards Creative AI Canvas (4).png",
+        "FlashBoards Creative AI Canvas (5).png",
+        "FlashBoards Creative AI Canvas (6).png",
+        "Three Quarter View Young Man.png",
+        "Young Man Portrait.png",
+        "Medium Wide Classroom Interior (3).png",
+        "Modern University Class (3).png"
+      ]
+    },
+    {
+      "pair": 13,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 14,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 14,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 15,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "FlashBoards Creative AI Canvas (9).png",
+        "FlashBoards Creative AI Canvas (10).png"
+      ]
+    },
+    {
+      "pair": 15,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 16,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "FlashBoards Creative AI Canvas (12).png",
+        "FlashBoards Creative AI Canvas (13).png"
+      ]
+    },
+    {
+      "pair": 16,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 17,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "FlashBoards Creative AI Canvas (11).png",
+        "FlashBoards Creative AI Canvas (12).png"
+      ]
+    },
+    {
+      "pair": 17,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 18,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "FlashBoards Creative AI Canvas (15).png"
+      ]
+    },
+    {
+      "pair": 18,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 19,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Medium Wide Classroom Interior (1).png"
+      ]
+    },
+    {
+      "pair": 19,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 20,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "FlashBoards Creative AI Canvas (16).png"
+      ]
+    },
+    {
+      "pair": 20,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 21,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Screenshot 2026-05-02 at 10.45.10 AM.png",
+        "Michael Chiklis Advice for MCU Reboot.jpeg.webp",
+        "shot5.1.png"
+      ]
+    },
+    {
+      "pair": 21,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 22,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Main sequence.00_00_23_08.Still037.png",
+        "Golem Night Creature Fist Model Sheet.webp",
+        "Malachi Model Sheet.webp"
+      ]
+    },
+    {
+      "pair": 22,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 23,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Screenshot 2026-05-02 at 11.10.34 AM.png",
+        "Malachi Model Sheet.webp"
+      ]
+    },
+    {
+      "pair": 23,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 24,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Main sequence.00_00_12_00.Still034.png",
+        "Main sequence.00_00_16_13.Still035.png",
+        "Main sequence.00_00_23_08.Still037.png",
+        "shot5.2.png",
+        "shot6.1.png",
+        "shot6.2.png",
+        "shot7.1.png",
+        "shot7.2.png",
+        "shot8.1.png",
+        "shot8.2.png",
+        "shot8.4.png",
+        "shot9.1.png",
+        "shot9.2.png",
+        "Medium Wide Classroom Interior (1).png",
+        "FlashBoards Creative AI Canvas (8).png",
+        "Medium Wide Classroom Interior (3).png",
+        "FlashBoards Creative AI Canvas (15).png",
+        "FlashBoards Creative AI Canvas (16).png",
+        "FlashBoards Creative AI Canvas (17).png"
+      ]
+    },
+    {
+      "pair": 24,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 25,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 25,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 26,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "FlashBoards Creative AI Canvas (15).png",
+        "Medium Wide Classroom Interior (1) (1).png"
+      ]
+    },
+    {
+      "pair": 26,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    }
+  ]
+}

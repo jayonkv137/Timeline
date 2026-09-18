@@ -1,0 +1,258 @@
+{
+  "chat_id": "c23_unsorted",
+  "source_kind": "claude_web_json",
+  "source_file": "source.json",
+  "exporter": "Claude Exporter (https://www.ai-chat-exporter.net)",
+  "source_title": "Honey product showcase video with dolly shot",
+  "source_link": "https://claude.ai/chat/48d21f65-a6c0-49fa-9dd4-f3948d4e0733",
+  "source_dates": {
+    "created": "6/5/2026 12:59:21",
+    "updated": "6/5/2026 14:52:56",
+    "exported": "9/17/2026 0:53:07"
+  },
+  "imported_at": "2026-09-18T09:14:41Z",
+  "import_spec_version": "1.0",
+  "pairs": 14,
+  "turns": 28,
+  "assumed_utc": true,
+  "fidelity": {
+    "images_dropped": 24,
+    "attachments_dropped": 0,
+    "tool_narration_turns": 0,
+    "injected_turns": 0,
+    "empty_turns": 0,
+    "merged_turns": 0,
+    "dropped_trailing_user_turn": false,
+    "dropped_leading_ai_turn": false
+  },
+  "turn_meta": [
+    {
+      "pair": 1,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "FlashBoards Creative AI Canvas (57).png"
+      ]
+    },
+    {
+      "pair": 1,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 2,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 2,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 3,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "FlashBoards Creative AI Canvas (58).png"
+      ]
+    },
+    {
+      "pair": 3,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 4,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Sequence 01.00_00_08_21.Still001.png",
+        "Sequence 01.00_00_12_12.Still002.png",
+        "Sequence 01.00_00_15_15.Still003.png",
+        "Bio Bruhe Streuwurze.webp",
+        "FlashBoards Creative AI Canvas (56).png",
+        "Bio Medjool Dates.webp"
+      ]
+    },
+    {
+      "pair": 4,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 5,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 5,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 6,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 6,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 7,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 7,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 8,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Sequence 01.00_00_28_13.Still004.png",
+        "Sequence 01.00_00_29_21.Still005.png",
+        "Sequence 01.00_00_32_00.Still006.png",
+        "Yogi Tea Ginger Orange Vanilla.webp"
+      ]
+    },
+    {
+      "pair": 8,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 9,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 9,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 10,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 10,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 11,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Bird's Eye Chili Front.webp",
+        "Chakalaka Gewürzmischung.webp",
+        "Langer Pfeffer geschnitten.webp",
+        "FlashBoards Creative AI Canvas (59).png",
+        "Screenshot 2026-06-05 at 1.52.29 PM.png"
+      ]
+    },
+    {
+      "pair": 11,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 12,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Sequence 01.00_00_21_08.Still007.png",
+        "Sequence 01.00_00_24_23.Still008.png",
+        "FlashBoards Creative AI Canvas (56).png"
+      ]
+    },
+    {
+      "pair": 12,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 13,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "FlashBoards Creative AI Canvas (60).png"
+      ]
+    },
+    {
+      "pair": 13,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 14,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Sequence 01.00_00_39_04.Still009.png",
+        "Sequence 01.00_00_42_15.Still010.png",
+        "Sequence 01.00_00_44_14.Still011.png"
+      ]
+    },
+    {
+      "pair": 14,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    }
+  ]
+}
