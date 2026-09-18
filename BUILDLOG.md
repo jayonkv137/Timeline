@@ -586,6 +586,32 @@ scripts/ingest_export.py
 
 **Next:** E0.S1 in Antigravity.
 
+---
+
+## 2026-09-18 12:15 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** E0.S8 — Phase close
+- **Did:**
+  - Audited full Definition of Done per `docs/briefs/E0_BRIEF.md`.
+  - Executed test suite: `pytest` passed (51/51 in 0.45s), `pytest -m tier1` passed (51/51 in 0.41s).
+  - Verified corpus reconciliation: 36 chats in `data/corpus/c01_unsorted` .. `c36_unsorted`, all 4 files per chat present, 0 schema errors, totals 100% match `manifest.json` (909 pairs, 829 images dropped, 1 injected turn, 69 tool narration turns).
+  - Verified `tests/invariants.py`: 21 invariants implemented; inv 1-9 pass on `data/chats/fixture_pair1/`, inv 10-21 guard gracefully with `skipped`.
+  - Verified `engine/llm_cache.py`: record and replay modes tested without network (`tests/test_llm_cache.py`).
+  - Confirmed `SPEC_QUESTIONS.md` logs Q4 (provenance sidecar), Q5 (injected text), Q6 (tool narration), and updated Q2 to resolved.
+  - Verified `data/chats/fixture_pair1/` remains strictly byte-identical (0 git diff against origin).
+  - Updated `Agents Documentation.md` `Current phase` line to E1 and its DoD.
+  - Tagged commit as `e0-done`.
+- **Decisions made:**
+  - Preserved strict backward compatibility and isolation for frozen Phase 0 contracts.
+  - S4 owner review gate passed for all 36 ingested chats.
+- **Spec contradictions/gaps flagged:** none (all open items tracked in `SPEC_QUESTIONS.md`).
+- **Verification:**
+  - `pytest` → 51/51 passed in 0.45s.
+  - `pytest -m tier1` → 51/51 passed in 0.41s.
+  - Corpus integrity check script → 36/36 valid, 0 schema errors, 100% reconciled totals.
+  - `git diff origin/master...HEAD -- data/chats/fixture_pair1/` → empty.
+- **Next:** Phase E1 kickoff — Extraction Pipeline (Steps 1a–3).
+
+
 
 
 

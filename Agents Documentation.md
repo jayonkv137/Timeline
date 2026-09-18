@@ -73,12 +73,10 @@ quote. It is a mirror, not a judge.
   schemas, configs), pause for owner review before building on top of it.
 
 ## Current phase
-E0 — Corpus, Importer, Harness. See docs/briefs/E0_BRIEF.md.
+E1 — Extraction Pipeline (Steps 1a–3). See docs/TEST_STRATEGY.md §7.
 
-The build has been re-planned as engine-first (command centre, Sept 2026). The old
-P2–P5 plan is superseded by E0–E5; BUILDLOG entries before this point refer to the old
-numbering. Phase 0 remains closed (tag `phase-0-done`). The Phase 1 panel UI remains on
-disk in fixture mode and is now understood as one projection of the engine, not the
-engine's purpose.
+The build is executing engine-first (command centre, Sept 2026).
+Phase E0 closed (tag `e0-done`): importer, corpus (36 chats, 909 pairs), 21 invariants, caching LLM client, 51 tests green.
 
-E0 DoD: importer + corpus + invariants + record/replay harness, per E0_BRIEF.
+E1 DoD: Steps 1a–3 extraction on Golden chat against hand labels, invariants 1-9 green on corpus, match rate >= 80%, spurious rate <= 20%.
+
