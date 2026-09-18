@@ -611,6 +611,92 @@ scripts/ingest_export.py
   - `git diff origin/master...HEAD -- data/chats/fixture_pair1/` → empty.
 - **Next:** Phase E1 kickoff — Extraction Pipeline (Steps 1a–3).
 
+---
+
+## 2026-09-18 13:10 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** E0 Review Challenge Resolution & Ritual Codification
+- **Did:**
+  - Responded to `E0_VERIFICATION_CHALLENGE.md` items V1–V9.
+  - Removed inaccurate narrative review file `docs/PHASE_E0_ARCHITECT_REVIEW.md` (V1).
+  - Implemented verbatim `evidence_quote` checking in `tests/invariants.py` `inv_21_provenance` and added `test_inv_21_verbatim_quote_check` to `tests/test_invariants.py` (V3).
+  - Logged Q7 (Single-root vs conversational drift) and Q8 (5-tuple ledger key) in `SPEC_QUESTIONS.md`; amended `docs/TEST_STRATEGY.md` §2 item 5 to 5-tuple (V4, V5).
+  - Added `fidelity_grade` (`clean`, `degraded`, `unusable`) to `scripts/ingest_export.py`, re-ingested corpus with `--force`, regenerated `manifest.json` and all `meta.yaml` files (V7).
+  - Created `scripts/phase_report.py` to generate ground-truth metrics, invariant checks, and DoD status strictly from the filesystem (V9).
+  - Codified the Automated Phase Report and Architect Review Routine in `Build Playbook.md` §3.
+  - Updated `Agents Documentation.md` `Current phase` line to state E0 engineering is complete with Owner tasks (10 `meta.yaml` and `golden_01` labeling) explicitly gating E1 (V2).
+- **Verification (Programmatic output from `scripts/phase_report.py`):**
+```
+================================================================================
+PHASE VERIFICATION REPORT (GENERATED FROM FILESYSTEM)
+================================================================================
+1. TEST HARNESS & TIERS
+  Total collected tests : 52
+  tier0 (replay)        : 0
+  tier1 (deterministic) : 52
+  tier2 (live API)      : 0
+  tier3 (robustness)    : 0
+  Default pytest run    : PASS (52 passed in 0.29s)
+  pytest -m tier1       : PASS (52 passed in 0.29s)
+--------------------------------------------------------------------------------
+2. CORPUS FIDELITY & MANIFEST RECONCILIATION
+  Ingested chats        : 36
+  Total dialogue pairs  : 909
+  Images dropped        : 829
+  Injected turns        : 1
+  Tool narration turns  : 69
+  Empty AI turns        : 6
+  Fidelity grades       : clean=10, degraded=7, unusable=19
+  Missing 4-files       : 0
+  Schema errors         : 0
+  Manifest reconciled   : YES (100% match)
+  meta.yaml filled      : 0 of 36
+  golden_01 exists      : NO
+--------------------------------------------------------------------------------
+4. THE 21 INVARIANTS EVALUATION (data/chats/fixture_pair1/)
+  inv_01: PASS
+  inv_02: PASS
+  inv_03: PASS
+  inv_04: PASS
+  inv_05: PASS
+  inv_06: PASS
+  inv_07: PASS
+  inv_08: PASS
+  inv_09: PASS
+  inv_10: SKIPPED (skipped: analysis.json absent)
+  inv_11: SKIPPED (skipped: analysis.json absent)
+  inv_12: SKIPPED (skipped: analysis.json absent)
+  inv_13: SKIPPED (skipped: analysis.json absent)
+  inv_14: SKIPPED (skipped: analysis.json absent)
+  inv_15: SKIPPED (skipped: analysis.json absent)
+  inv_16: SKIPPED (skipped: analysis.json absent)
+  inv_17: SKIPPED (skipped: consecutive ledgers absent)
+  inv_18: SKIPPED (skipped: rerun state absent)
+  inv_19: SKIPPED (skipped: analysis runs absent)
+  inv_20: SKIPPED (skipped: batch/live ledgers absent)
+  inv_21: SKIPPED (skipped: fixture dialogue is stubbed)
+--------------------------------------------------------------------------------
+5. FROZEN FIXTURE INTEGRITY
+  fixture_pair1 state   : UNTOUCHED (byte-identical)
+--------------------------------------------------------------------------------
+6. E0 DEFINITION OF DONE AUDIT
+  [X] pytest green (including 22 pre-existing)
+  [X] pytest -m tier1 green
+  [X] Every export in testing folder ingested or refused with reason
+  [X] Every corpus entry has 4 files and validates dialogue schema
+  [X] data/corpus/manifest.json exists and totals reconcile
+  [ ] Owner has filled meta.yaml for every entry and renamed folders
+  [X] tests/invariants.py implements all 21; 1-9 pass on fixture
+  [X] Record and replay LLM client demonstrated working
+  [X] Q4, Q5, Q6 (and Q7, Q8) logged in SPEC_QUESTIONS.md
+  [X] data/chats/fixture_pair1/ byte-identical
+  [ ] Golden chat (golden_01) established for E1
+================================================================================
+Overall Status: IN PROGRESS (OWNER TASKS OUTSTANDING)
+================================================================================
+```
+- **Next:** Owner completes items 9 and 10 (fill 10 `meta.yaml` + hand-label `c14` as `golden_01`) to ungate Phase E1.
+
+
 
 
 

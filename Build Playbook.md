@@ -52,20 +52,29 @@ exactly where the previous session stopped. Continue from its "Next" line. Same 
 
 ---
 
-## 3. The phase-close ritual (replaces command-center verification)
+## 3. The phase-close ritual and Architect Review Routine
 
-A phase is closed ONLY when all five are done, in order:
-1. **DoD executed** — the brief's Definition of Done run for real (pytest output / the
-   checklist walked item by item), results pasted into the BUILDLOG entry.
-2. **BUILDLOG entry** appended (template in BUILDLOG.md).
-3. **Git:** commit + tag `phase-N-done`.
-4. **AGENTS.md** "Current phase" line updated to the next phase + its DoD.
-5. **Self-review pass** (one prompt, same session): "Re-read the brief top to bottom.
-   List anything specified that was not delivered, or delivered differently. If the
-   list is non-empty, we are not done." — only an empty list closes the phase.
+A phase is closed ONLY when all six are done, in order:
+1. **Programmatic phase report generated** — run `python3 scripts/phase_report.py`.
+   All facts, test counts, invariant checks, and DoD status are generated strictly
+   from the filesystem. Never write narrative prose from memory.
+2. **BUILDLOG entry** appended (template in BUILDLOG.md), containing the exact output
+   of `scripts/phase_report.py`.
+3. **Architect Review Routine** — the Architect independently verifies the codebase,
+   runs verification challenges, and audits claims. Any raised challenge items must
+   be answered in the strict format: COMMAND RUN, OUTPUT, VERDICT, IF REFUTED, ACTION.
+   Zero narrative evasion.
+4. **Git:** commit + tag `eN-done` (only after all engineering DoD items pass and
+   any owner-gate items are explicitly documented).
+5. **AGENTS.md** "Current phase" line updated to reflect exact phase status, explicitly
+   naming any owner prerequisites that gate starting the next phase.
+6. **Self-review pass**: "Re-read the brief top to bottom. List anything specified that
+   was not delivered, or delivered differently. If the list is non-empty, we are not
+   done." — only an empty list closes the phase.
 
-Never start phase N+1 with phase N's DoD red. No exceptions, including "it's probably
-fine."
+Never start phase N+1 with phase N's engineering DoD red. No exceptions, including
+"it's probably fine."
+
 
 ---
 

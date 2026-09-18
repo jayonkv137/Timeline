@@ -73,10 +73,20 @@ quote. It is a mirror, not a judge.
   schemas, configs), pause for owner review before building on top of it.
 
 ## Current phase
-E1 — Extraction Pipeline (Steps 1a–3). See docs/TEST_STRATEGY.md §7.
+E0 — Corpus, Importer, Harness (Engineering complete; Owner review gate active).
 
-The build is executing engine-first (command centre, Sept 2026).
-Phase E0 closed (tag `e0-done`): importer, corpus (36 chats, 909 pairs), 21 invariants, caching LLM client, 51 tests green.
+All engineering deliverables for Phase E0 are complete and verified via `scripts/phase_report.py`:
+- Importer + fidelity accounting + fidelity grading (`clean`/`degraded`/`unusable`) across 36 chats (909 pairs).
+- The 21 invariants module (`tests/invariants.py`), with verbatim evidence quote checking in `inv_21`.
+- Caching LLM client (`engine/llm_cache.py`).
+- 52 tests green across all suites in < 0.5s.
+- Manifest 100% reconciled against individual sidecars.
+- Frozen fixture `fixture_pair1` byte-identical to origin.
 
-E1 DoD: Steps 1a–3 extraction on Golden chat against hand labels, invariants 1-9 green on corpus, match rate >= 80%, spurious rate <= 20%.
+**Prerequisites gating Phase E1 commencement (Owner tasks):**
+1. Fill `meta.yaml` for 10 chats across the coverage matrix and rename those folders from `c<NN>_unsorted` to `c<NN>_<task_type>_<length>`.
+2. Hand-label chat **c14** (Dialogue action extraction framework) as `golden_01` under `data/corpus/golden_01/`.
+
+Phase E1 (Extraction Pipeline: Steps 1a–3) commences immediately upon completion of these two owner tasks.
+
 
