@@ -1,5 +1,7 @@
 # filled by importer
 id: c05_unsorted
+title: "Finding research papers on AI creativity and design"
+source_file: "AI Creativity Design Research Papers.json"
 source_kind: claude_web_json
 pairs: 7
 length_band: medium

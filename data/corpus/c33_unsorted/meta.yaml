@@ -1,5 +1,7 @@
 # filled by importer
 id: c33_unsorted
+title: "Nike production video animation prompts with Seedance"
+source_file: "Nike Production Video Prompts.json"
 source_kind: claude_web_json
 pairs: 19
 length_band: medium

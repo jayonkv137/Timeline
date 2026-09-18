@@ -1,5 +1,7 @@
 # filled by importer
 id: c35_unsorted
+title: "Redesigning technology page with branch-based experience sections"
+source_file: "Redesigning Technology Page Claude.json"
 source_kind: claude_web_json
 pairs: 68
 length_band: long

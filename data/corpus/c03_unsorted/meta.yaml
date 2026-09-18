@@ -1,5 +1,7 @@
 # filled by importer
 id: c03_unsorted
+title: "3D interactive portfolio website setup continuation"
+source_file: "3D Portfolio Setup Continuation.json"
 source_kind: claude_web_json
 pairs: 3
 length_band: short

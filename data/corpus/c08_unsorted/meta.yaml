@@ -1,5 +1,7 @@
 # filled by importer
 id: c08_unsorted
+title: "Portfolio website content for Adidas product video"
+source_file: "Adidas Product Video Content.json"
 source_kind: claude_web_json
 pairs: 3
 length_band: short

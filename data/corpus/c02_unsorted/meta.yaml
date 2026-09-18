@@ -1,5 +1,7 @@
 # filled by importer
 id: c02_unsorted
+title: "3D interactive portfolio website design"
+source_file: "3D Portfolio Design Claude.json"
 source_kind: claude_web_json
 pairs: 40
 length_band: long

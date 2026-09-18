@@ -1,5 +1,7 @@
 # filled by importer
 id: c20_unsorted
+title: "Converting website pages to Figma components and auditing design system"
+source_file: "Figma Components Audit Sept 17 2026.json"
 source_kind: claude_web_json
 pairs: 3
 length_band: short

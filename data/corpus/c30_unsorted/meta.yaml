@@ -1,5 +1,7 @@
 # filled by importer
 id: c30_unsorted
+title: "Building a language learning story universe with AI agents"
+source_file: "Language Learning Story Universe AI.json"
 source_kind: claude_web_json
 pairs: 2
 length_band: short

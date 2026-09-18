@@ -1,5 +1,7 @@
 # filled by importer
 id: c19_unsorted
+title: "Exporting clips from Adobe for AI film reference"
+source_file: "Exporting Clips for AI Film Reference Sept 17 2026.json"
 source_kind: claude_web_json
 pairs: 47
 length_band: long

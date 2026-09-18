@@ -1,5 +1,7 @@
 # filled by importer
 id: c34_unsorted
+title: "Confirming Phase 2 workflow context"
+source_file: "Phase 2 Workflow Context Sept 17 2026.json"
 source_kind: claude_web_json
 pairs: 64
 length_band: long

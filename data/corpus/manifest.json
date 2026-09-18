@@ -1,9 +1,11 @@
 {
   "import_spec_version": "1.0",
-  "generated_at": "2026-09-18T09:14:42Z",
+  "generated_at": "2026-09-18T09:27:38Z",
   "chats": [
     {
       "id": "c01_unsorted",
+      "title": "Crafting a 1930s Kerala Catholic wedding photograph",
+      "source_file": "1930s Kerala Catholic Wedding Photo.json",
       "source_kind": "claude_web_json",
       "pairs": 60,
       "images_dropped": 76,
@@ -12,6 +14,8 @@
     },
     {
       "id": "c02_unsorted",
+      "title": "3D interactive portfolio website design",
+      "source_file": "3D Portfolio Design Claude.json",
       "source_kind": "claude_web_json",
       "pairs": 40,
       "images_dropped": 59,
@@ -20,6 +24,8 @@
     },
     {
       "id": "c03_unsorted",
+      "title": "3D interactive portfolio website setup continuation",
+      "source_file": "3D Portfolio Setup Continuation.json",
       "source_kind": "claude_web_json",
       "pairs": 3,
       "images_dropped": 1,
@@ -28,6 +34,8 @@
     },
     {
       "id": "c04_unsorted",
+      "title": "Analogies for explaining AI and automation styles",
+      "source_file": "AI Automation Analogies Sept 17.json",
       "source_kind": "claude_web_json",
       "pairs": 4,
       "images_dropped": 0,
@@ -36,6 +44,8 @@
     },
     {
       "id": "c05_unsorted",
+      "title": "Finding research papers on AI creativity and design",
+      "source_file": "AI Creativity Design Research Papers.json",
       "source_kind": "claude_web_json",
       "pairs": 7,
       "images_dropped": 0,
@@ -44,6 +54,8 @@
     },
     {
       "id": "c06_unsorted",
+      "title": "AI and creativity presentation task clarification",
+      "source_file": "AI Creativity Task Clarification Sept 17.json",
       "source_kind": "claude_web_json",
       "pairs": 93,
       "images_dropped": 35,
@@ -52,6 +64,8 @@
     },
     {
       "id": "c07_unsorted",
+      "title": "AI-stated plans versus user requirements",
+      "source_file": "AI Plans vs User Requirements Sept 17 2026.md",
       "source_kind": "claude_web_md",
       "pairs": 4,
       "images_dropped": 0,
@@ -60,6 +74,8 @@
     },
     {
       "id": "c08_unsorted",
+      "title": "Portfolio website content for Adidas product video",
+      "source_file": "Adidas Product Video Content.json",
       "source_kind": "claude_web_json",
       "pairs": 3,
       "images_dropped": 2,
@@ -68,6 +84,8 @@
     },
     {
       "id": "c09_unsorted",
+      "title": "Analyzing background lighting and color contrast in images",
+      "source_file": "Analyzing Background Lighting and Color Contrast.json",
       "source_kind": "claude_web_json",
       "pairs": 4,
       "images_dropped": 6,
@@ -76,6 +94,8 @@
     },
     {
       "id": "c10_unsorted",
+      "title": "Analyzing my role and contribution patterns in this project",
+      "source_file": "Analyzing Role Contribution Patterns Sept 17 2026.json",
       "source_kind": "claude_web_json",
       "pairs": 1,
       "images_dropped": 0,
@@ -84,6 +104,8 @@
     },
     {
       "id": "c11_unsorted",
+      "title": "Anki language learning workflows and methods",
+      "source_file": "Anki Language Learning Workflows Sept 17 2026.json",
       "source_kind": "claude_web_json",
       "pairs": 7,
       "images_dropped": 12,
@@ -92,6 +114,8 @@
     },
     {
       "id": "c12_unsorted",
+      "title": "Applying artistic style to hallway scene in Midjourney",
+      "source_file": "Artistic Style Hallway Scene Midjourney.json",
       "source_kind": "claude_web_json",
       "pairs": 18,
       "images_dropped": 22,
@@ -100,6 +124,8 @@
     },
     {
       "id": "c13_unsorted",
+      "title": "Creating a Berliner raver sausage character",
+      "source_file": "Berliner Raver Sausage Character.json",
       "source_kind": "claude_web_json",
       "pairs": 76,
       "images_dropped": 90,
@@ -108,6 +134,8 @@
     },
     {
       "id": "c14_unsorted",
+      "title": "Dialogue action extraction framework",
+      "source_file": "Claude Dialogue Action Extraction Framework Sept 17 2026.json",
       "source_kind": "claude_web_json",
       "pairs": 14,
       "images_dropped": 0,
@@ -116,6 +144,8 @@
     },
     {
       "id": "c15_unsorted",
+      "title": "Portfolio about page redesign",
+      "source_file": "Claude Portfolio About Page Redesign.json",
       "source_kind": "claude_web_json",
       "pairs": 8,
       "images_dropped": 1,
@@ -124,6 +154,8 @@
     },
     {
       "id": "c16_unsorted",
+      "title": "Co-creative systems design and timeline interface analogies",
+      "source_file": "Co-creative Systems Design Timeline Analogies Sept 2026.json",
       "source_kind": "claude_web_json",
       "pairs": 1,
       "images_dropped": 0,
@@ -132,6 +164,8 @@
     },
     {
       "id": "c17_unsorted",
+      "title": "Datafied society research topics",
+      "source_file": "Datafied Society Research Topics.md",
       "source_kind": "claude_web_md",
       "pairs": 1,
       "images_dropped": 0,
@@ -140,6 +174,8 @@
     },
     {
       "id": "c18_unsorted",
+      "title": "Understanding Diehl Aviation's AI implementation strategy",
+      "source_file": "Diehl Aviation AI Strategy Sept 17 2026.json",
       "source_kind": "claude_web_json",
       "pairs": 59,
       "images_dropped": 7,
@@ -148,6 +184,8 @@
     },
     {
       "id": "c19_unsorted",
+      "title": "Exporting clips from Adobe for AI film reference",
+      "source_file": "Exporting Clips for AI Film Reference Sept 17 2026.json",
       "source_kind": "claude_web_json",
       "pairs": 47,
       "images_dropped": 49,
@@ -156,6 +194,8 @@
     },
     {
       "id": "c20_unsorted",
+      "title": "Converting website pages to Figma components and auditing design system",
+      "source_file": "Figma Components Audit Sept 17 2026.json",
       "source_kind": "claude_web_json",
       "pairs": 3,
       "images_dropped": 0,
@@ -164,6 +204,8 @@
     },
     {
       "id": "c21_unsorted",
+      "title": "Fixing stuttering box page animation and masking transition",
+      "source_file": "Fixing Stuttering Box Animation Sept 17 2026.json",
       "source_kind": "claude_web_json",
       "pairs": 12,
       "images_dropped": 3,
@@ -172,6 +214,8 @@
     },
     {
       "id": "c22_unsorted",
+      "title": "Hemelingen room inquiry and move-in verification",
+      "source_file": "Hemelingen Room Inquiry Move-in Verification Sept 17 2026.json",
       "source_kind": "claude_web_json",
       "pairs": 65,
       "images_dropped": 65,
@@ -180,6 +224,8 @@
     },
     {
       "id": "c23_unsorted",
+      "title": "Honey product showcase video with dolly shot",
+      "source_file": "Honey Product Showcase Video.json",
       "source_kind": "claude_web_json",
       "pairs": 14,
       "images_dropped": 24,
@@ -188,6 +234,8 @@
     },
     {
       "id": "c24_unsorted",
+      "title": "Hybrid AI filmmaking for action short film",
+      "source_file": "Hybrid AI Filmmaking Action Short Film.json",
       "source_kind": "claude_web_json",
       "pairs": 5,
       "images_dropped": 4,
@@ -196,6 +244,8 @@
     },
     {
       "id": "c25_unsorted",
+      "title": "Creating hybrid art style for AI short film",
+      "source_file": "Hybrid Art Style for AI Short Film.json",
       "source_kind": "claude_web_json",
       "pairs": 26,
       "images_dropped": 74,
@@ -204,6 +254,8 @@
     },
     {
       "id": "c26_unsorted",
+      "title": "Indian student visa extension requirements in Bremen",
+      "source_file": "Indian Student Visa Extension Requirements Bremen.json",
       "source_kind": "claude_web_json",
       "pairs": 15,
       "images_dropped": 8,
@@ -212,6 +264,8 @@
     },
     {
       "id": "c27_unsorted",
+      "title": "Jellyfish animation prompt for Cling 3.0",
+      "source_file": "Jellyfish Animation Prompt for Cling 3.0.json",
       "source_kind": "claude_web_json",
       "pairs": 2,
       "images_dropped": 0,
@@ -220,6 +274,8 @@
     },
     {
       "id": "c28_unsorted",
+      "title": "Kerala family growth sequence shot progression",
+      "source_file": "Kerala Family Growth Sequence Sept 17 2026.json",
       "source_kind": "claude_web_json",
       "pairs": 16,
       "images_dropped": 20,
@@ -228,6 +284,8 @@
     },
     {
       "id": "c29_unsorted",
+      "title": "Lando Norris effect implementation details",
+      "source_file": "Lando Norris Effect Implementation Details.json",
       "source_kind": "claude_web_json",
       "pairs": 18,
       "images_dropped": 23,
@@ -236,6 +294,8 @@
     },
     {
       "id": "c30_unsorted",
+      "title": "Building a language learning story universe with AI agents",
+      "source_file": "Language Learning Story Universe AI.json",
       "source_kind": "claude_web_json",
       "pairs": 2,
       "images_dropped": 0,
@@ -244,6 +304,8 @@
     },
     {
       "id": "c31_unsorted",
+      "title": "Creating a centennial AI video biography for Malabar Amacchi",
+      "source_file": "Malabar Amacchi AI Biography.json",
       "source_kind": "claude_web_json",
       "pairs": 56,
       "images_dropped": 98,
@@ -252,6 +314,8 @@
     },
     {
       "id": "c32_unsorted",
+      "title": "Nike production-grade ad creative direction",
+      "source_file": "Nike Ad Creative Direction Sept 17 2026.json",
       "source_kind": "claude_web_json",
       "pairs": 28,
       "images_dropped": 38,
@@ -260,6 +324,8 @@
     },
     {
       "id": "c33_unsorted",
+      "title": "Nike production video animation prompts with Seedance",
+      "source_file": "Nike Production Video Prompts.json",
       "source_kind": "claude_web_json",
       "pairs": 19,
       "images_dropped": 24,
@@ -268,6 +334,8 @@
     },
     {
       "id": "c34_unsorted",
+      "title": "Confirming Phase 2 workflow context",
+      "source_file": "Phase 2 Workflow Context Sept 17 2026.json",
       "source_kind": "claude_web_json",
       "pairs": 64,
       "images_dropped": 16,
@@ -276,6 +344,8 @@
     },
     {
       "id": "c35_unsorted",
+      "title": "Redesigning technology page with branch-based experience sections",
+      "source_file": "Redesigning Technology Page Claude.json",
       "source_kind": "claude_web_json",
       "pairs": 68,
       "images_dropped": 60,
@@ -284,6 +354,8 @@
     },
     {
       "id": "c36_unsorted",
+      "title": "Timeline design specification and schema",
+      "source_file": "Timeline Design Specification Sept 17 2026.json",
       "source_kind": "claude_web_json",
       "pairs": 46,
       "images_dropped": 12,

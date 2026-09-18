@@ -1,5 +1,7 @@
 # filled by importer
 id: c22_unsorted
+title: "Hemelingen room inquiry and move-in verification"
+source_file: "Hemelingen Room Inquiry Move-in Verification Sept 17 2026.json"
 source_kind: claude_web_json
 pairs: 65
 length_band: long

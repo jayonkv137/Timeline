@@ -1,5 +1,7 @@
 # filled by importer
 id: c25_unsorted
+title: "Creating hybrid art style for AI short film"
+source_file: "Hybrid Art Style for AI Short Film.json"
 source_kind: claude_web_json
 pairs: 26
 length_band: long

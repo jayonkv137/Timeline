@@ -1,5 +1,7 @@
 # filled by importer
 id: c15_unsorted
+title: "Portfolio about page redesign"
+source_file: "Claude Portfolio About Page Redesign.json"
 source_kind: claude_web_json
 pairs: 8
 length_band: medium

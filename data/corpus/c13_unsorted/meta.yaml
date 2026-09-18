@@ -1,5 +1,7 @@
 # filled by importer
 id: c13_unsorted
+title: "Creating a Berliner raver sausage character"
+source_file: "Berliner Raver Sausage Character.json"
 source_kind: claude_web_json
 pairs: 76
 length_band: long

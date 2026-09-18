@@ -1,5 +1,7 @@
 # filled by importer
 id: c36_unsorted
+title: "Timeline design specification and schema"
+source_file: "Timeline Design Specification Sept 17 2026.json"
 source_kind: claude_web_json
 pairs: 46
 length_band: long

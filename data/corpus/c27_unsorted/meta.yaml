@@ -1,5 +1,7 @@
 # filled by importer
 id: c27_unsorted
+title: "Jellyfish animation prompt for Cling 3.0"
+source_file: "Jellyfish Animation Prompt for Cling 3.0.json"
 source_kind: claude_web_json
 pairs: 2
 length_band: short

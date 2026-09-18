@@ -1,5 +1,7 @@
 # filled by importer
 id: c09_unsorted
+title: "Analyzing background lighting and color contrast in images"
+source_file: "Analyzing Background Lighting and Color Contrast.json"
 source_kind: claude_web_json
 pairs: 4
 length_band: short

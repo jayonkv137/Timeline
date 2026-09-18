@@ -1,5 +1,7 @@
 # filled by importer
 id: c14_unsorted
+title: "Dialogue action extraction framework"
+source_file: "Claude Dialogue Action Extraction Framework Sept 17 2026.json"
 source_kind: claude_web_json
 pairs: 14
 length_band: medium

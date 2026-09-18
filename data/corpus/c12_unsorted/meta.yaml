@@ -1,5 +1,7 @@
 # filled by importer
 id: c12_unsorted
+title: "Applying artistic style to hallway scene in Midjourney"
+source_file: "Artistic Style Hallway Scene Midjourney.json"
 source_kind: claude_web_json
 pairs: 18
 length_band: medium

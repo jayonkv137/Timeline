@@ -1,5 +1,7 @@
 # filled by importer
 id: c24_unsorted
+title: "Hybrid AI filmmaking for action short film"
+source_file: "Hybrid AI Filmmaking Action Short Film.json"
 source_kind: claude_web_json
 pairs: 5
 length_band: short

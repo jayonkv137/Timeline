@@ -324,7 +324,7 @@ def validate(dialogue: list[dict], turn_meta: list[dict], schema_path: str | Non
 # meta.yaml skeleton (IMPORT_SPEC section 8)
 # --------------------------------------------------------------------------
 
-def meta_yaml(chat_id: str, source_kind: str, pairs: int, contains: list[str]) -> str:
+def meta_yaml(chat_id: str, title: str, source_file: str, source_kind: str, pairs: int, contains: list[str]) -> str:
     if pairs <= 5:
         band = "short"
     elif pairs <= 20:
@@ -332,8 +332,11 @@ def meta_yaml(chat_id: str, source_kind: str, pairs: int, contains: list[str]) -
     else:
         band = "long"
     contains_str = "[" + ", ".join(sorted(set(contains))) + "]" if contains else "[]"
+    clean_title = title.replace('"', '\\"')
     return f"""# filled by importer
 id: {chat_id}
+title: "{clean_title}"
+source_file: "{source_file}"
 source_kind: {source_kind}
 pairs: {pairs}
 length_band: {band}
@@ -389,6 +392,10 @@ def ingest(path: str, chat_id: str, out_root: str, dry_run: bool, force: bool,
     errors = validate(dialogue, turn_meta, schema_path)
 
     n_pairs = max((t["pair"] for t in dialogue), default=0)
+    source_filename = os.path.basename(path)
+    chat_title = header.get("source_title", "") or os.path.splitext(source_filename)[0]
+
+    print(f"  title           : {chat_title}")
     print(f"  turns in source : {len(raw_turns)}")
     print(f"  pairs after rules: {n_pairs}")
     print(f"  typed / injected : "
@@ -409,6 +416,8 @@ def ingest(path: str, chat_id: str, out_root: str, dry_run: bool, force: bool,
     if manifest_collector is not None:
         manifest_collector.append({
             "id": chat_id,
+            "title": chat_title,
+            "source_file": source_filename,
             "source_kind": fmt,
             "pairs": n_pairs,
             "images_dropped": fid["images_dropped"],
@@ -464,7 +473,7 @@ def ingest(path: str, chat_id: str, out_root: str, dry_run: bool, force: bool,
     meta_path = os.path.join(dest, "meta.yaml")
     if not os.path.exists(meta_path) or force:
         with open(meta_path, "w", encoding="utf-8") as f:
-            f.write(meta_yaml(chat_id, fmt, n_pairs, contains))
+            f.write(meta_yaml(chat_id, chat_title, source_filename, fmt, n_pairs, contains))
 
     print(f"  written -> {dest}")
     print("  NEXT: open meta.yaml and fill in the owner fields.")

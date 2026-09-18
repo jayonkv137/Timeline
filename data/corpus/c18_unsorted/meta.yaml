@@ -1,5 +1,7 @@
 # filled by importer
 id: c18_unsorted
+title: "Understanding Diehl Aviation's AI implementation strategy"
+source_file: "Diehl Aviation AI Strategy Sept 17 2026.json"
 source_kind: claude_web_json
 pairs: 59
 length_band: long
