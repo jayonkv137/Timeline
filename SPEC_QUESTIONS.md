@@ -87,3 +87,33 @@
   shows what is actually extracted from those turns.
 - **Status:** OPEN until E1 close.
 
+## Q7 — Single-root outcome tree constraint vs multi-topic conversational drift (OPEN)
+- **What:** `inv_06_outcome_tree` enforces that the outcome tree has exactly one root
+  (`len(roots) == 1`). Real chats can span multiple totally unrelated topics in the same
+  session (e.g. visa extension, bed frame, portfolio website). Forcing a single root may
+  compel Step 1b to invent an artificial umbrella goal that the user never expressed.
+- **Options considered:** (a) require a single umbrella root in state; (b) allow a forest
+  of multiple disconnected root outcomes in `state.json` and attach a virtual root only
+  at UI render time; (c) split multi-topic sessions into separate corpus chats at import.
+- **Taken:** Left as single root check in `tests/invariants.py` for E0. To be decided in
+  Phase E1 based on evidence: run Step 1b on deliberately multi-topic corpus chats and
+  inspect the root it creates. If the umbrella root is honest and natural, close as
+  RESOLVED. If it hallucinates a fictitious user goal, adopt a forest with a virtual
+  render root, or split at import.
+- **Status:** OPEN until E1 evaluation.
+
+## Q8 — 5-tuple uniqueness key for honesty ledger rows (RESOLVED)
+- **What:** `docs/TEST_STRATEGY.md` §2 item 5 specified a 4-tuple `(action_id, req_id, pair_added, kind)`
+  for ledger row uniqueness. However, `req_id` is scoped per outcome (`o1.r1` vs `o3.r1`).
+  Rows sharing the same action, req_id, pair, and kind across different outcomes appeared
+  as duplicates under the 4-tuple.
+- **Options considered:** (a) enforce 4-tuple globally — would falsely reject valid ledger
+  rows; (b) scope ledger uniqueness by including `outcome_id` as a 5-tuple:
+  `(action_id, outcome_id, req_id, pair_added, kind)`.
+- **Taken:** (b). `inv_05_no_duplicate_ledger_rows` enforces the 5-tuple. `TEST_STRATEGY.md` §2
+  item 5 amended to match. Design note added: **requirement identity is `(outcome_id, req_id)`,
+  never `req_id` alone.** Any future view or analysis module that treats a requirement as
+  a node and keys it on `req_id` alone will silently merge unrelated requirements.
+- **Status:** RESOLVED.
+
+

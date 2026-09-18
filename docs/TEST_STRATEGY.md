@@ -68,7 +68,8 @@ as one function per invariant, imported by the test suites and by `engine/checks
 2. Every action id matches `^([UA])\((\d+),(\d+)\)$` and is unique within the chat.
 3. Every ledger row's `action_id`, `req_id` and `outcome_id` exist in state.
 4. Every action maps to exactly one outcome.
-5. No duplicate ledger rows on `(action_id, req_id, pair_added, kind)`.
+5. No duplicate ledger rows on `(action_id, outcome_id, req_id, pair_added, kind)` (requirement identity is `(outcome_id, req_id)`, never `req_id` alone; see Q8).
+
 
 ### Structure
 
