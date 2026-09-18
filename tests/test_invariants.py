@@ -123,3 +123,31 @@ def test_inv_17_to_21_process_guards(fixture_data):
     assert inv.inv_21_provenance(
         fixture_data["dialogue"], fixture_data["ledger"], fixture_data["state"]
     ) == ["skipped: fixture dialogue is stubbed"]
+
+
+def test_inv_21_verbatim_quote_check():
+    """Verify inv_21 checks that action evidence_quote appears verbatim in turn text."""
+    dialogue = [
+        {"pair": 1, "speaker": "user", "text": "Can we build a portfolio website?", "attachments": [], "ts": "2026-09-18T10:00:00Z"},
+        {"pair": 1, "speaker": "ai", "text": "Sure, I recommend Next.js and Tailwind.", "attachments": [], "ts": "2026-09-18T10:00:05Z"},
+    ]
+    ledger = [
+        {"action_id": "U(1,1)", "outcome_id": "o1", "req_id": "r1", "pair_added": 1, "kind": "create"}
+    ]
+    state_valid = {
+        "actions": [
+            {"id": "U(1,1)", "type": "request", "text": "User asks for website", "role": "SHAPER", "evidence_quote": "portfolio website"},
+            {"id": "A(1,1)", "type": "suggest", "text": "AI suggests stack", "role": "EXECUTOR", "evidence_quote": "Next.js and Tailwind"}
+        ]
+    }
+    assert inv.inv_21_provenance(dialogue, ledger, state_valid) == []
+
+    state_invalid = {
+        "actions": [
+            {"id": "U(1,1)", "type": "request", "text": "User asks for website", "role": "SHAPER", "evidence_quote": "invented quote not in text"}
+        ]
+    }
+    violations = inv.inv_21_provenance(dialogue, ledger, state_invalid)
+    assert len(violations) == 1
+    assert "not found verbatim" in violations[0]
+

@@ -452,4 +452,21 @@ def inv_21_provenance(dialogue: list[dict[str, Any]] | None, ledger_rows: list[d
         if pair not in dialogue_pairs:
             violations.append(f"row {idx}: pair_added {pair} not found in dialogue.json")
 
+    # Map dialogue turns by (pair, speaker) -> text
+    dialogue_map = {(t.get("pair"), t.get("speaker")): t.get("text", "") for t in dialogue}
+
+    for action in state.get("actions", []):
+        act_id = action.get("id", "")
+        quote = action.get("evidence_quote")
+        if quote and quote != "(not captured in fixture)":
+            m = re.match(r"^([UA])\((\d+),\s*(\d+)\)$", str(act_id))
+            if m:
+                speaker = "user" if m.group(1) == "U" else "ai"
+                pair_num = int(m.group(2))
+                turn_text = dialogue_map.get((pair_num, speaker))
+                if turn_text is None:
+                    violations.append(f"action {act_id}: turn for {speaker} pair {pair_num} not found in dialogue.json")
+                elif quote not in turn_text:
+                    violations.append(f"action {act_id}: evidence_quote '{quote}' not found verbatim in {speaker} turn pair {pair_num}")
+
     return violations
