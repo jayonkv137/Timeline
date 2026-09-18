@@ -359,7 +359,7 @@ notes: >
 # --------------------------------------------------------------------------
 
 def ingest(path: str, chat_id: str, out_root: str, dry_run: bool, force: bool,
-           schema_path: str | None) -> int:
+           schema_path: str | None, manifest_collector: list[dict] | None = None) -> int:
     fmt = detect_format(path)
     print(f"\n=== {os.path.basename(path)}")
     print(f"  format : {fmt}")
@@ -405,6 +405,16 @@ def ingest(path: str, chat_id: str, out_root: str, dry_run: bool, force: bool,
         for e in errors:
             print(f"    - {e}")
         return 1
+
+    if manifest_collector is not None:
+        manifest_collector.append({
+            "id": chat_id,
+            "source_kind": fmt,
+            "pairs": n_pairs,
+            "images_dropped": fid["images_dropped"],
+            "injected_turns": fid["injected_turns"],
+            "tool_narration_turns": fid["tool_narration_turns"],
+        })
 
     if dry_run:
         print("  dry run, nothing written")
@@ -484,6 +494,7 @@ def main() -> int:
             return 3
         worst = 0
         n = 0
+        manifest_chats: list[dict] = []
         for path in files:
             fmt = detect_format(path)
             if fmt in ("unknown", "claude_code"):
@@ -491,8 +502,21 @@ def main() -> int:
                 continue
             n += 1
             chat_id = f"{args.prefix}{n:02d}_unsorted"
-            rc = ingest(path, chat_id, args.out, args.dry_run, args.force, args.schema)
+            rc = ingest(path, chat_id, args.out, args.dry_run, args.force, args.schema, manifest_chats)
             worst = max(worst, rc if rc != 2 else 0)
+        
+        if not args.dry_run and manifest_chats:
+            manifest = {
+                "import_spec_version": IMPORT_SPEC_VERSION,
+                "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "chats": manifest_chats,
+            }
+            manifest_path = os.path.join(args.out, "manifest.json")
+            with open(manifest_path, "w", encoding="utf-8") as f:
+                json.dump(manifest, f, indent=2, ensure_ascii=False)
+                f.write("\n")
+            print(f"  manifest written -> {manifest_path}")
+
         print(f"\n{n} file(s) ingested into {args.out}")
         print("Rename each folder to c<NN>_<task_type>_<length> once meta.yaml is filled in.")
         return worst
