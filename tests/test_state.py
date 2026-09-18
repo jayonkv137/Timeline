@@ -9,6 +9,8 @@ from pathlib import Path
 import pytest
 from jsonschema import ValidationError
 
+pytestmark = pytest.mark.tier1
+
 from engine.artifacts import (LedgerWriter, read_ledger, validate_artifact,
                               write_json_artifact)
 from engine.state import State

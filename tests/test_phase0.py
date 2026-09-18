@@ -10,6 +10,8 @@ from pathlib import Path
 import pytest
 from jsonschema import Draft202012Validator
 
+pytestmark = pytest.mark.tier1
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SCHEMAS_DIR = REPO_ROOT / "engine" / "schemas"
 FIXTURE_DIR = REPO_ROOT / "data" / "chats" / "fixture_pair1"
