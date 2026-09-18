@@ -17,13 +17,13 @@
 - **Status:** RESOLVED — owner decision, recorded here because other agents cannot see
   the chat. Not a REVISIT.
 
-## Q2 — PHASE2_BRIEF S1 export loader deferred (data/exports/ empty)
-- **What:** The brief's pre-requisite "one exported chat placed at `data/exports/`" is
-  not met; the folder was created empty in S1. S1 says the loader is written "against
-  whatever format it actually has", which is impossible without the file.
-- **Taken:** Conservative deferral — loader will be written when the export lands
-  (owner said before S8(c), the only step that needs it). No format invented.
-- **Status:** OPEN until the export file appears. Not a spec problem, a sequencing note.
+## Q2 — PHASE2_BRIEF S1 export loader deferred (RESOLVED in E0)
+- **What:** The brief's pre-requisite "one exported chat placed at `data/exports/`" was
+  initially deferred when data/exports/ was empty.
+- **Taken:** Resolved in Phase E0. `scripts/ingest_export.py` implements the official
+  export loader per `IMPORT_SPEC.md` v1.0, normalizing real chat exports into `data/corpus/`
+  with full schema validation and fidelity accounting.
+- **Status:** RESOLVED in E0.S2-S4.
 
 ## Q3 — state.schema.json has no home for cross-pair working data
 - **What:** The pipeline needs several pieces of cross-pair working data that
