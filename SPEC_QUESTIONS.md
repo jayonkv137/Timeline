@@ -44,3 +44,46 @@
   untouched; this file is engine-internal and carries no panel-facing data.
 - **Status:** REVISIT — if the command center wants this data in the contract, a spec
   amendment can move it into state.schema.json later; the engine change would be small.
+
+## Q4 — Provenance sidecar lives outside the frozen contract (REVISIT)
+- **What:** IMPORT_SPEC needs per-turn provenance (origin: typed | injected | model,
+  flags, dropped media) and per-chat fidelity counts. `dialogue.schema.json` is a
+  Phase 0 frozen contract with `additionalProperties: false`, so these cannot be added
+  to it without changing the shape of the frozen fixture's dialogue.json.
+- **Options considered:** (a) extend dialogue.schema.json — rejected, same reasoning as
+  Q3; (b) discard provenance — rejected, it is needed to interpret results and to make
+  the injected-text decision reversible; (c) a sidecar file in the corpus entry.
+- **Taken:** (c) — `data/corpus/<id>/source_meta.json`, parallel to dialogue.json and
+  joinable by index. Not a contract artifact, engine-internal, same precedent as Q3's
+  `run/pipeline_state.json`.
+- **Status:** REVISIT — if the command centre later wants origin inside the contract,
+  the importer change is small.
+
+## Q5 — Injected text counted as user input (RESOLVED, owner decision)
+- **What:** Some turns arrive in the user slot but were produced by tooling: slash
+  command expansions, loaded skill text, system notices, auto-continue strings, task
+  notifications. Measured on a real Claude Code session, 2,006 lines contained 22
+  non-tool user turns of which roughly 16–18 were actually typed. Counting injected
+  text as user input inflates user SHAPER mass with words the person never wrote.
+- **Options considered:** (a) strip injected turns at import; (b) count them as user
+  input; (c) tag them and decide at pipeline time.
+- **Taken:** (b) as the v1 behaviour, per owner decision: if it is text in the user
+  slot, the engine treats it as user text. Implemented as (c) mechanically — the
+  importer tags `origin` and never strips — so the behaviour matches the decision while
+  remaining reversible via `IMPORT_INJECTED_AS_USER`, read at pipeline time.
+- **Status:** RESOLVED. Revisit after the first stability measurement, which will show
+  whether injected turns materially move the numbers on any corpus chat.
+
+## Q6 — Tool narration left inside AI text (OPEN)
+- **What:** Claude web exports flatten tool use into the assistant's prose as
+  "Used tool … Done". 17 of 186 messages in one sample. Step 1a will extract actions
+  from this text, so an AI searching its own project history may appear as a
+  goal-shaping action.
+- **Options considered:** (a) strip at import; (b) leave it and let Step 1a decide;
+  (c) tag the turn and give Step 1a an instruction about it, which needs a prompt
+  change and therefore a pipeline spec amendment.
+- **Taken:** (b) for now, with (c) prepared: the importer tags the turn
+  `tool_narration` and counts it, so the decision can be made on evidence after E1
+  shows what is actually extracted from those turns.
+- **Status:** OPEN until E1 close.
+

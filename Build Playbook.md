@@ -9,21 +9,22 @@ contradictions). The five phase briefs live beside it: PHASE1_BRIEF.md … PHASE
 
 ---
 
-## 1. The session map (the whole build, in order)
+## 1. The session map (the engine-first rebuild, in order)
 
 | # | Phase.Steps | Tool · Model | Brief | Gate to pass before next |
 |---|---|---|---|---|
-| 1 | P0.S1–S2 | Antigravity · Gemini→Sonnet | PHASE0_BRIEF | schemas reviewed by owner |
-| 2 | P0.S3–S4 | Claude Code · Opus | PHASE0_BRIEF | pytest green (canonical numbers) |
-| 3 | P1.S1–S7 | Antigravity · Sonnet (Gemini for styling) | PHASE1_BRIEF | value-checklist + render test green |
-| 4 | P2.S1–S8 | Claude Code · Opus ONLY | PHASE2_BRIEF | fixture regression EXACT + checks green |
-| 5 | P3.S1–S4 | Claude Code · Opus | PHASE3_BRIEF | server tests green |
-| 6 | P3.S5–S7 | Antigravity · Sonnet | PHASE3_BRIEF | live 6-pair conversation checklist |
-| 7 | P4.S1–S7 | Antigravity · Sonnet/Gemini (Claude Code for retry logic) | PHASE4_BRIEF | INTERACTION_SPEC state checklist |
-| 8 | P5.S1–S5 | Claude Code · Opus | PHASE5_BRIEF | CALIBRATION.md complete |
+| 1 | E0.S1–S8 | Antigravity · Sonnet | E0_BRIEF | importer + corpus + invariants + harness |
+| 2 | E1.S1–S? | Claude Code · Opus ONLY | E1_BRIEF | golden-chat grading + invariants 1–9 on corpus |
+| 3 | E2.S1–S? | Claude Code · Opus ONLY | E2_BRIEF | canonical numbers EXACT from frozen ledger |
+| 4 | E3.S1–S? | Claude Code · Opus, Antigravity for importers | E3_BRIEF | 10/10 chats complete + STABILITY.md written |
+| 5 | E4.S1–S? | Claude Code · Opus | E4_BRIEF | invariant 20 (batch == live) + robustness green |
+| 6 | E5.S1–S? | Claude Code · Opus | E5_BRIEF | panel_bundle byte-identical via projection |
 
-Routing rule if ever unsure: **wrong-number-is-worse-than-slow → Claude Code Opus;
-your-eyes-are-the-test → Antigravity Sonnet/Gemini.**
+Routing rule unchanged: wrong-number-is-worse-than-slow → Claude Code Opus;
+your-eyes-are-the-test → Antigravity Sonnet/Gemini.
+
+E0 is the exception to that rule's usual reading: it is mechanical, well specified,
+and has no correctness-critical arithmetic, so Antigravity is correct for it.
 
 ---
 
@@ -82,7 +83,7 @@ When an agent hits a contradiction, gap, or repeated failure:
    blocker, move to a different step if one is independent, otherwise end the session
    with a clear BUILDLOG "blocked" entry. AGENTS.md rule 5 outranks momentum.
 5. Spec authority order when documents disagree:
-   **COTRACE_PIPELINE_SPEC > PANEL_SPEC / INTERACTION_SPEC > ARCHITECTURE > briefs.**
+   **COTRACE_PIPELINE_SPEC > PANEL_SPEC / INTERACTION_SPEC / IMPORT_SPEC / TEST_STRATEGY > ARCHITECTURE > briefs.**
 
 ---
 
@@ -99,3 +100,10 @@ When an agent hits a contradiction, gap, or repeated failure:
   goes through SPEC_QUESTIONS.md first.
 - Visual work: screenshot at every "Finish Step," compared against PANEL_SPEC's element
   tables by eye. Colors are law: blue #0057FF = you/left, orange #E85A0A = AI/right.
+- Test tiers per TEST_STRATEGY §1. Unmarked tests fail review.
+- engine/checks.py runs the invariants after every pipeline run in production, not
+  only in tests (from E1 onward).
+- Every run writes run/report.json per TEST_STRATEGY §6.
+- Recorded LLM cassettes are committed. Re-record only when a prompt changes, and say
+  so in the BUILDLOG entry.
+- The corpus is generated. Never hand-edit an entry.

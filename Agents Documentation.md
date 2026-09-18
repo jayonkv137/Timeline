@@ -10,7 +10,7 @@ exchange (with evidence), and the usage mode (You're driving / Copilot / Autopil
 Every number is computed by a real pipeline (COTRACE-based) and traces to a verbatim
 quote. It is a mirror, not a judge.
 
-## The four authoritative documents (read the sections the current brief names)
+## The authoritative documents (read the sections the current brief names)
 - `docs/ARCHITECTURE.md` — system design, decisions D1–D13, artifact contracts (§3),
   API surface (§4), live-turn sequence (§5), phase plan (§6), this protocol (§7)
 - `docs/COTRACE_PIPELINE_SPEC.md` — v5, the backend bible: Steps 1a–3 prompts, E1/E2,
@@ -20,6 +20,10 @@ quote. It is a mirror, not a judge.
   element→backend contract (§6)
 - `docs/INTERACTION_SPEC.md` — v1, how it behaves: pair coordinate model, scrub sources,
   live-turn choreography, state inventory
+- `docs/IMPORT_SPEC.md` — v1.0, how raw exports become engine input: corpus layout,
+  normalisation per format, pairing rules, origin tagging, fidelity accounting
+- `docs/TEST_STRATEGY.md` — v1.0, how the engine is proven: four test tiers, the
+  21 invariants, corpus design, stability protocol, robustness scenarios
 
 ## Standing rules (non-negotiable)
 1. The docs above are READ-ONLY from this side. If implementation reveals a
@@ -33,8 +37,18 @@ quote. It is a mirror, not a judge.
 5. Verified fixture numbers are sacred: Δ_you=87.0, Δ_AI=314.0 → You 21.7% / AI 78.3%;
    decisions 4 you · 10 AI; mode COPILOT (w 4/10, h 47.0/239.0). Any code producing
    different numbers from the fixture ledger is wrong, not the numbers.
+   The same applies to analysis.json once E2 defines it: the fixture ledger is the
+   source of truth and any code disagreeing with it is wrong.
 6. Prefer boring, readable code. No framework beyond the decided stack (ARCHITECTURE §2):
    Python engine, FastAPI server, React+Vite+Zustand web. Files over databases.
+7. Test tiers are mandatory. Every test carries exactly one marker: tier0 (replay),
+   tier1 (exact, no network), tier2 (live API), tier3 (robustness). An unmarked test
+   is a bug. Default `pytest` runs tier0 and tier1 only.
+8. No phase closes with any invariant in tests/invariants.py red. Invariants are not
+   advisory.
+9. Corpus entries under data/corpus/ are generated, never hand-edited. If an entry is
+   wrong, fix scripts/ingest_export.py and re-import with --force. The frozen fixture
+   at data/chats/fixture_pair1/ is never regenerated, for any reason.
 
 
 ## Multi-tool protocol (this repo is worked on from several AI tools)
@@ -59,10 +73,12 @@ quote. It is a mirror, not a judge.
   schemas, configs), pause for owner review before building on top of it.
 
 ## Current phase
-PHASE 2 — The Engine (offline CLI). Phase 0 DoD closed 2026-07-08 (tag `phase-0-done`):
-`tests/test_phase0.py` — fixture schema validation + canonical-numbers recomputation
-(ΣU=87.0, ΣA=314.0, 14 distinct reqs, creator split 4 you/10 AI, zero overlap/dup rows,
-direction match) — all green. Phase 1 (right-rail UI) built separately, not yet formally
-gate-closed per Playbook §3. Phase 2 DoD: PHASE2_BRIEF S1–S8 fixture regression EXACT +
-checks green (see PHASE2_BRIEF.md).
-(Update this line when a phase closes.)
+E0 — Corpus, Importer, Harness. See docs/briefs/E0_BRIEF.md.
+
+The build has been re-planned as engine-first (command centre, Sept 2026). The old
+P2–P5 plan is superseded by E0–E5; BUILDLOG entries before this point refer to the old
+numbering. Phase 0 remains closed (tag `phase-0-done`). The Phase 1 panel UI remains on
+disk in fixture mode and is now understood as one projection of the engine, not the
+engine's purpose.
+
+E0 DoD: importer + corpus + invariants + record/replay harness, per E0_BRIEF.

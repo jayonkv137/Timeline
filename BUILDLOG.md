@@ -555,6 +555,38 @@ ENTRY TEMPLATE (copy, fill, append):
   SELF-REFERENCE, {all actions block} ACCUMULATE, U(x,y)/A(x,y) regex enforcement).
 ---
 
+## 2026-09-17 — Command centre — engine-first re-plan
+
+**Tool/model:** planning chat (no code written)
+**Phase/step:** re-plan, between P2 and E0
+
+**Decisions made:**
+- Build re-sequenced engine-first. Old P2–P5 superseded by E0–E5. The product goal is
+  unchanged; the sequence now proves the engine before any UI work.
+- Stage 4 will split into 4a (analysis.json, UI-agnostic derived facts) and 4b
+  (projections). panel_bundle.json becomes one projection. Spec amendment to follow
+  before E2.
+- Batch and live are peer entry points over one core, not a product and a test harness.
+- Deleted code from c61215c is not being recovered. Rebuilding forward.
+- Three import tiers: T1 text only (now), T2 attachments, T3 agentic. T1 only for E0–E5.
+- Injected user-slot text counts as user input in v1 (Q5).
+
+**Files added:** docs/IMPORT_SPEC.md, docs/TEST_STRATEGY.md, docs/briefs/E0_BRIEF.md,
+scripts/ingest_export.py
+**Files changed:** AGENTS.md, Build Playbook.md, SPEC_QUESTIONS.md (Q4–Q6)
+
+**Contradictions flagged:**
+- PANEL_SPEC defines three locked mode sentences; the pipeline spec's §10.5 classifier
+  has four outcomes including QUIET. No string is specified for a quiet pair. To be
+  resolved before E5.
+- Phase 1 was never formally gate-closed. Left as is; the UI is not on the critical
+  path for E0–E5.
+
+**Verification:** none, no code written.
+
+**Next:** E0.S1 in Antigravity.
+
+
 
 
 
