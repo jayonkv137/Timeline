@@ -820,6 +820,144 @@ def step_3_trigger_a(
     }
 
 
+# Alias for Trigger A and Trigger B
+build_step3_prompt = build_step3_trigger_a_prompt
+
+
+def step_3_trigger_b(
+    client,
+    config: Config,
+    state: State,
+    pair_number: int,
+    outcome_id: str,
+    new_actions: list[dict],
+    ledger_writer=None,
+) -> dict:
+    """Step 3 Trigger B (§9.3, §12.6): Incremental influence scan on existing requirements.
+
+    Fires when outcome_id receives new actions in pair_number and has active requirements
+    created in earlier pairs (created_at_pair < pair_number).
+    Sends ONLY new subsequent actions not previously labeled for that requirement.
+    Batches requirements in chunks of config.step3_batch_size.
+    Section A is never re-sent.
+    """
+    # 1. Identify existing requirements created in earlier pairs
+    existing_reqs = [
+        r for r in state.requirements
+        if r.get("outcome_id") == outcome_id
+        and r.get("status") == "active"
+        and r.get("created_at_pair", pair_number) < pair_number
+    ]
+    if not existing_reqs:
+        return {}
+
+    # 2. For each requirement, determine new subsequent actions
+    reqs_with_candidates = []
+    a2o = state.run.get("action_to_outcome", {})
+    labeled_map = state.run.setdefault("labeled_action_ids", {})
+
+    for req in existing_reqs:
+        req_id = req["req_id"]
+        key = f"{outcome_id}||{req_id}"
+        already_labeled = set(labeled_map.get(key, []))
+
+        creation_aids = req.get("creation_action_ids", [])
+        if not creation_aids:
+            continue
+        sorted_creation = sorted(creation_aids, key=action_sort_key)
+        origin_turn = sorted_creation[0]
+        origin_key = action_sort_key(origin_turn)
+
+        # Candidates: actions in this pair assigned to outcome_id after origin_turn and not yet labeled
+        candidates = [
+            a for a in new_actions
+            if a2o.get(a["id"]) == outcome_id
+            and action_sort_key(a["id"]) > origin_key
+            and a["id"] not in creation_aids
+            and a["id"] not in already_labeled
+        ]
+        candidates.sort(key=lambda a: action_sort_key(a["id"]))
+        if candidates:
+            reqs_with_candidates.append((req, origin_turn, candidates))
+
+    if not reqs_with_candidates:
+        return {}
+
+    # 3. Batch requirements by config.step3_batch_size
+    batch_size = max(1, getattr(config, "step3_batch_size", 3))
+    results = {}
+
+    for i in range(0, len(reqs_with_candidates), batch_size):
+        batch = reqs_with_candidates[i : i + batch_size]
+        for req, origin_turn, subsequent_actions in batch:
+            req_id = req["req_id"]
+            outcome = state.get_outcome(outcome_id)
+            outcome_text = outcome["text"] if outcome else outcome_id
+
+            prompt = build_step3_prompt(
+                outcome_text=outcome_text,
+                req=req,
+                origin_turn=origin_turn,
+                preceding_actions=[],  # Section A is never re-sent (§9.3)
+                subsequent_actions=subsequent_actions,
+                slot_info=None,
+            )
+
+            call_label = f"3b:pair{pair_number}:{outcome_id}:{req_id}"
+            response = client.call_json(call_label, config.model_step3, prompt)
+
+            subsequent_labels = response.get("subsequent labels", [])
+            key = f"{outcome_id}||{req_id}"
+
+            for lbl in subsequent_labels:
+                aid = lbl.get("action id")
+                if not aid or not state.has_action(aid):
+                    continue
+
+                rel_type = lbl.get("relationship type", "NO CONNECTION")
+                score = lbl.get("relationship score")
+
+                # Track that this action was labeled for this requirement
+                labeled_map.setdefault(key, []).append(aid)
+
+                if rel_type == "NO CONNECTION" or score is None:
+                    continue
+
+                try:
+                    numeric_score = float(score)
+                except (ValueError, TypeError):
+                    continue
+
+                if numeric_score <= 0:
+                    continue
+
+                act = state.get_action(aid)
+                speaker = "U" if act["id"].startswith("U") else "A"
+                row = {
+                    "pair_added": pair_number,
+                    "action_id": act["id"],
+                    "speaker": speaker,
+                    "role": act["role"],
+                    "outcome_id": outcome_id,
+                    "req_id": req_id,
+                    "score": numeric_score,
+                    "kind": "labeled",
+                }
+                if ledger_writer is not None:
+                    ledger_writer.append(row)
+
+                if rel_type == "IMPLEMENTS" and aid not in req.get("implementation_action_ids", []):
+                    req.setdefault("implementation_action_ids", []).append(aid)
+                elif rel_type == "REVISES" and aid not in req.get("revise_action_ids", []):
+                    req.setdefault("revise_action_ids", []).append(aid)
+                elif aid not in req.get("contributing_action_ids", []):
+                    req.setdefault("contributing_action_ids", []).append(aid)
+
+            results[req_id] = subsequent_labels
+
+    return results
+
+
 # ------------------------------------------------------------ orchestration
 
 def run_level1(client, config, state, pair_number, user_text, ai_text):
@@ -833,8 +971,8 @@ def run_level1(client, config, state, pair_number, user_text, ai_text):
 
 
 def run_level2(client, config, state, pair_number, new_actions, ledger_writer=None):
-    """Level 2: Step 2 per touched outcome (§9.2), followed by Trigger A for new reqs
-    and the 3-pair abandonment sweep.
+    """Level 2: Step 2 per touched outcome (§9.2), followed by Trigger A for new reqs,
+    Trigger B for existing reqs, and the 3-pair abandonment sweep.
     """
     a2o = state.run.get("action_to_outcome", {})
     touched = sorted({a2o[a["id"]] for a in new_actions if a["id"] in a2o})
@@ -851,6 +989,11 @@ def run_level2(client, config, state, pair_number, new_actions, ledger_writer=No
                 step_3_trigger_a(
                     client, config, state, pair_number, outcome_id, req, ledger_writer=ledger_writer
                 )
+
+        # Step 3 Trigger B: incrementally score newly added actions for earlier requirements
+        step_3_trigger_b(
+            client, config, state, pair_number, outcome_id, new_actions, ledger_writer=ledger_writer
+        )
 
     sweep_abandoned_slots(state, pair_number)
     return results

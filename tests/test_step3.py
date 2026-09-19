@@ -14,8 +14,10 @@ from engine.pipeline import (
     action_sort_key,
     build_step3_trigger_a_prompt,
     step_3_trigger_a,
+    step_3_trigger_b,
 )
 from engine.state import State
+from tests.invariants import inv_05_no_duplicate_ledger_rows
 
 pytestmark = pytest.mark.tier1
 
@@ -181,3 +183,170 @@ def test_step_3_trigger_a_empty_candidates():
     step_3_trigger_a(client, make_test_config(), state, pair_number=1, outcome_id="outcome 1", requirement=req)
     # Because there are 0 preceding actions and 0 subsequent actions, client.call_json should NOT be called
     assert client.call_json.call_count == 0
+
+
+def test_step_3_trigger_b_incremental_subsequent_only(tmp_path):
+    state = State()
+    state.add_action({"id": "U(1,1)", "type": "Request", "text": "Build feature", "role": "SHAPER", "evidence_quote": "req"})
+    state.add_action({"id": "A(1,1)", "type": "Plan", "text": "Plan feature", "role": "EXECUTOR", "evidence_quote": "plan"})
+    state.add_action({"id": "A(2,1)", "type": "Implement", "text": "Implement feature code", "role": "EXECUTOR", "evidence_quote": "code"})
+    state.outcomes = [{"id": "outcome 1", "text": "Feature development", "turn_id": "U(1,1)", "parent": None, "children": [], "related": []}]
+    state.run["action_to_outcome"] = {"U(1,1)": "outcome 1", "A(1,1)": "outcome 1", "A(2,1)": "outcome 1"}
+
+    # Req created at Pair 1
+    req = {
+        "outcome_id": "outcome 1",
+        "req_id": "req 1",
+        "text": "Build feature",
+        "type": "task",
+        "status": "active",
+        "creation_action_ids": ["U(1,1)"],
+        "contributing_action_ids": [],
+        "implementation_action_ids": [],
+        "revise_action_ids": [],
+        "related_to": [],
+        "created_at_pair": 1,
+    }
+    state.requirements.append(req)
+
+    # Actions from Pair 1 were already labeled
+    state.run["labeled_action_ids"]["outcome 1||req 1"] = ["U(1,1)", "A(1,1)"]
+
+    client = MagicMock()
+    client.call_json.return_value = {
+        "subsequent labels": [
+            {
+                "index": 0,
+                "action id": "A(2,1)",
+                "relationship type": "IMPLEMENTS",
+                "relationship score": 5,
+                "contribution role": "EXECUTOR",
+            }
+        ]
+    }
+
+    ledger_path = tmp_path / "ledger.jsonl"
+    writer = LedgerWriter(ledger_path)
+    new_actions = [state.get_action("A(2,1)")]
+
+    res = step_3_trigger_b(client, make_test_config(), state, pair_number=2, outcome_id="outcome 1", new_actions=new_actions, ledger_writer=writer)
+
+    # 1. Prompt check: Section A was None, Section B contains ONLY A(2,1)
+    called_prompt = client.call_json.call_args[0][2]
+    assert "=== SECTION A: PRECEDING ACTIONS" in called_prompt
+    assert "None\n\n=== SECTION B: SUBSEQUENT ACTIONS" in called_prompt
+    assert "A(2,1) | Implement | EXECUTOR" in called_prompt
+    assert "A(1,1)" not in called_prompt  # already labeled, must not be re-sent
+
+    # 2. Ledger check: row written with score 5.0, kind="labeled", pair_added=2
+    assert len(writer.rows) == 1
+    row = writer.rows[0]
+    assert row["action_id"] == "A(2,1)"
+    assert row["speaker"] == "A"
+    assert row["score"] == 5.0
+    assert row["kind"] == "labeled"
+    assert row["pair_added"] == 2
+
+    # 3. Requirement updated with IMPLEMENTS action
+    assert "A(2,1)" in req["implementation_action_ids"]
+
+    # 4. Labeled action tracking updated
+    assert "A(2,1)" in state.run["labeled_action_ids"]["outcome 1||req 1"]
+
+
+def test_step_3_trigger_b_idempotency_zero_duplicate_rows(tmp_path):
+    """Re-processing the same actions must add zero duplicate rows (inv_05)."""
+    state = State()
+    state.add_action({"id": "U(1,1)", "type": "Request", "text": "Feature", "role": "SHAPER", "evidence_quote": "f"})
+    state.add_action({"id": "A(2,1)", "type": "Implement", "text": "Impl", "role": "EXECUTOR", "evidence_quote": "i"})
+    state.outcomes = [{"id": "outcome 1", "text": "Feature", "turn_id": "U(1,1)", "parent": None, "children": [], "related": []}]
+    state.run["action_to_outcome"] = {"U(1,1)": "outcome 1", "A(2,1)": "outcome 1"}
+
+    req = {
+        "outcome_id": "outcome 1",
+        "req_id": "req 1",
+        "text": "Feature",
+        "type": "task",
+        "status": "active",
+        "creation_action_ids": ["U(1,1)"],
+        "contributing_action_ids": [],
+        "implementation_action_ids": [],
+        "revise_action_ids": [],
+        "related_to": [],
+        "created_at_pair": 1,
+    }
+    state.requirements.append(req)
+
+    client = MagicMock()
+    client.call_json.return_value = {
+        "subsequent labels": [
+            {"index": 0, "action id": "A(2,1)", "relationship type": "IMPLEMENTS", "relationship score": 5}
+        ]
+    }
+    ledger_path = tmp_path / "ledger.jsonl"
+    writer = LedgerWriter(ledger_path)
+    new_actions = [state.get_action("A(2,1)")]
+
+    # First pass: adds row
+    step_3_trigger_b(client, make_test_config(), state, pair_number=2, outcome_id="outcome 1", new_actions=new_actions, ledger_writer=writer)
+    assert len(writer.rows) == 1
+
+    # Second pass: identical new_actions -> already labeled -> zero calls, zero rows added
+    client.reset_mock()
+    step_3_trigger_b(client, make_test_config(), state, pair_number=2, outcome_id="outcome 1", new_actions=new_actions, ledger_writer=writer)
+    assert client.call_json.call_count == 0
+    assert len(writer.rows) == 1
+
+    # Invariant 5 passes
+    assert inv_05_no_duplicate_ledger_rows(writer.rows) == []
+
+
+def test_step_3_trigger_b_batching_step3_batch_size():
+    """Verify requirements are batched up to config.step3_batch_size."""
+    state = State()
+    state.add_action({"id": "U(1,1)", "type": "Request", "text": "Base", "role": "SHAPER", "evidence_quote": "b"})
+    state.add_action({"id": "A(2,1)", "type": "Implement", "text": "Impl", "role": "EXECUTOR", "evidence_quote": "i"})
+    state.outcomes = [{"id": "outcome 1", "text": "Feature", "turn_id": "U(1,1)", "parent": None, "children": [], "related": []}]
+    state.run["action_to_outcome"] = {"U(1,1)": "outcome 1", "A(2,1)": "outcome 1"}
+
+    # Create 5 existing requirements
+    for i in range(1, 6):
+        state.requirements.append({
+            "outcome_id": "outcome 1",
+            "req_id": f"req_{i}",
+            "text": f"Requirement {i}",
+            "type": "task",
+            "status": "active",
+            "creation_action_ids": ["U(1,1)"],
+            "contributing_action_ids": [],
+            "implementation_action_ids": [],
+            "revise_action_ids": [],
+            "related_to": [],
+            "created_at_pair": 1,
+        })
+
+    config = Config(
+        llm_api_key="key",
+        llm_base_url="https://example.com",
+        model_fast="fast",
+        model_main="main",
+        model_step2="step2",
+        model_step3="step3",
+        step3_batch_size=2,  # Batches of 2: [req1, req2], [req3, req4], [req5]
+    )
+
+    client = MagicMock()
+    client.call_json.return_value = {
+        "subsequent labels": [
+            {"index": 0, "action id": "A(2,1)", "relationship type": "IMPLEMENTS", "relationship score": 4}
+        ]
+    }
+
+    new_actions = [state.get_action("A(2,1)")]
+    results = step_3_trigger_b(client, config, state, pair_number=2, outcome_id="outcome 1", new_actions=new_actions)
+
+    # All 5 requirements evaluated
+    assert len(results) == 5
+    assert sorted(results.keys()) == ["req_1", "req_2", "req_3", "req_4", "req_5"]
+    assert client.call_json.call_count == 5
+
