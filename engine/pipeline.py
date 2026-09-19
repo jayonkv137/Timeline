@@ -15,7 +15,10 @@ ids are the join keys for the entire downstream pipeline, so a violation here
 is corruption, not a warning.
 """
 import json
+from pathlib import Path
 import re
+import time
+from typing import Any
 
 from engine import prompts
 from engine.config import Config
@@ -997,3 +1000,199 @@ def run_level2(client, config, state, pair_number, new_actions, ledger_writer=No
 
     sweep_abandoned_slots(state, pair_number)
     return results
+
+
+def process_pair(client, config, state, pair_number, user_text, ai_text, ledger_writer=None):
+    """Executes Level 1 (1a -> 1b -> 1c) and Level 2 (Step 2 -> Step 3 Trigger A -> Step 3 Trigger B -> slot sweep)
+    for a single pair (§9.1 - §9.2).
+    """
+    new_actions = run_level1(client, config, state, pair_number, user_text, ai_text)
+    level2_results = run_level2(
+        client, config, state, pair_number, new_actions, ledger_writer=ledger_writer
+    )
+    return new_actions, level2_results
+
+
+def run_chat(
+    client,
+    config,
+    chat_id: str,
+    dialogue: list[dict] | str | Path,
+    out_dir: str | Path | None = None,
+    initial_state: Any = None,
+    stop_on_violation: bool = True,
+    clear_existing: bool = False,
+) -> dict:
+    """Run extraction pipeline across an entire chat with pair-level runtime invariant checks.
+
+    For each pair:
+    1. process_pair() executes Steps 1a->1b->1c->2->3.
+    2. Writes state.json, ledger.jsonl, and run/pipeline_state.json.
+    3. Runs runtime checks (engine/checks.py).
+    4. Writes run/status.json.
+    5. Halts immediately on invariant violation if stop_on_violation is True.
+    6. Emits run/report.json upon completion or halt.
+    """
+    from engine.artifacts import LedgerWriter, write_json_artifact
+    from engine.checks import (
+        InvariantViolationError,
+        run_pair_checks,
+        write_report,
+        write_status,
+    )
+
+    if isinstance(dialogue, (str, Path)):
+        with open(dialogue, "r", encoding="utf-8") as f:
+            raw_dialogue = json.load(f)
+    else:
+        raw_dialogue = list(dialogue)
+
+    dialogue_list = []
+    for turn in raw_dialogue:
+        t = dict(turn)
+        if "attachments" not in t:
+            t["attachments"] = []
+        if "ts" not in t:
+            t["ts"] = "2026-01-01T00:00:00Z"
+        dialogue_list.append(t)
+
+    if out_dir is None:
+        out_dir = Path("data/chats") / chat_id
+    else:
+        out_dir = Path(out_dir)
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    run_dir = out_dir / "run"
+    run_dir.mkdir(parents=True, exist_ok=True)
+
+    if clear_existing:
+        for fname in ["ledger.jsonl", "state.json", "dialogue.json"]:
+            p = out_dir / fname
+            if p.exists():
+                p.unlink()
+        for fname in ["status.json", "report.json", "pipeline_state.json"]:
+            p = run_dir / fname
+            if p.exists():
+                p.unlink()
+
+    # Save dialogue.json in out_dir
+    with open(out_dir / "dialogue.json", "w", encoding="utf-8") as f:
+        json.dump(dialogue_list, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+
+    if initial_state is None:
+        state = State()
+    elif isinstance(initial_state, dict):
+        state = State.from_dict(initial_state)
+    else:
+        state = initial_state
+
+    ledger_writer = LedgerWriter(out_dir / "ledger.jsonl")
+
+    # Group dialogue turns by pair
+    pairs_dict: dict[int, dict[str, str]] = {}
+    for turn in dialogue_list:
+        p = turn.get("pair")
+        if p is None:
+            continue
+        speaker = turn.get("speaker")
+        text = turn.get("text", "")
+        if p not in pairs_dict:
+            pairs_dict[p] = {"user": "", "ai": ""}
+        if speaker in ("user", "ai"):
+            pairs_dict[p][speaker] = text
+
+    sorted_pairs = sorted(pairs_dict.keys())
+
+    wall_time_per_pair: list[float] = []
+    tokens_per_pair: list[int] = []
+    passed_checks_set: set[str] = set()
+    failed_checks_set: set[str] = set()
+    prev_ledger = None
+
+    for pair_number in sorted_pairs:
+        t0 = time.monotonic()
+        tokens_start = getattr(client, "total_tokens", 0)
+        u_text = pairs_dict[pair_number].get("user", "")
+        a_text = pairs_dict[pair_number].get("ai", "")
+
+        new_actions, l2_res = process_pair(
+            client, config, state, pair_number, u_text, a_text, ledger_writer=ledger_writer
+        )
+
+        elapsed = round(time.monotonic() - t0, 3)
+        wall_time_per_pair.append(elapsed)
+        tokens_end = getattr(client, "total_tokens", 0)
+        tokens_delta = max(0, tokens_end - tokens_start)
+        tokens_per_pair.append(tokens_delta)
+
+        # Write state.json artifact (validated)
+        write_json_artifact(out_dir / "state.json", state.to_dict(), "state")
+
+        # Write run/pipeline_state.json
+        with open(run_dir / "pipeline_state.json", "w", encoding="utf-8") as f:
+            json.dump(state.run, f, indent=2, ensure_ascii=False)
+            f.write("\n")
+
+        # Run runtime invariants
+        chk_res = run_pair_checks(
+            state=state,
+            ledger_rows=ledger_writer.rows,
+            dialogue=dialogue_list,
+            prev_ledger_rows=prev_ledger,
+            current_pair=pair_number,
+        )
+        passed_checks_set.update(chk_res.passed)
+
+        if not chk_res.healthy:
+            failed_checks_set.update(chk_res.failed)
+            write_status(
+                out_dir,
+                healthy=False,
+                pair_number=pair_number,
+                violations=chk_res.violations,
+            )
+            report_file = write_report(
+                out_dir=out_dir,
+                chat_id=chat_id,
+                pairs_processed=pair_number - 1,
+                wall_time_per_pair=wall_time_per_pair,
+                tokens_per_pair=tokens_per_pair,
+                llm_calls=getattr(client, "call_count", 0),
+                retries=getattr(client, "retry_count", 0),
+                cache_hits=getattr(client, "cache_hits", 0),
+                state=state,
+                checks_passed=list(passed_checks_set),
+                checks_failed=list(failed_checks_set),
+            )
+            with open(report_file, "r", encoding="utf-8") as f:
+                report_data = json.load(f)
+            if stop_on_violation:
+                raise InvariantViolationError(chk_res.violations, chk_res.failed)
+            return report_data
+        else:
+            write_status(
+                out_dir,
+                healthy=True,
+                pair_number=pair_number,
+                violations=[],
+            )
+            prev_ledger = list(ledger_writer.rows)
+
+    # All pairs finished successfully
+    report_file = write_report(
+        out_dir=out_dir,
+        chat_id=chat_id,
+        pairs_processed=len(sorted_pairs),
+        wall_time_per_pair=wall_time_per_pair,
+        tokens_per_pair=tokens_per_pair,
+        llm_calls=getattr(client, "call_count", 0),
+        retries=getattr(client, "retry_count", 0),
+        cache_hits=getattr(client, "cache_hits", 0),
+        state=state,
+        checks_passed=list(passed_checks_set),
+        checks_failed=list(failed_checks_set),
+    )
+    with open(report_file, "r", encoding="utf-8") as f:
+        report_data = json.load(f)
+    return report_data

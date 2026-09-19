@@ -76,6 +76,9 @@ class LLMClient:
         self.monitor_path = Path(out_dir) / "run" / "llm_monitor.txt"
         self.monitor_path.parent.mkdir(parents=True, exist_ok=True)
         self.call_count = 0
+        self.retry_count = 0
+        self.total_tokens = 0
+        self.cache_hits = 0
 
     def call_json(self, step, model, prompt):
         """One LLM call → parsed JSON object. `step` is a label for the
@@ -93,9 +96,12 @@ class LLMClient:
                 text = response.choices[0].message.content or ""
                 elapsed = time.monotonic() - started
                 usage = getattr(response, "usage", None)
+                if usage is not None:
+                    self.total_tokens += getattr(usage, "total_tokens", 0) or 0
                 self._log(step, model, attempt, prompt, text, elapsed, usage, error=None)
                 return parse_json_response(text)
             except _TRANSIENT_EXCEPTIONS as exc:
+                self.retry_count += 1
                 elapsed = time.monotonic() - started
                 self._log(step, model, attempt, prompt, "", elapsed, None, error=repr(exc))
                 last_exc = exc
@@ -103,6 +109,7 @@ class LLMClient:
                 elapsed = time.monotonic() - started
                 self._log(step, model, attempt, prompt, "", elapsed, None, error=repr(exc))
                 if exc.status_code >= 500:
+                    self.retry_count += 1
                     last_exc = exc  # server-side: retry
                 else:
                     raise LLMError(f"non-retryable API error on step {step}: {exc}") from exc

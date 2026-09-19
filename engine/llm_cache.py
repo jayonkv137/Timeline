@@ -54,6 +54,28 @@ class CachingLLMClient:
         self.cassettes_dir.mkdir(parents=True, exist_ok=True)
 
         self._inner = inner_client
+        self.cache_hits = 0
+        self._call_count = 0
+        self._retry_count = 0
+        self._total_tokens = 0
+
+    @property
+    def call_count(self) -> int:
+        if self._inner is not None and hasattr(self._inner, "call_count"):
+            return self._inner.call_count
+        return self._call_count
+
+    @property
+    def retry_count(self) -> int:
+        if self._inner is not None and hasattr(self._inner, "retry_count"):
+            return self._inner.retry_count
+        return self._retry_count
+
+    @property
+    def total_tokens(self) -> int:
+        if self._inner is not None and hasattr(self._inner, "total_tokens"):
+            return self._inner.total_tokens
+        return self._total_tokens
 
     def call_json(self, step: str, model: str, prompt: str) -> Any:
         """Call LLM or serve from cassette according to mode."""
@@ -73,6 +95,10 @@ class CachingLLMClient:
                 )
             with open(cassette_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
+            self.cache_hits += 1
+            self._call_count += 1
+            # Rough token estimate from prompt and serialized response
+            self._total_tokens += len(prompt.split()) + len(str(data.get("response", "")).split())
             return data["response"]
 
         if self.mode == "record":
