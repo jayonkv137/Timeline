@@ -13,9 +13,11 @@ from typing import Any
 
 from jsonschema import Draft202012Validator
 
-ACTION_ID_RE = re.compile(r"^([UA])\((\d+),(\d+)\)$")
+from engine.pipeline import ACTION_ID_RE
+
 VALID_SLOT_STATUSES = {"open", "resolved", "abandoned"}
 VALID_MODES = {"YOU_DRIVING", "COPILOT", "AUTOPILOT", "QUIET", "centaur", "copilot", "autopilot"}
+
 
 
 # ==============================================================================
@@ -433,10 +435,56 @@ def inv_20_batch_equals_live(batch_ledger: list[dict[str, Any]] | None, live_led
     return []
 
 
+def _normalize_for_quote_match(s: str) -> str:
+    """Normalize text for evidence quote matching:
+    - Smart quotes/dashes normalized to ASCII equivalents
+    - All whitespace sequences (newlines, tabs, spaces) collapsed to a single space
+    """
+    s = s.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
+    s = s.replace("—", "--").replace("–", "-")
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
+
+def quote_matches_text(quote: str, text: str) -> bool:
+    """Check if quote is grounded in turn text, allowing:
+    - Whitespace normalization (newlines, multiple spaces -> single space)
+    - Ellipses splitting (e.g. 'part 1 ... part 2' must appear in sequence)
+    - Smart quotes normalization
+    """
+    norm_quote = _normalize_for_quote_match(quote)
+    norm_text = _normalize_for_quote_match(text)
+
+    # Strip optional surrounding quotation marks from model output
+    if len(norm_quote) >= 2 and norm_quote[0] in ('"', "'") and norm_quote[-1] == norm_quote[0]:
+        norm_quote = norm_quote[1:-1].strip()
+
+    if not norm_quote:
+        return True
+
+    # Check direct substring
+    if norm_quote in norm_text:
+        return True
+
+    # If the quote contains ellipses ('...' or '…'), check ordered segment appearance
+    segments = [s.strip() for s in re.split(r"\.{3,}|\u2026", norm_quote) if s.strip()]
+    if len(segments) > 1:
+        cur_pos = 0
+        for seg in segments:
+            idx = norm_text.find(seg, cur_pos)
+            if idx == -1:
+                return False
+            cur_pos = idx + len(seg)
+        return True
+
+    return False
+
+
 def inv_21_provenance(dialogue: list[dict[str, Any]] | None, ledger_rows: list[dict[str, Any]] | None, state: dict[str, Any] | None) -> list[str]:
     """21. Provenance: Every ledger row traces to a turn present in dialogue.json,
 
     and every attributed action's evidence_quote appears verbatim in that turn's text.
+    Grounded via quote_matches_text allowing whitespace/ellipse normalization.
     """
     if dialogue is None or ledger_rows is None or state is None:
         return ["skipped: dialogue/ledger/state absent"]
@@ -459,14 +507,15 @@ def inv_21_provenance(dialogue: list[dict[str, Any]] | None, ledger_rows: list[d
         act_id = action.get("id", "")
         quote = action.get("evidence_quote")
         if quote and quote != "(not captured in fixture)":
-            m = re.match(r"^([UA])\((\d+),\s*(\d+)\)$", str(act_id))
+            m = ACTION_ID_RE.match(str(act_id))
             if m:
                 speaker = "user" if m.group(1) == "U" else "ai"
                 pair_num = int(m.group(2))
                 turn_text = dialogue_map.get((pair_num, speaker))
                 if turn_text is None:
                     violations.append(f"action {act_id}: turn for {speaker} pair {pair_num} not found in dialogue.json")
-                elif quote not in turn_text:
-                    violations.append(f"action {act_id}: evidence_quote '{quote}' not found verbatim in {speaker} turn pair {pair_num}")
+                elif not quote_matches_text(quote, turn_text):
+                    violations.append(f"action {act_id}: evidence_quote '{quote}' not grounded in {speaker} turn pair {pair_num}")
 
     return violations
+

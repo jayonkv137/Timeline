@@ -85,8 +85,9 @@ All engineering deliverables for Phase E0 are complete and verified via `scripts
 
 **Prerequisites gating Phase E1 commencement (Owner tasks):**
 1. Fill `meta.yaml` for 10 chats across the coverage matrix and rename those folders from `c<NN>_unsorted` to `c<NN>_<task_type>_<length>`.
-2. Hand-label chat **c14** (Dialogue action extraction framework) as `golden_01` under `data/corpus/golden_01/`.
+2. Hand-label chat **c15** (Portfolio about page redesign, 8 pairs, real design work) as `golden_01` under `data/corpus/golden_01/` (chat c14 is archived as `provenance: pipeline_run` for E3 robustness).
 
 Phase E1 (Extraction Pipeline: Steps 1a–3) commences immediately upon completion of these two owner tasks.
+
 
 

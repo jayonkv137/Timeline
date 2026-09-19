@@ -19,7 +19,11 @@ import re
 
 from engine import prompts
 
-ACTION_ID_RE = re.compile(r"^([UA])\((\d+),(\d+)\)$")
+
+ACTION_ID_RE = re.compile(r"^([UA])\((\d+),\s*(\d+)\)$")
+
+
+
 
 
 class PipelineError(Exception):
