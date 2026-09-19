@@ -25,6 +25,14 @@ chats for testing/
 Files from Claude.ai/
 visualisation/
 
+# Data Ops: raw exports and private personal archive (never committed)
+data/archive/
+data/exports/
+data/calude/
+data/Takeout/
+data/Takeout 2/
+data/Claude Manifest*.json
+
 # OS
 .DS_Store
 Thumbs.db

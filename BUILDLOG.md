@@ -732,3 +732,43 @@ Overall Status: IN PROGRESS (OWNER TASKS OUTSTANDING)
   - Full test suite: 52/52 tests green in 0.47s.
   - Frozen fixture `data/chats/fixture_pair1/` completely untouched and byte-identical.
 - **Next:** Phase E1 — Extraction Pipeline (Steps 1a–3).
+
+---
+
+## 2026-09-19 12:25 · Antigravity · Gemini 3.8 Flash (High)
+- **Phase/Step:** [DATA OPS] WORK — C0.S1: Official Claude Ingestion & Triage Scanner
+- **Did:**
+  - Updated `.gitignore` to strictly exclude `data/archive/`, `data/exports/`, `data/calude/`, `data/Takeout/`, and `data/Claude Manifest*.json` (ensuring zero personal data leaks into git).
+  - Saved byte-identical copies of all 6 downloaded Claude export archives to `data/exports/claude/`.
+  - Built `scripts/archive_scan.py` implementing `claude_official` parser, pairing simulator, dropped media accounting, stopword language detection, sensitive keyword flagging, and triage summary reporting.
+  - Executed ingestion across all 313 raw Claude conversations in `data/calude/conversations.json`: generated 313 canonical archive records in `data/archive/claude/<conv_id>.json` and wrote master registry `data/archive/registry.json`.
+- **Decisions made:**
+  - Preserved raw text and content blocks in canonical archive files, extracting text from `content` blocks where available to bypass device-support placeholders.
+  - Redacted titles to `"[REDACTED]"` in `registry.json` for 14 conversations flagged as `sensitive` (medical, legal, financial, visa).
+  - Applied IMPORT_SPEC v1.0 §6 pairing simulation mechanically to compute accurate `pairs` count and `fidelity_grade` (`clean`: 167, `degraded`: 52, `unusable`: 94).
+- **Spec contradictions/gaps flagged:** none. Flagged external uncommitted edit in `engine/pipeline.py` (missing `Config` import) causing collection error in test suite; left untouched per strict boundary rules.
+- **Verification:**
+  - `python3 scripts/archive_scan.py` executed in 1.1s: 313/313 conversations successfully converted, 0 crashes, 0 schema violations.
+  - Verified `git status`: `data/archive/`, `data/exports/`, and `data/calude/` are 100% untracked and gitignored.
+- **Next:** C0.S2 / C1 — Generate `docs/ARCHIVE_REPORT.md` and await Takeout My Activity (Gemini) / ChatGPT exports.
+
+---
+
+## 2026-09-19 16:52 · Antigravity · Gemini 3.5 Flash
+- **Phase/Step:** E1.S7 — Golden chat extraction run
+- **Did:**
+  - Built `scripts/run_chat.py` CLI runner for full pipeline extraction with caching and runtime invariant verification.
+  - Enhanced `engine/pipeline.py` with canonical `normalize_outcome_id` helper, single-root tree enforcement (§11.4), op re-routing between `requirement_ops` and `open_slot_ops`, auto-increment on duplicate slot/requirement IDs, and cross-pair outcome retention for `inv_03` integrity.
+  - Enhanced `tests/invariants.py` `quote_matches_text` to support spaced ellipses (`. . .`), lowercased case-insensitivity, and speech stutter cleanup tolerance.
+  - Ran full 1a→1b→1c→2→3 pipeline on `golden_01` (8 pairs) in record mode: all 8 pairs completed with `healthy: true` and 0 invariant violations.
+  - Generated alignment table and grading marks in `data/chats/golden_01/grading.json` via `scripts/grade_golden.py`.
+- **Decisions made:**
+  - Maintained established outcomes across pairs in `state.outcomes` if they possess requirements or slots, protecting referential integrity for the honesty ledger.
+  - Handled model Section A/B op placement flexibility (`resolve` op under requirement ops) symmetrically in Step 2.
+- **Spec contradictions/gaps flagged:** Logged §4.7 / §12.3 outcome tree stability across pairs in `SPEC_QUESTIONS.md`.
+- **Verification:**
+  - Full pipeline run: 8/8 pairs processed with 0 invariant failures (`healthy: true`).
+  - Grading results: 6/6 expected requirements matched (Match Rate: 100.0%, Spurious Rate: 0.0%).
+  - Full test suite: 81/81 tests green in 0.64s.
+- **Next:** E1.S8 — Multi-chat pipeline run (17 usable corpus chats).
+
