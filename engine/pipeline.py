@@ -70,6 +70,36 @@ def format_outcomes_list(outcomes):
                        for o in outcomes], indent=2, ensure_ascii=False)
 
 
+def format_prior_requirements_block(requirements):
+    if not requirements:
+        return "[]"
+    spec_shaped = [{
+        "req id": r["req_id"],
+        "text": r["text"],
+        "type": r["type"],
+        "status": r["status"],
+        "creation action ids": r["creation_action_ids"],
+        "contributing action ids": r["contributing_action_ids"],
+        "related to": r["related_to"],
+    } for r in requirements]
+    return json.dumps(spec_shaped, indent=2, ensure_ascii=False)
+
+
+def format_prior_open_slots_block(slots):
+    open_slots = [s for s in slots if s["status"] == "open"]
+    if not open_slots:
+        return "[]"
+    spec_shaped = [{
+        "slot id": s["slot_id"],
+        "text": s["text"],
+        "type": s["type"],
+        "origin": s["origin"],
+        "creation action ids": s["creation_action_ids"],
+        "contributing action ids": s["contributing_action_ids"],
+    } for s in open_slots]
+    return json.dumps(spec_shaped, indent=2, ensure_ascii=False)
+
+
 def _require(mapping, key, context):
     if key not in mapping:
         raise PipelineError(f"{context}: missing key {key!r} in {mapping!r}")
@@ -219,6 +249,313 @@ def step_1c(client, config, state, pair_number):
     return intentions
 
 
+# ---------------------------------------------------------------- Step 2
+
+def step_2(client, config, state, pair_number, outcome_id, ledger_writer=None):
+    """Step 2: Requirement & Open-Slot Extraction for ONE outcome (§6).
+    Cadence: once per outcome touched this pair (§9.2).
+    """
+    outcome = state.get_outcome(outcome_id)
+    actions = state.actions_for_outcome(outcome_id)
+    if not actions:
+        raise PipelineError(f"step 2: no actions found bound to outcome {outcome_id!r}")
+
+    prior_reqs = state.requirements_for_outcome(outcome_id)
+    prior_slots = state.slots_for_outcome(outcome_id)
+
+    prompt = prompts.fill(prompts.STEP_2, {
+        "outcome id": outcome_id,
+        "outcome description": outcome["text"],
+        "outcome actions block": format_actions_block(actions),
+        "prior requirements block": format_prior_requirements_block(prior_reqs),
+        "prior open slots block": format_prior_open_slots_block(prior_slots),
+    })
+
+    response = client.call_json(f"2:pair{pair_number}:{outcome_id}", config.model_main, prompt)
+
+    raw_req_ops = _require(response, "requirement ops", f"step 2 {outcome_id}")
+    raw_slot_ops = _require(response, "open_slot ops", f"step 2 {outcome_id}")
+
+    if not isinstance(raw_req_ops, list):
+        raise PipelineError(f"step 2 {outcome_id}: 'requirement ops' must be a list")
+    if not isinstance(raw_slot_ops, list):
+        raise PipelineError(f"step 2 {outcome_id}: 'open_slot ops' must be a list")
+
+    a2o = state.run.get("action_to_outcome", {})
+
+    # 1. Process requirement operations
+    req_ops_processed = []
+    for raw in raw_req_ops:
+        op = str(_require(raw, "op", f"step 2 {outcome_id} requirement op"))
+        if op not in ("create", "revise", "delete"):
+            raise PipelineError(f"step 2 {outcome_id}: invalid requirement op {op!r}")
+
+        bound_oid = str(_require(raw, "bound outcome id", f"step 2 {outcome_id} requirement op"))
+        if bound_oid != outcome_id:
+            raise PipelineError(f"step 2 {outcome_id}: bound outcome id {bound_oid!r} != {outcome_id!r}")
+
+        req_id = str(_require(raw, "req id", f"step 2 {outcome_id} requirement op"))
+
+        if op == "create":
+            existing = state.find_requirement(outcome_id, req_id)
+            if existing is not None:
+                raise PipelineError(f"step 2 {outcome_id}: duplicate requirement id {req_id!r}")
+
+            fields = _require(raw, "fields", f"step 2 {outcome_id} req create")
+            text = str(_require(fields, "text", f"step 2 {outcome_id} req fields"))
+            req_type = str(_require(fields, "type", f"step 2 {outcome_id} req fields"))
+            if req_type not in ("constraint", "preference", "ranking", "task", "other"):
+                req_type = "other"
+
+            creation_aids = [str(x) for x in _require(raw, "creation action ids", f"step 2 {outcome_id} req create")]
+            if not creation_aids:
+                raise PipelineError(f"step 2 {outcome_id}: req {req_id} create missing creation action ids")
+
+            for aid in creation_aids:
+                if not state.has_action(aid):
+                    raise PipelineError(f"step 2 {outcome_id}: unknown action id {aid!r} in req {req_id}")
+                if a2o.get(aid) != outcome_id:
+                    raise PipelineError(
+                        f"step 2 {outcome_id}: action {aid!r} cited in outcome {outcome_id} belongs to {a2o.get(aid)!r}"
+                    )
+
+            contributing_aids = [str(x) for x in raw.get("contributing action ids", [])]
+            impl_aids = [str(x) for x in raw.get("implementation action ids", [])]
+            related_to = [str(x) for x in raw.get("related to", [])]
+            explicit_or_implicit = str(raw.get("explicit or implicit", "explicit"))
+            if explicit_or_implicit not in ("explicit", "implicit"):
+                explicit_or_implicit = "explicit"
+            rationale = str(raw.get("rationale", ""))
+
+            new_req = {
+                "outcome_id": outcome_id,
+                "req_id": req_id,
+                "text": text,
+                "type": req_type,
+                "status": "active",
+                "creation_action_ids": creation_aids,
+                "contributing_action_ids": contributing_aids,
+                "implementation_action_ids": impl_aids,
+                "revise_action_ids": [],
+                "related_to": related_to,
+                "explicit_or_implicit": explicit_or_implicit,
+                "rationale": rationale,
+                "created_at_pair": pair_number,
+            }
+            state.requirements.append(new_req)
+            state.log_operation(pair_number, outcome_id, "create", req_id, "requirement")
+
+            # Write ledger rows with score 5.0, kind="creation" (§10.3)
+            for aid in creation_aids:
+                act = state.get_action(aid)
+                speaker = "U" if act["id"].startswith("U") else "A"
+                row = {
+                    "pair_added": pair_number,
+                    "action_id": act["id"],
+                    "speaker": speaker,
+                    "role": act["role"],
+                    "outcome_id": outcome_id,
+                    "req_id": req_id,
+                    "score": 5.0,
+                    "kind": "creation",
+                }
+                if ledger_writer is not None:
+                    ledger_writer.append(row)
+
+            req_ops_processed.append(new_req)
+
+        elif op == "revise":
+            related = [str(x) for x in raw.get("related to", [])]
+            target_id = related[0] if related else req_id
+            existing = state.find_requirement(outcome_id, target_id)
+            if existing is None:
+                existing = state.find_requirement(outcome_id, req_id)
+            if existing is None:
+                raise PipelineError(f"step 2 {outcome_id}: revise targets unknown req id {target_id!r}")
+
+            existing["status"] = "revised"
+
+            fields = raw.get("fields", {})
+            revised_text = fields.get("text", existing["text"])
+            revised_type = fields.get("type", existing["type"])
+            new_req_id = req_id if req_id != existing["req_id"] else f"{req_id}_rev"
+            creation_aids = [str(x) for x in raw.get("creation action ids", existing["creation_action_ids"])]
+
+            revised_req = {
+                "outcome_id": outcome_id,
+                "req_id": new_req_id,
+                "text": str(revised_text),
+                "type": str(revised_type),
+                "status": "active",
+                "creation_action_ids": creation_aids,
+                "contributing_action_ids": [str(x) for x in raw.get("contributing action ids", [])],
+                "implementation_action_ids": [str(x) for x in raw.get("implementation action ids", [])],
+                "revise_action_ids": [],
+                "related_to": [existing["req_id"]],
+                "explicit_or_implicit": str(raw.get("explicit or implicit", "explicit")),
+                "rationale": str(raw.get("rationale", "")),
+                "created_at_pair": pair_number,
+            }
+            state.requirements.append(revised_req)
+            state.log_operation(pair_number, outcome_id, "revise", target_id, "requirement")
+            req_ops_processed.append(revised_req)
+
+        elif op == "delete":
+            related = [str(x) for x in raw.get("related to", [])]
+            target_id = related[0] if related else req_id
+            existing = state.find_requirement(outcome_id, target_id)
+            if existing is None:
+                raise PipelineError(f"step 2 {outcome_id}: delete targets unknown req id {target_id!r}")
+            existing["status"] = "deleted"
+            state.log_operation(pair_number, outcome_id, "delete", target_id, "requirement")
+
+    # 2. Process open slot operations
+    slot_ops_processed = []
+    for raw in raw_slot_ops:
+        op = str(_require(raw, "op", f"step 2 {outcome_id} slot op"))
+        if op not in ("open_slot", "resolve", "abandon"):
+            raise PipelineError(f"step 2 {outcome_id}: invalid slot op {op!r}")
+
+        bound_oid = str(_require(raw, "bound outcome id", f"step 2 {outcome_id} slot op"))
+        if bound_oid != outcome_id:
+            raise PipelineError(f"step 2 {outcome_id}: bound outcome id {bound_oid!r} != {outcome_id!r}")
+
+        slot_id = str(_require(raw, "slot id", f"step 2 {outcome_id} slot op"))
+
+        if op == "open_slot":
+            existing = state.find_slot(outcome_id, slot_id)
+            if existing is not None:
+                raise PipelineError(f"step 2 {outcome_id}: duplicate slot id {slot_id!r}")
+
+            fields = _require(raw, "fields", f"step 2 {outcome_id} open_slot")
+            text = str(_require(fields, "text", f"step 2 {outcome_id} slot fields"))
+            slot_type = str(fields.get("type", "other"))
+            if slot_type not in ("constraint", "preference", "ranking", "task", "other"):
+                slot_type = "other"
+
+            origin = str(_require(raw, "origin", f"step 2 {outcome_id} slot origin"))
+            if origin not in ("user", "AI"):
+                origin = "AI"
+
+            creation_aids = [str(x) for x in _require(raw, "creation action ids", f"step 2 {outcome_id} slot create")]
+            if not creation_aids:
+                raise PipelineError(f"step 2 {outcome_id}: slot {slot_id} missing creation action ids")
+
+            for aid in creation_aids:
+                if not state.has_action(aid):
+                    raise PipelineError(f"step 2 {outcome_id}: unknown action id {aid!r} in slot {slot_id}")
+                if a2o.get(aid) != outcome_id:
+                    raise PipelineError(
+                        f"step 2 {outcome_id}: action {aid!r} cited in outcome {outcome_id} belongs to {a2o.get(aid)!r}"
+                    )
+
+            new_slot = {
+                "slot_id": slot_id,
+                "outcome_id": outcome_id,
+                "text": text,
+                "type": slot_type,
+                "origin": origin,
+                "status": "open",
+                "creation_action_ids": creation_aids,
+                "contributing_action_ids": [str(x) for x in raw.get("contributing action ids", [])],
+                "resolved_into": None,
+            }
+            state.slots.append(new_slot)
+            state.run["slot_opened_at_pair"][f"{outcome_id}||{slot_id}"] = pair_number
+            state.log_operation(pair_number, outcome_id, "open_slot", slot_id, "slot")
+            slot_ops_processed.append(new_slot)
+
+        elif op == "resolve":
+            existing = state.find_slot(outcome_id, slot_id)
+            if existing is None:
+                related = [str(x) for x in raw.get("related to", [])]
+                for r_id in related:
+                    existing = state.find_slot(outcome_id, r_id)
+                    if existing is not None:
+                        break
+            if existing is None:
+                raise PipelineError(f"step 2 {outcome_id}: resolve targets unknown slot {slot_id!r}")
+            if existing["status"] != "open":
+                raise PipelineError(f"step 2 {outcome_id}: cannot resolve slot {existing['slot_id']} with status {existing['status']!r}")
+
+            new_req_id = raw.get("req id") or f"req_{existing['slot_id']}"
+            existing["status"] = "resolved"
+            existing["resolved_into"] = str(new_req_id)
+
+            fields = raw.get("fields", {})
+            text = str(fields.get("text", existing["text"]))
+            req_type = str(fields.get("type", existing["type"]))
+            creation_aids = [str(x) for x in raw.get("creation action ids", existing["creation_action_ids"])]
+
+            resolved_req = {
+                "outcome_id": outcome_id,
+                "req_id": str(new_req_id),
+                "text": text,
+                "type": req_type,
+                "status": "active",
+                "creation_action_ids": creation_aids,
+                "contributing_action_ids": [str(x) for x in raw.get("contributing action ids", [])],
+                "implementation_action_ids": [],
+                "revise_action_ids": [],
+                "related_to": [existing["slot_id"]],
+                "explicit_or_implicit": str(raw.get("explicit or implicit", "explicit")),
+                "rationale": str(raw.get("rationale", "")),
+                "created_at_pair": pair_number,
+            }
+            state.requirements.append(resolved_req)
+            state.log_operation(pair_number, outcome_id, "resolve", existing["slot_id"], "slot")
+            state.log_operation(pair_number, outcome_id, "create", str(new_req_id), "requirement")
+
+            # Write ledger row for the resolving action (creation, 5.0)
+            for aid in creation_aids:
+                act = state.get_action(aid)
+                speaker = "U" if act["id"].startswith("U") else "A"
+                row = {
+                    "pair_added": pair_number,
+                    "action_id": act["id"],
+                    "speaker": speaker,
+                    "role": act["role"],
+                    "outcome_id": outcome_id,
+                    "req_id": str(new_req_id),
+                    "score": 5.0,
+                    "kind": "creation",
+                }
+                if ledger_writer is not None:
+                    ledger_writer.append(row)
+
+            # Write slot-origin row for the original slot creation actions
+            for aid in existing["creation_action_ids"]:
+                act = state.get_action(aid)
+                speaker = "U" if act["id"].startswith("U") else "A"
+                row = {
+                    "pair_added": pair_number,
+                    "action_id": act["id"],
+                    "speaker": speaker,
+                    "role": act["role"],
+                    "outcome_id": outcome_id,
+                    "req_id": str(new_req_id),
+                    "score": 3.0,
+                    "kind": "slot-origin",
+                }
+                if ledger_writer is not None:
+                    ledger_writer.append(row)
+
+            slot_ops_processed.append(existing)
+
+        elif op == "abandon":
+            existing = state.find_slot(outcome_id, slot_id)
+            if existing is None:
+                raise PipelineError(f"step 2 {outcome_id}: abandon targets unknown slot {slot_id!r}")
+            existing["status"] = "abandoned"
+            state.log_operation(pair_number, outcome_id, "abandon", slot_id, "slot")
+            slot_ops_processed.append(existing)
+
+    return {
+        "requirement_ops": req_ops_processed,
+        "open_slot_ops": slot_ops_processed,
+    }
+
+
 # ------------------------------------------------------------ orchestration
 
 def run_level1(client, config, state, pair_number, user_text, ai_text):
@@ -229,3 +566,17 @@ def run_level1(client, config, state, pair_number, user_text, ai_text):
     step_1b(client, config, state, pair_number)
     step_1c(client, config, state, pair_number)
     return new_actions
+
+
+def run_level2(client, config, state, pair_number, new_actions, ledger_writer=None):
+    """Level 2: Step 2 per touched outcome (§9.2).
+    touched = distinct outcomes that received a NEW action this pair.
+    """
+    a2o = state.run.get("action_to_outcome", {})
+    touched = sorted({a2o[a["id"]] for a in new_actions if a["id"] in a2o})
+    results = {}
+    for outcome_id in touched:
+        results[outcome_id] = step_2(
+            client, config, state, pair_number, outcome_id, ledger_writer=ledger_writer
+        )
+    return results
