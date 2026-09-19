@@ -18,6 +18,8 @@ import json
 import re
 
 from engine import prompts
+from engine.config import Config
+from engine.state import State
 
 
 ACTION_ID_RE = re.compile(r"^([UA])\((\d+),\s*(\d+)\)$")
@@ -594,6 +596,230 @@ def sweep_abandoned_slots(state, pair_number):
     return abandoned
 
 
+# ------------------------------------------------------------ step 3 (trigger a)
+
+def format_step3_action_line(idx: int, action: dict) -> str:
+    aid = action["id"]
+    atype = action.get("type", "other")
+    role = action.get("role", "OTHER")
+    text = action.get("text", "")
+    quote = action.get("evidence_quote", "")
+    return f"[{idx}] {aid} | {atype} | {role} | {text} | evidence: \"{quote}\""
+
+
+def format_step3_actions_block(actions: list[dict]) -> str:
+    if not actions:
+        return "None"
+    return "\n".join(format_step3_action_line(i, a) for i, a in enumerate(actions))
+
+
+def build_step3_trigger_a_prompt(
+    outcome_text: str,
+    req: dict,
+    origin_turn: str,
+    preceding_actions: list[dict],
+    subsequent_actions: list[dict],
+    slot_info: dict | None = None,
+) -> str:
+    template = prompts.STEP_3
+
+    outcome_desc = outcome_text or req.get("outcome_id", "")
+    req_id = req["req_id"]
+    req_text = req["text"]
+    preceding_block = format_step3_actions_block(preceding_actions)
+    subsequent_block = format_step3_actions_block(subsequent_actions)
+
+    if slot_info is not None:
+        slot_actions_block = format_step3_actions_block(slot_info.get("actions", []))
+        prompt = (
+            template
+            .replace("{outcome description}", outcome_desc)
+            .replace("{req id}", req_id)
+            .replace("{req text}", req_text)
+            .replace("{req origin turn}", origin_turn)
+            .replace("Origin: <directly created | resolved from open slot>", "Origin: resolved from open slot")
+            .replace("{slot id}", slot_info.get("slot_id", ""))
+            .replace("{user|AI}", slot_info.get("origin", "AI"))
+            .replace("{slot creation turn}", slot_info.get("creation_turn", ""))
+            .replace("{slot text}", slot_info.get("text", ""))
+            .replace(
+                "{slot's creation + contributing actions, each as: action_id | action_type |\nrole | action_text | evidence: \"quote\"}",
+                slot_actions_block,
+            )
+            .replace("{preceding block}", preceding_block)
+            .replace("{subsequent block}", subsequent_block)
+        )
+    else:
+        # Origin = directly created: strip the conditional KNOWN SLOT ORIGIN block (§7.1, §7.3)
+        start_marker = "=== KNOWN SLOT ORIGIN ==="
+        end_marker = "=== SECTION A: PRECEDING ACTIONS"
+        start_idx = template.find(start_marker)
+        end_idx = template.find(end_marker)
+        if start_idx != -1 and end_idx != -1:
+            template = template[:start_idx] + template[end_idx:]
+
+        prompt = (
+            template
+            .replace("{outcome description}", outcome_desc)
+            .replace("{req id}", req_id)
+            .replace("{req text}", req_text)
+            .replace("{req origin turn}", origin_turn)
+            .replace("Origin: <directly created | resolved from open slot>", "Origin: directly created")
+            .replace("{preceding block}", preceding_block)
+            .replace("{subsequent block}", subsequent_block)
+        )
+
+    return prompt
+
+
+def step_3_trigger_a(
+    client,
+    config: Config,
+    state: State,
+    pair_number: int,
+    outcome_id: str,
+    requirement: dict,
+    ledger_writer=None,
+) -> dict:
+    """Step 3 Trigger A (§9.3): Whole-dialogue influence scan for newly created/resolved requirement.
+
+    Scans all actions across the entire dialogue preceding origin_turn (excluding creation actions
+    and slot-origin actions). Scored actions (1-5) write kind='labeled' rows to the ledger.
+    """
+    creation_aids = requirement.get("creation_action_ids", [])
+    if not creation_aids:
+        raise PipelineError(f"step 3 Trigger A: req {requirement.get('req_id')} has no creation action ids")
+
+    sorted_creation = sorted(creation_aids, key=action_sort_key)
+    origin_turn = sorted_creation[0]
+    origin_key = action_sort_key(origin_turn)
+
+    # Invariant §11.4: requirement's own creation actions are excluded (pre-scored at 5.0)
+    excluded_ids = set(creation_aids)
+
+    slot_info = None
+    resolved_slot_ids = requirement.get("related_to", [])
+    if resolved_slot_ids:
+        for sid in resolved_slot_ids:
+            slot = state.find_slot(outcome_id, sid)
+            if slot is not None:
+                slot_actions = [
+                    state.get_action(aid) for aid in (slot.get("creation_action_ids", []) + slot.get("contributing_action_ids", []))
+                    if state.has_action(aid)
+                ]
+                slot_info = {
+                    "slot_id": slot["slot_id"],
+                    "origin": slot.get("origin", "AI"),
+                    "creation_turn": slot.get("creation_action_ids", ["U(1,1)"])[0],
+                    "text": slot["text"],
+                    "actions": slot_actions,
+                }
+                excluded_ids.update(slot.get("creation_action_ids", []))
+                excluded_ids.update(slot.get("contributing_action_ids", []))
+                break
+
+    # Section A: all actions across the whole dialogue before origin_turn
+    preceding_actions = [
+        a for a in state.actions
+        if action_sort_key(a["id"]) < origin_key and a["id"] not in excluded_ids
+    ]
+    preceding_actions.sort(key=lambda a: action_sort_key(a["id"]))
+
+    # Section B: actions in the same outcome after origin_turn (so far)
+    a2o = state.run.get("action_to_outcome", {})
+    subsequent_actions = [
+        a for a in state.actions
+        if action_sort_key(a["id"]) > origin_key
+        and a2o.get(a["id"]) == outcome_id
+        and a["id"] not in excluded_ids
+    ]
+    subsequent_actions.sort(key=lambda a: action_sort_key(a["id"]))
+
+    if not preceding_actions and not subsequent_actions and not slot_info:
+        return {"slot_origin_labels": [], "preceding_labels": [], "subsequent_labels": []}
+
+    outcome = state.get_outcome(outcome_id)
+    outcome_text = outcome["text"] if outcome else outcome_id
+
+    prompt = build_step3_trigger_a_prompt(
+        outcome_text=outcome_text,
+        req=requirement,
+        origin_turn=origin_turn,
+        preceding_actions=preceding_actions,
+        subsequent_actions=subsequent_actions,
+        slot_info=slot_info,
+    )
+
+    call_label = f"3a:pair{pair_number}:{outcome_id}:{requirement['req_id']}"
+    response = client.call_json(call_label, config.model_step3, prompt)
+
+    slot_origin_labels = response.get("slot origin labels", [])
+    preceding_labels = response.get("preceding labels", [])
+    subsequent_labels = response.get("subsequent labels", [])
+
+    all_labels = []
+    if isinstance(slot_origin_labels, list):
+        all_labels.extend(slot_origin_labels)
+    if isinstance(preceding_labels, list):
+        all_labels.extend(preceding_labels)
+    if isinstance(subsequent_labels, list):
+        all_labels.extend(subsequent_labels)
+
+    req_id = requirement["req_id"]
+    key = f"{outcome_id}||{req_id}"
+
+    for lbl in all_labels:
+        aid = lbl.get("action id")
+        if not aid or not state.has_action(aid):
+            continue
+
+        rel_type = lbl.get("relationship type", "NO CONNECTION")
+        score = lbl.get("relationship score")
+
+        # Track that this action was labeled for this requirement
+        state.run.setdefault("labeled_action_ids", {}).setdefault(key, []).append(aid)
+
+        if rel_type == "NO CONNECTION" or score is None:
+            continue
+
+        try:
+            numeric_score = float(score)
+        except (ValueError, TypeError):
+            continue
+
+        if numeric_score <= 0:
+            continue
+
+        act = state.get_action(aid)
+        speaker = "U" if act["id"].startswith("U") else "A"
+        row = {
+            "pair_added": pair_number,
+            "action_id": act["id"],
+            "speaker": speaker,
+            "role": act["role"],
+            "outcome_id": outcome_id,
+            "req_id": req_id,
+            "score": numeric_score,
+            "kind": "labeled",
+        }
+        if ledger_writer is not None:
+            ledger_writer.append(row)
+
+        # Maintain relationship linkages on requirement
+        if rel_type == "IMPLEMENTS" and aid not in requirement.get("implementation_action_ids", []):
+            requirement.setdefault("implementation_action_ids", []).append(aid)
+        elif rel_type == "REVISES" and aid not in requirement.get("revise_action_ids", []):
+            requirement.setdefault("revise_action_ids", []).append(aid)
+        elif aid not in requirement.get("contributing_action_ids", []):
+            requirement.setdefault("contributing_action_ids", []).append(aid)
+
+    return {
+        "slot_origin_labels": slot_origin_labels,
+        "preceding_labels": preceding_labels,
+        "subsequent_labels": subsequent_labels,
+    }
+
+
 # ------------------------------------------------------------ orchestration
 
 def run_level1(client, config, state, pair_number, user_text, ai_text):
@@ -607,15 +833,24 @@ def run_level1(client, config, state, pair_number, user_text, ai_text):
 
 
 def run_level2(client, config, state, pair_number, new_actions, ledger_writer=None):
-    """Level 2: Step 2 per touched outcome (§9.2), followed by the 3-pair abandonment sweep.
-    touched = distinct outcomes that received a NEW action this pair.
+    """Level 2: Step 2 per touched outcome (§9.2), followed by Trigger A for new reqs
+    and the 3-pair abandonment sweep.
     """
     a2o = state.run.get("action_to_outcome", {})
     touched = sorted({a2o[a["id"]] for a in new_actions if a["id"] in a2o})
     results = {}
     for outcome_id in touched:
-        results[outcome_id] = step_2(
+        step2_res = step_2(
             client, config, state, pair_number, outcome_id, ledger_writer=ledger_writer
         )
+        results[outcome_id] = step2_res
+
+        # Step 3 Trigger A: scan preceding actions for each newly created requirement
+        for req in step2_res.get("requirement_ops", []):
+            if req.get("created_at_pair") == pair_number:
+                step_3_trigger_a(
+                    client, config, state, pair_number, outcome_id, req, ledger_writer=ledger_writer
+                )
+
     sweep_abandoned_slots(state, pair_number)
     return results
