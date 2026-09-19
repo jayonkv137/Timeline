@@ -28,6 +28,7 @@ def _empty_run_state():
         # slot ageing for the 3-pair abandonment sweep:
         # "outcome_id||slot_id" -> pair the slot was opened at
         "slot_opened_at_pair": {},
+        "slot_last_active_pair": {},
         "last_completed_pair": 0,         # for --resume
     }
 

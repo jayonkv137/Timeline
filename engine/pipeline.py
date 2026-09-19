@@ -345,6 +345,11 @@ def step_2(client, config, state, pair_number, outcome_id, ledger_writer=None):
             state.requirements.append(new_req)
             state.log_operation(pair_number, outcome_id, "create", req_id, "requirement")
 
+            # Reset slot age if requirement references an open slot in related_to
+            for r_id in related_to:
+                if state.find_slot(outcome_id, str(r_id)) is not None:
+                    record_slot_activity(state, outcome_id, str(r_id), pair_number)
+
             # Write ledger rows with score 5.0, kind="creation" (§10.3)
             for aid in creation_aids:
                 act = state.get_action(aid)
@@ -461,7 +466,8 @@ def step_2(client, config, state, pair_number, outcome_id, ledger_writer=None):
                 "resolved_into": None,
             }
             state.slots.append(new_slot)
-            state.run["slot_opened_at_pair"][f"{outcome_id}||{slot_id}"] = pair_number
+            record_slot_activity(state, outcome_id, slot_id, pair_number)
+            state.run.setdefault("slot_opened_at_pair", {})[f"{outcome_id}||{slot_id}"] = pair_number
             state.log_operation(pair_number, outcome_id, "open_slot", slot_id, "slot")
             slot_ops_processed.append(new_slot)
 
@@ -556,6 +562,38 @@ def step_2(client, config, state, pair_number, outcome_id, ledger_writer=None):
     }
 
 
+# ------------------------------------------------------------ slot lifecycle
+
+def record_slot_activity(state, outcome_id, slot_id, pair_number):
+    """Reset the slot's inactivity timer because an action or operation referenced it."""
+    key = f"{outcome_id}||{slot_id}"
+    state.run.setdefault("slot_last_active_pair", {})[key] = pair_number
+
+
+def sweep_abandoned_slots(state, pair_number):
+    """Automated 3-pair abandonment sweep (§9.3, §12.1).
+
+    Any slot with status 'open' that has had no activity for 3 or more consecutive
+    pairs (pair_number - last_active >= 3) transitions to 'abandoned'.
+    """
+    abandoned = []
+    for slot in state.slots:
+        if slot.get("status") != "open":
+            continue
+        outcome_id = slot["outcome_id"]
+        slot_id = slot["slot_id"]
+        key = f"{outcome_id}||{slot_id}"
+        last_active = state.run.get("slot_last_active_pair", {}).get(
+            key,
+            state.run.get("slot_opened_at_pair", {}).get(key, pair_number),
+        )
+        if pair_number - last_active >= 3:
+            slot["status"] = "abandoned"
+            state.log_operation(pair_number, outcome_id, "abandon", slot_id, "slot")
+            abandoned.append(slot)
+    return abandoned
+
+
 # ------------------------------------------------------------ orchestration
 
 def run_level1(client, config, state, pair_number, user_text, ai_text):
@@ -569,7 +607,7 @@ def run_level1(client, config, state, pair_number, user_text, ai_text):
 
 
 def run_level2(client, config, state, pair_number, new_actions, ledger_writer=None):
-    """Level 2: Step 2 per touched outcome (§9.2).
+    """Level 2: Step 2 per touched outcome (§9.2), followed by the 3-pair abandonment sweep.
     touched = distinct outcomes that received a NEW action this pair.
     """
     a2o = state.run.get("action_to_outcome", {})
@@ -579,4 +617,5 @@ def run_level2(client, config, state, pair_number, new_actions, ledger_writer=No
         results[outcome_id] = step_2(
             client, config, state, pair_number, outcome_id, ledger_writer=ledger_writer
         )
+    sweep_abandoned_slots(state, pair_number)
     return results
