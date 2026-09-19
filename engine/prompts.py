@@ -91,8 +91,10 @@ description>", "turn id": "<U(x,y) or A(x,y) of the action where this outcome
 first appears>", "parent outcome id": null, "child outcome ids": [], "related
 outcome ids": [], "confidence": <float 0.0--1.0> } ], "action to outcome": {
 "<action id>": "<outcome id>" } }
-IMPORTANT: action to outcome must map EVERY action id to an outcome id. No action
-left unassigned.
+IMPORTANT:
+- action to outcome must map EVERY action id to an outcome id. No action left unassigned.
+- Exactly ONE root outcome must have "parent outcome id": null. All other outcomes must point to a parent.
+- Use consistent outcome IDs formatted as "outcome 1", "outcome 2", etc.
 Respond with ONLY the JSON object. No additional text."""
 
 

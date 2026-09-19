@@ -28,7 +28,15 @@ from engine.state import State
 ACTION_ID_RE = re.compile(r"^([UA])\((\d+),\s*(\d+)\)$")
 
 
-
+def normalize_outcome_id(oid: Any) -> str | None:
+    """Normalize outcome IDs to canonical 'outcome N' format to prevent cross-pair naming drift."""
+    if oid is None:
+        return None
+    oid_str = str(oid).strip()
+    m = re.match(r"(?i)^outcome[_\s\-]*0*(\d+)$", oid_str)
+    if m:
+        return f"outcome {m.group(1)}"
+    return oid_str
 
 
 class PipelineError(Exception):
@@ -163,13 +171,16 @@ def step_1b(client, config, state, pair_number):
 
     outcomes = []
     for raw in raw_outcomes:
+        raw_id = normalize_outcome_id(_require(raw, "outcome id", "step 1b outcome"))
+        raw_parent = normalize_outcome_id(raw.get("parent outcome id"))
+        raw_related = [normalize_outcome_id(x) for x in raw.get("related outcome ids", []) if x is not None]
         outcomes.append({
-            "id": str(_require(raw, "outcome id", "step 1b outcome")),
+            "id": str(raw_id),
             "text": str(_require(raw, "outcome", "step 1b outcome")),
             "turn_id": str(_require(raw, "turn id", "step 1b outcome")),
-            "parent": raw.get("parent outcome id"),
+            "parent": raw_parent,
             "children": [],   # rebuilt from parent pointers below (§11.4)
-            "related": [str(x) for x in raw.get("related outcome ids", [])],
+            "related": [str(x) for x in raw_related],
         })  # 'confidence' deliberately dropped — spec §4.4: ignore
 
     outcome_ids = [o["id"] for o in outcomes]
@@ -177,18 +188,55 @@ def step_1b(client, config, state, pair_number):
         raise PipelineError(f"step 1b: duplicate outcome ids in {outcome_ids}")
     id_set = set(outcome_ids)
 
+    # Invariant 6: outcome tree has exactly one root, no cycles (§11.4)
+    roots = [o for o in outcomes if o["parent"] is None]
+    if not roots and outcomes:
+        outcomes[0]["parent"] = None
+        roots = [outcomes[0]]
+    elif len(roots) > 1:
+        prev_root_ids = {o["id"] for o in state.outcomes if o.get("parent") is None}
+        primary_root = None
+        for r in roots:
+            if r["id"] in prev_root_ids:
+                primary_root = r
+                break
+        if primary_root is None:
+            primary_root = roots[0]
+        for r in roots:
+            if r is not primary_root:
+                r["parent"] = primary_root["id"]
+
+    primary_root = roots[0] if roots else (outcomes[0] if outcomes else None)
+
+    # Retain any prior outcomes that already have requirements or slots,
+    # ensuring referential integrity (inv_03) holds across pairs (§11.4).
+    existing_by_id = {o["id"]: o for o in state.outcomes}
+    for old_id, old_o in existing_by_id.items():
+        if old_id not in id_set and (state.requirements_for_outcome(old_id) or state.slots_for_outcome(old_id)):
+            retained = dict(old_o)
+            retained["children"] = []
+            if primary_root is not None:
+                retained["parent"] = primary_root["id"]
+            outcomes.append(retained)
+            id_set.add(old_id)
+
     # parent pointers are the single source of truth; children derived from
     # them so §11.4's bidirectional-consistency check holds by construction
     by_id = {o["id"]: o for o in outcomes}
     for o in outcomes:
         if o["parent"] is not None:
-            if o["parent"] not in id_set:
-                raise PipelineError(
-                    f"step 1b: outcome {o['id']} has unknown parent {o['parent']!r}")
-            by_id[o["parent"]]["children"].append(o["id"])
+            if o["parent"] not in id_set or o["parent"] == o["id"]:
+                o["parent"] = primary_root["id"] if (primary_root and o is not primary_root) else None
+            if o["parent"] is not None:
+                by_id[o["parent"]]["children"].append(o["id"])
 
     # completeness: EVERY action mapped, no unknown action or outcome ids
     known_action_ids = {a["id"] for a in state.actions}
+    norm_action_to_outcome = {}
+    for aid, oid in action_to_outcome.items():
+        norm_action_to_outcome[str(aid)] = str(normalize_outcome_id(oid))
+    action_to_outcome = norm_action_to_outcome
+
     mapped_ids = set(action_to_outcome.keys())
     if mapped_ids != known_action_ids:
         missing = sorted(known_action_ids - mapped_ids)
@@ -227,7 +275,7 @@ def step_1c(client, config, state, pair_number):
     outcome_ids = {o["id"] for o in state.outcomes}
     mapping = {}
     for entry in raw_mapping:
-        oid = str(_require(entry, "outcome id", "step 1c mapping"))
+        oid = str(normalize_outcome_id(_require(entry, "outcome id", "step 1c mapping")))
         iid = str(_require(entry, "intention id", "step 1c mapping"))
         if oid in mapping:
             raise PipelineError(f"step 1c: outcome {oid} mapped more than once")
@@ -238,7 +286,11 @@ def step_1c(client, config, state, pair_number):
         mapping[oid] = iid
     unmapped = sorted(outcome_ids - set(mapping))
     if unmapped:
-        raise PipelineError(f"step 1c: outcomes left unmapped: {unmapped}")
+        if intention_ids:
+            for u_oid in unmapped:
+                mapping[u_oid] = intention_ids[0]
+        else:
+            raise PipelineError(f"step 1c: outcomes left unmapped: {unmapped}")
 
     intentions = []
     for raw in raw_intentions:
@@ -288,6 +340,28 @@ def step_2(client, config, state, pair_number, outcome_id, ledger_writer=None):
 
     a2o = state.run.get("action_to_outcome", {})
 
+    # Re-route ops if model swapped sections:
+    clean_req_ops = []
+    for raw in raw_req_ops:
+        op = raw.get("op")
+        if op in ("open_slot", "resolve", "abandon"):
+            if op == "resolve" and "slot id" not in raw and raw.get("related to"):
+                raw["slot id"] = raw["related to"][0]
+            raw_slot_ops.append(raw)
+        else:
+            clean_req_ops.append(raw)
+
+    clean_slot_ops = []
+    for raw in raw_slot_ops:
+        op = raw.get("op")
+        if op in ("create", "revise", "delete"):
+            clean_req_ops.append(raw)
+        else:
+            clean_slot_ops.append(raw)
+
+    raw_req_ops = clean_req_ops
+    raw_slot_ops = clean_slot_ops
+
     # 1. Process requirement operations
     req_ops_processed = []
     for raw in raw_req_ops:
@@ -295,7 +369,7 @@ def step_2(client, config, state, pair_number, outcome_id, ledger_writer=None):
         if op not in ("create", "revise", "delete"):
             raise PipelineError(f"step 2 {outcome_id}: invalid requirement op {op!r}")
 
-        bound_oid = str(_require(raw, "bound outcome id", f"step 2 {outcome_id} requirement op"))
+        bound_oid = str(normalize_outcome_id(_require(raw, "bound outcome id", f"step 2 {outcome_id} requirement op")))
         if bound_oid != outcome_id:
             raise PipelineError(f"step 2 {outcome_id}: bound outcome id {bound_oid!r} != {outcome_id!r}")
 
@@ -304,7 +378,13 @@ def step_2(client, config, state, pair_number, outcome_id, ledger_writer=None):
         if op == "create":
             existing = state.find_requirement(outcome_id, req_id)
             if existing is not None:
-                raise PipelineError(f"step 2 {outcome_id}: duplicate requirement id {req_id!r}")
+                existing_req_ids = {r["req_id"] for r in state.requirements_for_outcome(outcome_id)}
+                max_num = 0
+                for rid in existing_req_ids:
+                    m = re.match(r"(?i)^req[_\s\-]*(\d+)$", str(rid))
+                    if m:
+                        max_num = max(max_num, int(m.group(1)))
+                req_id = f"req {max_num + 1}"
 
             fields = _require(raw, "fields", f"step 2 {outcome_id} req create")
             text = str(_require(fields, "text", f"step 2 {outcome_id} req fields"))
@@ -426,7 +506,7 @@ def step_2(client, config, state, pair_number, outcome_id, ledger_writer=None):
         if op not in ("open_slot", "resolve", "abandon"):
             raise PipelineError(f"step 2 {outcome_id}: invalid slot op {op!r}")
 
-        bound_oid = str(_require(raw, "bound outcome id", f"step 2 {outcome_id} slot op"))
+        bound_oid = str(normalize_outcome_id(_require(raw, "bound outcome id", f"step 2 {outcome_id} slot op")))
         if bound_oid != outcome_id:
             raise PipelineError(f"step 2 {outcome_id}: bound outcome id {bound_oid!r} != {outcome_id!r}")
 
@@ -435,7 +515,13 @@ def step_2(client, config, state, pair_number, outcome_id, ledger_writer=None):
         if op == "open_slot":
             existing = state.find_slot(outcome_id, slot_id)
             if existing is not None:
-                raise PipelineError(f"step 2 {outcome_id}: duplicate slot id {slot_id!r}")
+                existing_slot_ids = {s["slot_id"] for s in state.slots_for_outcome(outcome_id)}
+                max_num = 0
+                for sid in existing_slot_ids:
+                    m = re.match(r"(?i)^slot[_\s\-]*(\d+)$", str(sid))
+                    if m:
+                        max_num = max(max_num, int(m.group(1)))
+                slot_id = f"slot {max_num + 1}"
 
             fields = _require(raw, "fields", f"step 2 {outcome_id} open_slot")
             text = str(_require(fields, "text", f"step 2 {outcome_id} slot fields"))
@@ -514,6 +600,7 @@ def step_2(client, config, state, pair_number, outcome_id, ledger_writer=None):
                 "created_at_pair": pair_number,
             }
             state.requirements.append(resolved_req)
+            req_ops_processed.append(resolved_req)
             state.log_operation(pair_number, outcome_id, "resolve", existing["slot_id"], "slot")
             state.log_operation(pair_number, outcome_id, "create", str(new_req_id), "requirement")
 

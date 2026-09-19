@@ -143,6 +143,14 @@ def test_inv_21_verbatim_quote_check():
     }
     assert inv.inv_21_provenance(dialogue, ledger, state_valid) == []
 
+    # Test spaced ellipses (e.g. '. . .')
+    state_spaced_ellipses = {
+        "actions": [
+            {"id": "A(1,1)", "type": "suggest", "text": "AI suggests stack", "role": "EXECUTOR", "evidence_quote": "Sure. . . Next.js and Tailwind"}
+        ]
+    }
+    assert inv.inv_21_provenance(dialogue, ledger, state_spaced_ellipses) == []
+
     # Test hallucinated quote that is not grounded
     state_invalid = {
         "actions": [

@@ -102,6 +102,14 @@ class CachingLLMClient:
             return data["response"]
 
         if self.mode == "record":
+            if cassette_path.exists():
+                with open(cassette_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                self.cache_hits += 1
+                self._call_count += 1
+                self._total_tokens += len(prompt.split()) + len(str(data.get("response", "")).split())
+                return data["response"]
+
             if self._inner is None:
                 raise LLMError("inner LLMClient is required when cache mode is 'record'")
             response = self._inner.call_json(step, model, prompt)

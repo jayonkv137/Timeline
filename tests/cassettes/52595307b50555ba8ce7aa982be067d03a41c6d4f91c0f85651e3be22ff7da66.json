@@ -1,0 +1,114 @@
+{
+  "key": "52595307b50555ba8ce7aa982be067d03a41c6d4f91c0f85651e3be22ff7da66",
+  "step": "2:pair6:outcome 3",
+  "model": "gemini-3.5-flash",
+  "prompt": "Step 2: Requirement Extraction\n\nYou are given ONE outcome and the actions bound to it. Extract **requirements**\n(binding success conditions) for this outcome only.\n\n=== OUTCOME ===\noutcome 3: Study guide and reference list of David Attenborough's narration style\n=== ACTIONS FOR THIS OUTCOME ===\n[\n  {\n    \"turn id\": \"U(5,1)\",\n    \"action type\": \"Request\",\n    \"action text\": \"User asks for guidance on David Attenborough clips to study his narration style.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"can u guide me to some david attenorughs stuff where its descirbing some species and tlakign about some exmaple videos to look and get inspired from and to learn the writing or narating style\"\n  },\n  {\n    \"turn id\": \"U(5,2)\",\n    \"action type\": \"Ask\",\n    \"action text\": \"User asks what specific terms to search for to find these examples.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"so what to look and search for?\"\n  },\n  {\n    \"turn id\": \"A(5,1)\",\n    \"action type\": \"Plan\",\n    \"action text\": \"AI plans to curate specific clips and distill Attenborough's narrative techniques.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Curating specific clips and distilling Attenborough's narrative techniques.\"\n  },\n  {\n    \"turn id\": \"A(5,2)\",\n    \"action type\": \"List\",\n    \"action text\": \"AI provides a list of specific David Attenborough sequences to study.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"The essential sequences (search these on YouTube): \\\"Planet Earth II iguana vs snakes\\\"... \\\"Attenborough bird of paradise courtship\\\"... \\\"Attenborough pebble toad\\\"... \\\"Life of Mammals chimpanzee\\\"\"\n  },\n  {\n    \"turn id\": \"A(5,3)\",\n    \"action type\": \"Explain\",\n    \"action text\": \"AI explains the writing principles behind Attenborough's narration style.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"What to listen for specifically \u2014 these are the writing rules under the voice\"\n  },\n  {\n    \"turn id\": \"A(5,4)\",\n    \"action type\": \"Instruct\",\n    \"action text\": \"AI instructs the user to transcribe Attenborough's sentences to internalize the rhythm.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"One practical move: while you watch, pause after each narrated line and transcribe 5\u20136 of his actual sentences into a notes file.\"\n  },\n  {\n    \"turn id\": \"A(5,5)\",\n    \"action type\": \"Invite\",\n    \"action text\": \"AI invites the user to decide whether to wait or rework the draft immediately.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Want me to wait for that, or rework the current draft now using these rules so you have a target to compare against?\"\n  },\n  {\n    \"turn id\": \"U(6,1)\",\n    \"action type\": \"Request\",\n    \"action text\": \"User requests a video of Attenborough describing a species' life metaphorically rather than clinically.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"i want to look at this video where he is describing or telling a anrative a baout a specie and his life in a metaphorical way, not closely obseving but in a more metaphoric way\"\n  },\n  {\n    \"turn id\": \"A(6,1)\",\n    \"action type\": \"Acknowledge\",\n    \"action text\": \"AI acknowledges the user's preference for metaphorical, narrative-driven content over clinical observation.\",\n    \"role\": \"OTHER\",\n    \"evidence quote\": \"Identified metaphorical life-narrative content over clinical observation.\"\n  },\n  {\n    \"turn id\": \"A(6,2)\",\n    \"action type\": \"Analyze\",\n    \"action text\": \"AI analyzes the user's request to identify the specific tone and narrative style desired.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"I'm realizing the user is looking for those more poetic Attenborough moments\u2014the ones where he frames nature as an epic narrative rather than clinical observation\"\n  },\n  {\n    \"turn id\": \"A(6,3)\",\n    \"action type\": \"Plan\",\n    \"action text\": \"AI plans to identify specific examples that fit the requested mythic and sweeping quality.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Let me think through some specific examples that capture that mythic, sweeping quality.\"\n  },\n  {\n    \"turn id\": \"A(6,4)\",\n    \"action type\": \"List\",\n    \"action text\": \"AI lists potential subjects for the requested metaphorical narration.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"Attenborough most poetic metaphorical narration about a creature's whole life journey mayfly salmon eel\"\n  },\n  {\n    \"turn id\": \"A(6,5)\",\n    \"action type\": \"Evaluate\",\n    \"action text\": \"AI evaluates the BBC's Life Story series as the ideal reference point for the user's request.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"The BBC's Life Story series is the perfect reference point since it explicitly structures each episode around universal life stages\"\n  },\n  {\n    \"turn id\": \"A(6,6)\",\n    \"action type\": \"Recommend\",\n    \"action text\": \"AI recommends the series 'Life Story' as the primary study material.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"The series to study: \\\"Life Story\\\" (BBC, 2014). This is the one.\"\n  },\n  {\n    \"turn id\": \"A(6,7)\",\n    \"action type\": \"Describe\",\n    \"action text\": \"AI describes the structural parallels between the 'Life Story' series and the user's own life narrative.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"That's structurally identical to what you're doing with your own life: origin \u2192 discovery \u2192 captivity \u2192 migration \u2192 now.\"\n  },\n  {\n    \"turn id\": \"A(6,8)\",\n    \"action type\": \"List\",\n    \"action text\": \"AI lists specific clips and examples of metaphorical life-arcs.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"Specific metaphorical life-arc clips to search: \\\"Attenborough mayfly one day to live\\\"... \\\"Attenborough salmon journey home to spawn\\\"... \\\"Attenborough emperor penguin march\\\"\"\n  },\n  {\n    \"turn id\": \"A(6,9)\",\n    \"action type\": \"Explain\",\n    \"action text\": \"AI explains the linguistic and stylistic differences between the 'metaphoric mode' and the 'clinical mode'.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"What makes these the \\\"metaphoric mode\\\" vs. the clinical one \u2014 listen for the shift: He stops describing behaviour... and starts describing meaning\"\n  },\n  {\n    \"turn id\": \"A(6,10)\",\n    \"action type\": \"Suggest\",\n    \"action text\": \"AI suggests a tonal blend for the user's film project.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"For your film, the sweet spot is probably a blend: open in the wry clinical register... then let it tilt into the metaphoric mode at the migration beat\"\n  },\n  {\n    \"turn id\": \"A(6,11)\",\n    \"action type\": \"Instruct\",\n    \"action text\": \"AI instructs the user on the next steps for their project.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Watch the mayfly and the Life Story opening first. Those two will give you the metaphoric cadence fastest. Then bring your draft back.\"\n  },\n  {\n    \"turn id\": \"A(6,12)\",\n    \"action type\": \"Provide\",\n    \"action text\": \"AI provides a list of sources for further research.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"Sources: Attenborough\u2019s Life Journey ~ About | Nature | PBS...\"\n  }\n]\n=== PRIOR REQUIREMENTS FOR THIS OUTCOME (if any; empty on first extraction) ===\n[\n  {\n    \"req id\": \"req 1\",\n    \"text\": \"The AI video must be a hybrid filmmaking style video with a duration of 45 to 60 seconds.\",\n    \"type\": \"constraint\",\n    \"status\": \"active\",\n    \"creation action ids\": [\n      \"U(2,2)\"\n    ],\n    \"contributing action ids\": [\n      \"U(1,1)\",\n      \"U(1,2)\",\n      \"A(1,5)\",\n      \"U(2,1)\",\n      \"U(2,3)\",\n      \"A(2,2)\",\n      \"A(2,3)\",\n      \"A(2,5)\",\n      \"U(3,1)\",\n      \"U(3,4)\",\n      \"A(3,1)\",\n      \"A(3,3)\",\n      \"A(3,5)\",\n      \"U(4,1)\",\n      \"A(4,1)\",\n      \"A(4,2)\",\n      \"A(4,4)\"\n    ],\n    \"related to\": []\n  },\n  {\n    \"req id\": \"req 2\",\n    \"text\": \"The video must focus on the user's personal story, journey, and 'why' rather than serving as a standard showreel.\",\n    \"type\": \"constraint\",\n    \"status\": \"active\",\n    \"creation action ids\": [\n      \"A(2,3)\"\n    ],\n    \"contributing action ids\": [\n      \"U(3,1)\",\n      \"U(1,1)\",\n      \"U(2,1)\",\n      \"U(2,2)\",\n      \"A(2,2)\",\n      \"A(2,5)\",\n      \"U(3,4)\",\n      \"A(3,3)\",\n      \"U(4,1)\",\n      \"U(4,2)\",\n      \"A(4,1)\",\n      \"A(4,5)\"\n    ],\n    \"related to\": []\n  },\n  {\n    \"req id\": \"req 3\",\n    \"text\": \"The video narrative must use a third-person nature-documentary style, observing the user as a creative technologist.\",\n    \"type\": \"constraint\",\n    \"status\": \"active\",\n    \"creation action ids\": [\n      \"U(3,1)\"\n    ],\n    \"contributing action ids\": [\n      \"A(3,1)\",\n      \"U(2,1)\",\n      \"U(2,2)\",\n      \"A(2,2)\",\n      \"A(2,3)\",\n      \"A(2,5)\",\n      \"U(3,2)\",\n      \"U(3,4)\",\n      \"A(3,2)\",\n      \"A(3,3)\",\n      \"A(3,4)\",\n      \"U(4,2)\",\n      \"A(4,1)\",\n      \"A(4,2)\",\n      \"A(4,5)\"\n    ],\n    \"related to\": []\n  },\n  {\n    \"req id\": \"req 4\",\n    \"text\": \"The video voiceover must not clone a real person's voice (specifically David Attenborough) and must instead use an original voice in an Attenborough-style (plummy British natural-history tone).\",\n    \"type\": \"constraint\",\n    \"status\": \"active\",\n    \"creation action ids\": [\n      \"A(3,4)\",\n      \"A(3,5)\"\n    ],\n    \"contributing action ids\": [\n      \"U(2,1)\",\n      \"U(2,2)\",\n      \"A(2,5)\",\n      \"U(3,1)\",\n      \"U(3,4)\",\n      \"A(3,1)\",\n      \"A(3,3)\",\n      \"U(4,1)\",\n      \"A(4,2)\"\n    ],\n    \"related to\": []\n  },\n  {\n    \"req id\": \"req 5\",\n    \"text\": \"The script must be structured to clearly separate visual cues (what we SEE) and voiceover/audio (what we HEAR).\",\n    \"type\": \"constraint\",\n    \"status\": \"active\",\n    \"creation action ids\": [\n      \"A(4,3)\"\n    ],\n    \"contributing action ids\": [\n      \"U(3,4)\",\n      \"U(4,1)\",\n      \"A(4,1)\",\n      \"A(4,2)\"\n    ],\n    \"related to\": []\n  }\n]\n=== PRIOR OPEN SLOTS FOR THIS OUTCOME (if any; empty on first extraction) ===\n[\n  {\n    \"slot id\": \"slot 1\",\n    \"text\": \"Whether the video fully replaces the written About page text or sits over a thin text layer for SEO, accessibility, and recruiters.\",\n    \"type\": \"constraint\",\n    \"origin\": \"AI\",\n    \"creation action ids\": [\n      \"A(2,4)\"\n    ],\n    \"contributing action ids\": []\n  },\n  {\n    \"slot id\": \"slot 2\",\n    \"text\": \"Whether to include some of the user's actual work/projects at the end of the video.\",\n    \"type\": \"preference\",\n    \"origin\": \"user\",\n    \"creation action ids\": [\n      \"U(3,4)\"\n    ],\n    \"contributing action ids\": []\n  },\n  {\n    \"slot id\": \"slot 3\",\n    \"text\": \"The final line of the script.\",\n    \"type\": \"preference\",\n    \"origin\": \"AI\",\n    \"creation action ids\": [\n      \"A(4,5)\"\n    ],\n    \"contributing action ids\": []\n  },\n  {\n    \"slot id\": \"slot 4\",\n    \"text\": \"How to frame the EY (Ernst & Young) experience in the script.\",\n    \"type\": \"preference\",\n    \"origin\": \"AI\",\n    \"creation action ids\": [\n      \"A(4,5)\"\n    ],\n    \"contributing action ids\": []\n  },\n  {\n    \"slot id\": \"slot 5\",\n    \"text\": \"Whether any of the content cut from the user's original draft is essential and needs to be reintegrated.\",\n    \"type\": \"preference\",\n    \"origin\": \"AI\",\n    \"creation action ids\": [\n      \"A(4,5)\"\n    ],\n    \"contributing action ids\": []\n  },\n  {\n    \"slot id\": \"slot 6\",\n    \"text\": \"Whether to structure the script around a pronoun shift from 'it' (observing the object) to 'I' (the real user) at the end.\",\n    \"type\": \"constraint\",\n    \"origin\": \"AI\",\n    \"creation action ids\": [\n      \"A(4,4)\"\n    ],\n    \"contributing action ids\": []\n  },\n  {\n    \"slot id\": \"slot 7\",\n    \"text\": \"The exact word count of the voiceover script, targeted at approximately 100 to 130 words to fit the slow nature-documentary pacing.\",\n    \"type\": \"constraint\",\n    \"origin\": \"AI\",\n    \"creation action ids\": [\n      \"A(4,2)\"\n    ],\n    \"contributing action ids\": []\n  }\n]\n\n**REQUIREMENT** = An atomic, externally verifiable SUCCESS CONDITION for an outcome.\n- Binary testable (pass/fail). - Must be explicitly stated or adopted as binding in\nthe dialogue.\n\n**NOT a requirement:** content itself, advice, implementation methods, internal\nreasoning, example outputs, one-off decisions.\n\nExtract ONLY if ALL pass:\n1) NECESSITY --- framed as mandatory (must/need/required/cannot, numeric\nconstraints, explicit include/exclude)\n2) GROUNDING --- directly stated, no inference\n3) REPLACEABILITY --- cannot be swapped without violating success\n4) BINARY TESTABILITY --- reviewer can judge pass/fail\n\nIf an action raises a substantive idea, constraint, or decision point but FAILS\ngate (1) NECESSITY specifically because of hedge or uncertainty language \u2014 this\nincludes option-uncertainty (\"maybe\", \"could\", \"might\", \"may\", \"would possibly\",\n\"perhaps\", \"mix / pick later\"), epistemic hedges (\"I think\", \"it seems\", \"I\nbelieve\", \"it appears\" \u2014 used to qualify the CONTENT of the claim, not as a\nconversational filler elsewhere in the sentence), or approximation language\n(\"about\", \"some\", \"most\", \"somewhat\", \"probably\", \"likely\") \u2014 OR because the\naction commits to determining something later rather than specifying it now\n(\"I'll recommend based on your answer\", \"I'll decide after\", \"I'll verify before\ncommitting\") \u2014 do NOT discard it. Use the open_slot operation (see below) instead\nof create. This applies only to Necessity failures caused by hedging, uncertainty,\nor deferred content; failures of gates 2-4, content that is not substantive at all\n(small talk, pure acknowledgment, restating something already said), or content\nwhere a hedge word appears only as filler alongside an otherwise clearly mandatory\nstatement (e.g. \"I think this must include X\" \u2014 still a requirement, the hedge\nqualifies the speaker's tone, not the requirement's content), are still handled\nnormally (dropped or extracted as create, respectively).\n\nOperations:\n- **create**: New requirement. Check PRIOR REQUIREMENTS above for revise BEFORE\ncreate. - **revise**: Modify existing requirement (contradicts/tightens/\nrelaxes/replaces). Use EXACT existing req id (from PRIOR REQUIREMENTS) in related\nto (within this outcome). - **delete**: Explicitly cancels a previously binding\ncondition. - **open_slot**: A hedged, uncertain, or deferred-content idea that\nfails Necessity but is substantive enough to track \u2014 neither a binding requirement\nnor nothing. Check PRIOR OPEN SLOTS above for resolve BEFORE open_slot: if this\naction firmly answers/resolves a prior open slot, emit op=\"resolve\" instead,\nturning that slot into a new create with related to pointing at the resolved slot\nid. Assign origin: \"user\" if the hedge came from the user's action, \"AI\" if from\nthe AI's action. A slot that has appeared in PRIOR OPEN SLOTS for 3 or more\nconsecutive pairs without being resolved should be marked op=\"abandon\" \u2014 it is no\nlonger carried forward.\n\nEdge cases:\n- Advice itself is NOT a requirement. Only constraints ON the advice. - \"Try to /\nideally / could / maybe\" \u2192 not binding \u2192 not a requirement \u2192 check if substantive\nenough for open_slot (see above); if not even substantive, drop entirely with no op.\n\nReturn JSON only (bound outcome id must be \"outcome 3\"):\n{ \"requirement ops\": [ { \"op\": \"create\", \"req id\": \"req 1\", \"bound outcome id\":\n\"outcome 3\", \"fields\": { \"text\": \"<requirement text>\", \"type\":\n\"<constraint|preference|ranking|task|other>\" }, \"creation action ids\":\n[\"<action id>\"], \"contributing action ids\": [], \"implementation action ids\":\n[], \"related to\": [], \"explicit or implicit\": \"<explicit|implicit>\", \"rationale\":\n\"<why extracted>\" } ],\n\"open_slot ops\": [ { \"op\": \"open_slot\", \"slot id\": \"slot 1\", \"bound outcome id\":\n\"outcome 3\", \"fields\": { \"text\": \"<the hedged, uncertain, or deferred idea>\",\n\"type\": \"<constraint|preference|ranking|task|other>\" }, \"origin\": \"<user|AI>\",\n\"creation action ids\": [\"<action id>\"], \"contributing action ids\": [],\n\"related to\": [], \"explicit or implicit\": \"<explicit = directly posed as an open\nquestion/uncertainty; implicit = inferred ambiguity nobody named>\", \"rationale\":\n\"<why substantive but failed Necessity>\" } ] }\nUse action ids (e.g. \"U(3,1)\" or \"A(3,1)\") in creation action ids / contributing\naction ids / implementation action ids.\n\nCRITICAL: Respond with ONLY the JSON object. No additional text.",
+  "response": {
+    "requirement ops": [
+      {
+        "op": "create",
+        "req id": "req 6",
+        "bound outcome id": "outcome 3",
+        "fields": {
+          "text": "The study guide must include a curated list of specific David Attenborough sequences to search for and study, including 'Planet Earth II iguana vs snakes', 'Attenborough bird of paradise courtship', 'Attenborough pebble toad', and 'Life of Mammals chimpanzee'.",
+          "type": "constraint"
+        },
+        "creation action ids": [
+          "U(5,1)",
+          "U(5,2)"
+        ],
+        "contributing action ids": [
+          "A(5,1)",
+          "A(5,2)"
+        ],
+        "implementation action ids": [],
+        "related to": [],
+        "explicit or implicit": "explicit",
+        "rationale": "The user explicitly requested guidance on specific David Attenborough clips to study his narration style and asked what terms to search for. The AI provided a specific list of sequences to fulfill this."
+      },
+      {
+        "op": "create",
+        "req id": "req 7",
+        "bound outcome id": "outcome 3",
+        "fields": {
+          "text": "The study guide must explain the writing principles and rules behind David Attenborough's narration style.",
+          "type": "constraint"
+        },
+        "creation action ids": [
+          "U(5,1)"
+        ],
+        "contributing action ids": [
+          "A(5,3)"
+        ],
+        "implementation action ids": [],
+        "related to": [],
+        "explicit or implicit": "explicit",
+        "rationale": "The user requested to learn the writing or narrating style of David Attenborough, and the AI provided specific writing rules/principles under the voice to satisfy this."
+      },
+      {
+        "op": "create",
+        "req id": "req 8",
+        "bound outcome id": "outcome 3",
+        "fields": {
+          "text": "The study guide must include specific examples and clips of Attenborough's metaphorical narration style (focusing on a species' life journey rather than clinical observation), specifically recommending the BBC series 'Life Story' (2014) and clips such as the mayfly, salmon, and emperor penguin.",
+          "type": "constraint"
+        },
+        "creation action ids": [
+          "U(6,1)"
+        ],
+        "contributing action ids": [
+          "A(6,1)",
+          "A(6,2)",
+          "A(6,3)",
+          "A(6,4)",
+          "A(6,5)",
+          "A(6,6)",
+          "A(6,8)",
+          "A(6,9)",
+          "A(6,12)"
+        ],
+        "implementation action ids": [],
+        "related to": [],
+        "explicit or implicit": "explicit",
+        "rationale": "The user explicitly requested examples where Attenborough describes a species' life in a metaphorical, narrative-driven way rather than clinical observation. The AI fulfilled this by recommending the 'Life Story' series and specific metaphorical life-arc clips."
+      }
+    ],
+    "open_slot ops": [
+      {
+        "op": "open_slot",
+        "slot id": "slot 8",
+        "bound outcome id": "outcome 3",
+        "fields": {
+          "text": "Whether the AI should wait for the user to transcribe Attenborough's sentences or immediately rework the current script draft using the narration rules.",
+          "type": "preference"
+        },
+        "origin": "AI",
+        "creation action ids": [
+          "A(5,5)"
+        ],
+        "contributing action ids": [],
+        "related to": [],
+        "explicit or implicit": "explicit",
+        "rationale": "The AI explicitly asks the user to decide whether to wait for them to transcribe sentences or to rework the draft immediately, leaving this next step open."
+      },
+      {
+        "op": "open_slot",
+        "slot id": "slot 9",
+        "bound outcome id": "outcome 3",
+        "fields": {
+          "text": "Whether to structure the script as a tonal blend that opens in a wry clinical register and tilts into a metaphoric mode at the migration beat.",
+          "type": "preference"
+        },
+        "origin": "AI",
+        "creation action ids": [
+          "A(6,10)"
+        ],
+        "contributing action ids": [],
+        "related to": [],
+        "explicit or implicit": "implicit",
+        "rationale": "The AI suggests a tonal blend as the 'sweet spot' using the hedge word 'probably', leaving the final decision on this script structure open for the user."
+      }
+    ]
+  },
+  "recorded_at": "2026-09-19T14:10:24.695509+00:00"
+}

@@ -1,0 +1,53 @@
+{
+  "key": "2d4e01f26a9bb86e3050c5b27a9daf72ffa4b9fecda3165c038d42efa1d98dce",
+  "step": "2:pair5:outcome 5",
+  "model": "gemini-3.5-flash",
+  "prompt": "Step 2: Requirement Extraction\n\nYou are given ONE outcome and the actions bound to it. Extract **requirements**\n(binding success conditions) for this outcome only.\n\n=== OUTCOME ===\noutcome 5: Reference guide and analysis of David Attenborough's narration style\n=== ACTIONS FOR THIS OUTCOME ===\n[\n  {\n    \"turn id\": \"U(5,1)\",\n    \"action type\": \"Request\",\n    \"action text\": \"User asks for guidance on David Attenborough clips to study his narration style.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"can u guide me to some david attenorughs stuff where its descirbing some species and tlakign about some exmaple videos to look and get inspired from and to learn the writing or narating style\"\n  },\n  {\n    \"turn id\": \"U(5,2)\",\n    \"action type\": \"Ask\",\n    \"action text\": \"User asks what specific terms to search for to find these examples.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"so what to look and search for?\"\n  },\n  {\n    \"turn id\": \"A(5,1)\",\n    \"action type\": \"Plan\",\n    \"action text\": \"AI plans to curate specific clips and distill Attenborough's narrative techniques.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Curating specific clips and distilling Attenborough's narrative techniques.\"\n  },\n  {\n    \"turn id\": \"A(5,2)\",\n    \"action type\": \"List\",\n    \"action text\": \"AI provides a list of specific David Attenborough sequences to study.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"The essential sequences (search these on YouTube): \\\"Planet Earth II iguana vs snakes\\\"... \\\"Attenborough bird of paradise courtship\\\"... \\\"Attenborough pebble toad\\\"... \\\"Life of Mammals chimpanzee\\\"\"\n  },\n  {\n    \"turn id\": \"A(5,3)\",\n    \"action type\": \"Explain\",\n    \"action text\": \"AI explains the writing principles behind Attenborough's narration style.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"What to listen for specifically — these are the writing rules under the voice\"\n  },\n  {\n    \"turn id\": \"A(5,4)\",\n    \"action type\": \"Instruct\",\n    \"action text\": \"AI instructs the user to transcribe Attenborough's sentences to internalize the rhythm.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"One practical move: while you watch, pause after each narrated line and transcribe 5–6 of his actual sentences into a notes file.\"\n  },\n  {\n    \"turn id\": \"A(5,5)\",\n    \"action type\": \"Invite\",\n    \"action text\": \"AI invites the user to decide whether to wait or rework the draft immediately.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Want me to wait for that, or rework the current draft now using these rules so you have a target to compare against?\"\n  }\n]\n=== PRIOR REQUIREMENTS FOR THIS OUTCOME (if any; empty on first extraction) ===\n[]\n=== PRIOR OPEN SLOTS FOR THIS OUTCOME (if any; empty on first extraction) ===\n[]\n\n**REQUIREMENT** = An atomic, externally verifiable SUCCESS CONDITION for an outcome.\n- Binary testable (pass/fail). - Must be explicitly stated or adopted as binding in\nthe dialogue.\n\n**NOT a requirement:** content itself, advice, implementation methods, internal\nreasoning, example outputs, one-off decisions.\n\nExtract ONLY if ALL pass:\n1) NECESSITY --- framed as mandatory (must/need/required/cannot, numeric\nconstraints, explicit include/exclude)\n2) GROUNDING --- directly stated, no inference\n3) REPLACEABILITY --- cannot be swapped without violating success\n4) BINARY TESTABILITY --- reviewer can judge pass/fail\n\nIf an action raises a substantive idea, constraint, or decision point but FAILS\ngate (1) NECESSITY specifically because of hedge or uncertainty language — this\nincludes option-uncertainty (\"maybe\", \"could\", \"might\", \"may\", \"would possibly\",\n\"perhaps\", \"mix / pick later\"), epistemic hedges (\"I think\", \"it seems\", \"I\nbelieve\", \"it appears\" — used to qualify the CONTENT of the claim, not as a\nconversational filler elsewhere in the sentence), or approximation language\n(\"about\", \"some\", \"most\", \"somewhat\", \"probably\", \"likely\") — OR because the\naction commits to determining something later rather than specifying it now\n(\"I'll recommend based on your answer\", \"I'll decide after\", \"I'll verify before\ncommitting\") — do NOT discard it. Use the open_slot operation (see below) instead\nof create. This applies only to Necessity failures caused by hedging, uncertainty,\nor deferred content; failures of gates 2-4, content that is not substantive at all\n(small talk, pure acknowledgment, restating something already said), or content\nwhere a hedge word appears only as filler alongside an otherwise clearly mandatory\nstatement (e.g. \"I think this must include X\" — still a requirement, the hedge\nqualifies the speaker's tone, not the requirement's content), are still handled\nnormally (dropped or extracted as create, respectively).\n\nOperations:\n- **create**: New requirement. Check PRIOR REQUIREMENTS above for revise BEFORE\ncreate. - **revise**: Modify existing requirement (contradicts/tightens/\nrelaxes/replaces). Use EXACT existing req id (from PRIOR REQUIREMENTS) in related\nto (within this outcome). - **delete**: Explicitly cancels a previously binding\ncondition. - **open_slot**: A hedged, uncertain, or deferred-content idea that\nfails Necessity but is substantive enough to track — neither a binding requirement\nnor nothing. Check PRIOR OPEN SLOTS above for resolve BEFORE open_slot: if this\naction firmly answers/resolves a prior open slot, emit op=\"resolve\" instead,\nturning that slot into a new create with related to pointing at the resolved slot\nid. Assign origin: \"user\" if the hedge came from the user's action, \"AI\" if from\nthe AI's action. A slot that has appeared in PRIOR OPEN SLOTS for 3 or more\nconsecutive pairs without being resolved should be marked op=\"abandon\" — it is no\nlonger carried forward.\n\nEdge cases:\n- Advice itself is NOT a requirement. Only constraints ON the advice. - \"Try to /\nideally / could / maybe\" → not binding → not a requirement → check if substantive\nenough for open_slot (see above); if not even substantive, drop entirely with no op.\n\nReturn JSON only (bound outcome id must be \"outcome 5\"):\n{ \"requirement ops\": [ { \"op\": \"create\", \"req id\": \"req 1\", \"bound outcome id\":\n\"outcome 5\", \"fields\": { \"text\": \"<requirement text>\", \"type\":\n\"<constraint|preference|ranking|task|other>\" }, \"creation action ids\":\n[\"<action id>\"], \"contributing action ids\": [], \"implementation action ids\":\n[], \"related to\": [], \"explicit or implicit\": \"<explicit|implicit>\", \"rationale\":\n\"<why extracted>\" } ],\n\"open_slot ops\": [ { \"op\": \"open_slot\", \"slot id\": \"slot 1\", \"bound outcome id\":\n\"outcome 5\", \"fields\": { \"text\": \"<the hedged, uncertain, or deferred idea>\",\n\"type\": \"<constraint|preference|ranking|task|other>\" }, \"origin\": \"<user|AI>\",\n\"creation action ids\": [\"<action id>\"], \"contributing action ids\": [],\n\"related to\": [], \"explicit or implicit\": \"<explicit = directly posed as an open\nquestion/uncertainty; implicit = inferred ambiguity nobody named>\", \"rationale\":\n\"<why substantive but failed Necessity>\" } ] }\nUse action ids (e.g. \"U(3,1)\" or \"A(3,1)\") in creation action ids / contributing\naction ids / implementation action ids.\n\nCRITICAL: Respond with ONLY the JSON object. No additional text.",
+  "response": {
+    "requirement ops": [
+      {
+        "op": "create",
+        "req id": "req 1",
+        "bound outcome id": "outcome 5",
+        "fields": {
+          "text": "The output must provide a curated list of specific David Attenborough video sequences to study, including search terms, and an analysis of his narration style and writing principles.",
+          "type": "task"
+        },
+        "creation action ids": [
+          "U(5,1)",
+          "U(5,2)"
+        ],
+        "contributing action ids": [
+          "A(5,1)"
+        ],
+        "implementation action ids": [
+          "A(5,2)",
+          "A(5,3)"
+        ],
+        "related to": [],
+        "explicit or implicit": "explicit",
+        "rationale": "The user explicitly requests guidance on David Attenborough clips to study his narration style, including specific search terms, which the AI plans for and executes by providing specific sequences and analyzing his writing rules."
+      }
+    ],
+    "open_slot ops": [
+      {
+        "op": "open_slot",
+        "slot id": "slot 1",
+        "bound outcome id": "outcome 5",
+        "fields": {
+          "text": "Whether the AI should wait for the user to study and transcribe the clips or immediately rework the draft using the identified narration rules.",
+          "type": "task"
+        },
+        "origin": "AI",
+        "creation action ids": [
+          "A(5,5)"
+        ],
+        "contributing action ids": [],
+        "related to": [],
+        "explicit or implicit": "explicit",
+        "rationale": "The AI explicitly asks the user to decide on the next step (waiting vs. immediate reworking of the draft), which is a deferred decision point."
+      }
+    ]
+  },
+  "recorded_at": "2026-09-19T14:42:29.597298+00:00"
+}

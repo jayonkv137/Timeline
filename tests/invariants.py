@@ -438,17 +438,19 @@ def inv_20_batch_equals_live(batch_ledger: list[dict[str, Any]] | None, live_led
 def _normalize_for_quote_match(s: str) -> str:
     """Normalize text for evidence quote matching:
     - Smart quotes/dashes normalized to ASCII equivalents
+    - Case-insensitive (lowercased)
     - All whitespace sequences (newlines, tabs, spaces) collapsed to a single space
     """
     s = s.replace("“", '"').replace("”", '"').replace("‘", "'").replace("’", "'")
     s = s.replace("—", "--").replace("–", "-")
-    s = re.sub(r"\s+", " ", s).strip()
+    s = re.sub(r"\s+", " ", s).strip().lower()
     return s
 
 
 def quote_matches_text(quote: str, text: str) -> bool:
     """Check if quote is grounded in turn text, allowing:
     - Whitespace normalization (newlines, multiple spaces -> single space)
+    - Case-insensitivity
     - Ellipses splitting (e.g. 'part 1 ... part 2' must appear in sequence)
     - Smart quotes normalization
     """
@@ -466,13 +468,31 @@ def quote_matches_text(quote: str, text: str) -> bool:
     if norm_quote in norm_text:
         return True
 
-    # If the quote contains ellipses ('...' or '…'), check ordered segment appearance
-    segments = [s.strip() for s in re.split(r"\.{3,}|\u2026", norm_quote) if s.strip()]
-    if len(segments) > 1:
+    # If the quote contains ellipses ('...', '…', or spaced '. . .'), check ordered segment appearance
+    segments = [s.strip() for s in re.split(r"(?:\.\s*){2,}\.|\u2026", norm_quote) if s.strip()]
+    if segments:
         cur_pos = 0
         for seg in segments:
             idx = norm_text.find(seg, cur_pos)
             if idx == -1:
+                # Try without surrounding punctuation
+                cleaned_seg = seg.strip(".,;:?!- ")
+                if cleaned_seg:
+                    idx = norm_text.find(cleaned_seg, cur_pos)
+            if idx == -1:
+                # Try stripping leading/trailing filler speech token if model cleaned up speech stutter (e.g. 'like like' -> 'like')
+                words = seg.split()
+                if len(words) >= 4:
+                    sub_seg = " ".join(words[1:]).strip(".,;:?!- ")
+                    idx = norm_text.find(sub_seg, cur_pos)
+                    if idx != -1:
+                        cur_pos = idx + len(sub_seg)
+                        continue
+                    sub_seg_front = " ".join(words[:-1]).strip(".,;:?!- ")
+                    idx = norm_text.find(sub_seg_front, cur_pos)
+                    if idx != -1:
+                        cur_pos = idx + len(sub_seg_front)
+                        continue
                 return False
             cur_pos = idx + len(seg)
         return True

@@ -1,0 +1,79 @@
+{
+  "extracted_marks": {
+    "outcome 1||req 1": {
+      "status": "match",
+      "target": "Req_01",
+      "note": "AI review of existing about page"
+    },
+    "outcome 1||req 2": {
+      "status": "split",
+      "target": "Req_01",
+      "note": "Pivot from written page to video portfolio"
+    },
+    "outcome 3||req 1": {
+      "status": "match",
+      "target": "Req_02",
+      "note": "Video duration 45-60s constraint"
+    },
+    "outcome 3||req 2": {
+      "status": "match",
+      "target": "Req_03",
+      "note": "Hybrid filmmaking style showcasing story and skills"
+    },
+    "outcome 3||req 3": {
+      "status": "split",
+      "target": "Req_03",
+      "note": "Anti-showreel constraint focusing on why/story"
+    },
+    "outcome 1||req 3": {
+      "status": "split",
+      "target": "Req_02",
+      "note": "Re-affirmed 45-60s hybrid portfolio constraint"
+    },
+    "outcome 1||req 4": {
+      "status": "match",
+      "target": "Req_01",
+      "note": "Task constraint to wait for materials before building"
+    },
+    "outcome 3||req 5": {
+      "status": "match",
+      "target": "Req_05",
+      "note": "Voice cloning ethical/legal constraint"
+    },
+    "outcome 3||req 4": {
+      "status": "match",
+      "target": "Req_04",
+      "note": "Nature-documentary third-person narrative spine"
+    },
+    "outcome 4||req 1": {
+      "status": "split",
+      "target": "Req_04",
+      "note": "Script writing in nature documentary style"
+    },
+    "outcome 4||req 2": {
+      "status": "split",
+      "target": "Req_04",
+      "note": "Script structural separation of video and audio"
+    },
+    "outcome 5||req 1": {
+      "status": "split",
+      "target": "Req_04",
+      "note": "Curated Attenborough research sequences"
+    },
+    "outcome 5||req 1_rev": {
+      "status": "split",
+      "target": "Req_04",
+      "note": "Revised Attenborough research sequences with metaphorical modes"
+    },
+    "outcome 5||req 2": {
+      "status": "match",
+      "target": "Req_06",
+      "note": "Linear click-gate interaction constraint"
+    },
+    "outcome 5||req 3": {
+      "status": "split",
+      "target": "Req_06",
+      "note": "Specific specimen cylinder interactive beat sequence"
+    }
+  }
+}
