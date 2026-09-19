@@ -1,0 +1,21 @@
+# filled by importer
+id: c02_coding_long
+title: "3D interactive portfolio website design"
+source_file: "3D Portfolio Design Claude.json"
+source_kind: claude_web_json
+pairs: 40
+length_band: long
+fidelity_grade: unusable
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: coding
+prompt_style: specified
+expected:
+  mode_hint: copilot
+  direction_hint: balanced
+  min_requirements: 10
+  max_requirements: 60
+notes: >
+  Iterative frontend architecture and 3D Three.js integration for personal portfolio website.

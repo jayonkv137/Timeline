@@ -1,0 +1,21 @@
+# filled by importer
+id: c17_research_short
+title: "Datafied society research topics"
+source_file: "Datafied Society Research Topics.md"
+source_kind: claude_web_md
+pairs: 1
+length_band: short
+fidelity_grade: clean
+contains: []
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: research
+prompt_style: vague
+expected:
+  mode_hint: copilot
+  direction_hint: ai_heavy
+  min_requirements: 1
+  max_requirements: 5
+notes: >
+  Brief brainstorming query requesting research topic candidates for Datafied Society seminar.

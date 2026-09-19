@@ -1,0 +1,21 @@
+# filled by importer
+id: c16_research_short
+title: "Co-creative systems design and timeline interface analogies"
+source_file: "Co-creative Systems Design Timeline Analogies Sept 2026.json"
+source_kind: claude_web_json
+pairs: 1
+length_band: short
+fidelity_grade: clean
+contains: [long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: research
+prompt_style: specified
+expected:
+  mode_hint: centaur
+  direction_hint: user_heavy
+  min_requirements: 1
+  max_requirements: 5
+notes: >
+  Connecting academic paper 'Designing for Co-Creative Systems: 5 Paradoxes' to Timeline UI concepts.

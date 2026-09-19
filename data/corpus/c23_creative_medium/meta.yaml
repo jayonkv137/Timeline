@@ -1,0 +1,21 @@
+# filled by importer
+id: c23_creative_medium
+title: "Honey product showcase video with dolly shot"
+source_file: "Honey Product Showcase Video.json"
+source_kind: claude_web_json
+pairs: 14
+length_band: medium
+fidelity_grade: unusable
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: creative
+prompt_style: specified
+expected:
+  mode_hint: copilot
+  direction_hint: user_heavy
+  min_requirements: 5
+  max_requirements: 25
+notes: >
+  Commercial product video direction defining fluid camera dolly movements and honey jar macro cinematography.

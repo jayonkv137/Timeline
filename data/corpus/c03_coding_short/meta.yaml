@@ -1,0 +1,21 @@
+# filled by importer
+id: c03_coding_short
+title: "3D interactive portfolio website setup continuation"
+source_file: "3D Portfolio Setup Continuation.json"
+source_kind: claude_web_json
+pairs: 3
+length_band: short
+fidelity_grade: degraded
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: coding
+prompt_style: specified
+expected:
+  mode_hint: copilot
+  direction_hint: user_heavy
+  min_requirements: 2
+  max_requirements: 10
+notes: >
+  Brief continuation resolving 3D portfolio setup environment issues.

@@ -1,0 +1,21 @@
+# filled by importer
+id: c31_creative_long
+title: "Creating a centennial AI video biography for Malabar Amacchi"
+source_file: "Malabar Amacchi AI Biography.json"
+source_kind: claude_web_json
+pairs: 56
+length_band: long
+fidelity_grade: unusable
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: creative
+prompt_style: mixed
+expected:
+  mode_hint: copilot
+  direction_hint: user_heavy
+  min_requirements: 15
+  max_requirements: 80
+notes: >
+  Family history documentary planning structuring archival photographs and AI video for centennial biography.

@@ -1,0 +1,21 @@
+# filled by importer
+id: c21_debugging_medium
+title: "Fixing stuttering box page animation and masking transition"
+source_file: "Fixing Stuttering Box Animation Sept 17 2026.json"
+source_kind: claude_web_json
+pairs: 12
+length_band: medium
+fidelity_grade: degraded
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: debugging
+prompt_style: specified
+expected:
+  mode_hint: copilot
+  direction_hint: user_heavy
+  min_requirements: 5
+  max_requirements: 25
+notes: >
+  Technical debugging identifying causes of stuttering animations and optimizing GSAP / CSS masking transitions.

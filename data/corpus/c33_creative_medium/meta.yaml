@@ -1,0 +1,21 @@
+# filled by importer
+id: c33_creative_medium
+title: "Nike production video animation prompts with Seedance"
+source_file: "Nike Production Video Prompts.json"
+source_kind: claude_web_json
+pairs: 19
+length_band: medium
+fidelity_grade: unusable
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: creative
+prompt_style: specified
+expected:
+  mode_hint: copilot
+  direction_hint: balanced
+  min_requirements: 8
+  max_requirements: 35
+notes: >
+  Generative video prompt engineering tailoring Nike motion prompts for Seedance generation.

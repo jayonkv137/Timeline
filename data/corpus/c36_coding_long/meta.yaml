@@ -1,0 +1,21 @@
+# filled by importer
+id: c36_coding_long
+title: "Timeline design specification and schema"
+source_file: "Timeline Design Specification Sept 17 2026.json"
+source_kind: claude_web_json
+pairs: 46
+length_band: long
+fidelity_grade: degraded
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: coding
+prompt_style: specified
+expected:
+  mode_hint: copilot
+  direction_hint: user_heavy
+  min_requirements: 12
+  max_requirements: 60
+notes: >
+  Technical specification review and schema design for Timeline data contracts and backend pipeline.

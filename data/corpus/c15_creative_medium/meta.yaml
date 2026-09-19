@@ -1,0 +1,21 @@
+# filled by importer
+id: c15_creative_medium
+title: "Portfolio about page redesign"
+source_file: "Claude Portfolio About Page Redesign.json"
+source_kind: claude_web_json
+pairs: 8
+length_band: medium
+fidelity_grade: degraded
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: creative
+prompt_style: mixed
+expected:
+  mode_hint: copilot
+  direction_hint: user_heavy
+  min_requirements: 5
+  max_requirements: 25
+notes: >
+  Portfolio About page redesign pivoting from text narrative to an Attenborough-style AI film about the creative technologist.

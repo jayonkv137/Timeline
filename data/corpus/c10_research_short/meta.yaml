@@ -1,0 +1,21 @@
+# filled by importer
+id: c10_research_short
+title: "Analyzing my role and contribution patterns in this project"
+source_file: "Analyzing Role Contribution Patterns Sept 17 2026.json"
+source_kind: claude_web_json
+pairs: 1
+length_band: short
+fidelity_grade: clean
+contains: [long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: research
+prompt_style: specified
+expected:
+  mode_hint: centaur
+  direction_hint: user_heavy
+  min_requirements: 1
+  max_requirements: 5
+notes: >
+  Direct user reflection asking AI to quantify and explain attribution of contributions across project artifacts.

@@ -20,6 +20,11 @@ web/dist/
 # Engine run artifacts (caches, raw LLM outputs)
 data/chats/*/run/
 
+# Staging & local exploration files
+chats for testing/
+Files from Claude.ai/
+visualisation/
+
 # OS
 .DS_Store
 Thumbs.db

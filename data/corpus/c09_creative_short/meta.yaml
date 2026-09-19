@@ -1,0 +1,21 @@
+# filled by importer
+id: c09_creative_short
+title: "Analyzing background lighting and color contrast in images"
+source_file: "Analyzing Background Lighting and Color Contrast.json"
+source_kind: claude_web_json
+pairs: 4
+length_band: short
+fidelity_grade: unusable
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: creative
+prompt_style: vague
+expected:
+  mode_hint: copilot
+  direction_hint: user_heavy
+  min_requirements: 2
+  max_requirements: 12
+notes: >
+  Visual analysis evaluating lighting contrast and background separation across reference photos.

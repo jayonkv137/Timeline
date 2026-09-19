@@ -16,7 +16,7 @@
   },
   "chats": [
     {
-      "id": "c01_unsorted",
+      "id": "c01_creative_long",
       "title": "Crafting a 1930s Kerala Catholic wedding photograph",
       "source_file": "1930s Kerala Catholic Wedding Photo.json",
       "source_kind": "claude_web_json",
@@ -29,7 +29,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c02_unsorted",
+      "id": "c02_coding_long",
       "title": "3D interactive portfolio website design",
       "source_file": "3D Portfolio Design Claude.json",
       "source_kind": "claude_web_json",
@@ -42,7 +42,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c03_unsorted",
+      "id": "c03_coding_short",
       "title": "3D interactive portfolio website setup continuation",
       "source_file": "3D Portfolio Setup Continuation.json",
       "source_kind": "claude_web_json",
@@ -55,7 +55,7 @@
       "fidelity_grade": "degraded"
     },
     {
-      "id": "c04_unsorted",
+      "id": "c04_writing_short",
       "title": "Analogies for explaining AI and automation styles",
       "source_file": "AI Automation Analogies Sept 17.json",
       "source_kind": "claude_web_json",
@@ -68,7 +68,7 @@
       "fidelity_grade": "clean"
     },
     {
-      "id": "c05_unsorted",
+      "id": "c05_research_medium",
       "title": "Finding research papers on AI creativity and design",
       "source_file": "AI Creativity Design Research Papers.json",
       "source_kind": "claude_web_json",
@@ -81,7 +81,7 @@
       "fidelity_grade": "clean"
     },
     {
-      "id": "c06_unsorted",
+      "id": "c06_planning_long",
       "title": "AI and creativity presentation task clarification",
       "source_file": "AI Creativity Task Clarification Sept 17.json",
       "source_kind": "claude_web_json",
@@ -94,7 +94,7 @@
       "fidelity_grade": "degraded"
     },
     {
-      "id": "c07_unsorted",
+      "id": "c07_research_short",
       "title": "AI-stated plans versus user requirements",
       "source_file": "AI Plans vs User Requirements Sept 17 2026.md",
       "source_kind": "claude_web_md",
@@ -107,7 +107,7 @@
       "fidelity_grade": "clean"
     },
     {
-      "id": "c08_unsorted",
+      "id": "c08_writing_short",
       "title": "Portfolio website content for Adidas product video",
       "source_file": "Adidas Product Video Content.json",
       "source_kind": "claude_web_json",
@@ -120,7 +120,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c09_unsorted",
+      "id": "c09_creative_short",
       "title": "Analyzing background lighting and color contrast in images",
       "source_file": "Analyzing Background Lighting and Color Contrast.json",
       "source_kind": "claude_web_json",
@@ -133,7 +133,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c10_unsorted",
+      "id": "c10_research_short",
       "title": "Analyzing my role and contribution patterns in this project",
       "source_file": "Analyzing Role Contribution Patterns Sept 17 2026.json",
       "source_kind": "claude_web_json",
@@ -146,7 +146,7 @@
       "fidelity_grade": "clean"
     },
     {
-      "id": "c11_unsorted",
+      "id": "c11_research_medium",
       "title": "Anki language learning workflows and methods",
       "source_file": "Anki Language Learning Workflows Sept 17 2026.json",
       "source_kind": "claude_web_json",
@@ -159,7 +159,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c12_unsorted",
+      "id": "c12_creative_medium",
       "title": "Applying artistic style to hallway scene in Midjourney",
       "source_file": "Artistic Style Hallway Scene Midjourney.json",
       "source_kind": "claude_web_json",
@@ -172,7 +172,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c13_unsorted",
+      "id": "c13_creative_long",
       "title": "Creating a Berliner raver sausage character",
       "source_file": "Berliner Raver Sausage Character.json",
       "source_kind": "claude_web_json",
@@ -185,7 +185,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c14_unsorted",
+      "id": "c14_coding_medium",
       "title": "Dialogue action extraction framework",
       "source_file": "Claude Dialogue Action Extraction Framework Sept 17 2026.json",
       "source_kind": "claude_web_json",
@@ -198,7 +198,7 @@
       "fidelity_grade": "clean"
     },
     {
-      "id": "c15_unsorted",
+      "id": "c15_creative_medium",
       "title": "Portfolio about page redesign",
       "source_file": "Claude Portfolio About Page Redesign.json",
       "source_kind": "claude_web_json",
@@ -211,7 +211,7 @@
       "fidelity_grade": "degraded"
     },
     {
-      "id": "c16_unsorted",
+      "id": "c16_research_short",
       "title": "Co-creative systems design and timeline interface analogies",
       "source_file": "Co-creative Systems Design Timeline Analogies Sept 2026.json",
       "source_kind": "claude_web_json",
@@ -224,7 +224,7 @@
       "fidelity_grade": "clean"
     },
     {
-      "id": "c17_unsorted",
+      "id": "c17_research_short",
       "title": "Datafied society research topics",
       "source_file": "Datafied Society Research Topics.md",
       "source_kind": "claude_web_md",
@@ -237,7 +237,7 @@
       "fidelity_grade": "clean"
     },
     {
-      "id": "c18_unsorted",
+      "id": "c18_research_long",
       "title": "Understanding Diehl Aviation's AI implementation strategy",
       "source_file": "Diehl Aviation AI Strategy Sept 17 2026.json",
       "source_kind": "claude_web_json",
@@ -250,7 +250,7 @@
       "fidelity_grade": "degraded"
     },
     {
-      "id": "c19_unsorted",
+      "id": "c19_creative_long",
       "title": "Exporting clips from Adobe for AI film reference",
       "source_file": "Exporting Clips for AI Film Reference Sept 17 2026.json",
       "source_kind": "claude_web_json",
@@ -263,7 +263,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c20_unsorted",
+      "id": "c20_coding_short",
       "title": "Converting website pages to Figma components and auditing design system",
       "source_file": "Figma Components Audit Sept 17 2026.json",
       "source_kind": "claude_web_json",
@@ -276,7 +276,7 @@
       "fidelity_grade": "clean"
     },
     {
-      "id": "c21_unsorted",
+      "id": "c21_debugging_medium",
       "title": "Fixing stuttering box page animation and masking transition",
       "source_file": "Fixing Stuttering Box Animation Sept 17 2026.json",
       "source_kind": "claude_web_json",
@@ -289,7 +289,7 @@
       "fidelity_grade": "degraded"
     },
     {
-      "id": "c22_unsorted",
+      "id": "c22_writing_long",
       "title": "Hemelingen room inquiry and move-in verification",
       "source_file": "Hemelingen Room Inquiry Move-in Verification Sept 17 2026.json",
       "source_kind": "claude_web_json",
@@ -302,7 +302,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c23_unsorted",
+      "id": "c23_creative_medium",
       "title": "Honey product showcase video with dolly shot",
       "source_file": "Honey Product Showcase Video.json",
       "source_kind": "claude_web_json",
@@ -315,7 +315,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c24_unsorted",
+      "id": "c24_planning_short",
       "title": "Hybrid AI filmmaking for action short film",
       "source_file": "Hybrid AI Filmmaking Action Short Film.json",
       "source_kind": "claude_web_json",
@@ -328,7 +328,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c25_unsorted",
+      "id": "c25_creative_long",
       "title": "Creating hybrid art style for AI short film",
       "source_file": "Hybrid Art Style for AI Short Film.json",
       "source_kind": "claude_web_json",
@@ -341,7 +341,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c26_unsorted",
+      "id": "c26_planning_medium",
       "title": "Indian student visa extension requirements in Bremen",
       "source_file": "Indian Student Visa Extension Requirements Bremen.json",
       "source_kind": "claude_web_json",
@@ -354,7 +354,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c27_unsorted",
+      "id": "c27_creative_short",
       "title": "Jellyfish animation prompt for Cling 3.0",
       "source_file": "Jellyfish Animation Prompt for Cling 3.0.json",
       "source_kind": "claude_web_json",
@@ -367,7 +367,7 @@
       "fidelity_grade": "clean"
     },
     {
-      "id": "c28_unsorted",
+      "id": "c28_creative_medium",
       "title": "Kerala family growth sequence shot progression",
       "source_file": "Kerala Family Growth Sequence Sept 17 2026.json",
       "source_kind": "claude_web_json",
@@ -380,7 +380,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c29_unsorted",
+      "id": "c29_research_medium",
       "title": "Lando Norris effect implementation details",
       "source_file": "Lando Norris Effect Implementation Details.json",
       "source_kind": "claude_web_json",
@@ -393,7 +393,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c30_unsorted",
+      "id": "c30_creative_short",
       "title": "Building a language learning story universe with AI agents",
       "source_file": "Language Learning Story Universe AI.json",
       "source_kind": "claude_web_json",
@@ -406,7 +406,7 @@
       "fidelity_grade": "clean"
     },
     {
-      "id": "c31_unsorted",
+      "id": "c31_creative_long",
       "title": "Creating a centennial AI video biography for Malabar Amacchi",
       "source_file": "Malabar Amacchi AI Biography.json",
       "source_kind": "claude_web_json",
@@ -419,7 +419,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c32_unsorted",
+      "id": "c32_creative_long",
       "title": "Nike production-grade ad creative direction",
       "source_file": "Nike Ad Creative Direction Sept 17 2026.json",
       "source_kind": "claude_web_json",
@@ -432,7 +432,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c33_unsorted",
+      "id": "c33_creative_medium",
       "title": "Nike production video animation prompts with Seedance",
       "source_file": "Nike Production Video Prompts.json",
       "source_kind": "claude_web_json",
@@ -445,7 +445,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c34_unsorted",
+      "id": "c34_planning_long",
       "title": "Confirming Phase 2 workflow context",
       "source_file": "Phase 2 Workflow Context Sept 17 2026.json",
       "source_kind": "claude_web_json",
@@ -458,7 +458,7 @@
       "fidelity_grade": "degraded"
     },
     {
-      "id": "c35_unsorted",
+      "id": "c35_coding_long",
       "title": "Redesigning technology page with branch-based experience sections",
       "source_file": "Redesigning Technology Page Claude.json",
       "source_kind": "claude_web_json",
@@ -471,7 +471,7 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c36_unsorted",
+      "id": "c36_coding_long",
       "title": "Timeline design specification and schema",
       "source_file": "Timeline Design Specification Sept 17 2026.json",
       "source_kind": "claude_web_json",

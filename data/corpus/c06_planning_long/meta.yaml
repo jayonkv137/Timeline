@@ -1,0 +1,21 @@
+# filled by importer
+id: c06_planning_long
+title: "AI and creativity presentation task clarification"
+source_file: "AI Creativity Task Clarification Sept 17.json"
+source_kind: claude_web_json
+pairs: 93
+length_band: long
+fidelity_grade: degraded
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: planning
+prompt_style: vague
+expected:
+  mode_hint: autopilot
+  direction_hint: ai_heavy
+  min_requirements: 20
+  max_requirements: 120
+notes: >
+  Long presentation planning session clarifying scope and structure for an upcoming scientific talk on AI creativity.

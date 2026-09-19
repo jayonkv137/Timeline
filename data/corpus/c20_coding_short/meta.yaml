@@ -1,0 +1,21 @@
+# filled by importer
+id: c20_coding_short
+title: "Converting website pages to Figma components and auditing design system"
+source_file: "Figma Components Audit Sept 17 2026.json"
+source_kind: claude_web_json
+pairs: 3
+length_band: short
+fidelity_grade: clean
+contains: [long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: coding
+prompt_style: vague
+expected:
+  mode_hint: copilot
+  direction_hint: balanced
+  min_requirements: 2
+  max_requirements: 10
+notes: >
+  Auditing portfolio page assets and initiating conversion into reusable Figma components.

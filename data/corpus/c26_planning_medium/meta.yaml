@@ -1,0 +1,21 @@
+# filled by importer
+id: c26_planning_medium
+title: "Indian student visa extension requirements in Bremen"
+source_file: "Indian Student Visa Extension Requirements Bremen.json"
+source_kind: claude_web_json
+pairs: 15
+length_band: medium
+fidelity_grade: unusable
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: planning
+prompt_style: specified
+expected:
+  mode_hint: copilot
+  direction_hint: user_heavy
+  min_requirements: 5
+  max_requirements: 30
+notes: >
+  Legal/administrative planning verifying immigration and student visa renewal procedures in Bremen.

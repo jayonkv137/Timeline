@@ -1,0 +1,78 @@
+{
+  "chat_id": "c08_writing_short",
+  "source_kind": "claude_web_json",
+  "source_file": "source.json",
+  "exporter": "Claude Exporter (https://www.ai-chat-exporter.net)",
+  "source_title": "Portfolio website content for Adidas product video",
+  "source_link": "https://claude.ai/chat/221d752e-1522-4eac-967c-a271114d07bf",
+  "source_dates": {
+    "created": "5/26/2026 16:59:30",
+    "updated": "5/26/2026 17:11:30",
+    "exported": "9/17/2026 0:52:44"
+  },
+  "imported_at": "2026-09-18T11:05:50Z",
+  "import_spec_version": "1.0",
+  "pairs": 3,
+  "turns": 6,
+  "assumed_utc": true,
+  "fidelity": {
+    "images_dropped": 2,
+    "attachments_dropped": 0,
+    "tool_narration_turns": 0,
+    "injected_turns": 0,
+    "empty_turns": 0,
+    "merged_turns": 0,
+    "dropped_trailing_user_turn": false,
+    "dropped_leading_ai_turn": false,
+    "grade": "unusable",
+    "image_ratio": 0.67
+  },
+  "turn_meta": [
+    {
+      "pair": 1,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Screenshot 2026-05-26 at 4.45.35 PM.png"
+      ]
+    },
+    {
+      "pair": 1,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 2,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 2,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 3,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "FlashBoards Creative AI Canvas (42).png"
+      ]
+    },
+    {
+      "pair": 3,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    }
+  ]
+}

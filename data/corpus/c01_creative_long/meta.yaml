@@ -1,0 +1,21 @@
+# filled by importer
+id: c01_creative_long
+title: "Crafting a 1930s Kerala Catholic wedding photograph"
+source_file: "1930s Kerala Catholic Wedding Photo.json"
+source_kind: claude_web_json
+pairs: 60
+length_band: long
+fidelity_grade: unusable
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: creative
+prompt_style: mixed
+expected:
+  mode_hint: copilot
+  direction_hint: balanced
+  min_requirements: 10
+  max_requirements: 80
+notes: >
+  Collaborative photographic styling and art direction for a period 1930s Kerala Catholic wedding photo.

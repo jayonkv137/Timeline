@@ -1,0 +1,21 @@
+# filled by importer
+id: c34_planning_long
+title: "Confirming Phase 2 workflow context"
+source_file: "Phase 2 Workflow Context Sept 17 2026.json"
+source_kind: claude_web_json
+pairs: 64
+length_band: long
+fidelity_grade: degraded
+contains: [code_blocks, images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: planning
+prompt_style: specified
+expected:
+  mode_hint: copilot
+  direction_hint: user_heavy
+  min_requirements: 15
+  max_requirements: 80
+notes: >
+  Engineering workflow alignment establishing Phase 2 development rules and repository handoff.

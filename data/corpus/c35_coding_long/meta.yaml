@@ -1,0 +1,21 @@
+# filled by importer
+id: c35_coding_long
+title: "Redesigning technology page with branch-based experience sections"
+source_file: "Redesigning Technology Page Claude.json"
+source_kind: claude_web_json
+pairs: 68
+length_band: long
+fidelity_grade: unusable
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: coding
+prompt_style: mixed
+expected:
+  mode_hint: copilot
+  direction_hint: balanced
+  min_requirements: 15
+  max_requirements: 90
+notes: >
+  Frontend redesign implementing branch-based experience cards and timeline navigation on Technology page.

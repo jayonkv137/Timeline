@@ -1,0 +1,21 @@
+# filled by importer
+id: c12_creative_medium
+title: "Applying artistic style to hallway scene in Midjourney"
+source_file: "Artistic Style Hallway Scene Midjourney.json"
+source_kind: claude_web_json
+pairs: 18
+length_band: medium
+fidelity_grade: unusable
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: creative
+prompt_style: specified
+expected:
+  mode_hint: copilot
+  direction_hint: balanced
+  min_requirements: 8
+  max_requirements: 30
+notes: >
+  Prompt engineering and style transfer experiments translating character portraits into Midjourney scene environments.

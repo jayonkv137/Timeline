@@ -1,0 +1,21 @@
+# filled by importer
+id: c24_planning_short
+title: "Hybrid AI filmmaking for action short film"
+source_file: "Hybrid AI Filmmaking Action Short Film.json"
+source_kind: claude_web_json
+pairs: 5
+length_band: short
+fidelity_grade: unusable
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: planning
+prompt_style: vague
+expected:
+  mode_hint: copilot
+  direction_hint: user_heavy
+  min_requirements: 3
+  max_requirements: 15
+notes: >
+  Production pre-planning defining shot list and visual constraints for a 5-shot hybrid action short film.

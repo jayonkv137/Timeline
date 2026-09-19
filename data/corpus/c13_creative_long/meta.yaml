@@ -1,0 +1,21 @@
+# filled by importer
+id: c13_creative_long
+title: "Creating a Berliner raver sausage character"
+source_file: "Berliner Raver Sausage Character.json"
+source_kind: claude_web_json
+pairs: 76
+length_band: long
+fidelity_grade: unusable
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: creative
+prompt_style: mixed
+expected:
+  mode_hint: copilot
+  direction_hint: user_heavy
+  min_requirements: 20
+  max_requirements: 100
+notes: >
+  Extensive character design dialogue evolving visual identity, lore, and styling for a Berliner raver sausage character.

@@ -1,0 +1,21 @@
+# filled by importer
+id: c30_creative_short
+title: "Building a language learning story universe with AI agents"
+source_file: "Language Learning Story Universe AI.json"
+source_kind: claude_web_json
+pairs: 2
+length_band: short
+fidelity_grade: clean
+contains: [long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: creative
+prompt_style: vague
+expected:
+  mode_hint: copilot
+  direction_hint: user_heavy
+  min_requirements: 2
+  max_requirements: 10
+notes: >
+  Worldbuilding ideation developing an educational story universe driven by autonomous AI characters.

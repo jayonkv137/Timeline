@@ -1,0 +1,21 @@
+# filled by importer
+id: c18_research_long
+title: "Understanding Diehl Aviation's AI implementation strategy"
+source_file: "Diehl Aviation AI Strategy Sept 17 2026.json"
+source_kind: claude_web_json
+pairs: 59
+length_band: long
+fidelity_grade: degraded
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: research
+prompt_style: specified
+expected:
+  mode_hint: copilot
+  direction_hint: balanced
+  min_requirements: 15
+  max_requirements: 70
+notes: >
+  Comprehensive industry analysis dissecting aviation AI job description and corporate deployment strategies.

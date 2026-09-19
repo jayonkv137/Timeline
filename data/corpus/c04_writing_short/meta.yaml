@@ -1,0 +1,21 @@
+# filled by importer
+id: c04_writing_short
+title: "Analogies for explaining AI and automation styles"
+source_file: "AI Automation Analogies Sept 17.json"
+source_kind: claude_web_json
+pairs: 4
+length_band: short
+fidelity_grade: clean
+contains: []
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: writing
+prompt_style: vague
+expected:
+  mode_hint: centaur
+  direction_hint: user_heavy
+  min_requirements: 2
+  max_requirements: 15
+notes: >
+  Ideation session exploring accessible analogies for AI automation styles (cyborg, centaur, autopilot).

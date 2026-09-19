@@ -1,0 +1,21 @@
+# filled by importer
+id: c07_research_short
+title: "AI-stated plans versus user requirements"
+source_file: "AI Plans vs User Requirements Sept 17 2026.md"
+source_kind: claude_web_md
+pairs: 4
+length_band: short
+fidelity_grade: clean
+contains: [code_blocks]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: research
+prompt_style: specified
+expected:
+  mode_hint: centaur
+  direction_hint: user_heavy
+  min_requirements: 2
+  max_requirements: 15
+notes: >
+  Methodological inquiry distinguishing AI-stated plans from genuine user requirements in human-AI interaction.

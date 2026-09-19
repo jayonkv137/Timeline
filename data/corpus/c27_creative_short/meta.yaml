@@ -1,0 +1,21 @@
+# filled by importer
+id: c27_creative_short
+title: "Jellyfish animation prompt for Cling 3.0"
+source_file: "Jellyfish Animation Prompt for Cling 3.0.json"
+source_kind: claude_web_json
+pairs: 2
+length_band: short
+fidelity_grade: clean
+contains: []
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: creative
+prompt_style: specified
+expected:
+  mode_hint: copilot
+  direction_hint: user_heavy
+  min_requirements: 1
+  max_requirements: 8
+notes: >
+  Animation prompt crafting for Kling 3.0 specifying upward motion and bioluminescent jellyfish dynamics.

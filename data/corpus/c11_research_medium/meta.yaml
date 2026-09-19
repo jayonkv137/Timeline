@@ -1,0 +1,21 @@
+# filled by importer
+id: c11_research_medium
+title: "Anki language learning workflows and methods"
+source_file: "Anki Language Learning Workflows Sept 17 2026.json"
+source_kind: claude_web_json
+pairs: 7
+length_band: medium
+fidelity_grade: unusable
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: research
+prompt_style: specified
+expected:
+  mode_hint: copilot
+  direction_hint: balanced
+  min_requirements: 5
+  max_requirements: 25
+notes: >
+  Deep dive into language acquisition workflows, spaced repetition mechanics, and Anki card architectures.

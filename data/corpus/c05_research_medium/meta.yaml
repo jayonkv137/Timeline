@@ -1,0 +1,21 @@
+# filled by importer
+id: c05_research_medium
+title: "Finding research papers on AI creativity and design"
+source_file: "AI Creativity Design Research Papers.json"
+source_kind: claude_web_json
+pairs: 7
+length_band: medium
+fidelity_grade: clean
+contains: [long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: research
+prompt_style: specified
+expected:
+  mode_hint: copilot
+  direction_hint: balanced
+  min_requirements: 5
+  max_requirements: 20
+notes: >
+  Academic literature search and synthesis on computational creativity, co-creativity, and design systems.

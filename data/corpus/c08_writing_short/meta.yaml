@@ -1,0 +1,21 @@
+# filled by importer
+id: c08_writing_short
+title: "Portfolio website content for Adidas product video"
+source_file: "Adidas Product Video Content.json"
+source_kind: claude_web_json
+pairs: 3
+length_band: short
+fidelity_grade: unusable
+contains: [images]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: writing
+prompt_style: specified
+expected:
+  mode_hint: copilot
+  direction_hint: balanced
+  min_requirements: 2
+  max_requirements: 10
+notes: >
+  Copywriting and content shaping for an Adidas product video case study on personal portfolio.

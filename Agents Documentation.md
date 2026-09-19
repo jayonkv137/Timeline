@@ -73,21 +73,19 @@ quote. It is a mirror, not a judge.
   schemas, configs), pause for owner review before building on top of it.
 
 ## Current phase
-E0 — Corpus, Importer, Harness (Engineering complete; Owner review gate active).
+E0 — Corpus, Importer, Harness (CLOSED — Tagged `e0-done`). Ready for Phase E1.
 
-All engineering deliverables for Phase E0 are complete and verified via `scripts/phase_report.py`:
+All Phase E0 deliverables are 100% complete and verified via `scripts/phase_report.py`:
 - Importer + fidelity accounting + fidelity grading (`clean`/`degraded`/`unusable`) across 36 chats (909 pairs).
 - The 21 invariants module (`tests/invariants.py`), with verbatim evidence quote checking in `inv_21`.
 - Caching LLM client (`engine/llm_cache.py`).
 - 52 tests green across all suites in < 0.5s.
 - Manifest 100% reconciled against individual sidecars.
+- All 36 corpus folders populated with `meta.yaml` and renamed to `c<NN>_<task_type>_<length>`.
 - Frozen fixture `fixture_pair1` byte-identical to origin.
+- `golden_01` initialized from `c15_creative_medium` with `expected.md`.
 
-**Prerequisites gating Phase E1 commencement (Owner tasks):**
-1. Fill `meta.yaml` for 10 chats across the coverage matrix and rename those folders from `c<NN>_unsorted` to `c<NN>_<task_type>_<length>`.
-2. Hand-label chat **c15** (Portfolio about page redesign, 8 pairs, real design work) as `golden_01` under `data/corpus/golden_01/` (chat c14 is archived as `provenance: pipeline_run` for E3 robustness).
+**Corpus & Evaluation Strategy for E1:**
+Per user directive, testing and extraction benchmarking will not be restricted to a single golden chat. E1 will evaluate extraction across the entire usable corpus in varying ways — leveraging all 17 usable chats (10 `clean`, 7 `degraded`) across diverse domains (Coding, Creative, Writing, Planning, Research, Debugging) to ensure pipeline generalization.
 
-Phase E1 (Extraction Pipeline: Steps 1a–3) commences immediately upon completion of these two owner tasks.
-
-
-
+Next: **Phase E1 — Extraction Pipeline (Steps 1a–3)**.

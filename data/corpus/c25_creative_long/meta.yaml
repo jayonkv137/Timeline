@@ -1,0 +1,21 @@
+# filled by importer
+id: c25_creative_long
+title: "Creating hybrid art style for AI short film"
+source_file: "Hybrid Art Style for AI Short Film.json"
+source_kind: claude_web_json
+pairs: 26
+length_band: long
+fidelity_grade: unusable
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: creative
+prompt_style: mixed
+expected:
+  mode_hint: copilot
+  direction_hint: user_heavy
+  min_requirements: 10
+  max_requirements: 45
+notes: >
+  Artistic look-development developing a hybrid aesthetic combining real production footage with AI stylized renders.

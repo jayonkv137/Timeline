@@ -1,0 +1,21 @@
+# filled by importer
+id: c29_research_medium
+title: "Lando Norris effect implementation details"
+source_file: "Lando Norris Effect Implementation Details.json"
+source_kind: claude_web_json
+pairs: 18
+length_band: medium
+fidelity_grade: unusable
+contains: [images, long_message]
+
+# OWNER METADATA (COMPLETED)
+language: en
+task_type: research
+prompt_style: specified
+expected:
+  mode_hint: copilot
+  direction_hint: balanced
+  min_requirements: 5
+  max_requirements: 25
+notes: >
+  Explaining visual storytelling mechanics behind the Lando Norris effect and its application to brain page.
