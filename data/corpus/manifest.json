@@ -185,7 +185,8 @@
       "fidelity_grade": "unusable"
     },
     {
-      "id": "c14_coding_medium",
+      "id": "c14_pipeline_run",
+      "provenance": "pipeline_run",
       "title": "Dialogue action extraction framework",
       "source_file": "Claude Dialogue Action Extraction Framework Sept 17 2026.json",
       "source_kind": "claude_web_json",

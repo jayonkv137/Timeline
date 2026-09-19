@@ -1,5 +1,6 @@
 # filled by importer
-id: c15_creative_medium
+id: golden_01
+source_corpus_id: c15_creative_medium
 title: "Portfolio about page redesign"
 source_file: "Claude Portfolio About Page Redesign.json"
 source_kind: claude_web_json
@@ -8,14 +9,16 @@ length_band: medium
 fidelity_grade: degraded
 contains: [images, long_message]
 
-# OWNER METADATA (COMPLETED)
+# Layer 1: Descriptive facts
 language: en
 task_type: creative
-prompt_style: mixed
-expected:
-  mode_hint: copilot
-  direction_hint: user_heavy
-  min_requirements: 5
-  max_requirements: 25
 notes: >
   Portfolio About page redesign pivoting from text narrative to an Attenborough-style AI film about the creative technologist.
+
+# Layer 2: Judgement & predictive fields (HUMAN HAND-LABELED IN expected.md)
+prompt_style: null       # owner ground truth: specified | vague | mixed
+expected:
+  mode_hint: null        # owner ground truth: centaur | copilot | autopilot
+  direction_hint: null   # owner ground truth: user_heavy | balanced | ai_heavy
+  min_requirements: null
+  max_requirements: null

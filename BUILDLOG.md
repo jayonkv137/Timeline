@@ -714,6 +714,21 @@ Overall Status: IN PROGRESS (OWNER TASKS OUTSTANDING)
 - **Verification:** Ran `python3 scripts/phase_report.py` — result: **`Overall Status: ALL DOD CRITERIA MET`** (11/11 criteria satisfied). Full suite: 52/52 tests green in 0.41s.
 - **Next:** Phase E1 — Extraction Pipeline (Steps 1a–3).
 
+---
 
-
-
+## 2026-09-19 11:25 · Antigravity · Claude 3.5 Sonnet
+- **Phase/Step:** E0 Post-Closeout Refinement — Layer 2 Clearing, c14 Archival & Golden Chat Protocol
+- **Did:**
+  - Created and executed `scripts/clear_layer2.py` across all 36 corpus entries: preserved Layer 1 descriptive facts (`task_type`, `language`, `notes`), cleared Layer 2 predictive/evaluative fields (`prompt_style`, `expected: mode_hint, direction_hint, min/max_requirements`) to prevent circular LLM-vs-LLM evaluation in downstream phases (E1–E3).
+  - Renamed `data/corpus/c14_coding_medium` to `data/corpus/c14_pipeline_run`, added `provenance: pipeline_run` in `source_meta.json` and `meta.yaml`, synchronized `manifest.json`, and explicitly archived it as the origin record of `fixture_pair1` (129k char AI turn, excluded from E1 extraction, reserved for E3 robustness).
+  - Configured `data/corpus/golden_01/` with a comprehensive 8-pair hand-labeling worksheet in `expected.md` based on `c15_creative_medium` (Attenborough portfolio about page redesign), providing human ground truth before engine execution.
+  - Formulated the dual evaluation protocol in `Agents Documentation.md`: Breadth (all 17 usable chats) for pipeline stability and invariant enforcement; Depth/Correctness (`golden_01`) for semantic extraction accuracy.
+- **Decisions made:**
+  - Strict separation of Layer 1 (machine-descriptive facts) and Layer 2 (human ground truth / predictions) to maintain experimental integrity for E3 (COTRACE prompt underspecification replication).
+  - Excluded pipeline execution artifacts (`c14`) from extraction evaluation corpora while retaining them for robustness stress testing.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:**
+  - `python3 scripts/phase_report.py`: `Overall Status: ALL DOD CRITERIA MET` (11/11 criteria satisfied, 36/36 meta files filled, manifest 100% reconciled).
+  - Full test suite: 52/52 tests green in 0.47s.
+  - Frozen fixture `data/chats/fixture_pair1/` completely untouched and byte-identical.
+- **Next:** Phase E1 — Extraction Pipeline (Steps 1a–3).

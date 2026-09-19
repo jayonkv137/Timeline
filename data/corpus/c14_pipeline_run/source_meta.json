@@ -1,5 +1,6 @@
 {
-  "chat_id": "c14_coding_medium",
+  "chat_id": "c14_pipeline_run",
+  "provenance": "pipeline_run",
   "source_kind": "claude_web_json",
   "source_file": "source.json",
   "exporter": "Claude Exporter (https://www.ai-chat-exporter.net)",

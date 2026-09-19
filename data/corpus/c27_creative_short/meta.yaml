@@ -8,14 +8,16 @@ length_band: short
 fidelity_grade: clean
 contains: []
 
-# OWNER METADATA (COMPLETED)
+# Layer 1: Descriptive facts (verified)
 language: en
 task_type: creative
-prompt_style: specified
-expected:
-  mode_hint: copilot
-  direction_hint: user_heavy
-  min_requirements: 1
-  max_requirements: 8
 notes: >
   Animation prompt crafting for Kling 3.0 specifying upward motion and bioluminescent jellyfish dynamics.
+
+# Layer 2: Judgement & predictive fields (HUMAN-LABELED ONLY — cleared to prevent circularity)
+prompt_style: null       # specified | vague | mixed (owner ground truth for E3)
+expected:
+  mode_hint: null        # centaur | copilot | autopilot
+  direction_hint: null   # user_heavy | balanced | ai_heavy
+  min_requirements: null
+  max_requirements: null

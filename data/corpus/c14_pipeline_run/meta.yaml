@@ -1,5 +1,5 @@
 # filled by importer
-id: c14_coding_medium
+id: c14_pipeline_run
 title: "Dialogue action extraction framework"
 source_file: "Claude Dialogue Action Extraction Framework Sept 17 2026.json"
 source_kind: claude_web_json
@@ -9,18 +9,19 @@ fidelity_grade: clean
 provenance: pipeline_run
 contains: [long_message]
 
-# ARCHIVED AS FIXTURE ORIGIN & E3 ROBUSTNESS (DO NOT USE FOR E1 EXTRACTION)
-task_type: coding
+# Layer 1: Descriptive facts (verified)
 language: en
-prompt_style: specified
-expected:
-  mode_hint: copilot
-  direction_hint: balanced
-  min_requirements: 10
-  max_requirements: 40
+task_type: pipeline_run
 notes: >
-
   Manual Step 1a through Stage 4 session that produced fixture_pair1.
   User turns are pipeline prompts and contains one AI turn of 129,121 characters.
   Archived as origin record of fixture_pair1 and high-value E3 robustness material.
+  EXCLUDED from standard E1 extraction runs.
 
+# Layer 2: Judgement & predictive fields (HUMAN-LABELED ONLY — cleared to prevent circularity)
+prompt_style: null       # specified | vague | mixed (owner ground truth for E3)
+expected:
+  mode_hint: null        # centaur | copilot | autopilot
+  direction_hint: null   # user_heavy | balanced | ai_heavy
+  min_requirements: null
+  max_requirements: null

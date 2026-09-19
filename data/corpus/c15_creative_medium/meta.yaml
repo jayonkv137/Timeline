@@ -8,14 +8,16 @@ length_band: medium
 fidelity_grade: degraded
 contains: [images, long_message]
 
-# OWNER METADATA (COMPLETED)
+# Layer 1: Descriptive facts (verified)
 language: en
 task_type: creative
-prompt_style: mixed
-expected:
-  mode_hint: copilot
-  direction_hint: user_heavy
-  min_requirements: 5
-  max_requirements: 25
 notes: >
   Portfolio About page redesign pivoting from text narrative to an Attenborough-style AI film about the creative technologist.
+
+# Layer 2: Judgement & predictive fields (HUMAN-LABELED ONLY — cleared to prevent circularity)
+prompt_style: null       # specified | vague | mixed (owner ground truth for E3)
+expected:
+  mode_hint: null        # centaur | copilot | autopilot
+  direction_hint: null   # user_heavy | balanced | ai_heavy
+  min_requirements: null
+  max_requirements: null

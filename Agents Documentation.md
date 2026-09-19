@@ -81,11 +81,13 @@ All Phase E0 deliverables are 100% complete and verified via `scripts/phase_repo
 - Caching LLM client (`engine/llm_cache.py`).
 - 52 tests green across all suites in < 0.5s.
 - Manifest 100% reconciled against individual sidecars.
-- All 36 corpus folders populated with `meta.yaml` and renamed to `c<NN>_<task_type>_<length>`.
+- All 36 corpus folders renamed to `c<NN>_<task_type>_<length>`, with Layer 1 descriptive facts populated and Layer 2 predictive fields cleared (`scripts/clear_layer2.py`) to eliminate circular LLM evaluation.
+- `c14` permanently designated as `c14_pipeline_run` (`provenance: pipeline_run`), archived as origin record of `fixture_pair1`, excluded from E1 extraction, and reserved for E3 robustness testing.
 - Frozen fixture `fixture_pair1` byte-identical to origin.
-- `golden_01` initialized from `c15_creative_medium` with `expected.md`.
+- `golden_01` established from `c15_creative_medium` with hand-labeling worksheet `expected.md`.
 
-**Corpus & Evaluation Strategy for E1:**
-Per user directive, testing and extraction benchmarking will not be restricted to a single golden chat. E1 will evaluate extraction across the entire usable corpus in varying ways — leveraging all 17 usable chats (10 `clean`, 7 `degraded`) across diverse domains (Coding, Creative, Writing, Planning, Research, Debugging) to ensure pipeline generalization.
+**Corpus & Dual Evaluation Strategy for E1:**
+1. **Breadth Gate (Generalization):** Extraction benchmarking evaluates across all 17 usable chats (10 `clean`, 7 `degraded`) across 6 domains (Coding, Creative, Writing, Planning, Research, Debugging) to prove the engine runs robustly everywhere without crashing or violating invariants.
+2. **Depth / Correctness Gate (Accuracy):** `golden_01` provides human hand-labeled ground truth in `data/corpus/golden_01/expected.md` to measure whether extracted requirements, actions, outcomes, and mode are factually accurate.
 
 Next: **Phase E1 — Extraction Pipeline (Steps 1a–3)**.

@@ -8,14 +8,16 @@ length_band: short
 fidelity_grade: clean
 contains: []
 
-# OWNER METADATA (COMPLETED)
+# Layer 1: Descriptive facts (verified)
 language: en
 task_type: writing
-prompt_style: vague
-expected:
-  mode_hint: centaur
-  direction_hint: user_heavy
-  min_requirements: 2
-  max_requirements: 15
 notes: >
   Ideation session exploring accessible analogies for AI automation styles (cyborg, centaur, autopilot).
+
+# Layer 2: Judgement & predictive fields (HUMAN-LABELED ONLY — cleared to prevent circularity)
+prompt_style: null       # specified | vague | mixed (owner ground truth for E3)
+expected:
+  mode_hint: null        # centaur | copilot | autopilot
+  direction_hint: null   # user_heavy | balanced | ai_heavy
+  min_requirements: null
+  max_requirements: null

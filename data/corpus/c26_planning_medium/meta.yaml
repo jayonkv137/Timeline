@@ -8,14 +8,16 @@ length_band: medium
 fidelity_grade: unusable
 contains: [images, long_message]
 
-# OWNER METADATA (COMPLETED)
+# Layer 1: Descriptive facts (verified)
 language: en
 task_type: planning
-prompt_style: specified
-expected:
-  mode_hint: copilot
-  direction_hint: user_heavy
-  min_requirements: 5
-  max_requirements: 30
 notes: >
   Legal/administrative planning verifying immigration and student visa renewal procedures in Bremen.
+
+# Layer 2: Judgement & predictive fields (HUMAN-LABELED ONLY — cleared to prevent circularity)
+prompt_style: null       # specified | vague | mixed (owner ground truth for E3)
+expected:
+  mode_hint: null        # centaur | copilot | autopilot
+  direction_hint: null   # user_heavy | balanced | ai_heavy
+  min_requirements: null
+  max_requirements: null
