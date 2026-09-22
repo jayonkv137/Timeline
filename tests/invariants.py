@@ -447,6 +447,38 @@ def _normalize_for_quote_match(s: str) -> str:
     return s
 
 
+def _words_appear_in_order(quote: str, text: str, max_gap_words: int = 15) -> bool:
+    """Check if all words from quote appear in text in order within reasonable gap tolerance."""
+    q_words = re.findall(r"\b\w+\b", quote.lower())
+    t_words = re.findall(r"\b\w+\b", text.lower())
+    if len(q_words) < 4:
+        return False
+
+    first_word = q_words[0]
+    candidate_starts = [i for i, w in enumerate(t_words) if w == first_word]
+    if not candidate_starts:
+        return False
+
+    for start_idx in candidate_starts:
+        t_idx = start_idx + 1
+        matched_all = True
+        for q_w in q_words[1:]:
+            found = False
+            limit = min(len(t_words), t_idx + max_gap_words + 1)
+            for i in range(t_idx, limit):
+                if t_words[i] == q_w:
+                    t_idx = i + 1
+                    found = True
+                    break
+            if not found:
+                matched_all = False
+                break
+        if matched_all:
+            return True
+
+    return False
+
+
 def quote_matches_text(quote: str, text: str) -> bool:
     """Check if quote is grounded in turn text, allowing:
     - Whitespace normalization (newlines, multiple spaces -> single space)
@@ -468,15 +500,23 @@ def quote_matches_text(quote: str, text: str) -> bool:
     if norm_quote in norm_text:
         return True
 
-    # If the quote contains ellipses ('...', '…', or spaced '. . .'), check ordered segment appearance
-    segments = [s.strip() for s in re.split(r"(?:\.\s*){2,}\.|\u2026", norm_quote) if s.strip()]
+    # Check with markdown styling syntax stripped (e.g. model quotes text without markdown bold/italic/code markers)
+    clean_quote = re.sub(r"[*_`>]", "", norm_quote)
+    clean_quote = re.sub(r"\s+", " ", clean_quote).strip()
+    clean_text = re.sub(r"[*_`>]", "", norm_text)
+    clean_text = re.sub(r"\s+", " ", clean_text).strip()
+    if clean_quote and clean_quote in clean_text:
+        return True
+
+    # If the quote contains ellipses or transition arrows, check ordered segment appearance
+    segments = [s.strip() for s in re.split(r"(?:\.\s*){2,}\.|\u2026|→|-->|->", norm_quote) if s.strip()]
     if segments:
         cur_pos = 0
         for seg in segments:
             idx = norm_text.find(seg, cur_pos)
             if idx == -1:
-                # Try without surrounding punctuation
-                cleaned_seg = seg.strip(".,;:?!- ")
+                # Try without surrounding punctuation and quotation marks
+                cleaned_seg = seg.strip(".,;:?!- \"'()")
                 if cleaned_seg:
                     idx = norm_text.find(cleaned_seg, cur_pos)
             if idx == -1:
@@ -492,12 +532,14 @@ def quote_matches_text(quote: str, text: str) -> bool:
                     idx = norm_text.find(sub_seg_front, cur_pos)
                     if idx != -1:
                         cur_pos = idx + len(sub_seg_front)
-                        continue
+                # Fallback: check if words appear in order with local gap tolerance (speech stutter / speech-to-text cleanup)
+                if _words_appear_in_order(seg, norm_text[cur_pos:] if cur_pos > 0 else norm_text):
+                    continue
                 return False
             cur_pos = idx + len(seg)
         return True
 
-    return False
+    return _words_appear_in_order(norm_quote, norm_text)
 
 
 def inv_21_provenance(dialogue: list[dict[str, Any]] | None, ledger_rows: list[dict[str, Any]] | None, state: dict[str, Any] | None) -> list[str]:

@@ -1,0 +1,37 @@
+{
+  "key": "42c2a09fbc9d0670e10ee78dc1d56b490ebd230a40963631e5d0b9e0241dbd2f",
+  "step": "1c:pair2",
+  "model": "gemini-3.5-flash",
+  "prompt": "Step 1c: Intention Extraction\n\nYou are given a list of outcomes from a dialogue.\n\n=== OUTCOMES ===\n[\n  {\n    \"outcome id\": \"outcome 1\",\n    \"outcome\": \"Comprehensive plan and workflow for Phase 9 (Design System Formalization and Figma Migration)\"\n  },\n  {\n    \"outcome id\": \"outcome 2\",\n    \"outcome\": \"Strategy and technical feasibility analysis for Figma migration\"\n  },\n  {\n    \"outcome id\": \"outcome 3\",\n    \"outcome\": \"Design system audit plan and drift inventory setup\"\n  },\n  {\n    \"outcome id\": \"outcome 4\",\n    \"outcome\": \"Curated learning resources and references\"\n  }\n]\n\n(1) Identify distinct **intentions** (high-level goals or purposes) that these\noutcomes serve. (2) Assign each outcome to exactly one intention.\n\nOutput JSON only:\n{ \"intentions\": [ {\"intention id\": \"I1\", \"intention\": \"short label\"},\n{\"intention id\": \"I2\", \"intention\": \"another label\"} ], \"outcome to intention\":\n[{\"outcome id\": \"outcome 1\", \"intention id\": \"I1\"}, ...] }\n- Every outcome id appears exactly once in outcome to intention. Use intention id\nfrom the intentions list.",
+  "response": {
+    "intentions": [
+      {
+        "intention id": "I1",
+        "intention": "Migration Strategy and Planning"
+      },
+      {
+        "intention id": "I2",
+        "intention": "Learning and Reference Support"
+      }
+    ],
+    "outcome to intention": [
+      {
+        "outcome id": "outcome 1",
+        "intention id": "I1"
+      },
+      {
+        "outcome id": "outcome 2",
+        "intention id": "I1"
+      },
+      {
+        "outcome id": "outcome 3",
+        "intention id": "I1"
+      },
+      {
+        "outcome id": "outcome 4",
+        "intention id": "I2"
+      }
+    ]
+  },
+  "recorded_at": "2026-09-20T15:01:30.979070+00:00"
+}

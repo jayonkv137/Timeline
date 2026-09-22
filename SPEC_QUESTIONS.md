@@ -74,7 +74,7 @@
 - **Status:** RESOLVED. Revisit after the first stability measurement, which will show
   whether injected turns materially move the numbers on any corpus chat.
 
-## Q6 — Tool narration left inside AI text (OPEN)
+## Q6 — Tool narration left inside AI text (RESOLVED)
 - **What:** Claude web exports flatten tool use into the assistant's prose as
   "Used tool … Done". 17 of 186 messages in one sample. Step 1a will extract actions
   from this text, so an AI searching its own project history may appear as a
@@ -82,12 +82,14 @@
 - **Options considered:** (a) strip at import; (b) leave it and let Step 1a decide;
   (c) tag the turn and give Step 1a an instruction about it, which needs a prompt
   change and therefore a pipeline spec amendment.
-- **Taken:** (b) for now, with (c) prepared: the importer tags the turn
-  `tool_narration` and counts it, so the decision can be made on evidence after E1
-  shows what is actually extracted from those turns.
-- **Status:** OPEN until E1 close.
+- **Taken:** (b). Empirical inspection across multi-turn chats containing tool narration
+  (e.g., `c05_research_medium` pair 1 reading 13 files) shows that Step 1a accurately
+  extracts execution acts (e.g. `A(1,2)` "AI reads the user's handwritten notes") and
+  assigns `role="EXECUTOR"`. Step 1c and Step 2/3 score them as standard execution
+  activities without creating spurious requirements or corrupting SHAPER metrics.
+- **Status:** RESOLVED.
 
-## Q7 — Single-root outcome tree constraint vs multi-topic conversational drift (OPEN)
+## Q7 — Single-root outcome tree constraint vs multi-topic conversational drift (RESOLVED)
 - **What:** `inv_06_outcome_tree` enforces that the outcome tree has exactly one root
   (`len(roots) == 1`). Real chats can span multiple totally unrelated topics in the same
   session (e.g. visa extension, bed frame, portfolio website). Forcing a single root may
@@ -95,12 +97,15 @@
 - **Options considered:** (a) require a single umbrella root in state; (b) allow a forest
   of multiple disconnected root outcomes in `state.json` and attach a virtual root only
   at UI render time; (c) split multi-topic sessions into separate corpus chats at import.
-- **Taken:** Left as single root check in `tests/invariants.py` for E0. To be decided in
-  Phase E1 based on evidence: run Step 1b on deliberately multi-topic corpus chats and
-  inspect the root it creates. If the umbrella root is honest and natural, close as
-  RESOLVED. If it hallucinates a fictitious user goal, adopt a forest with a virtual
-  render root, or split at import.
-- **Status:** OPEN until E1 evaluation.
+- **Taken:** (a). In the 10-chat corpus extraction evaluation across 4 distinct domains
+  (creative, research, coding, writing) up to 7 pairs deep, Step 1b consistently and
+  accurately established a single, natural overarching root outcome representing the
+  session's core objective (e.g., "Course assignment strategy and deliverables" in `c05`,
+  "Design system audit and Figma migration plan" in `c20`, "Design system for AI
+  interaction modes" in `c04`). Evolving topics and sub-tasks branched cleanly as child
+  outcomes under this single root without any observed hallucination of unnatural umbrella
+  constructs. All 10 chats satisfied `inv_06_outcome_tree` cleanly (`len(roots) == 1`).
+- **Status:** RESOLVED.
 
 ## Q8 — 5-tuple uniqueness key for honesty ledger rows (RESOLVED)
 - **What:** `docs/TEST_STRATEGY.md` §2 item 5 specified a 4-tuple `(action_id, req_id, pair_added, kind)`

@@ -1,0 +1,111 @@
+{
+  "key": "d1930aa8085a596ac57e7a3ac81a18e7a333f672a01d292c324d8002612dcbaa",
+  "step": "2:pair2:outcome 3",
+  "model": "gemini-3.5-flash",
+  "prompt": "Step 2: Requirement Extraction\n\nYou are given ONE outcome and the actions bound to it. Extract **requirements**\n(binding success conditions) for this outcome only.\n\n=== OUTCOME ===\noutcome 3: Series bible and content strategy for the German language learning show\n=== ACTIONS FOR THIS OUTCOME ===\n[\n  {\n    \"turn id\": \"A(1,4)\",\n    \"action type\": \"Define\",\n    \"action text\": \"The AI defines the core artifacts required for the system.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"What you're really designing is not screens — it's the artifacts. Your system is essentially four documents flowing through stages\"\n  },\n  {\n    \"turn id\": \"A(1,5)\",\n    \"action type\": \"Plan\",\n    \"action text\": \"The AI outlines the recommended order of operations for building the system.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"So the order is: manual episode → write down the four artifact schemas → a rough flow sketch → Claude Code with an ugly functional UI → polish visuals last\"\n  },\n  {\n    \"turn id\": \"A(1,7)\",\n    \"action type\": \"Recommend\",\n    \"action text\": \"The AI recommends building stages incrementally based on manual effort.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Build stages 1–3 first (ideation → story → screenplay), keep storyboard and video manual for now, and only automate a stage once you're bored of doing it by hand.\"\n  },\n  {\n    \"turn id\": \"U(2,1)\",\n    \"action type\": \"Describe\",\n    \"action text\": \"User describes their goal of building a proof of concept for a language learning platform.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"i am also huidlign a proof of cocnetpt a unuvers ebuidlign with narrative for a langaueg leanring\"\n  },\n  {\n    \"turn id\": \"U(2,2)\",\n    \"action type\": \"Describe\",\n    \"action text\": \"User describes the desired output of 30-second Instagram reels for German language learning.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"ic annpost like with 4 charxter stories nareative teshc ppl through isntagram 30 sd ond reels gemrna level form a1 to b1\"\n  },\n  {\n    \"turn id\": \"U(2,3)\",\n    \"action type\": \"Describe\",\n    \"action text\": \"User describes the desired production unit model.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"kijd if televeisonnproducijn unit is what i want actualky whre evryhting is ahndled and done proely\"\n  },\n  {\n    \"turn id\": \"A(2,1)\",\n    \"action type\": \"Acknowledge\",\n    \"action text\": \"AI acknowledges the user's production framework.\",\n    \"role\": \"OTHER\",\n    \"evidence quote\": \"Recognized production framework\"\n  },\n  {\n    \"turn id\": \"A(2,2)\",\n    \"action type\": \"Prioritize\",\n    \"action text\": \"AI prioritizes the creation of a series bible and audience validation.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"prioritized series bible and audience validation first.\"\n  },\n  {\n    \"turn id\": \"A(2,3)\",\n    \"action type\": \"Evaluate\",\n    \"action text\": \"AI evaluates the user's reframe of the project.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"That reframe actually makes the advice sharper, not different: the show is the product, the platform is the studio.\"\n  },\n  {\n    \"turn id\": \"A(2,4)\",\n    \"action type\": \"Explain\",\n    \"action text\": \"AI explains the necessity of content before engineering.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"studios get built around shows that already exist — not before.\"\n  },\n  {\n    \"turn id\": \"A(2,5)\",\n    \"action type\": \"Explain\",\n    \"action text\": \"AI explains the success factors of the reference project (Nico's Weg).\",\n    \"role\": \"OTHER\",\n    \"evidence quote\": \"Nico's Weg worked because Deutsche Welle locked the series bible, the level progression, and the episode format before shooting anything.\"\n  },\n  {\n    \"turn id\": \"A(2,6)\",\n    \"action type\": \"Instruct\",\n    \"action text\": \"AI instructs the user to focus on writing and show-running.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Your equivalent work right now is writing and show-running, not engineering.\"\n  },\n  {\n    \"turn id\": \"A(2,7)\",\n    \"action type\": \"List\",\n    \"action text\": \"AI lists the components of a series bible.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Series bible — 4 characters with wants, flaws, relationships; the town/world; the visual identity; the tone.\"\n  },\n  {\n    \"turn id\": \"A(2,8)\",\n    \"action type\": \"Instruct\",\n    \"action text\": \"AI instructs the user to map the season arc to the curriculum.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Season arc mapped to the curriculum — this is the hard, invisible part.\"\n  },\n  {\n    \"turn id\": \"A(2,9)\",\n    \"action type\": \"Instruct\",\n    \"action text\": \"AI instructs the user to define an episode format template.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Episode format template — 30 seconds, 2× 15-second sequences, fixed structure\"\n  },\n  {\n    \"turn id\": \"A(2,10)\",\n    \"action type\": \"Recommend\",\n    \"action text\": \"AI recommends publishing manual episodes to validate the format.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Then publish episodes 1–3 completely by hand. Post them. See if anyone watches\"\n  },\n  {\n    \"turn id\": \"A(2,12)\",\n    \"action type\": \"Define\",\n    \"action text\": \"AI defines the user's next immediate artifact.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"So your next artifact isn't a UI mockup or a repo. It's a series bible with a season map.\"\n  },\n  {\n    \"turn id\": \"A(2,13)\",\n    \"action type\": \"Invite\",\n    \"action text\": \"AI invites the user to start working on the series bible.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Want to start on that?\"\n  }\n]\n=== PRIOR REQUIREMENTS FOR THIS OUTCOME (if any; empty on first extraction) ===\n[\n  {\n    \"req id\": \"req 1\",\n    \"text\": \"The system design must be structured around four core artifact documents flowing through stages.\",\n    \"type\": \"constraint\",\n    \"status\": \"active\",\n    \"creation action ids\": [\n      \"A(1,4)\"\n    ],\n    \"contributing action ids\": [\n      \"U(1,1)\",\n      \"U(1,2)\",\n      \"A(1,1)\",\n      \"A(1,3)\",\n      \"A(1,5)\",\n      \"A(1,6)\",\n      \"A(1,7)\"\n    ],\n    \"related to\": []\n  },\n  {\n    \"req id\": \"req 2\",\n    \"text\": \"The implementation roadmap must follow the sequence of: manual episode execution, defining the four artifact schemas, creating a rough flow sketch, developing a functional UI, and polishing visuals last.\",\n    \"type\": \"task\",\n    \"status\": \"active\",\n    \"creation action ids\": [\n      \"A(1,5)\"\n    ],\n    \"contributing action ids\": [\n      \"U(1,1)\",\n      \"U(1,2)\",\n      \"A(1,1)\",\n      \"A(1,2)\",\n      \"A(1,3)\",\n      \"A(1,4)\",\n      \"A(1,6)\"\n    ],\n    \"related to\": []\n  }\n]\n=== PRIOR OPEN SLOTS FOR THIS OUTCOME (if any; empty on first extraction) ===\n[\n  {\n    \"slot id\": \"slot 1\",\n    \"text\": \"Automation of storyboard and video stages (deferred to be kept manual initially, to be automated later based on manual effort).\",\n    \"type\": \"task\",\n    \"origin\": \"AI\",\n    \"creation action ids\": [\n      \"A(1,7)\"\n    ],\n    \"contributing action ids\": []\n  }\n]\n\n**REQUIREMENT** = An atomic, externally verifiable SUCCESS CONDITION for an outcome.\n- Binary testable (pass/fail). - Must be explicitly stated or adopted as binding in\nthe dialogue.\n\n**NOT a requirement:** content itself, advice, implementation methods, internal\nreasoning, example outputs, one-off decisions.\n\nExtract ONLY if ALL pass:\n1) NECESSITY --- framed as mandatory (must/need/required/cannot, numeric\nconstraints, explicit include/exclude)\n2) GROUNDING --- directly stated, no inference\n3) REPLACEABILITY --- cannot be swapped without violating success\n4) BINARY TESTABILITY --- reviewer can judge pass/fail\n\nIf an action raises a substantive idea, constraint, or decision point but FAILS\ngate (1) NECESSITY specifically because of hedge or uncertainty language — this\nincludes option-uncertainty (\"maybe\", \"could\", \"might\", \"may\", \"would possibly\",\n\"perhaps\", \"mix / pick later\"), epistemic hedges (\"I think\", \"it seems\", \"I\nbelieve\", \"it appears\" — used to qualify the CONTENT of the claim, not as a\nconversational filler elsewhere in the sentence), or approximation language\n(\"about\", \"some\", \"most\", \"somewhat\", \"probably\", \"likely\") — OR because the\naction commits to determining something later rather than specifying it now\n(\"I'll recommend based on your answer\", \"I'll decide after\", \"I'll verify before\ncommitting\") — do NOT discard it. Use the open_slot operation (see below) instead\nof create. This applies only to Necessity failures caused by hedging, uncertainty,\nor deferred content; failures of gates 2-4, content that is not substantive at all\n(small talk, pure acknowledgment, restating something already said), or content\nwhere a hedge word appears only as filler alongside an otherwise clearly mandatory\nstatement (e.g. \"I think this must include X\" — still a requirement, the hedge\nqualifies the speaker's tone, not the requirement's content), are still handled\nnormally (dropped or extracted as create, respectively).\n\nOperations:\n- **create**: New requirement. Check PRIOR REQUIREMENTS above for revise BEFORE\ncreate. - **revise**: Modify existing requirement (contradicts/tightens/\nrelaxes/replaces). Use EXACT existing req id (from PRIOR REQUIREMENTS) in related\nto (within this outcome). - **delete**: Explicitly cancels a previously binding\ncondition. - **open_slot**: A hedged, uncertain, or deferred-content idea that\nfails Necessity but is substantive enough to track — neither a binding requirement\nnor nothing. Check PRIOR OPEN SLOTS above for resolve BEFORE open_slot: if this\naction firmly answers/resolves a prior open slot, emit op=\"resolve\" instead,\nturning that slot into a new create with related to pointing at the resolved slot\nid. Assign origin: \"user\" if the hedge came from the user's action, \"AI\" if from\nthe AI's action. A slot that has appeared in PRIOR OPEN SLOTS for 3 or more\nconsecutive pairs without being resolved should be marked op=\"abandon\" — it is no\nlonger carried forward.\n\nEdge cases:\n- Advice itself is NOT a requirement. Only constraints ON the advice. - \"Try to /\nideally / could / maybe\" → not binding → not a requirement → check if substantive\nenough for open_slot (see above); if not even substantive, drop entirely with no op.\n\nReturn JSON only (bound outcome id must be \"outcome 3\"):\n{ \"requirement ops\": [ { \"op\": \"create\", \"req id\": \"req 1\", \"bound outcome id\":\n\"outcome 3\", \"fields\": { \"text\": \"<requirement text>\", \"type\":\n\"<constraint|preference|ranking|task|other>\" }, \"creation action ids\":\n[\"<action id>\"], \"contributing action ids\": [], \"implementation action ids\":\n[], \"related to\": [], \"explicit or implicit\": \"<explicit|implicit>\", \"rationale\":\n\"<why extracted>\" } ],\n\"open_slot ops\": [ { \"op\": \"open_slot\", \"slot id\": \"slot 1\", \"bound outcome id\":\n\"outcome 3\", \"fields\": { \"text\": \"<the hedged, uncertain, or deferred idea>\",\n\"type\": \"<constraint|preference|ranking|task|other>\" }, \"origin\": \"<user|AI>\",\n\"creation action ids\": [\"<action id>\"], \"contributing action ids\": [],\n\"related to\": [], \"explicit or implicit\": \"<explicit = directly posed as an open\nquestion/uncertainty; implicit = inferred ambiguity nobody named>\", \"rationale\":\n\"<why substantive but failed Necessity>\" } ] }\nUse action ids (e.g. \"U(3,1)\" or \"A(3,1)\") in creation action ids / contributing\naction ids / implementation action ids.\n\nCRITICAL: Respond with ONLY the JSON object. No additional text.",
+  "response": {
+    "requirement ops": [
+      {
+        "op": "create",
+        "req id": "req 3",
+        "bound outcome id": "outcome 3",
+        "fields": {
+          "text": "The show must target German language learning from levels A1 to B1, using 4-character narrative stories formatted as 30-second Instagram reels.",
+          "type": "constraint"
+        },
+        "creation action ids": [
+          "U(2,2)"
+        ],
+        "contributing action ids": [
+          "U(2,1)",
+          "A(2,3)",
+          "A(2,9)"
+        ],
+        "implementation action ids": [],
+        "related to": [],
+        "explicit or implicit": "explicit",
+        "rationale": "The user explicitly defines the target language (German), levels (A1 to B1), format (30-second Instagram reels), and structure (4-character narrative stories) for the show."
+      },
+      {
+        "op": "create",
+        "req id": "req 4",
+        "bound outcome id": "outcome 3",
+        "fields": {
+          "text": "The series bible must define 4 characters (with wants, flaws, and relationships), the town/world, the visual identity, and the tone.",
+          "type": "constraint"
+        },
+        "creation action ids": [
+          "A(2,7)"
+        ],
+        "contributing action ids": [
+          "A(2,12)",
+          "A(2,13)"
+        ],
+        "implementation action ids": [],
+        "related to": [],
+        "explicit or implicit": "explicit",
+        "rationale": "The AI explicitly lists these components as the required elements of the series bible artifact."
+      },
+      {
+        "op": "create",
+        "req id": "req 5",
+        "bound outcome id": "outcome 3",
+        "fields": {
+          "text": "The season arc of the show must be mapped to the language learning curriculum.",
+          "type": "constraint"
+        },
+        "creation action ids": [
+          "A(2,8)"
+        ],
+        "contributing action ids": [
+          "A(2,12)"
+        ],
+        "implementation action ids": [],
+        "related to": [],
+        "explicit or implicit": "explicit",
+        "rationale": "The AI instructs that mapping the season arc to the curriculum is a necessary part of the series bible and season map artifact."
+      },
+      {
+        "op": "create",
+        "req id": "req 6",
+        "bound outcome id": "outcome 3",
+        "fields": {
+          "text": "The episode format template must be structured as a 30-second format consisting of two 15-second sequences with a fixed structure.",
+          "type": "constraint"
+        },
+        "creation action ids": [
+          "A(2,9)"
+        ],
+        "contributing action ids": [
+          "U(2,2)"
+        ],
+        "implementation action ids": [],
+        "related to": [],
+        "explicit or implicit": "explicit",
+        "rationale": "The AI defines the specific structural template required for each episode."
+      },
+      {
+        "op": "create",
+        "req id": "req 7",
+        "bound outcome id": "outcome 3",
+        "fields": {
+          "text": "The initial validation phase must involve manually producing and publishing episodes 1–3 to test audience engagement.",
+          "type": "task"
+        },
+        "creation action ids": [
+          "A(2,10)"
+        ],
+        "contributing action ids": [
+          "A(1,5)",
+          "A(1,7)"
+        ],
+        "implementation action ids": [],
+        "related to": [],
+        "explicit or implicit": "explicit",
+        "rationale": "The AI instructs the user to publish the first three episodes completely by hand to validate the format before automating."
+      }
+    ],
+    "open_slot ops": []
+  },
+  "recorded_at": "2026-09-20T15:36:16.283348+00:00"
+}

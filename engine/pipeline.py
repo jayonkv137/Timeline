@@ -237,6 +237,17 @@ def step_1b(client, config, state, pair_number):
         norm_action_to_outcome[str(aid)] = str(normalize_outcome_id(oid))
     action_to_outcome = norm_action_to_outcome
 
+    # Preserve outcome mapping for actions that already anchored prior requirements or slots,
+    # ensuring cross-pair referential integrity and slot lifecycle consistency.
+    for r in state.requirements:
+        for aid in r.get("creation_action_ids", []):
+            if aid in known_action_ids and r.get("outcome_id") in id_set:
+                action_to_outcome[aid] = r["outcome_id"]
+    for s in state.slots:
+        for aid in s.get("creation_action_ids", []):
+            if aid in known_action_ids and s.get("outcome_id") in id_set:
+                action_to_outcome[aid] = s["outcome_id"]
+
     mapped_ids = set(action_to_outcome.keys())
     if mapped_ids != known_action_ids:
         missing = sorted(known_action_ids - mapped_ids)
@@ -1168,7 +1179,10 @@ def run_chat(
         f.write("\n")
 
     if initial_state is None:
-        state = State()
+        if not clear_existing and (out_dir / "state.json").exists():
+            state = State.load(out_dir)
+        else:
+            state = State()
     elif isinstance(initial_state, dict):
         state = State.from_dict(initial_state)
     else:
@@ -1190,6 +1204,7 @@ def run_chat(
             pairs_dict[p][speaker] = text
 
     sorted_pairs = sorted(pairs_dict.keys())
+    last_completed = state.run.get("last_completed_pair", 0) if not clear_existing else 0
 
     wall_time_per_pair: list[float] = []
     tokens_per_pair: list[int] = []
@@ -1198,6 +1213,9 @@ def run_chat(
     prev_ledger = None
 
     for pair_number in sorted_pairs:
+        if not clear_existing and pair_number <= last_completed:
+            continue
+
         t0 = time.monotonic()
         tokens_start = getattr(client, "total_tokens", 0)
         u_text = pairs_dict[pair_number].get("user", "")
@@ -1206,6 +1224,8 @@ def run_chat(
         new_actions, l2_res = process_pair(
             client, config, state, pair_number, u_text, a_text, ledger_writer=ledger_writer
         )
+
+        state.run["last_completed_pair"] = pair_number
 
         elapsed = round(time.monotonic() - t0, 3)
         wall_time_per_pair.append(elapsed)
