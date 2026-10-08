@@ -1,0 +1,605 @@
+{
+  "pairs": [
+    {
+      "pair": 1,
+      "direction": {
+        "you_pct": 50.0,
+        "ai_pct": 50.0
+      },
+      "decisions": {
+        "you_count": 2,
+        "ai_count": 0,
+        "latest_ai_example": null
+      },
+      "timeline": {
+        "pair": 1,
+        "delta_you": 10.0,
+        "delta_ai": 10.0,
+        "summary": "adding The analogies must represent",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 1",
+              "label": "R1",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 5.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 2",
+              "label": "R2",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 5.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "user",
+              "status": "resolved",
+              "resolved_into": "req 1"
+            },
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "abandoned",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Design system for AI interaction modes in a chat interface",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Design system for AI interaction modes in a chat interface",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Analogies and conceptual framing for AI interaction modes",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Interactive widget demonstrating the car metaphor animation",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Design and mockup of the right-side minimap panel",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Design and mockup of the bottom identity bar and chat interface",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 2,
+          "w_ai": 0,
+          "h_you": 0.0,
+          "h_ai": 10.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "direction": {
+        "you_pct": 51.0,
+        "ai_pct": 49.0
+      },
+      "decisions": {
+        "you_count": 5,
+        "ai_count": 1,
+        "latest_ai_example": "The interactive widget must allow the user to click through three different modes and display a corresponding animation for each"
+      },
+      "timeline": {
+        "pair": 2,
+        "delta_you": 41.0,
+        "delta_ai": 39.0,
+        "summary": "adding The design concepts must",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 1",
+              "label": "R3",
+              "op": "create",
+              "delta_you": 10.0,
+              "delta_ai": 10.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 1",
+              "label": "R4",
+              "op": "create",
+              "delta_you": 15.0,
+              "delta_ai": 12.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 1",
+              "label": "R5",
+              "op": "create",
+              "delta_you": 9.0,
+              "delta_ai": 8.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 2",
+              "label": "R6",
+              "op": "create",
+              "delta_you": 7.0,
+              "delta_ai": 9.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 2",
+              "origin": "AI",
+              "status": "open",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 3",
+              "origin": "AI",
+              "status": "open",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 1",
+              "origin": "user",
+              "status": "resolved",
+              "resolved_into": "req 1"
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Design system for AI interaction modes in a chat interface",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Design system for AI interaction modes in a chat interface",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Analogies and conceptual framing for AI interaction modes",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Interactive widget demonstrating the car metaphor animation",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Design and mockup of the right-side minimap panel",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Design and mockup of the bottom identity bar and chat interface",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 3,
+          "w_ai": 1,
+          "h_you": 26.0,
+          "h_ai": 34.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 3,
+      "direction": {
+        "you_pct": 48.8,
+        "ai_pct": 51.2
+      },
+      "decisions": {
+        "you_count": 8,
+        "ai_count": 3,
+        "latest_ai_example": "An interactive right-panel mockup widget named 'agency_minimap_panel' must be built"
+      },
+      "timeline": {
+        "pair": 3,
+        "delta_you": 86.0,
+        "delta_ai": 95.0,
+        "summary": "adding An interactive right-panel mockup",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 1",
+              "label": "R7",
+              "op": "create",
+              "delta_you": 12.0,
+              "delta_ai": 16.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 2",
+              "label": "R8",
+              "op": "create",
+              "delta_you": 20.0,
+              "delta_ai": 18.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 3",
+              "label": "R9",
+              "op": "create",
+              "delta_you": 16.0,
+              "delta_ai": 16.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 4",
+              "label": "R10",
+              "op": "create",
+              "delta_you": 17.0,
+              "delta_ai": 15.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 5",
+              "label": "R11",
+              "op": "create",
+              "delta_you": 21.0,
+              "delta_ai": 30.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "user",
+              "status": "open",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 2",
+              "origin": "AI",
+              "status": "open",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 3",
+              "origin": "AI",
+              "status": "open",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Design system for AI interaction modes in a chat interface",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Design system for AI interaction modes in a chat interface",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Analogies and conceptual framing for AI interaction modes",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Interactive widget demonstrating the car metaphor animation",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Design and mockup of the right-side minimap panel",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Design and mockup of the bottom identity bar and chat interface",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 3,
+          "w_ai": 2,
+          "h_you": 71.0,
+          "h_ai": 85.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 4,
+      "direction": {
+        "you_pct": 46.1,
+        "ai_pct": 53.9
+      },
+      "decisions": {
+        "you_count": 11,
+        "ai_count": 4,
+        "latest_ai_example": "The bottom identity bar must feature three elements designed to work together as a system"
+      },
+      "timeline": {
+        "pair": 4,
+        "delta_you": 75.0,
+        "delta_ai": 104.0,
+        "summary": "adding The chat interface must",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 1",
+              "label": "R3",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 0.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 2",
+              "label": "R8",
+              "op": "revise",
+              "delta_you": 4.0,
+              "delta_ai": 17.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 4",
+              "label": "R10",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 7.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 5",
+              "label": "R11",
+              "op": "revise",
+              "delta_you": 3.0,
+              "delta_ai": 12.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 1_rev",
+              "label": "R12",
+              "op": "create",
+              "delta_you": 17.0,
+              "delta_ai": 19.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 2",
+              "label": "R13",
+              "op": "create",
+              "delta_you": 19.0,
+              "delta_ai": 10.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 6",
+              "label": "R14",
+              "op": "create",
+              "delta_you": 18.0,
+              "delta_ai": 21.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 7",
+              "label": "R15",
+              "op": "create",
+              "delta_you": 14.0,
+              "delta_ai": 18.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "open",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 4",
+              "origin": "AI",
+              "status": "open",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "abandoned",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Design system for AI interaction modes in a chat interface",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Design system for AI interaction modes in a chat interface",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Analogies and conceptual framing for AI interaction modes",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Interactive widget demonstrating the car metaphor animation",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Design and mockup of the right-side minimap panel",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Design and mockup of the bottom identity bar and chat interface",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 3,
+          "w_ai": 1,
+          "h_you": 65.0,
+          "h_ai": 99.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    }
+  ]
+}

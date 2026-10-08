@@ -16,7 +16,7 @@ from jsonschema import Draft202012Validator
 from engine.pipeline import ACTION_ID_RE
 
 VALID_SLOT_STATUSES = {"open", "resolved", "abandoned"}
-VALID_MODES = {"YOU_DRIVING", "COPILOT", "AUTOPILOT", "QUIET", "centaur", "copilot", "autopilot"}
+VALID_MODES = {"CENTAUR", "COPILOT", "AUTOPILOT", "QUIET", "YOU_DRIVING", "centaur", "copilot", "autopilot"}
 
 
 
@@ -479,67 +479,122 @@ def _words_appear_in_order(quote: str, text: str, max_gap_words: int = 15) -> bo
     return False
 
 
+def classify_quote_match(quote: str, text: str) -> str | None:
+    """Classify how quote matches text: 'exact', 'whitespace_normalised', 'segmented', 'fuzzy', or None."""
+    if not quote or quote == "(not captured in fixture)":
+        return None
+
+    # 1. Exact verbatim match (character-for-character, including standard outer quotes stripping)
+    if quote in text:
+        return "exact"
+    stripped = quote.strip("\"'")
+    if stripped and stripped in text:
+        return "exact"
+
+    norm_quote = _normalize_for_quote_match(quote)
+    norm_text = _normalize_for_quote_match(text)
+    if len(norm_quote) >= 2 and norm_quote[0] in ('"', "'") and norm_quote[-1] == norm_quote[0]:
+        norm_quote = norm_quote[1:-1].strip()
+
+    if not norm_quote:
+        return "exact"
+
+    # 2. Whitespace-normalised (case-folding, collapsed whitespace, smart punctuation, markdown markers)
+    if norm_quote in norm_text:
+        return "whitespace_normalised"
+    clean_quote = re.sub(r"[*_`>]", "", norm_quote)
+    clean_quote = re.sub(r"\s+", " ", clean_quote).strip()
+    clean_text = re.sub(r"[*_`>]", "", norm_text)
+    clean_text = re.sub(r"\s+", " ", clean_text).strip()
+    if clean_quote and clean_quote in clean_text:
+        return "whitespace_normalised"
+
+    # 3. Segmented (ellipses / arrows splitting)
+    segments = [s.strip() for s in re.split(r"(?:\.\s*){2,}\.|\u2026|→|-->|->", norm_quote) if s.strip()]
+    if len(segments) > 1:
+        cur_pos = 0
+        all_segs = True
+        for seg in segments:
+            idx = norm_text.find(seg, cur_pos)
+            if idx == -1:
+                cseg = seg.strip(".,;:?!- \"'()")
+                if cseg:
+                    idx = norm_text.find(cseg, cur_pos)
+            if idx == -1:
+                all_segs = False
+                break
+            cur_pos = idx + len(seg)
+        if all_segs:
+            return "segmented"
+
+    # 4. Fuzzy (words appear in order with gap tolerance up to 15 words / speech stutter cleanup)
+    if _words_appear_in_order(norm_quote, norm_text, max_gap_words=15):
+        return "fuzzy"
+    if segments:
+        cur_pos = 0
+        seg_fuzzy = True
+        for seg in segments:
+            idx = norm_text.find(seg, cur_pos)
+            if idx != -1:
+                cur_pos = idx + len(seg)
+                continue
+            cleaned_seg = seg.strip(".,;:?!- \"'()")
+            if cleaned_seg:
+                idx = norm_text.find(cleaned_seg, cur_pos)
+                if idx != -1:
+                    cur_pos = idx + len(cleaned_seg)
+                    continue
+            words = seg.split()
+            if len(words) >= 4:
+                sub_seg = " ".join(words[1:]).strip(".,;:?!- ")
+                idx = norm_text.find(sub_seg, cur_pos)
+                if idx != -1:
+                    cur_pos = idx + len(sub_seg)
+                    continue
+            if _words_appear_in_order(seg, norm_text[cur_pos:] if cur_pos > 0 else norm_text, max_gap_words=15):
+                continue
+            seg_fuzzy = False
+            break
+        if seg_fuzzy:
+            return "fuzzy"
+
+    return None
+
+
 def quote_matches_text(quote: str, text: str) -> bool:
     """Check if quote is grounded in turn text, allowing:
     - Whitespace normalization (newlines, multiple spaces -> single space)
     - Case-insensitivity
     - Ellipses splitting (e.g. 'part 1 ... part 2' must appear in sequence)
     - Smart quotes normalization
+    - Fuzzy word-order matching with gap tolerance up to 15 words
     """
-    norm_quote = _normalize_for_quote_match(quote)
-    norm_text = _normalize_for_quote_match(text)
+    return classify_quote_match(quote, text) is not None
 
-    # Strip optional surrounding quotation marks from model output
-    if len(norm_quote) >= 2 and norm_quote[0] in ('"', "'") and norm_quote[-1] == norm_quote[0]:
-        norm_quote = norm_quote[1:-1].strip()
 
-    if not norm_quote:
-        return True
-
-    # Check direct substring
-    if norm_quote in norm_text:
-        return True
-
-    # Check with markdown styling syntax stripped (e.g. model quotes text without markdown bold/italic/code markers)
-    clean_quote = re.sub(r"[*_`>]", "", norm_quote)
-    clean_quote = re.sub(r"\s+", " ", clean_quote).strip()
-    clean_text = re.sub(r"[*_`>]", "", norm_text)
-    clean_text = re.sub(r"\s+", " ", clean_text).strip()
-    if clean_quote and clean_quote in clean_text:
-        return True
-
-    # If the quote contains ellipses or transition arrows, check ordered segment appearance
-    segments = [s.strip() for s in re.split(r"(?:\.\s*){2,}\.|\u2026|→|-->|->", norm_quote) if s.strip()]
-    if segments:
-        cur_pos = 0
-        for seg in segments:
-            idx = norm_text.find(seg, cur_pos)
-            if idx == -1:
-                # Try without surrounding punctuation and quotation marks
-                cleaned_seg = seg.strip(".,;:?!- \"'()")
-                if cleaned_seg:
-                    idx = norm_text.find(cleaned_seg, cur_pos)
-            if idx == -1:
-                # Try stripping leading/trailing filler speech token if model cleaned up speech stutter (e.g. 'like like' -> 'like')
-                words = seg.split()
-                if len(words) >= 4:
-                    sub_seg = " ".join(words[1:]).strip(".,;:?!- ")
-                    idx = norm_text.find(sub_seg, cur_pos)
-                    if idx != -1:
-                        cur_pos = idx + len(sub_seg)
-                        continue
-                    sub_seg_front = " ".join(words[:-1]).strip(".,;:?!- ")
-                    idx = norm_text.find(sub_seg_front, cur_pos)
-                    if idx != -1:
-                        cur_pos = idx + len(sub_seg_front)
-                # Fallback: check if words appear in order with local gap tolerance (speech stutter / speech-to-text cleanup)
-                if _words_appear_in_order(seg, norm_text[cur_pos:] if cur_pos > 0 else norm_text):
-                    continue
-                return False
-            cur_pos = idx + len(seg)
-        return True
-
-    return _words_appear_in_order(norm_quote, norm_text)
+def audit_quote_matches(dialogue: list[dict[str, Any]] | None, state: dict[str, Any] | None) -> dict[str, int]:
+    """Return count breakdown of quote matching: exact, whitespace_normalised, segmented, fuzzy, unmatched."""
+    counts = {"exact": 0, "whitespace_normalised": 0, "segmented": 0, "fuzzy": 0, "unmatched": 0}
+    if dialogue is None or state is None:
+        return counts
+    if any(t.get("text") == "(not captured in fixture)" for t in dialogue):
+        return counts
+    dialogue_map = {(t.get("pair"), t.get("speaker")): t.get("text", "") for t in dialogue}
+    for action in state.get("actions", []):
+        quote = action.get("evidence_quote")
+        if not quote or quote == "(not captured in fixture)":
+            continue
+        m = ACTION_ID_RE.match(str(action.get("id", "")))
+        if m:
+            speaker = "user" if m.group(1) == "U" else "ai"
+            pair_num = int(m.group(2))
+            turn_text = dialogue_map.get((pair_num, speaker), "")
+            match_type = classify_quote_match(quote, turn_text)
+            if match_type in counts:
+                counts[match_type] += 1
+            else:
+                counts["unmatched"] += 1
+    return counts
 
 
 def inv_21_provenance(dialogue: list[dict[str, Any]] | None, ledger_rows: list[dict[str, Any]] | None, state: dict[str, Any] | None) -> list[str]:

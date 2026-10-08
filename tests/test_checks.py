@@ -58,7 +58,16 @@ def test_invariants_direct_import():
         ("inv_08_requirement_created_at_pair", checks.inv_08_requirement_created_at_pair, invariants.inv_08_requirement_created_at_pair),
         ("inv_09_slot_status_and_inactivity", checks.inv_09_slot_status_and_inactivity, invariants.inv_09_slot_status_and_inactivity),
         ("inv_10_scores_positive", checks.inv_10_scores_positive, invariants.inv_10_scores_positive),
+        ("inv_11_deltas_sum_to_cumulative", checks.inv_11_deltas_sum_to_cumulative, invariants.inv_11_deltas_sum_to_cumulative),
+        ("inv_12_creator_counts_sum", checks.inv_12_creator_counts_sum, invariants.inv_12_creator_counts_sum),
+        ("inv_13_cumulative_mass_monotonic", checks.inv_13_cumulative_mass_monotonic, invariants.inv_13_cumulative_mass_monotonic),
+        ("inv_14_shaper_subset", checks.inv_14_shaper_subset, invariants.inv_14_shaper_subset),
+        ("inv_15_percentages_sum_to_100", checks.inv_15_percentages_sum_to_100, invariants.inv_15_percentages_sum_to_100),
+        ("inv_16_mode_pure_function", checks.inv_16_mode_pure_function, invariants.inv_16_mode_pure_function),
         ("inv_17_append_only", checks.inv_17_append_only, invariants.inv_17_append_only),
+        ("inv_18_idempotency", checks.inv_18_idempotency, invariants.inv_18_idempotency),
+        ("inv_19_purity", checks.inv_19_purity, invariants.inv_19_purity),
+        ("inv_20_batch_equals_live", checks.inv_20_batch_equals_live, invariants.inv_20_batch_equals_live),
         ("inv_21_provenance", checks.inv_21_provenance, invariants.inv_21_provenance),
     ]
     for name, func_chk, func_inv in check_pairs:
@@ -92,6 +101,13 @@ def test_run_pair_checks_passes_on_fixture():
     assert "inv_08" in result.passed
     assert "inv_09" in result.passed
     assert "inv_10" in result.passed
+    assert "inv_11" in result.passed
+    assert "inv_12" in result.passed
+    assert "inv_13" in result.passed
+    assert "inv_14" in result.passed
+    assert "inv_15" in result.passed
+    assert "inv_16" in result.passed
+    assert "inv_19" in result.passed
 
 
 def test_run_pair_checks_detects_deliberate_violations():
@@ -134,6 +150,91 @@ def test_run_pair_checks_detects_deliberate_violations():
     res_inv07 = run_pair_checks(state=corrupted_reqs_state, ledger_rows=ledger, current_pair=1)
     assert res_inv07.healthy is False
     assert "inv_07" in res_inv07.failed
+
+
+def test_run_pair_checks_detects_arithmetic_violations():
+    """Verify run_pair_checks detects violations of invariants 11-16 and 19."""
+    with open(FIXTURE_DIR / "state.json", "r", encoding="utf-8") as f:
+        state = json.load(f)
+    with open(FIXTURE_DIR / "ledger.jsonl", "r", encoding="utf-8") as f:
+        ledger = [json.loads(line) for line in f if line.strip()]
+
+    # inv_11: sum of deltas != cumulative
+    bad_analysis_11 = {
+        "pairs": [
+            {"pair": 1, "delta_you": 10.0, "delta_ai": 20.0, "c_you": 999.0, "c_ai": 20.0, "h_you": 5.0, "h_ai": 5.0, "you_pct": 33.3, "ai_pct": 66.7, "mode": "COPILOT"}
+        ],
+        "creator_counts": {"you": 4, "ai": 10},
+        "total_requirements": 14,
+    }
+    res_11 = run_pair_checks(state=state, ledger_rows=ledger, current_pair=1, analysis=bad_analysis_11)
+    assert res_11.healthy is False
+    assert "inv_11" in res_11.failed
+
+    # inv_12: creator counts do not sum to total_requirements
+    bad_analysis_12 = {
+        "pairs": [
+            {"pair": 1, "delta_you": 87.0, "delta_ai": 314.0, "c_you": 87.0, "c_ai": 314.0, "h_you": 47.0, "h_ai": 239.0, "you_pct": 21.7, "ai_pct": 78.3, "mode": "COPILOT"}
+        ],
+        "creator_counts": {"you": 1, "ai": 2},
+        "total_requirements": 14,
+    }
+    res_12 = run_pair_checks(state=state, ledger_rows=ledger, current_pair=1, analysis=bad_analysis_12)
+    assert res_12.healthy is False
+    assert "inv_12" in res_12.failed
+
+    # inv_13: cumulative mass non-monotonic
+    bad_analysis_13 = {
+        "pairs": [
+            {"pair": 1, "delta_you": 87.0, "delta_ai": 314.0, "c_you": 87.0, "c_ai": 314.0, "h_you": 47.0, "h_ai": 239.0, "you_pct": 21.7, "ai_pct": 78.3, "mode": "COPILOT"},
+            {"pair": 2, "delta_you": 0.0, "delta_ai": 0.0, "c_you": 50.0, "c_ai": 314.0, "h_you": 0.0, "h_ai": 0.0, "you_pct": 13.7, "ai_pct": 86.3, "mode": "QUIET"},
+        ],
+        "creator_counts": {"you": 4, "ai": 10},
+        "total_requirements": 14,
+    }
+    res_13 = run_pair_checks(state=state, ledger_rows=ledger, current_pair=2, analysis=bad_analysis_13)
+    assert res_13.healthy is False
+    assert "inv_13" in res_13.failed
+
+    # inv_14: shaper mass > delta mass
+    bad_analysis_14 = {
+        "pairs": [
+            {"pair": 1, "delta_you": 87.0, "delta_ai": 314.0, "c_you": 87.0, "c_ai": 314.0, "h_you": 100.0, "h_ai": 239.0, "you_pct": 21.7, "ai_pct": 78.3, "mode": "COPILOT"}
+        ],
+        "creator_counts": {"you": 4, "ai": 10},
+        "total_requirements": 14,
+    }
+    res_14 = run_pair_checks(state=state, ledger_rows=ledger, current_pair=1, analysis=bad_analysis_14)
+    assert res_14.healthy is False
+    assert "inv_14" in res_14.failed
+
+    # inv_15: percentages do not sum to 100
+    bad_analysis_15 = {
+        "pairs": [
+            {"pair": 1, "delta_you": 87.0, "delta_ai": 314.0, "c_you": 87.0, "c_ai": 314.0, "h_you": 47.0, "h_ai": 239.0, "you_pct": 40.0, "ai_pct": 40.0, "mode": "COPILOT"}
+        ],
+        "creator_counts": {"you": 4, "ai": 10},
+        "total_requirements": 14,
+    }
+    res_15 = run_pair_checks(state=state, ledger_rows=ledger, current_pair=1, analysis=bad_analysis_15)
+    assert res_15.healthy is False
+    assert "inv_15" in res_15.failed
+
+    # inv_16: mode not in VALID_MODES
+    bad_analysis_16 = {
+        "pairs": [
+            {"pair": 1, "delta_you": 87.0, "delta_ai": 314.0, "c_you": 87.0, "c_ai": 314.0, "h_you": 47.0, "h_ai": 239.0, "you_pct": 21.7, "ai_pct": 78.3, "mode": "BOGUS_MODE"}
+        ],
+        "creator_counts": {"you": 4, "ai": 10},
+        "total_requirements": 14,
+    }
+    res_16 = run_pair_checks(state=state, ledger_rows=ledger, current_pair=1, analysis=bad_analysis_16)
+    assert res_16.healthy is False
+    assert "inv_16" in res_16.failed
+
+    # inv_19: purity failure when analysis does not match recalculated ledger facts
+    res_19 = run_pair_checks(state=state, ledger_rows=ledger, current_pair=1, analysis=bad_analysis_11)
+    assert "inv_19" in res_19.failed
 
 
 def test_write_status_and_read(tmp_path):
@@ -356,6 +457,21 @@ def test_run_chat_end_to_end_healthy(tmp_path):
     assert rep_data["checks"]["failed"] == []
     assert "inv_01" in rep_data["checks"]["passed"]
     assert "inv_05" in rep_data["checks"]["passed"]
+    for inv_name in ["inv_10", "inv_11", "inv_12", "inv_13", "inv_14", "inv_15", "inv_16", "inv_19"]:
+        assert inv_name in rep_data["checks"]["passed"]
+
+    # Stage 4 Projections written to chat directory
+    assert (out_dir / "panel_bundle.json").exists()
+    assert (out_dir / "snapshots.json").exists()
+    with open(out_dir / "panel_bundle.json", "r", encoding="utf-8") as f:
+        bundle_data = json.load(f)
+    assert len(bundle_data["pairs"]) == 2
+
+    # Final summary in report matches TEST_STRATEGY §6
+    assert rep_data["final"] is not None
+    assert "direction" in rep_data["final"]
+    assert "decisions" in rep_data["final"]
+    assert "mode" in rep_data["final"]
 
 
 def test_deliberate_violation_halts_pipeline_and_names_invariant(tmp_path):

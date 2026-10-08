@@ -1,0 +1,122 @@
+{
+  "pairs": [
+    {
+      "pair": 1,
+      "direction": {
+        "you_pct": 47.5,
+        "ai_pct": 52.5
+      },
+      "decisions": {
+        "you_count": 4,
+        "ai_count": 0,
+        "latest_ai_example": null
+      },
+      "timeline": {
+        "pair": 1,
+        "delta_you": 29.0,
+        "delta_ai": 32.0,
+        "summary": "adding The evaluation of how",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 1",
+              "label": "R1",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 11.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 1",
+              "label": "R2",
+              "op": "create",
+              "delta_you": 9.0,
+              "delta_ai": 8.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 2",
+              "label": "R3",
+              "op": "create",
+              "delta_you": 8.0,
+              "delta_ai": 8.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 1",
+              "label": "R4",
+              "op": "create",
+              "delta_you": 7.0,
+              "delta_ai": 5.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Design analysis and evaluation of the co-creative panel",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Design analysis and evaluation of the co-creative panel",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Project status and timeline review",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Evaluation of how the panel addresses co-creative system challenges",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Analogies for the timeline mechanism",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 4,
+          "w_ai": 0,
+          "h_you": 9.0,
+          "h_ai": 32.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    }
+  ]
+}

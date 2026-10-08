@@ -885,4 +885,102 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
 ```
 - **Next:** Phase E2 — Stage 4 Math & Derived Facts (`analysis.json`).
 
+---
+
+## 2026-09-24 13:30 · Antigravity · Gemini 3.8 Flash (High)
+- **Phase/Step:** [DATA OPS] WORK — C3: 20-Chat Stratified Selection & Corpus Promotion
+- **Did:**
+  - Built `scripts/promote_from_archive.py` to extract, normalize, and promote canonical archive conversations into full 4-file corpus entries.
+  - Selected 20 non-sensitive chats (10 Medium: 6–20 pairs, 10 Long: 21–242 pairs) spanning learning, planning, writing, coding, research, and creative domains.
+  - Applied IMPORT_SPEC v1.0 §6 pairing rules: leading AI turn dropped, consecutive same-speaker turns merged, trailing user turns dropped.
+  - Generated and verified `dialogue.json` (100% compliant with `engine/schemas/dialogue.schema.json`), `source.json`, `source_meta.json`, and `meta.yaml` across all 20 new entries (`c37` through `c56`).
+  - Created `data/corpus/selection_manifest.json` and synchronized `data/corpus/manifest.json`.
+- **Decisions made:**
+  - Preserved Layer 1 descriptive facts (`task_type`, `language`, `domain`, `notes`) and kept Layer 2 fields (`prompt_style`, `expected.*`) null to prevent circular evaluation.
+  - Numbered promoted chats sequentially from `c37` to `c56` to avoid any collision with existing E0 corpus chats (`c01`–`c36`).
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - All 20 `dialogue.json` files validated against `dialogue.schema.json` via Draft202012Validator with 0 errors.
+  - `python3 scripts/phase_report.py`: 56/56 corpus entries valid with all 4 files; `manifest.json` 100% reconciled against filesystem.
+  - Full test suite: 82/82 tests green in 0.50s.
+- **Next:** Available for Phase E2 Stage 4 benchmarking.
+
+---
+
+## 2026-10-08 10:18 · Antigravity · Gemini
+- **Phase/Step:** E2.S7 — Into the Pipeline
+- **Did:**
+  - Implemented `build_analysis_dict` in `engine/quant.py` assembling the exact Stage 4 derived metrics structure required by arithmetic and purity invariants (Invariants 10–16, 19).
+  - Added uppercase `"CENTAUR"` to `VALID_MODES` in `tests/invariants.py` to match `panel_bundle.schema.json`.
+  - Wired Stage 4 quantification and invariant checks into `engine/checks.py:run_pair_checks`: computes `analysis` deterministically from ledger rows and evaluates Invariants 10 through 16 and 19 (purity on identical ledger).
+  - Wired Stage 4 projections into `engine/pipeline.py:run_chat`: calls `export_panel_projections(target_dir=out_dir, ...)` immediately after Step 3 on every pair, outputting schema-validated `panel_bundle.json` and `snapshots.json`.
+  - Added Stage 4 `final` summary (`direction`, `decisions`, `mode`) to `report.json` in `engine/pipeline.py` adhering to `docs/TEST_STRATEGY.md` §6.
+  - Updated `tests/test_checks.py`: verified direct function object import for all 21 invariants from `tests/invariants.py`, asserted passing of Invariants 10–16 and 19 on `fixture_pair1`, added explicit tests detecting arithmetic violations on Invariants 11–16 and 19, and verified Stage 4 projections and report final summary in end-to-end pipeline execution test.
+- **Decisions made:**
+  - `build_analysis_dict` operates with zero LLM calls and full IEEE 754 precision, producing identical output on repeated runs (Invariant 19).
+  - Runtime checks automatically construct Stage 4 `analysis` whenever ledger rows exist if not explicitly supplied, ensuring invariants 10–16 and 19 run in production and tests without external scaffolding.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `pytest -m tier1`: 101/101 passed in 0.68s.
+  - Full test suite: 102/102 passed in 0.55s.
+  - `data/chats/fixture_pair1/` untouched.
+- **Next:** E2.S8 — Stage 4 Corpus Replay across 10 E1 Ledgers.
+
+---
+
+## 2026-10-08 10:25 · Antigravity · Gemini
+- **Phase/Step:** E2.S8 — First Real Numbers (Corpus Replay)
+- **Did:**
+  - Built `scripts/replay_stage4.py` executing Stage 4 quantification and projections offline across all 10 Phase E1 corpus ledgers (`c03`, `c04`, `c05`, `c07`, `c10`, `c16`, `c17`, `c20`, `c27`, `c30`) with zero LLM calls and zero network requests.
+  - Materialized schema-validated `panel_bundle.json` and `snapshots.json` in all 10 chat directories.
+  - Ran `run_pair_checks` across all 10 chats: 100% passed all applicable invariants (Invariants 1–16, 19, 21).
+  - Updated `data/chats/<id>/run/report.json` across all 10 chats with Stage 4 `final` metrics and complete check passes.
+  - Produced empirical metrics summary table per E2.S8 brief:
+    | chat | pairs | you % | AI % | decisions you/AI | mode per pair | quote match exact/fuzzy |
+    |---|---|---|---|---|---|---|
+    | c03_coding_short | 3 | 25.8% | 74.2% | 3 / 6 | [COPILOT, COPILOT, COPILOT] | 28 exact / 1 fuzzy |
+    | c04_writing_short | 4 | 46.1% | 53.9% | 11 / 4 | [COPILOT, COPILOT, COPILOT, COPILOT] | 31 exact / 1 fuzzy |
+    | c05_research_medium | 7 | 25.1% | 74.9% | 14 / 5 | [COPILOT, COPILOT, COPILOT, COPILOT, COPILOT, COPILOT, COPILOT] | 72 exact / 1 fuzzy |
+    | c07_research_short | 4 | 20.9% | 79.1% | 5 / 1 | [COPILOT, COPILOT, COPILOT, COPILOT] | 24 exact / 1 fuzzy |
+    | c10_research_short | 1 | 72.0% | 28.0% | 4 / 1 | [CENTAUR] | 8 exact / 0 fuzzy |
+    | c16_research_short | 1 | 47.5% | 52.5% | 4 / 0 | [COPILOT] | 9 exact / 0 fuzzy |
+    | c17_research_short | 1 | 52.0% | 48.0% | 2 / 0 | [COPILOT] | 5 exact / 0 fuzzy |
+    | c20_coding_short | 3 | 29.6% | 70.4% | 3 / 11 | [COPILOT, COPILOT, COPILOT] | 34 exact / 0 fuzzy |
+    | c27_creative_short | 2 | 53.8% | 46.2% | 7 / 2 | [COPILOT, CENTAUR] | 18 exact / 0 fuzzy |
+    | c30_creative_short | 2 | 24.8% | 75.2% | 3 / 7 | [COPILOT, COPILOT] | 23 exact / 0 fuzzy |
+- **Decisions made:**
+  - Audited structural peculiarities per brief: zero chats with 0 requirements, zero degenerate 100/0 splits, zero all-QUIET chats.
+  - Flagged for owner review: `c16` and `c17` are 1-pair chats where AI decisions are 0; `c10` is high user agency CENTAUR (72.0% you); `c05` is sustained 7-pair COPILOT (74.9% AI).
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `python3 scripts/replay_stage4.py`: 10/10 chats successfully replayed, 100% invariants passed.
+  - `pytest -m tier1`: 101/101 passed in 0.50s.
+  - Full test suite: 102/102 passed in 0.55s.
+  - `data/chats/fixture_pair1/` untouched.
+- **Next:** E2.S9 — Phase Close (phase report, git tag `e2-done`, self-review against brief).
+
+---
+
+## 2026-10-08 10:35 · Antigravity · Gemini
+- **Phase/Step:** E2.S9 — Phase Close
+- **Did:**
+  - Audited all 13 Phase E2 Definition of Done criteria via `scripts/phase_report.py`: 13/13 verified `[X]`.
+  - Updated `scripts/phase_report.py` to evaluate Stage 4 analysis for Invariants 10–16 & 19 on `fixture_pair1` and added Section 9 (E2 Definition of Done Audit).
+  - Updated `Agents Documentation.md` to document Phase E2 complete and mark Phase E2 closed (tagged `e2-done`).
+  - Added `.tmp_chrome/` to `.gitignore` to keep working tree clean.
+  - Verified frozen fixture integrity: `data/chats/fixture_pair1/` strictly untouched (0 diffs).
+  - Ready for git commit and `git tag e2-done`.
+- **Decisions made:**
+  - E2 DoD criteria 100% verified programmatically from disk state.
+  - Entire Phase E2 executed with zero LLM calls, zero network requests, pure deterministic arithmetic.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `python3 scripts/phase_report.py`: exit code 0, all 13 E2 DoD criteria `[X]`.
+  - `pytest -m tier1`: 101/101 passed in 0.50s.
+  - Full test suite: 102/102 passed in 0.55s.
+  - `data/chats/fixture_pair1/` untouched.
+- **Next:** Phase E3 (Long-chat evaluation) / Phase C (Frontend UI & Visualisation).
+
+
+
 

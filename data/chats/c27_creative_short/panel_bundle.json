@@ -1,0 +1,249 @@
+{
+  "pairs": [
+    {
+      "pair": 1,
+      "direction": {
+        "you_pct": 44.3,
+        "ai_pct": 55.7
+      },
+      "decisions": {
+        "you_count": 3,
+        "ai_count": 2,
+        "latest_ai_example": "The animation prompt must adhere to the Kling 'One-motion rule', focusing on a single action and avoiding multi-stage choreography"
+      },
+      "timeline": {
+        "pair": 1,
+        "delta_you": 31.0,
+        "delta_ai": 39.0,
+        "summary": "adding The animation prompt must",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 1",
+              "label": "R1",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 2.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 2",
+              "label": "R2",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 5.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 1",
+              "label": "R3",
+              "op": "create",
+              "delta_you": 8.0,
+              "delta_ai": 10.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 1",
+              "label": "R4",
+              "op": "create",
+              "delta_you": 7.0,
+              "delta_ai": 7.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 1",
+              "label": "R5",
+              "op": "create",
+              "delta_you": 6.0,
+              "delta_ai": 15.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Comprehensive prompt package for jellyfish image modification and animation",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Comprehensive prompt package for jellyfish image modification and animation",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Kling 3.0 Pro image-to-video animation prompt and settings",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Nano Banana Pro image editing prompt and instructions to reduce jellyfish artifact height",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Prompting principles and iteration strategy",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 3,
+          "w_ai": 2,
+          "h_you": 16.0,
+          "h_ai": 29.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "direction": {
+        "you_pct": 53.8,
+        "ai_pct": 46.2
+      },
+      "decisions": {
+        "you_count": 7,
+        "ai_count": 2,
+        "latest_ai_example": "The animation prompt must adhere to the Kling 'One-motion rule', focusing on a single action and avoiding multi-stage choreography"
+      },
+      "timeline": {
+        "pair": 2,
+        "delta_you": 60.0,
+        "delta_ai": 39.0,
+        "summary": "adding The Nano Banana Pro",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 2",
+              "label": "R6",
+              "op": "create",
+              "delta_you": 16.0,
+              "delta_ai": 10.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 3",
+              "label": "R7",
+              "op": "create",
+              "delta_you": 14.0,
+              "delta_ai": 11.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 4",
+              "label": "R8",
+              "op": "create",
+              "delta_you": 15.0,
+              "delta_ai": 8.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 5",
+              "label": "R9",
+              "op": "create",
+              "delta_you": 15.0,
+              "delta_ai": 10.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Comprehensive prompt package for jellyfish image modification and animation",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Comprehensive prompt package for jellyfish image modification and animation",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Kling 3.0 Pro image-to-video animation prompt and settings",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Nano Banana Pro image editing prompt and instructions to reduce jellyfish artifact height",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Prompting principles and iteration strategy",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "CENTAUR",
+        "signals": {
+          "w_you": 4,
+          "w_ai": 0,
+          "h_you": 40.0,
+          "h_ai": 39.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 50.0,
+          "copilot_pct": 50.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    }
+  ]
+}

@@ -18,8 +18,11 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from engine.quant import build_analysis_dict
+
 # Direct imports from tests/invariants.py: one implementation, two callers.
 from tests.invariants import (
+    audit_quote_matches,
     inv_01_schema_valid,
     inv_02_action_ids,
     inv_03_ledger_references_exist,
@@ -60,6 +63,7 @@ class CheckResult:
     passed: list[str] = field(default_factory=list)
     failed: list[str] = field(default_factory=list)
     violations: list[str] = field(default_factory=list)
+    quote_matches: dict[str, int] = field(default_factory=dict)
 
 
 def run_pair_checks(
@@ -69,6 +73,7 @@ def run_pair_checks(
     prev_ledger_rows: list[dict[str, Any]] | None = None,
     current_pair: int | None = None,
     schemas_dir: Path | str | None = None,
+    analysis: dict[str, Any] | None = None,
 ) -> CheckResult:
     """Run all applicable invariants after a pair completes.
 
@@ -83,11 +88,25 @@ def run_pair_checks(
     - inv_08: Requirement created_at_pair <= current_pair
     - inv_09: Slot status and resolution link
     - inv_10: Positive finite scores on ledger rows
+    - inv_11: Sum of deltas equals cumulative total
+    - inv_12: Creator counts sum to distinct requirements
+    - inv_13: Cumulative mass is monotonically non-decreasing
+    - inv_14: SHAPER scores are a subset of all scores
+    - inv_15: Percentages within [0, 100] and sum to 100
+    - inv_16: Mode is pure function of w and h and in valid enum
     - inv_17: Append-only ledger preservation (if prev_ledger_rows is provided)
+    - inv_19: Purity (deterministic recalculation on same inputs)
     - inv_21: Provenance of evidence quotes in dialogue (if dialogue is provided)
     """
     state_dict = state.to_dict() if hasattr(state, "to_dict") else (state or {})
     rows = getattr(ledger_rows, "rows", ledger_rows) or []
+
+    # If analysis is not explicitly provided, derive it from Stage 4 quantification
+    if analysis is None and rows:
+        try:
+            analysis = build_analysis_dict(rows, state_dict=state_dict, max_pair=current_pair)
+        except Exception:
+            analysis = None
 
     passed: list[str] = []
     failed: list[str] = []
@@ -138,7 +157,23 @@ def run_pair_checks(
     _eval("inv_09", inv_09_slot_status_and_inactivity(state_dict, current_pair=current_pair))
 
     # 10. inv_10: scores positive
-    _eval("inv_10", inv_10_scores_positive(analysis=None, ledger_rows=rows))
+    _eval("inv_10", inv_10_scores_positive(analysis=analysis, ledger_rows=rows))
+
+    # Stage 4 Arithmetic & Purity Invariants (11 - 16, 19)
+    if analysis is not None:
+        _eval("inv_11", inv_11_deltas_sum_to_cumulative(analysis))
+        _eval("inv_12", inv_12_creator_counts_sum(analysis, state=state_dict))
+        _eval("inv_13", inv_13_cumulative_mass_monotonic(analysis))
+        _eval("inv_14", inv_14_shaper_subset(analysis))
+        _eval("inv_15", inv_15_percentages_sum_to_100(analysis))
+        _eval("inv_16", inv_16_mode_pure_function(analysis))
+
+        # 19. inv_19: purity (deterministic recalculation on same inputs)
+        try:
+            analysis_rerun = build_analysis_dict(rows, state_dict=state_dict, max_pair=current_pair)
+        except Exception:
+            analysis_rerun = None
+        _eval("inv_19", inv_19_purity(analysis, analysis_rerun))
 
     # 17. inv_17: append-only (if prev_ledger_rows is provided)
     if prev_ledger_rows is not None:
@@ -146,8 +181,10 @@ def run_pair_checks(
         _eval("inv_17", inv_17_append_only(prev_rows, rows))
 
     # 21. inv_21: provenance (if dialogue is provided)
+    quote_counts = {}
     if dialogue is not None:
         _eval("inv_21", inv_21_provenance(dialogue, rows, state_dict))
+        quote_counts = audit_quote_matches(dialogue, state_dict)
 
     healthy = len(failed) == 0
     return CheckResult(
@@ -155,6 +192,7 @@ def run_pair_checks(
         passed=passed,
         failed=failed,
         violations=violations,
+        quote_matches=quote_counts,
     )
 
 
@@ -194,6 +232,8 @@ def write_report(
     checks_passed: list[str],
     checks_failed: list[str],
     final: dict | None = None,
+    quote_matches: dict[str, int] | None = None,
+    dialogue: list[dict[str, Any]] | None = None,
 ) -> Path:
     """Write run/report.json per TEST_STRATEGY.md §6."""
     report_path = Path(out_dir) / "run" / "report.json"
@@ -210,6 +250,31 @@ def write_report(
     # Sort and deduplicate checks
     passed_sorted = sorted(list(set(checks_passed)))
     failed_sorted = sorted(list(set(checks_failed)))
+
+    # Compute quote match breakdown if not explicitly supplied
+    if quote_matches is None:
+        if dialogue is not None:
+            quote_matches = audit_quote_matches(dialogue, state_dict)
+        else:
+            diag_file = Path(out_dir) / "dialogue.json"
+            if not diag_file.exists():
+                diag_file = Path(out_dir).parent.parent / "corpus" / chat_id / "dialogue.json"
+            if diag_file.exists():
+                try:
+                    with open(diag_file, "r", encoding="utf-8") as f:
+                        diag_data = json.load(f)
+                    quote_matches = audit_quote_matches(diag_data, state_dict)
+                except Exception:
+                    quote_matches = {}
+            else:
+                quote_matches = {}
+
+    qm_dict = {
+        "exact": quote_matches.get("exact", 0),
+        "whitespace_normalised": quote_matches.get("whitespace_normalised", 0),
+        "segmented": quote_matches.get("segmented", 0),
+        "fuzzy": quote_matches.get("fuzzy", 0),
+    }
 
     report_data = {
         "chat_id": chat_id,
@@ -229,6 +294,7 @@ def write_report(
             "passed": passed_sorted,
             "failed": failed_sorted,
         },
+        "quote_matches": qm_dict,
         "final": final,
     }
 

@@ -36,3 +36,6 @@ data/Claude Manifest*.json
 # OS
 .DS_Store
 Thumbs.db
+
+# Chrome temp
+.tmp_chrome/

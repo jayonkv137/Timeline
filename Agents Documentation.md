@@ -73,19 +73,24 @@ quote. It is a mirror, not a judge.
   schemas, configs), pause for owner review before building on top of it.
 
 ## Current phase
-E1 — Extraction Pipeline (Steps 1a–3) (CLOSED — Tagged `e1-done`). Ready for Phase E2 (Stage 4 Math & `analysis.json`).
+Phase E2 — Stage 4 Math & Projections (CLOSED — Tagged `e2-done`). Ready for Phase E3 (Long-chat evaluation) / Phase C (Frontend UI & Visualisation).
 
-All Phase E1 deliverables are 100% complete and verified via `scripts/phase_report.py`:
-- Complete extraction pipeline (Steps 1a $\to$ 1b $\to$ 1c $\to$ 2 $\to$ 3) implemented in `engine/pipeline.py` with verbatim COTRACE prompts.
-- Production runtime invariants promoted in `engine/checks.py` with immediate halt-on-violation, writing `run/status.json` and `run/report.json` on every run.
-- Golden chat (`golden_01`) extraction verified: Match rate = 100.0%, Spurious rate = 0.0% against human ground truth in `expected.md`.
-- Multi-chat corpus execution completed across 10 classified chats in record mode, with 100% passing all 10 invariants (1–9, 21).
-- Offline tier0 replay test suite running against committed cassettes in `tests/cassettes/` in < 0.5s without network access.
-- Idempotency verified: re-running processed chats produces zero duplicate ledger rows (`inv_05`, `inv_17`).
-- Scaling analysis: empirical wall time and token growth curves prove linear plateauing (50k–85k tokens/pair), confirming bounded context accumulation.
-- `SPEC_QUESTIONS.md` Q6 (tool narration in AI turns) and Q7 (single-root tree invariant across drift) fully resolved with empirical evidence.
-- Full test suite: 82/82 tests green in 0.39s.
-- Frozen fixture `data/chats/fixture_pair1/` strictly untouched and byte-identical.
+All Phase E2 deliverables are 100% complete and verified via `scripts/phase_report.py`:
+- Stage 4 deterministic mathematical engine implemented in `engine/quant.py`:
+  - Direction Fact (`compute_direction`): Net contribution masses $\Sigma U = 87.0$, $\Sigma A = 314.0$ (21.7% You / 78.3% AI) exactly matching §10.2 / fixture.
+  - Requirement Attribution & Decisions Fact (`compute_decisions`): Requirement keying on `(outcome_id, req_id)`, creator tie-break, non-trivial requirement masses ($w_r = \delta_r + \text{depth}_r$), 4 You · 10 AI over 14 requirements matching §10.3 / fixture.
+  - Mode Classification Fact (`compute_mode`): Exact signals $w = 4/10$, $h = 47.0/239.0$, classified as `COPILOT` via literal §10.5 rule tree.
+  - Timeline Fact (`compute_timeline`): Drawer projection with 5 slot aggregations, $r_{\text{sum}}$ sum of requirement masses, deterministic ledger summaries, matching §10.6 / fixture.
+  - Goal View (`compute_goal_view`): Default node (dominant requirement) and hierarchical tree views across all depth cases ($d=0, 1, 2, \ge 3$), exactly matching §10.7 / fixture.
+- Projections & Writers implemented in `engine/projections/panel.py`:
+  - `export_panel_projections` generating `panel_bundle.json` and `snapshots.json`.
+  - Zero-diff equivalence verified against frozen `fixture_pair1/` (`tests/test_projections.py`).
+- Runtime Invariants 10–16 & 19 wired into `engine/checks.py:run_pair_checks` and `engine/pipeline.py:run_chat`.
+- Zero-LLM offline replay executed across all 10 Phase E1 corpus chats (`scripts/replay_stage4.py`), validating and materializing schema-compliant `panel_bundle.json` and `snapshots.json` in each directory.
+- All Invariants 1–16, 19, 21 passing across all 10 corpus chats and `fixture_pair1/`.
+- `SPEC_QUESTIONS.md` updated: Q7 single-root outcome tree constraint reopened with multi-topic evidence; Q9 logged documenting `inv_21` widening for normalized/segmented quote matches.
+- Full test suite: 101 tier1 tests passing in 0.50s (102 total passing in 0.55s).
+- Frozen fixture `data/chats/fixture_pair1/` strictly untouched (0 diffs).
 
-Next: **Phase E2 — Stage 4 Math & Derived Facts (`analysis.json`)**.
+Next: **Phase E3 — Long-Chat Evaluation & Batch Pipeline Scaling** / **Phase C — Frontend UI & Visualisation**.
 

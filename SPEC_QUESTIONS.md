@@ -89,7 +89,7 @@
   activities without creating spurious requirements or corrupting SHAPER metrics.
 - **Status:** RESOLVED.
 
-## Q7 — Single-root outcome tree constraint vs multi-topic conversational drift (RESOLVED)
+## Q7 — Single-root outcome tree constraint vs multi-topic conversational drift (OPEN)
 - **What:** `inv_06_outcome_tree` enforces that the outcome tree has exactly one root
   (`len(roots) == 1`). Real chats can span multiple totally unrelated topics in the same
   session (e.g. visa extension, bed frame, portfolio website). Forcing a single root may
@@ -105,7 +105,7 @@
   interaction modes" in `c04`). Evolving topics and sub-tasks branched cleanly as child
   outcomes under this single root without any observed hallucination of unnatural umbrella
   constructs. All 10 chats satisfied `inv_06_outcome_tree` cleanly (`len(roots) == 1`).
-- **Status:** RESOLVED.
+- **Status:** OPEN — Reopened before E2; closed prematurely on ten chats of at most 7 pairs, none genuinely multi-topic. Tested properly in E3 with stratified long chats.
 
 ## Q8 — 5-tuple uniqueness key for honesty ledger rows (RESOLVED)
 - **What:** `docs/TEST_STRATEGY.md` §2 item 5 specified a 4-tuple `(action_id, req_id, pair_added, kind)`
@@ -120,5 +120,29 @@
   never `req_id` alone.** Any future view or analysis module that treats a requirement as
   a node and keys it on `req_id` alone will silently merge unrelated requirements.
 - **Status:** RESOLVED.
+
+## Q9 — Widening of inv_21 quote matching beyond exact verbatim (REVISIT)
+- **What:** During Phase E1, `inv_21` (quote provenance) was widened from strict verbatim substring matching to tolerate real-world transcript artifacts across four classes:
+  1. `exact`: Verbatim character-for-character substring (including standard surrounding quotes stripping).
+  2. `whitespace_normalised`: Case-folding, collapsed whitespace sequences (`\s+` -> `' '`), smart punctuation/dashes normalization, and markdown styling marker (`*`, `_`, `` ` ``, `>`) stripping.
+  3. `segmented`: Sequential ordered segment appearance for quotes joined across ellipses (`...`, `…`) or transition arrows (`->`, `→`).
+  4. `fuzzy`: In-order word matching with gap tolerance up to 15 words and speech stutter head/tail stripping (e.g. model cleaning conversational filler).
+- **Why:** In real LLM chats, the model frequently quotes across pauses, strips formatting syntax, or cleans up speech disfluencies. Enforcing byte-exact substring matching falsely flagged genuinely grounded quotes as ungrounded hallucinations.
+- **Empirical counts across all 10 E1 corpus chats (305 total action quotes):**
+  - `exact`: 252 (82.6%)
+  - `whitespace_normalised`: 23 (7.5%)
+  - `segmented`: 26 (8.5%)
+  - `fuzzy`: 4 (1.3%)
+  - `unmatched`: 0 (0.0%)
+- **Status:** REVISIT — The matching logic is preserved for pipeline stability, and every run now explicitly records the four counts in `run/report.json` and the phase verification report. The owner decides whether to retain fuzzy tolerances or tighten quote extraction prompts with the empirical numbers in front of him.
+
+## Q10 — QUIET pair mode classification and schema representation (RESOLVED)
+- **What:** Pipeline Spec §10.5 states: `quiet pair (no ops, Δ total < 2) → inherit`, whereas `panel_bundle.schema.json` explicitly defines the `"mode"` enum as `["CENTAUR", "COPILOT", "AUTOPILOT", "QUIET"]` and defines `split` as `% of non-quiet pairs`.
+- **Options considered:**
+  (a) set `mode` directly to the inherited prior mode — rejected: this would make `"QUIET"` unreachable despite being in the frozen schema enum, and would prevent downstream consumers from identifying quiet exchanges.
+  (b) classify `mode = "QUIET"`, track `inherited_mode` (the previous non-quiet mode for UI metaphor inheritance), and exclude quiet pairs from the running `split` denominator.
+- **Taken:** (b). `ModeFact` assigns `mode = "QUIET"`, preserves `inherited_mode` for the UI narrative line, and computes `split` percentages strictly over non-quiet history up to pair $t$.
+- **Status:** RESOLVED.
+
 
 

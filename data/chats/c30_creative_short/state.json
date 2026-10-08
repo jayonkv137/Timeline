@@ -1,0 +1,578 @@
+{
+  "actions": [
+    {
+      "id": "U(1,1)",
+      "type": "Describe",
+      "text": "The user describes their vision for an automated multi-agent system for language learning video production.",
+      "role": "SHAPER",
+      "evidence_quote": "i wanna platform automated with agents and persistent global context memory"
+    },
+    {
+      "id": "U(1,2)",
+      "type": "Ask",
+      "text": "The user asks for advice on whether to design the UI first or focus on workflow clarity to build the system.",
+      "role": "SHAPER",
+      "evidence_quote": "is it better rlike i desing the full ui like how evryhting should Work using claude design and like maybe figma make so then how wohld ahve perfect clairty om thsi full workflwo or workspzcr clairty"
+    },
+    {
+      "id": "A(1,1)",
+      "type": "Recommend",
+      "text": "The AI advises against designing the UI first and recommends running the pipeline manually.",
+      "role": "SHAPER",
+      "evidence_quote": "Short answer: no — don't design the UI first. Run the pipeline manually once, first."
+    },
+    {
+      "id": "A(1,2)",
+      "type": "Explain",
+      "text": "The AI explains why a UI-first approach is a trap for this specific project.",
+      "role": "SHAPER",
+      "evidence_quote": "Designing screens gives you the feeling of clarity, but you'd be designing chat interfaces around a process you haven't actually executed yet."
+    },
+    {
+      "id": "A(1,3)",
+      "type": "Instruct",
+      "text": "The AI provides a step-by-step plan for achieving clarity through manual execution.",
+      "role": "SHAPER",
+      "evidence_quote": "What actually gives you clarity: do one full episode by hand. Today, in Claude chat, no code, no UI."
+    },
+    {
+      "id": "A(1,4)",
+      "type": "Define",
+      "text": "The AI defines the core artifacts required for the system.",
+      "role": "SHAPER",
+      "evidence_quote": "What you're really designing is not screens — it's the artifacts. Your system is essentially four documents flowing through stages"
+    },
+    {
+      "id": "A(1,5)",
+      "type": "Plan",
+      "text": "The AI outlines the recommended order of operations for building the system.",
+      "role": "SHAPER",
+      "evidence_quote": "So the order is: manual episode → write down the four artifact schemas → a rough flow sketch → Claude Code with an ugly functional UI → polish visuals last"
+    },
+    {
+      "id": "A(1,6)",
+      "type": "Warn",
+      "text": "The AI warns the user about the complexity of automating too many stages at once.",
+      "role": "SHAPER",
+      "evidence_quote": "One thing worth flagging: you've described eight-plus agent stages. As a solo builder, that's a lot of surface area"
+    },
+    {
+      "id": "A(1,7)",
+      "type": "Recommend",
+      "text": "The AI recommends building stages incrementally based on manual effort.",
+      "role": "SHAPER",
+      "evidence_quote": "Build stages 1–3 first (ideation → story → screenplay), keep storyboard and video manual for now, and only automate a stage once you're bored of doing it by hand."
+    },
+    {
+      "id": "U(2,1)",
+      "type": "Describe",
+      "text": "User describes their goal of building a proof of concept for a language learning platform.",
+      "role": "SHAPER",
+      "evidence_quote": "i am also huidlign a proof of cocnetpt a unuvers ebuidlign with narrative for a langaueg leanring"
+    },
+    {
+      "id": "U(2,2)",
+      "type": "Describe",
+      "text": "User describes the desired output of 30-second Instagram reels for German language learning.",
+      "role": "SHAPER",
+      "evidence_quote": "ic annpost like with 4 charxter stories nareative teshc ppl through isntagram 30 sd ond reels gemrna level form a1 to b1"
+    },
+    {
+      "id": "U(2,3)",
+      "type": "Describe",
+      "text": "User describes the desired production unit model.",
+      "role": "SHAPER",
+      "evidence_quote": "kijd if televeisonnproducijn unit is what i want actualky whre evryhting is ahndled and done proely"
+    },
+    {
+      "id": "A(2,1)",
+      "type": "Acknowledge",
+      "text": "AI acknowledges the user's production framework.",
+      "role": "OTHER",
+      "evidence_quote": "Recognized production framework"
+    },
+    {
+      "id": "A(2,2)",
+      "type": "Prioritize",
+      "text": "AI prioritizes the creation of a series bible and audience validation.",
+      "role": "SHAPER",
+      "evidence_quote": "prioritized series bible and audience validation first."
+    },
+    {
+      "id": "A(2,3)",
+      "type": "Evaluate",
+      "text": "AI evaluates the user's reframe of the project.",
+      "role": "SHAPER",
+      "evidence_quote": "That reframe actually makes the advice sharper, not different: the show is the product, the platform is the studio."
+    },
+    {
+      "id": "A(2,4)",
+      "type": "Explain",
+      "text": "AI explains the necessity of content before engineering.",
+      "role": "SHAPER",
+      "evidence_quote": "studios get built around shows that already exist — not before."
+    },
+    {
+      "id": "A(2,5)",
+      "type": "Explain",
+      "text": "AI explains the success factors of the reference project (Nico's Weg).",
+      "role": "OTHER",
+      "evidence_quote": "Nico's Weg worked because Deutsche Welle locked the series bible, the level progression, and the episode format before shooting anything."
+    },
+    {
+      "id": "A(2,6)",
+      "type": "Instruct",
+      "text": "AI instructs the user to focus on writing and show-running.",
+      "role": "SHAPER",
+      "evidence_quote": "Your equivalent work right now is writing and show-running, not engineering."
+    },
+    {
+      "id": "A(2,7)",
+      "type": "List",
+      "text": "AI lists the components of a series bible.",
+      "role": "SHAPER",
+      "evidence_quote": "Series bible — 4 characters with wants, flaws, relationships; the town/world; the visual identity; the tone."
+    },
+    {
+      "id": "A(2,8)",
+      "type": "Instruct",
+      "text": "AI instructs the user to map the season arc to the curriculum.",
+      "role": "SHAPER",
+      "evidence_quote": "Season arc mapped to the curriculum — this is the hard, invisible part."
+    },
+    {
+      "id": "A(2,9)",
+      "type": "Instruct",
+      "text": "AI instructs the user to define an episode format template.",
+      "role": "SHAPER",
+      "evidence_quote": "Episode format template — 30 seconds, 2× 15-second sequences, fixed structure"
+    },
+    {
+      "id": "A(2,10)",
+      "type": "Recommend",
+      "text": "AI recommends publishing manual episodes to validate the format.",
+      "role": "SHAPER",
+      "evidence_quote": "Then publish episodes 1–3 completely by hand. Post them. See if anyone watches"
+    },
+    {
+      "id": "A(2,11)",
+      "type": "Explain",
+      "text": "AI explains the strategy for building production tools.",
+      "role": "SHAPER",
+      "evidence_quote": "That's how every real production tool gets built: someone does the job manually until a step becomes unbearable, then automates that step."
+    },
+    {
+      "id": "A(2,12)",
+      "type": "Define",
+      "text": "AI defines the user's next immediate artifact.",
+      "role": "SHAPER",
+      "evidence_quote": "So your next artifact isn't a UI mockup or a repo. It's a series bible with a season map."
+    },
+    {
+      "id": "A(2,13)",
+      "type": "Invite",
+      "text": "AI invites the user to start working on the series bible.",
+      "role": "SHAPER",
+      "evidence_quote": "Want to start on that?"
+    }
+  ],
+  "outcomes": [
+    {
+      "id": "outcome 1",
+      "text": "Development plan for a language learning video production system and content pipeline",
+      "turn_id": "U(1,1)",
+      "parent": null,
+      "children": [
+        "outcome 2",
+        "outcome 3"
+      ],
+      "related": []
+    },
+    {
+      "id": "outcome 2",
+      "text": "Workflow strategy for incremental automation",
+      "turn_id": "U(1,2)",
+      "parent": "outcome 1",
+      "children": [],
+      "related": []
+    },
+    {
+      "id": "outcome 3",
+      "text": "Series bible and content strategy for the German language learning show",
+      "turn_id": "U(2,1)",
+      "parent": "outcome 1",
+      "children": [],
+      "related": []
+    }
+  ],
+  "intentions": [
+    {
+      "intention_id": "I1",
+      "intention": "Production infrastructure and automation",
+      "outcome_ids": [
+        "outcome 1",
+        "outcome 2"
+      ]
+    },
+    {
+      "intention_id": "I2",
+      "intention": "Content strategy and show design",
+      "outcome_ids": [
+        "outcome 3"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "outcome_id": "outcome 1",
+      "req_id": "req 1",
+      "text": "The system must be automated using multiple agents.",
+      "type": "constraint",
+      "status": "active",
+      "creation_action_ids": [
+        "U(1,1)"
+      ],
+      "contributing_action_ids": [],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "The user explicitly states they want a platform automated with agents.",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 1",
+      "req_id": "req 2",
+      "text": "The system must feature persistent global context memory.",
+      "type": "constraint",
+      "status": "active",
+      "creation_action_ids": [
+        "U(1,1)"
+      ],
+      "contributing_action_ids": [],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "The user explicitly specifies the need for persistent global context memory in the platform.",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 3",
+      "req_id": "req 1",
+      "text": "The system design must be structured around four core artifact documents flowing through stages.",
+      "type": "constraint",
+      "status": "active",
+      "creation_action_ids": [
+        "A(1,4)"
+      ],
+      "contributing_action_ids": [
+        "U(1,1)",
+        "U(1,2)",
+        "A(1,1)",
+        "A(1,3)",
+        "A(1,5)",
+        "A(1,6)",
+        "A(1,7)",
+        "U(2,3)",
+        "A(2,2)",
+        "A(2,7)",
+        "A(2,8)",
+        "A(2,9)",
+        "A(2,12)"
+      ],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "The AI explicitly defines the system as essentially consisting of four documents flowing through stages, establishing this as a core structural constraint.",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 3",
+      "req_id": "req 2",
+      "text": "The implementation roadmap must follow the sequence of: manual episode execution, defining the four artifact schemas, creating a rough flow sketch, developing a functional UI, and polishing visuals last.",
+      "type": "task",
+      "status": "active",
+      "creation_action_ids": [
+        "A(1,5)"
+      ],
+      "contributing_action_ids": [
+        "U(1,1)",
+        "U(1,2)",
+        "A(1,1)",
+        "A(1,2)",
+        "A(1,3)",
+        "A(1,4)",
+        "A(1,6)",
+        "A(2,2)",
+        "A(2,4)",
+        "A(2,5)",
+        "A(2,6)",
+        "A(2,7)",
+        "A(2,8)",
+        "A(2,9)",
+        "A(2,10)",
+        "A(2,12)",
+        "A(2,13)"
+      ],
+      "implementation_action_ids": [
+        "A(1,7)"
+      ],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "The AI explicitly defines the specific order of operations for building the system.",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 2",
+      "req_id": "req 1",
+      "text": "The workflow strategy must begin with running one full episode of the pipeline manually (without code or UI) before any UI design or automation is initiated.",
+      "type": "constraint",
+      "status": "active",
+      "creation_action_ids": [
+        "A(1,1)",
+        "A(1,3)"
+      ],
+      "contributing_action_ids": [
+        "U(1,2)",
+        "A(1,2)",
+        "U(1,1)",
+        "A(1,6)",
+        "A(2,11)"
+      ],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "The AI explicitly rules out a UI-first approach ('don't design the UI first') and mandates that the user must first run one full episode manually in chat with no code and no UI to establish workflow clarity.",
+      "created_at_pair": 2
+    },
+    {
+      "outcome_id": "outcome 3",
+      "req_id": "req 3",
+      "text": "The show must target German language learning from levels A1 to B1, using 4-character narrative stories formatted as 30-second Instagram reels.",
+      "type": "constraint",
+      "status": "active",
+      "creation_action_ids": [
+        "U(2,2)"
+      ],
+      "contributing_action_ids": [
+        "U(2,1)",
+        "A(2,3)",
+        "A(2,9)",
+        "U(1,1)",
+        "A(2,2)",
+        "A(2,5)",
+        "A(2,10)",
+        "A(2,12)"
+      ],
+      "implementation_action_ids": [
+        "A(2,7)",
+        "A(2,8)",
+        "A(2,9)"
+      ],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "The user explicitly defines the target language (German), levels (A1 to B1), format (30-second Instagram reels), and structure (4-character narrative stories) for the show.",
+      "created_at_pair": 2
+    },
+    {
+      "outcome_id": "outcome 3",
+      "req_id": "req 4",
+      "text": "The series bible must define 4 characters (with wants, flaws, and relationships), the town/world, the visual identity, and the tone.",
+      "type": "constraint",
+      "status": "active",
+      "creation_action_ids": [
+        "A(2,7)"
+      ],
+      "contributing_action_ids": [
+        "A(2,12)",
+        "A(2,13)",
+        "U(2,1)",
+        "U(2,2)",
+        "U(2,3)",
+        "A(2,2)",
+        "A(2,5)",
+        "A(2,6)"
+      ],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "The AI explicitly lists these components as the required elements of the series bible artifact.",
+      "created_at_pair": 2
+    },
+    {
+      "outcome_id": "outcome 3",
+      "req_id": "req 5",
+      "text": "The season arc of the show must be mapped to the language learning curriculum.",
+      "type": "constraint",
+      "status": "active",
+      "creation_action_ids": [
+        "A(2,8)"
+      ],
+      "contributing_action_ids": [
+        "A(2,12)",
+        "U(2,1)",
+        "U(2,2)",
+        "A(2,2)",
+        "A(2,5)",
+        "A(2,7)"
+      ],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "The AI instructs that mapping the season arc to the curriculum is a necessary part of the series bible and season map artifact.",
+      "created_at_pair": 2
+    },
+    {
+      "outcome_id": "outcome 3",
+      "req_id": "req 6",
+      "text": "The episode format template must be structured as a 30-second format consisting of two 15-second sequences with a fixed structure.",
+      "type": "constraint",
+      "status": "active",
+      "creation_action_ids": [
+        "A(2,9)"
+      ],
+      "contributing_action_ids": [
+        "U(2,2)",
+        "A(2,5)"
+      ],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "The AI defines the specific structural template required for each episode.",
+      "created_at_pair": 2
+    },
+    {
+      "outcome_id": "outcome 3",
+      "req_id": "req 7",
+      "text": "The initial validation phase must involve manually producing and publishing episodes 1–3 to test audience engagement.",
+      "type": "task",
+      "status": "active",
+      "creation_action_ids": [
+        "A(2,10)"
+      ],
+      "contributing_action_ids": [
+        "A(1,5)",
+        "A(1,7)",
+        "U(1,1)",
+        "U(1,2)",
+        "A(1,1)",
+        "A(1,2)",
+        "A(1,3)",
+        "A(1,6)",
+        "U(2,1)",
+        "U(2,2)",
+        "A(2,2)",
+        "A(2,4)",
+        "A(2,6)"
+      ],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "The AI instructs the user to publish the first three episodes completely by hand to validate the format before automating.",
+      "created_at_pair": 2
+    }
+  ],
+  "slots": [
+    {
+      "slot_id": "slot 1",
+      "outcome_id": "outcome 3",
+      "text": "Automation of storyboard and video stages (deferred to be kept manual initially, to be automated later based on manual effort).",
+      "type": "task",
+      "origin": "AI",
+      "status": "open",
+      "creation_action_ids": [
+        "A(1,7)"
+      ],
+      "contributing_action_ids": [],
+      "resolved_into": null
+    }
+  ],
+  "operations_log": [
+    {
+      "pair": 1,
+      "outcome_id": "outcome 1",
+      "op": "create",
+      "target_id": "req 1",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 1",
+      "op": "create",
+      "target_id": "req 2",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 3",
+      "op": "create",
+      "target_id": "req 1",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 3",
+      "op": "create",
+      "target_id": "req 2",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 3",
+      "op": "open_slot",
+      "target_id": "slot 1",
+      "target_type": "slot"
+    },
+    {
+      "pair": 2,
+      "outcome_id": "outcome 2",
+      "op": "create",
+      "target_id": "req 1",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 2,
+      "outcome_id": "outcome 3",
+      "op": "create",
+      "target_id": "req 3",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 2,
+      "outcome_id": "outcome 3",
+      "op": "create",
+      "target_id": "req 4",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 2,
+      "outcome_id": "outcome 3",
+      "op": "create",
+      "target_id": "req 5",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 2,
+      "outcome_id": "outcome 3",
+      "op": "create",
+      "target_id": "req 6",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 2,
+      "outcome_id": "outcome 3",
+      "op": "create",
+      "target_id": "req 7",
+      "target_type": "requirement"
+    }
+  ]
+}

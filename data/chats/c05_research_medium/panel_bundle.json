@@ -1,0 +1,955 @@
+{
+  "pairs": [
+    {
+      "pair": 1,
+      "direction": {
+        "you_pct": 43.5,
+        "ai_pct": 56.5
+      },
+      "decisions": {
+        "you_count": 3,
+        "ai_count": 0,
+        "latest_ai_example": null
+      },
+      "timeline": {
+        "pair": 1,
+        "delta_you": 27.0,
+        "delta_ai": 35.0,
+        "summary": "adding The AI must review",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 1",
+              "label": "R1",
+              "op": "create",
+              "delta_you": 9.0,
+              "delta_ai": 10.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 2",
+              "label": "R2",
+              "op": "create",
+              "delta_you": 10.0,
+              "delta_ai": 15.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 1",
+              "label": "R3",
+              "op": "create",
+              "delta_you": 8.0,
+              "delta_ai": 10.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "abandoned",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "resolved",
+              "resolved_into": "req 2"
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Course assignment strategy and deliverables",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Course assignment strategy and deliverables",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Initial assignment plan and paper search strategy",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Expanded paper bank and recommendations",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Reading strategy and presentation preparation guide",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Comparative analysis and recommendation of the final four selected papers",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Reading strategy and presentation preparation guide for the selected 'Disembodied Creativity' paper",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 3,
+          "w_ai": 0,
+          "h_you": 12.0,
+          "h_ai": 35.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "direction": {
+        "you_pct": 26.6,
+        "ai_pct": 73.4
+      },
+      "decisions": {
+        "you_count": 4,
+        "ai_count": 3,
+        "latest_ai_example": "The document must include preparation instructions for Monday, specifically detailing pulling, printing, and rewriting the Woodruff et al"
+      },
+      "timeline": {
+        "pair": 2,
+        "delta_you": 36.0,
+        "delta_ai": 139.0,
+        "summary": "adding The selected research papers",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 1",
+              "label": "R3",
+              "op": "revise",
+              "delta_you": 6.0,
+              "delta_ai": 28.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 2",
+              "label": "R4",
+              "op": "create",
+              "delta_you": 15.0,
+              "delta_ai": 48.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 3",
+              "label": "R5",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 23.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 1",
+              "label": "R6",
+              "op": "create",
+              "delta_you": 1.0,
+              "delta_ai": 12.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 2",
+              "label": "R7",
+              "op": "create",
+              "delta_you": 9.0,
+              "delta_ai": 28.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "resolved",
+              "resolved_into": "req 2"
+            },
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "abandoned",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Course assignment strategy and deliverables",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Course assignment strategy and deliverables",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Initial assignment plan and paper search strategy",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Expanded paper bank and recommendations",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Reading strategy and presentation preparation guide",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Comparative analysis and recommendation of the final four selected papers",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Reading strategy and presentation preparation guide for the selected 'Disembodied Creativity' paper",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 1,
+          "w_ai": 3,
+          "h_you": 26.0,
+          "h_ai": 124.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 3,
+      "direction": {
+        "you_pct": 23.1,
+        "ai_pct": 76.9
+      },
+      "decisions": {
+        "you_count": 5,
+        "ai_count": 4,
+        "latest_ai_example": "The expanded paper bank must be documented with proper citations and confidence tiers"
+      },
+      "timeline": {
+        "pair": 3,
+        "delta_you": 32.0,
+        "delta_ai": 143.0,
+        "summary": "adding The expanded paper bank",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 1",
+              "label": "R3",
+              "op": "revise",
+              "delta_you": 6.0,
+              "delta_ai": 35.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 2",
+              "label": "R4",
+              "op": "revise",
+              "delta_you": 6.0,
+              "delta_ai": 28.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 3",
+              "label": "R5",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 9.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 4",
+              "label": "R8",
+              "op": "create",
+              "delta_you": 17.0,
+              "delta_ai": 57.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 5",
+              "label": "R9",
+              "op": "create",
+              "delta_you": 3.0,
+              "delta_ai": 14.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Course assignment strategy and deliverables",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Course assignment strategy and deliverables",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Initial assignment plan and paper search strategy",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Expanded paper bank and recommendations",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Reading strategy and presentation preparation guide",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Comparative analysis and recommendation of the final four selected papers",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Reading strategy and presentation preparation guide for the selected 'Disembodied Creativity' paper",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 1,
+          "w_ai": 1,
+          "h_you": 27.0,
+          "h_ai": 138.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 4,
+      "direction": {
+        "you_pct": 21.3,
+        "ai_pct": 78.7
+      },
+      "decisions": {
+        "you_count": 7,
+        "ai_count": 5,
+        "latest_ai_example": "The compiled research papers must be organized and presented in a created file"
+      },
+      "timeline": {
+        "pair": 4,
+        "delta_you": 38.0,
+        "delta_ai": 175.0,
+        "summary": "adding The research papers must",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req_5_1",
+              "label": "R10",
+              "op": "create",
+              "delta_you": 7.0,
+              "delta_ai": 55.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req_5_2",
+              "label": "R11",
+              "op": "create",
+              "delta_you": 23.0,
+              "delta_ai": 89.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req_5_3",
+              "label": "R12",
+              "op": "create",
+              "delta_you": 8.0,
+              "delta_ai": 31.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "abandoned",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Course assignment strategy and deliverables",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Course assignment strategy and deliverables",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Initial assignment plan and paper search strategy",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Expanded paper bank and recommendations",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Reading strategy and presentation preparation guide",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Comparative analysis and recommendation of the final four selected papers",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Reading strategy and presentation preparation guide for the selected 'Disembodied Creativity' paper",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 2,
+          "w_ai": 1,
+          "h_you": 28.0,
+          "h_ai": 170.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 5,
+      "direction": {
+        "you_pct": 23.8,
+        "ai_pct": 76.2
+      },
+      "decisions": {
+        "you_count": 10,
+        "ai_count": 5,
+        "latest_ai_example": "The compiled research papers must be organized and presented in a created file"
+      },
+      "timeline": {
+        "pair": 5,
+        "delta_you": 86.0,
+        "delta_ai": 208.0,
+        "summary": "adding The AI must provide",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req_5_2",
+              "label": "R11",
+              "op": "revise",
+              "delta_you": 4.0,
+              "delta_ai": 20.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req_5_3",
+              "label": "R12",
+              "op": "revise",
+              "delta_you": 12.0,
+              "delta_ai": 34.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req_5_4",
+              "label": "R13",
+              "op": "create",
+              "delta_you": 31.0,
+              "delta_ai": 95.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req_5_5",
+              "label": "R14",
+              "op": "create",
+              "delta_you": 13.0,
+              "delta_ai": 14.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req_5_6",
+              "label": "R15",
+              "op": "create",
+              "delta_you": 26.0,
+              "delta_ai": 45.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "abandoned",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Course assignment strategy and deliverables",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Course assignment strategy and deliverables",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Initial assignment plan and paper search strategy",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Expanded paper bank and recommendations",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Reading strategy and presentation preparation guide",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Comparative analysis and recommendation of the final four selected papers",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Reading strategy and presentation preparation guide for the selected 'Disembodied Creativity' paper",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 3,
+          "w_ai": 0,
+          "h_you": 71.0,
+          "h_ai": 208.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 6,
+      "direction": {
+        "you_pct": 24.9,
+        "ai_pct": 75.1
+      },
+      "decisions": {
+        "you_count": 13,
+        "ai_count": 5,
+        "latest_ai_example": "The compiled research papers must be organized and presented in a created file"
+      },
+      "timeline": {
+        "pair": 6,
+        "delta_you": 42.0,
+        "delta_ai": 88.0,
+        "summary": "adding The reading strategy and",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 1",
+              "label": "R16",
+              "op": "create",
+              "delta_you": 21.0,
+              "delta_ai": 52.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 2",
+              "label": "R17",
+              "op": "create",
+              "delta_you": 11.0,
+              "delta_ai": 20.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 3",
+              "label": "R18",
+              "op": "create",
+              "delta_you": 10.0,
+              "delta_ai": 16.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Course assignment strategy and deliverables",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Course assignment strategy and deliverables",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Initial assignment plan and paper search strategy",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Expanded paper bank and recommendations",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Reading strategy and presentation preparation guide",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Comparative analysis and recommendation of the final four selected papers",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Reading strategy and presentation preparation guide for the selected 'Disembodied Creativity' paper",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 3,
+          "w_ai": 0,
+          "h_you": 27.0,
+          "h_ai": 88.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 7,
+      "direction": {
+        "you_pct": 25.1,
+        "ai_pct": 74.9
+      },
+      "decisions": {
+        "you_count": 14,
+        "ai_count": 5,
+        "latest_ai_example": "The compiled research papers must be organized and presented in a created file"
+      },
+      "timeline": {
+        "pair": 7,
+        "delta_you": 24.0,
+        "delta_ai": 64.0,
+        "summary": "adding The presentation guide must",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 3",
+              "label": "R19",
+              "op": "create",
+              "delta_you": 24.0,
+              "delta_ai": 64.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Course assignment strategy and deliverables",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Course assignment strategy and deliverables",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Initial assignment plan and paper search strategy",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Expanded paper bank and recommendations",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Reading strategy and presentation preparation guide",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Comparative analysis and recommendation of the final four selected papers",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Reading strategy and presentation preparation guide for the selected 'Disembodied Creativity' paper",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 1,
+          "w_ai": 0,
+          "h_you": 14.0,
+          "h_ai": 64.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    }
+  ]
+}

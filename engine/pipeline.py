@@ -1138,6 +1138,8 @@ def run_chat(
         write_report,
         write_status,
     )
+    from engine.projections.panel import export_panel_projections
+    from engine.quant import compute_decisions, compute_direction, compute_mode
 
     if isinstance(dialogue, (str, Path)):
         with open(dialogue, "r", encoding="utf-8") as f:
@@ -1241,6 +1243,14 @@ def run_chat(
             json.dump(state.run, f, indent=2, ensure_ascii=False)
             f.write("\n")
 
+        # Stage 4 Projections: panel_bundle.json and snapshots.json
+        export_panel_projections(
+            target_dir=out_dir,
+            ledger_rows=ledger_writer.rows,
+            state_dict=state.to_dict(),
+            max_pair=pair_number,
+        )
+
         # Run runtime invariants
         chk_res = run_pair_checks(
             state=state,
@@ -1286,6 +1296,30 @@ def run_chat(
             )
             prev_ledger = list(ledger_writer.rows)
 
+    # Compute final metrics for report per TEST_STRATEGY §6
+    final_info = None
+    if ledger_writer.rows:
+        try:
+            dir_facts = compute_direction(ledger_writer.rows, max_pair=len(sorted_pairs))
+            dec_facts = compute_decisions(
+                ledger_writer.rows,
+                state_requirements=state.requirements,
+                max_pair=len(sorted_pairs),
+            )
+            mode_facts = compute_mode(
+                ledger_writer.rows,
+                state_requirements=state.requirements,
+                max_pair=len(sorted_pairs),
+            )
+            if dir_facts and dec_facts and mode_facts:
+                final_info = {
+                    "direction": [dir_facts[-1].you_pct, dir_facts[-1].ai_pct],
+                    "decisions": [dec_facts[-1].you_count, dec_facts[-1].ai_count],
+                    "mode": mode_facts[-1].mode,
+                }
+        except Exception:
+            final_info = None
+
     # All pairs finished successfully
     report_file = write_report(
         out_dir=out_dir,
@@ -1299,6 +1333,7 @@ def run_chat(
         state=state,
         checks_passed=list(passed_checks_set),
         checks_failed=list(failed_checks_set),
+        final=final_info,
     )
     with open(report_file, "r", encoding="utf-8") as f:
         report_data = json.load(f)

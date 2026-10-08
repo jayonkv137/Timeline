@@ -1,0 +1,486 @@
+{
+  "pairs": [
+    {
+      "pair": 1,
+      "direction": {
+        "you_pct": 48.0,
+        "ai_pct": 52.0
+      },
+      "decisions": {
+        "you_count": 3,
+        "ai_count": 4,
+        "latest_ai_example": "The technical feasibility assessment must account for the constraint that WebGL/canvas elements (such as shaders, box animations"
+      },
+      "timeline": {
+        "pair": 1,
+        "delta_you": 61.0,
+        "delta_ai": 66.0,
+        "summary": "adding The migration strategy must",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 1",
+              "label": "R1",
+              "op": "create",
+              "delta_you": 10.0,
+              "delta_ai": 8.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 2",
+              "label": "R2",
+              "op": "create",
+              "delta_you": 11.0,
+              "delta_ai": 11.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 1",
+              "label": "R3",
+              "op": "create",
+              "delta_you": 9.0,
+              "delta_ai": 14.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 2",
+              "label": "R4",
+              "op": "create",
+              "delta_you": 11.0,
+              "delta_ai": 11.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 3",
+              "label": "R5",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 12.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 1",
+              "label": "R6",
+              "op": "create",
+              "delta_you": 8.0,
+              "delta_ai": 5.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 2",
+              "label": "R7",
+              "op": "create",
+              "delta_you": 7.0,
+              "delta_ai": 5.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "open",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 1",
+              "origin": "user",
+              "status": "open",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 1",
+              "origin": "user",
+              "status": "open",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Design system audit and Figma migration plan (Phase 9)",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Design system audit and Figma migration plan (Phase 9)",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Figma migration strategy and research",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Design system audit workflow and scope definition",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": [
+              "outcome 4"
+            ]
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "AntiGravity design audit brief and testing checklist",
+            "depth": 2,
+            "parent": "outcome 3",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 3,
+          "w_ai": 4,
+          "h_you": 46.0,
+          "h_ai": 46.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "direction": {
+        "you_pct": 30.9,
+        "ai_pct": 69.1
+      },
+      "decisions": {
+        "you_count": 3,
+        "ai_count": 9,
+        "latest_ai_example": "The first step delivered after the 'start task' trigger must include the full AntiGravity brief and a testing checklist"
+      },
+      "timeline": {
+        "pair": 2,
+        "delta_you": 38.0,
+        "delta_ai": 155.0,
+        "summary": "adding The design system audit",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 1",
+              "label": "R1",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 5.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 2",
+              "label": "R2",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 5.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 1",
+              "label": "R3",
+              "op": "revise",
+              "delta_you": 4.0,
+              "delta_ai": 0.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 2",
+              "label": "R4",
+              "op": "revise",
+              "delta_you": 2.0,
+              "delta_ai": 0.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 3",
+              "label": "R5",
+              "op": "revise",
+              "delta_you": 2.0,
+              "delta_ai": 0.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 1",
+              "label": "R6",
+              "op": "revise",
+              "delta_you": 4.0,
+              "delta_ai": 26.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 2",
+              "label": "R7",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 6.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 3",
+              "label": "R8",
+              "op": "create",
+              "delta_you": 0.0,
+              "delta_ai": 14.0,
+              "chip": "orange"
+            },
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 4",
+              "label": "R9",
+              "op": "create",
+              "delta_you": 0.0,
+              "delta_ai": 12.0,
+              "chip": "orange"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 3",
+              "label": "R10",
+              "op": "create",
+              "delta_you": 13.0,
+              "delta_ai": 45.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 4",
+              "label": "R11",
+              "op": "create",
+              "delta_you": 10.0,
+              "delta_ai": 31.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 5",
+              "label": "R12",
+              "op": "create",
+              "delta_you": 3.0,
+              "delta_ai": 11.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 2",
+              "origin": "user",
+              "status": "open",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 2",
+              "origin": "AI",
+              "status": "open",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 3",
+              "origin": "AI",
+              "status": "open",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 4",
+              "origin": "AI",
+              "status": "open",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Design system audit and Figma migration plan (Phase 9)",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Design system audit and Figma migration plan (Phase 9)",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Figma migration strategy and research",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Design system audit workflow and scope definition",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": [
+              "outcome 4"
+            ]
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "AntiGravity design audit brief and testing checklist",
+            "depth": 2,
+            "parent": "outcome 3",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 5,
+          "h_you": 38.0,
+          "h_ai": 130.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 3,
+      "direction": {
+        "you_pct": 29.6,
+        "ai_pct": 70.4
+      },
+      "decisions": {
+        "you_count": 3,
+        "ai_count": 11,
+        "latest_ai_example": "The audit must produce exactly one report file named 'design-audit-raw.md' located at the repository root"
+      },
+      "timeline": {
+        "pair": 3,
+        "delta_you": 16.0,
+        "delta_ai": 53.0,
+        "summary": "adding The design audit must",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 1",
+              "label": "R13",
+              "op": "create",
+              "delta_you": 9.0,
+              "delta_ai": 27.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 2",
+              "label": "R14",
+              "op": "create",
+              "delta_you": 7.0,
+              "delta_ai": 26.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Design system audit and Figma migration plan (Phase 9)",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "Design system audit and Figma migration plan (Phase 9)",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Figma migration strategy and research",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Design system audit workflow and scope definition",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": [
+              "outcome 4"
+            ]
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "AntiGravity design audit brief and testing checklist",
+            "depth": 2,
+            "parent": "outcome 3",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 2,
+          "h_you": 16.0,
+          "h_ai": 43.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    }
+  ]
+}
