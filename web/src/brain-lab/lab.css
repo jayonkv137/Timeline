@@ -26,3 +26,13 @@ body { margin: 0; background: var(--color-bg-canvas); color: var(--color-text-pr
 .lab-evidence dd b { font-family: var(--type-metric-family); font-weight: var(--p-font-weight-medium); font-variant-numeric: tabular-nums; }
 .lab-evidence dd small { display: block; font-family: var(--type-metric-family); font-size: var(--type-caption-size); color: var(--color-text-faint); }
 @media (max-width: 760px) { .lab { grid-template-columns: 1fr; grid-template-rows: 60vh auto; height: auto; } .lab-frame { height: 60vh; } .lab-panel { border-left: 0; border-top: 1px solid var(--color-border-subtle); } }
+.lab-sub { margin: 0; font-size: var(--type-overline-size); font-weight: var(--type-overline-weight); letter-spacing: var(--type-overline-tracking); text-transform: uppercase; color: var(--color-text-faint); border-top: 1px solid var(--color-border-subtle); padding-top: var(--p-space-3); }
+.lab-scale h2 { margin: 0 0 var(--p-space-1); font-size: var(--type-overline-size); font-weight: var(--type-overline-weight); letter-spacing: var(--type-overline-tracking); text-transform: uppercase; color: var(--color-text-faint); }
+.lab-formula { margin: 0 0 var(--p-space-2); font-family: var(--type-metric-family); font-size: var(--type-caption-size); color: var(--color-text-secondary); }
+.lab-scale table { width: 100%; border-collapse: collapse; font-size: var(--type-caption-size); font-variant-numeric: tabular-nums; }
+.lab-scale th { text-align: left; font-weight: var(--p-font-weight-medium); color: var(--color-text-muted); padding: var(--p-space-1) var(--p-space-1) var(--p-space-1) 0; border-bottom: 1px solid var(--color-border-subtle); }
+.lab-scale td { padding: var(--p-space-1) var(--p-space-1) var(--p-space-1) 0; border-bottom: 1px solid var(--color-border-subtle); vertical-align: top; }
+.lab-scale td small { display: block; color: var(--color-text-faint); }
+.lab-scale tr.ref td { color: var(--color-text-muted); font-style: italic; }
+.lab-scale td:last-child { min-width: 92px; }
+.lab-bar { display: block; height: 4px; margin-bottom: 2px; border-radius: var(--p-radius-pill); background: var(--color-text-muted); }

@@ -65,7 +65,7 @@ A rule that looks good but can't be read is rejected. Examples:
 | 1 | Anatomy dictionary | Which neuron part means what? | see §3 | **decided** (§3.1) |
 | AD | **Art direction** (look-dev) | What should it look and feel like, brain and interface together? | — | after 1 |
 | 2 | 3D placement | How does a 3D neuron sit on the 3D cortex? | anchor per chat | **decided: B** (§6) · template in review (§7) |
-| 3 | Soma size | One universal scale across all chats | chat mass 25–1,137 (45×) | — |
+| 3 | Soma size | One universal scale across all chats | chat mass 25–1,137 (45×); archive ≈ 1,000× | **candidates ready** (§11) |
 | 4 | Soma glow | How does a 25 / 75 share actually look? | human share 21–72% | — |
 | 5 | Soma texture | Work mode as texture, and is it effective? | mode per exchange; split (see §4 Q3) | — |
 | 6 | Dendrites + terminal heads | Branch look, thickness, colour, history | outcomes 1–5 per chat; outcome mass 0–507; per-exchange deltas | — |
@@ -396,6 +396,54 @@ A 25%-you chat is about a quarter blue nerve and three-quarters orange circuitry
 - Small chats are still tiny (Session 3).
 - Twig crowding (Session 7).
 - Titles (Session 9).
+
+## 11. Session 3: soma size (one universal scale)
+
+**Restored first (9 Oct 2026):** the owner's working copy had reverted the Lab page and §10 to the fix-pass-1 (rings) version while the engine was already fix pass 2. Both were restored to the committed fix-pass-2 state (`3b20cca`); the rings version stays in history (`1844ac9`).
+
+### 11.1 The data the rule must hold
+| Source | Spread |
+|---|---|
+| 10 measured chats | mass 25 … 1,137 (45×); 25–162 mass per exchange, median ≈ 93 |
+| Archive (298 chats with exchanges, `data/archive/registry.json`) | 1 exchange: 99 chats · ≤ 3: 179 (60%) · ≤ 20: 270 (90%) · max 242 |
+| Archive mass (estimate: exchanges × 93) | ≈ 93 … 22,500, about 1,000× |
+
+**Constraints:**
+1. **Absolute:** one scale in mass units, never relative to the biggest chat, so adding a chat never shrinks the others.
+2. **Readable floor:** the smallest measured chat (mass 25) gets R = 0.028, about 10 px at the overview.
+3. **The largest archive chat must not swallow a lobe.**
+4. **Two channels already carry mass:** the dendritic field (territory cells) grows **linearly** with mass. So the soma may use a compressed scale without hiding the amount.
+
+### 11.2 Candidates (Lab switch "Size rule"; diameters at a 900 px-tall overview)
+
+| | Volume-true ∛ (recommended) | Area-true √ (cap 0.16) | Steps (log₂) |
+|---|---|---|---|
+| Formula | R = 0.028 × ∛(m ÷ 25) | R = 0.028 × √(m ÷ 25), max 0.16 | R = 0.028 + 0.011 × log₂(m ÷ 25) |
+| Datafied Society (25) | 10 px | 10 px | 10 px |
+| 1 exchange (≈ 93) | 15 px | 19 px | 17 px |
+| Archive median, 3 exchanges (≈ 280) | 22 px | 32 px | 23 px |
+| Human–AI interaction design (460) | 26 px | 42 px | 26 px |
+| AI creativity (1,137) | 35 px | **55 px (capped)** | 31 px |
+| Archive 90th percentile, 20 exchanges (≈ 1,860) | 41 px | **55 px (capped)** | 33 px |
+| Largest archive chat, 242 exchanges (≈ 22,500) | 94 px | **55 px (capped)** | 47 px |
+| Whole archive spans | ≈ 10× | ≈ 30×, capped from 7 exchanges up | ≈ 5× |
+
+Screenshots: `brain-neuron/session-3/` (volume-true, area-true, steps, Lab scale table).
+
+### 11.3 Reading the candidates
+- **Area-true √** is the textbook-honest scale for 2D marks, but on this data its cap already hits at 7 exchanges. AI creativity, a 20-exchange chat and the 242-exchange chat all render the same, so the top 10% of the archive would be wrong. Uncapped, the biggest chat would be about 290 px and swallow a lobe. In the Lab, neighbours in the Research lobe start to overlap.
+- **Steps (log)** keeps everything small and safe, but a 2.5× difference (AI creativity vs Human–AI interaction design) shows as 31 vs 26 px, hard to see. Sizes stop reading as amounts.
+- **Volume-true ∛** treats the soma as what it is, a 3D body: 8× the work makes it 2× as wide (8× the volume). The archive fits in 10× with no cap. The floor stays readable, and 2.5× differences remain visible (35 vs 26 px). The linear amount is still visible as the dendritic field.
+
+### 11.4 Perception test (to run with the owner)
+- **5-second questions:** which is the biggest chat? Which are the one-exchange chats?
+- **Pass condition:** the biggest chat is named correctly, and chats with 1 exchange vs 3+ are told apart.
+- **Expected limit (by design):** chats closer than about 1.3× apart (Figma migration 389 vs Co-creation research 345: 24 vs 23 px) don't separate; exact numbers live in the panel and the evidence inspector.
+
+### 11.5 Template consequences (no new decision)
+Trunks, boutons and twig lengths are proportional to R (§7.2), so every neuron keeps the same proportions at any size. The dendritic field still comes from the territory (linear in mass).
+
+**Owner decision needed:** volume-true ∛ (recommended), area-true √ or steps.
 
 ## Sources
 - [Obsidian graph view help](https://obsidian.md/help/plugins/graph); [forum: text fade threshold should consider node size](https://forum.obsidian.md/t/graph-text-fade-threshold-consider-node-size/6737)

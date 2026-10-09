@@ -157,10 +157,22 @@ function createBrain(root,initialData){
  // tapered dendrites resting on the folds, a bouton at each outcome end, twigs for requirements, an axon diving
  // inward. Colour is never blended (review §8): the membrane is neutral tissue lit from within by a white
  // nucleus; who-made-it is shown only in pure party light (share rings, twigs). Sizes stay provisional (Session 3).
- const NEURON=TK.brainMode==='neuron',LAB=!!TK.lab,labState={place:'B',footprint:'off',axon:true,twigs:true,hybrid:true,etch:true,brain:'slate',bloom:true};
+ const NEURON=TK.brainMode==='neuron',LAB=!!TK.lab,labState={place:'B',footprint:'off',axon:true,twigs:true,hybrid:true,etch:true,brain:'slate',bloom:true,size:'cbrt'};
  const neuronGroup=new T.Group();brain.add(neuronGroup);let neurons=new Map();
  if(NEURON)scene.add(camera);
- const SIZE={soma:m=>.010+.0013*Math.sqrt(m)},DEPTH=.16;
+ // Session 3 candidates: ONE absolute scale for every chat (never relative to the biggest chat, so adding a chat
+ // never shrinks the others), with a readable floor at the smallest measured chat (mass 25 → R 0.028 ≈ 8 px at overview).
+ const SIZE_RULES={
+  cbrt:{f:m=>.028*Math.cbrt(Math.max(1,m/25)),label:'R = 0.028 × ∛(mass ÷ 25)'},
+  sqrt:{f:m=>Math.min(.16,.028*Math.sqrt(Math.max(1,m/25))),label:'R = 0.028 × √(mass ÷ 25), capped at 0.16'},
+  log:{f:m=>.028+.011*Math.log2(Math.max(1,m/25)),label:'R = 0.028 + 0.011 × log₂(mass ÷ 25)'}};
+ const SIZE={soma:m=>(SIZE_RULES[labState.size]||SIZE_RULES.cbrt).f(m)},DEPTH=.16;
+ // Scale table for the Lab: body radius and on-screen diameter at the overview distance, for archive reference sizes
+ // (≈ 93 mass per exchange, the median of the 10 measured chats) and for every chat in view.
+ function postScale(){if(!LAB)return;const rule=SIZE_RULES[labState.size]||SIZE_RULES.cbrt,ppu=viewport.clientHeight/(2*8*Math.tan(camera.fov*Math.PI/360)),row=(label,m,note,ref)=>({label,mass:Math.round(m),R:+rule.f(m).toFixed(3),px:Math.round(2*rule.f(m)*ppu),note,ref});
+  const rows=[['1 exchange',93,'99 of 298 archive chats'],['3 exchanges',280,'archive median'],['20 exchanges',1860,'archive 90th percentile'],['242 exchanges',22500,'largest archive chat (estimate)']].map(([l,m,n])=>row(l,m,n,true));
+  for(const t of [...territories.values()].sort((a,b)=>b.mass-a.mass))rows.push(row(t.node.title,t.mass,'',false));
+  parent.postMessage({type:'cotrace-lab-scale',rule:labState.size,label:rule.label,rows},'*')}
  // Template proportions, relative to the soma radius R, so every neuron is the same shape at any size.
  const FORM={trunkBase:.22,trunkRange:.14,tipShare:.5,taper:1.5,blend:.45,capsule:2.0,flare:1.6,head:.1,headRange:.08,headStretch:1.3,axon:.28,bow:.12,twigLen:1.15,twigMin:.032,twigFrom:.42,twigTo:.94};
  const NUCLEUS=new T.Color('#fff2e2'),TISSUE=new T.Color('#c9d4df'),NEUTRAL_LIGHT=new T.Color('#dfe6ee');
@@ -264,7 +276,7 @@ function createBrain(root,initialData){
    spill.push({v:new T.Vector4(center.x,center.y,center.z,t.rT*worldPerDir(seed.dir,side)*1.05),share:mass?t.share:.5});
    const lights=[];g.traverse(o=>{if(o.material?.isMeshBasicMaterial){o.userData.base=o.userData.base??o.material.opacity;lights.push(o)}});
    neuronGroup.add(g);neurons.set(id,{group:g,mats:[mat,tubeMat],lights,heads,center,R,op:1})}
-  const [hc,ac]=colors();for(const m of materials){const L=m.uniforms.nLights.value,S=m.uniforms.nShare.value;for(let i=0;i<L.length;i++){L[i].copy(spill[i]?.v||new T.Vector4());S[i]=spill[i]?.share??.5}m.uniforms.nCount.value=Math.min(L.length,spill.length);m.uniforms.etch.value=labState.etch?1:0;m.uniforms.hum.value.set(hc);m.uniforms.aic.value.set(ac)}}
+  const [hc,ac]=colors();for(const m of materials){const L=m.uniforms.nLights.value,S=m.uniforms.nShare.value;for(let i=0;i<L.length;i++){L[i].copy(spill[i]?.v||new T.Vector4());S[i]=spill[i]?.share??.5}m.uniforms.nCount.value=Math.min(L.length,spill.length);m.uniforms.etch.value=labState.etch?1:0;m.uniforms.hum.value.set(hc);m.uniforms.aic.value.set(ac)}if(LAB)postScale()}
  // Bloom (lab only): scene into an sRGB target, bright pass, two blur levels, additive composite.
  let bloom=null;
  function renderBloom(){if(!bloom){const vs=`varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}`,base=new T.WebGLRenderTarget(1,1,{samples:4});base.texture.colorSpace=T.SRGBColorSpace;const rt=()=>new T.WebGLRenderTarget(1,1,{type:T.HalfFloatType}),quad=new T.Mesh(new T.PlaneGeometry(2,2)),sc=new T.Scene();sc.add(quad);
@@ -280,7 +292,7 @@ function createBrain(root,initialData){
   run(B.blur,B.a1,B.b1,w1,0);run(B.blur,B.b1,B.a1,0,h1);run(B.blur,B.a1,B.a2,w1*2,h1*2);run(B.blur,B.a2,B.b2,w2,0);run(B.blur,B.b2,B.a2,0,h2);run(B.blur,B.a2,B.b2,w2*2,0);run(B.blur,B.b2,B.a2,0,h2*2);
   B.quad.material=B.comp;renderer.setRenderTarget(null);renderer.render(B.sc,B.cam)}
  function chatEvidence(id){const t=territories.get(id);if(!t)return null;const tot=totals(t.node,pair),m=tot.human+tot.ai,kids=(t.node.outcomes||[]).filter(o=>!o.root),nr=neurons.get(id),atoms=kids.flatMap(o=>o.atoms||[]);
-  return {kind:'chat',title:t.node.title,rows:[['Mass (Σ ledger scores)',Math.round(m),`you ${Math.round(tot.human)} + AI ${Math.round(tot.ai)}`],['Who did the work → membrane',`${(100*t.share).toFixed(1)}% organic (blue) · ${(100-100*t.share).toFixed(1)}% circuitry (orange)`,'human share of mass → synthetic area of the body ≈ AI share'],['Outcomes → dendrites',kids.length,'children of the root goal'],['Requirements + questions → twigs',atoms.length,`yours ${atoms.filter(a=>a.origin==='human').length} (organic) · AI ${atoms.filter(a=>a.origin==='ai').length} (synthetic)`],['Soma radius R (provisional)',nr?nr.R.toFixed(3):'—',`0.010 + 0.0013 × √${Math.round(m)}`],['Placement',t.node.category||'—','topic lobe (provisional) → seed cell #'+t.seed.id+(t.side>0?' · right':' · left')]]}}
+  return {kind:'chat',title:t.node.title,rows:[['Mass (Σ ledger scores)',Math.round(m),`you ${Math.round(tot.human)} + AI ${Math.round(tot.ai)}`],['Who did the work → membrane',`${(100*t.share).toFixed(1)}% organic (blue) · ${(100-100*t.share).toFixed(1)}% circuitry (orange)`,'human share of mass → synthetic area of the body ≈ AI share'],['Outcomes → dendrites',kids.length,'children of the root goal'],['Requirements + questions → twigs',atoms.length,`yours ${atoms.filter(a=>a.origin==='human').length} (organic) · AI ${atoms.filter(a=>a.origin==='ai').length} (synthetic)`],['Soma radius R',nr?nr.R.toFixed(3):'—',`${(SIZE_RULES[labState.size]||SIZE_RULES.cbrt).label}, mass ${Math.round(m)} (Session 3 candidate: ${labState.size})`],['Placement',t.node.category||'—','topic lobe (provisional) → seed cell #'+t.seed.id+(t.side>0?' · right':' · left')]]}}
  function outcomeEvidence(chatId,oid){const nr=neurons.get(chatId),h=nr?.heads.find(x=>x.id===oid);if(!h)return null;const o=h.o,m=o.human+o.ai,atoms=o.atoms||[],count=(k,w)=>atoms.filter(a=>a.kind===k&&a.origin===w).length;
   return {kind:'outcome',title:o.title,rows:[['Outcome mass',Math.round(m),`you ${Math.round(o.human)} + AI ${Math.round(o.ai)}`],['Who did the work → branch',m?`${(100*o.human/m).toFixed(1)}% organic · ${(100-100*o.human/m).toFixed(1)}% circuitry`:'unmeasured (neutral)','synthetic length of the dendrite = AI share, exactly'],['Bouton radius',h.hr.toFixed(3),'R × (0.10 + 0.08 × √(mass ÷ largest outcome))'],['Trunk base',h.rBase.toFixed(3),'R × (0.22 + 0.14 × √(mass ÷ largest outcome))'],['Twigs',atoms.length,`requirements: you ${count('requirement','human')} · AI ${count('requirement','ai')} · open questions: you ${count('question','human')} · AI ${count('question','ai')} · answered ${atoms.filter(a=>a.kind==='resolved').length}`],['Parent',o.parent||'root','outcome tree']]}}
  function labPost(ev){if(LAB&&ev)parent.postMessage({type:'cotrace-lab-inspect',evidence:ev},'*')}
