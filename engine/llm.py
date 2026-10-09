@@ -77,8 +77,9 @@ class UsageMeter:
     {"timestamp": ..., "step": ..., "pair": ..., "model": ..., "tokens": {...}, "cost": {...}, "mode": ...}
     """
 
-    def __init__(self, usage_path: Path | str | None = None):
+    def __init__(self, usage_path: Path | str | None = None, budget_guard: Any = None):
         self.usage_path = Path(usage_path).resolve() if usage_path else None
+        self.budget_guard = budget_guard
         self.records: list[dict[str, Any]] = []
         self.total_prompt_tokens: int = 0
         self.total_completion_tokens: int = 0
@@ -95,6 +96,7 @@ class UsageMeter:
         completion_tokens: int,
         is_replay: bool = False,
         mode: str = "live",
+        chat_id: str | None = None,
     ) -> dict[str, Any]:
         prompt_tokens = max(0, int(prompt_tokens))
         completion_tokens = max(0, int(completion_tokens))
@@ -116,6 +118,7 @@ class UsageMeter:
 
         entry = {
             "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "chat_id": chat_id,
             "step": step_name,
             "call": step,
             "pair": pair_num,
@@ -139,6 +142,9 @@ class UsageMeter:
             with open(self.usage_path, "a", encoding="utf-8") as f:
                 f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
+        if self.budget_guard is not None:
+            self.budget_guard.check_or_record(cost["total"])
+
         return entry
 
     def summary(self) -> dict[str, Any]:
@@ -154,7 +160,7 @@ class UsageMeter:
 
 
 class LLMClient:
-    def __init__(self, config, out_dir):
+    def __init__(self, config, out_dir, budget_guard: Any = None):
         """`out_dir` is the run's output folder (`<out>`); the monitor file is
         `<out>/run/llm_monitor.txt`, appended from the first call.
         """
@@ -165,11 +171,16 @@ class LLMClient:
         self.monitor_path = self.out_dir / "run" / "llm_monitor.txt"
         self.monitor_path.parent.mkdir(parents=True, exist_ok=True)
         self.usage_path = self.out_dir / "run" / "usage.jsonl"
-        self.usage_meter = UsageMeter(self.usage_path)
+        self.budget_guard = budget_guard
+        self.usage_meter = UsageMeter(self.usage_path, budget_guard=budget_guard)
         self.call_count = 0
         self.retry_count = 0
         self.total_tokens = 0
         self.cache_hits = 0
+
+    def set_budget_guard(self, budget_guard: Any) -> None:
+        self.budget_guard = budget_guard
+        self.usage_meter.budget_guard = budget_guard
 
     def set_out_dir(self, out_dir: Path | str) -> None:
         self.out_dir = Path(out_dir)

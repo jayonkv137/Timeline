@@ -202,6 +202,8 @@ if (typeof window !== 'undefined' && !checkOffline()) {
       st.refresh();
     } else if ((event === 'pair_ready' || event === 'chat_ready') && data?.chatId) {
       st.loadBundle(data.chatId);
+    } else if (event === 'budget_stop') {
+      window.dispatchEvent(new CustomEvent('cotrace:budget_stop', { detail: data }));
     }
   });
 }

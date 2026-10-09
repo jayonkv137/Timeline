@@ -85,6 +85,7 @@ export function subscribeEvents(
       'pair_ready',
       'chat_ready',
       'pipeline_status',
+      'budget_stop',
     ];
 
     for (const evt of knownEvents) {
@@ -184,6 +185,38 @@ export async function testConnection(params?: {
   });
   if (!res.ok) {
     throw new Error(`Connection test failed: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export interface UsageReport {
+  month: string;
+  spent_this_month: number;
+  monthly_budget: number;
+  remaining_budget: number;
+  by_chat: Record<string, number>;
+  by_step: Record<string, number>;
+  by_model: Record<string, number>;
+  recent_calls: Array<{
+    timestamp: string;
+    chat_id?: string;
+    step: string;
+    call?: string;
+    model: string;
+    tokens: { prompt: number; completion: number; total: number };
+    cost: { prompt: number; completion: number; total: number };
+    mode?: string;
+  }>;
+  total_calls: number;
+}
+
+export async function fetchUsage(month?: string): Promise<UsageReport> {
+  const url = month ? `${API_BASE}/usage?month=${encodeURIComponent(month)}` : `${API_BASE}/usage`;
+  const res = await fetch(url, {
+    headers: { Accept: 'application/json' },
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to fetch usage: ${res.status} ${res.statusText}`);
   }
   return res.json();
 }

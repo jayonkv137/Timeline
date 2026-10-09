@@ -68,6 +68,12 @@ class CachingLLMClient:
 
         self.usage_meter = UsageMeter(usage_path)
 
+    def set_budget_guard(self, budget_guard: Any) -> None:
+        """Propagate budget guard to usage meter and inner client."""
+        self.usage_meter.budget_guard = budget_guard
+        if self._inner is not None and hasattr(self._inner, "set_budget_guard"):
+            self._inner.set_budget_guard(budget_guard)
+
     def set_out_dir(self, out_dir: Path | str) -> None:
         """Update out_dir and point usage.jsonl to <out>/run/usage.jsonl."""
         usage_path = Path(out_dir) / "run" / "usage.jsonl"

@@ -100,6 +100,7 @@ class Library:
         self.jobs_path = self.root / "jobs.json"
         self.settings_path = self.root / "settings.json"
         self.secrets_path = self.root / "secrets.json"
+        self.usage_path = self.root / "usage.jsonl"
 
     def ensure_layout(self) -> None:
         """Create standard library directory structure and initial files if missing."""
@@ -490,3 +491,19 @@ class Library:
         """Atomically persist jobs.json."""
         self.ensure_layout()
         atomic_write_json(self.jobs_path, jobs)
+
+    def get_usage_summary(self, year_month: str | None = None) -> dict[str, Any]:
+        """Aggregate usage metrics adhering to STANDALONE_V1_PLAN §4 (S3.4)."""
+        from engine.budget import get_usage_summary
+        return get_usage_summary(
+            library_root=self.root,
+            year_month=year_month,
+            settings=self.get_effective_settings(),
+        )
+
+    def record_usage(self, entry: dict[str, Any]) -> None:
+        """Append a usage entry to library usage.jsonl."""
+        self.ensure_layout()
+        line = json.dumps(entry, ensure_ascii=False) + "\n"
+        with open(self.usage_path, "a", encoding="utf-8") as f:
+            f.write(line)

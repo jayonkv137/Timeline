@@ -1120,6 +1120,7 @@ def run_chat(
     initial_state: Any = None,
     stop_on_violation: bool = True,
     clear_existing: bool = False,
+    budget_guard: Any = None,
 ) -> dict:
     """Run extraction pipeline across an entire chat with pair-level runtime invariant checks.
 
@@ -1132,6 +1133,7 @@ def run_chat(
     6. Emits run/report.json upon completion or halt.
     """
     from engine.artifacts import LedgerWriter, write_json_artifact
+    from engine.budget import BudgetStopError
     from engine.checks import (
         InvariantViolationError,
         run_pair_checks,
@@ -1141,6 +1143,12 @@ def run_chat(
     from engine.projections.panel import export_panel_projections
     from engine.projections.workspace import export_workspace_bundle, load_chat_metadata
     from engine.quant import compute_decisions, compute_direction, compute_mode
+
+    if budget_guard is not None:
+        if hasattr(client, "set_budget_guard"):
+            client.set_budget_guard(budget_guard)
+        elif hasattr(client, "usage_meter"):
+            client.usage_meter.budget_guard = budget_guard
 
     if isinstance(dialogue, (str, Path)):
         with open(dialogue, "r", encoding="utf-8") as f:
@@ -1229,9 +1237,37 @@ def run_chat(
         u_text = pairs_dict[pair_number].get("user", "")
         a_text = pairs_dict[pair_number].get("ai", "")
 
-        new_actions, l2_res = process_pair(
-            client, config, state, pair_number, u_text, a_text, ledger_writer=ledger_writer
-        )
+        try:
+            new_actions, l2_res = process_pair(
+                client, config, state, pair_number, u_text, a_text, ledger_writer=ledger_writer
+            )
+        except BudgetStopError as b_err:
+            write_status(
+                out_dir,
+                healthy=False,
+                pair_number=pair_number,
+                violations=[str(b_err)],
+            )
+            report_file = write_report(
+                out_dir=out_dir,
+                chat_id=chat_id,
+                pairs_processed=state.run.get("last_completed_pair", 0),
+                wall_time_per_pair=wall_time_per_pair,
+                tokens_per_pair=tokens_per_pair,
+                llm_calls=getattr(client, "call_count", 0),
+                retries=getattr(client, "retry_count", 0),
+                cache_hits=getattr(client, "cache_hits", 0),
+                state=state,
+                checks_passed=list(passed_checks_set),
+                checks_failed=list(failed_checks_set) + ["budget_stop"],
+            )
+            with open(report_file, "r", encoding="utf-8") as f:
+                report_data = json.load(f)
+            report_data["budget_stop"] = True
+            report_data["error"] = str(b_err)
+            if stop_on_violation:
+                raise
+            return report_data
 
         state.run["last_completed_pair"] = pair_number
 

@@ -231,6 +231,12 @@ def create_router() -> APIRouter:
             safe_err = str(exc).replace(api_key, "[REDACTED]")
             return {"ok": False, "error": f"Connection failed: {safe_err}"}
 
+    @router.get("/usage")
+    def get_usage_endpoint(request: Request, month: str | None = None) -> dict[str, Any]:
+        """Return spend this month, per chat, per step, per model, and remaining budget (S3.4)."""
+        lib: Library = request.app.state.library
+        return lib.get_usage_summary(year_month=month)
+
     return router
 
 

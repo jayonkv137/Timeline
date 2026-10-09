@@ -1776,6 +1776,33 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - Sacred numbers: 21.7% / 78.3%, 4 · 10, COPILOT invariant.
 - **Next:** S3.4 — Budget guard: jobs refuse to start above remaining budget, running job stops at cap and emits `budget_stop`, `/usage` page (AG+).
 
+---
+
+## 2026-10-10 00:43 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S3.4 — Budget guard and /usage screen (Keys, models, cost and budget)
+- **Did:**
+  - Implemented `engine/budget.py`: `BudgetExceededError`, `BudgetStopError`, `get_usage_summary(library_root, year_month, settings)`, `check_budget_before_start(estimated_cost, library_root, settings)`, and runtime `BudgetGuard(cap, current_spent, on_budget_stop)`.
+  - Updated `engine/llm.py` and `engine/llm_cache.py`: wired `BudgetGuard` into `UsageMeter` and `LLMClient` to check and enforce budget cap on every call.
+  - Updated `engine/pipeline.py`: updated `run_chat` to accept `budget_guard` and safely handle `BudgetStopError`, halting execution at the cap while preserving valid state up to the last completed pair.
+  - Implemented `server/library.py`: added `get_usage_summary()` and `record_usage()`.
+  - Implemented `server/app.py`: added `GET /usage` endpoint returning monthly spend, budget cap, remaining balance, and breakdowns by chat, step, and model.
+  - Implemented `web/src/workspace/api.ts`: added `budget_stop` to SSE `knownEvents`, added `UsageReport` interface and `fetchUsage()` function.
+  - Implemented `web/src/workspace/UsageModal.tsx`: created token-backed Usage modal with monthly budget progress bar, allowance consumption %, step/model breakdowns, per-chat spend table, recent metered calls, and budget cap warning alerts.
+  - Styled modal in `web/src/workspace/workspace.css` with strict adherence to COTRACE design system tokens (`tokens.css`).
+  - Updated `web/src/workspace/store.ts` and `Workspace.tsx`: subscribed to `budget_stop` SSE events, added toast notification on budget stop, added activity rail Usage button, and rendered `UsageModal`.
+  - Built comprehensive test suite `tests/test_budget_guard.py` verifying usage summary aggregations, pre-flight refusal when estimate > remaining budget, mid-flight stop at cap emitting `budget_stop`, `/usage` API endpoint, and SSE event broadcast.
+- **Decisions made:**
+  - De-duplication: `load_usage_entries` de-duplicates usage records across library root and chat run folders using `(timestamp, call, model, tokens_total)`.
+  - Strict Token Adherence: All usage modal elements and progress indicators use canonical CSS variables (`--color-surface-panel`, `--color-party-human-solid`, `--color-status-danger`, `--color-status-warning`, etc.).
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `pytest tests/test_budget_guard.py -v`: 5/5 tests passed.
+  - `.venv/bin/python -m pytest -q`: 233 passed in 3.01s (baseline >= 102 intact).
+  - `npm --prefix web run build:workspace`: clean build in 200ms.
+  - Git diff `data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+  - Sacred numbers: 21.7% / 78.3%, 4 · 10, COPILOT verified invariant.
+- **Next:** S3.5 — Model bake-off: 3 golden chats × 3 cheap configurations, graded with `scripts/grade_golden.py` (CC).
+
 
 
 
