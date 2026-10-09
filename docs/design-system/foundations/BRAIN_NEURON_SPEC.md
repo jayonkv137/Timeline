@@ -1,6 +1,6 @@
 # BRAIN_NEURON_SPEC: every chat is a neuron in one brain
 
-Status: **v0, in design (Session 1 open).** This is the rulebook we are building rule by rule, the same way `design_pack/GRAPH_SYSTEM_SPEC.md` was built for the 2D graph. If the owner approves the neuron direction, it supersedes the cell territories in [`BRAIN_SYSTEM_SPEC.md`](BRAIN_SYSTEM_SPEC.md) (DDR-008).
+Status: **v0, in design.** Session 1 decided (9 Oct 2026); Session 2 variants are ready in the Brain Lab. This is the rulebook we are building rule by rule, the same way `design_pack/GRAPH_SYSTEM_SPEC.md` was built for the 2D graph. If the owner approves the neuron direction, it supersedes the cell territories in [`BRAIN_SYSTEM_SPEC.md`](BRAIN_SYSTEM_SPEC.md) (DDR-008).
 
 Lane: design track only. It touches `web/src/workspace/brain-*`, a dev-only Brain Lab page, `docs/design-system/` and tokens, and never `engine/`, `server/` or Track S files. The one shared file, `Brain.tsx`, is coordinated through BUILDLOG.
 
@@ -62,9 +62,9 @@ A rule that looks good but can't be read is rejected. Examples:
 
 | # | Session | Main question | Engine data (verified 9 Oct 2026) | Status |
 |---|---|---|---|---|
-| 1 | Anatomy dictionary | Which neuron part means what? | see §3 | **open** |
+| 1 | Anatomy dictionary | Which neuron part means what? | see §3 | **decided** (§3.1) |
 | AD | **Art direction** (look-dev) | What should it look and feel like, brain and interface together? | — | after 1 |
-| 2 | 3D placement | How does a 3D neuron sit on the 3D cortex? | anchor per chat | — |
+| 2 | 3D placement | How does a 3D neuron sit on the 3D cortex? | anchor per chat | **variants ready** (§6) |
 | 3 | Soma size | One universal scale across all chats | chat mass 25–1,137 (45×) | — |
 | 4 | Soma glow | How does a 25 / 75 share actually look? | human share 21–72% | — |
 | 5 | Soma texture | Work mode as texture, and is it effective? | mode per exchange; split (see §4 Q3) | — |
@@ -95,7 +95,14 @@ A rule that looks good but can't be read is rejected. Examples:
 | **Position** | Related chats close together | ❌ only the provisional topic category | — |
 | **Title** | The chat's name, the only text on the brain | chat title | — |
 
-**Owner decisions needed:**
+### 3.1 Session 1 decisions (owner, 9 Oct 2026)
+- **D1-1 Anatomy:** "anatomy good for now". Accepted as the working dictionary.
+- **D1-2 Texture:** "yeah let's see what happens". Session 5 tests the continuous "who decides / who does" signals against mode-only.
+- **D1-3 Footprint:** the question wasn't clear in words, so it is answered by looking: the Lab's *Surface footprint* switch (off · soft glow · cells). Decided in Session 2.
+- **D1-4 Placement:** "let's start". Session 2 starts with B as the lead candidate, with A and C rendered for comparison.
+- **D1-5 References:** "I have already given you some reference images … use those always". The owner's references (`owner-ref-4` … `-13`) are the standing moodboard for every session.
+
+The original questions, for the record:
 - **D1-1:** Is this dictionary right?
 - **D1-2:** Should texture use the continuous "who decides / who does" signals behind the mode, or only the mode name? (§4 Q3)
 - **D1-3:** Neurons replace the cell territories fully, or keep a soft surface trace under each neuron?
@@ -167,6 +174,30 @@ Goal: the brain and the whole interface look like one piece, designed by someone
 Budget: 45 fps or more on the desktop.
 
 ---
+
+## 6. Session 2: 3D placement (variants ready)
+
+**Brain Lab:** `npm run workspace` → `http://localhost:5180/brain-lab.html` (dev only; it doesn't change the workspace Brain). It shows the 10 real chats as neurons, a placement switch, a footprint switch, an axon-stub switch and the evidence inspector (click a neuron or one of its terminal heads).
+
+| Variant | How it is built | Seen on real data | Screenshot |
+|---|---|---|---|
+| **A** Drawn on the surface | Soma, dendrites and heads are flat shapes pushed through `brainPoint` (no volume) | Reads like white stickers. It sticks to the brain, but loses the "neuron" feeling | `brain-neuron/session-2/a-closeup.jpg` |
+| **B** Embedded in the cortex | Soma = a lumpy cell body with hillocks where branches leave, centred 0.35 r above the surface (≈ 2/3 visible, the rest seen faintly through the cortex). Dendrites = tapered tubes lying on the folds. Heads = small bulbs resting on the surface. An axon stub dives inward | Reads as a real object on the brain, at every angle. The title currently sits over the soma (Session 9) | `b-overview.jpg`, `b-closeup.jpg` |
+| **C** Inside the glass | The whole neuron sits 0.16 below the surface; the cortex turns more transparent (veil 0.85 → 0.30) | Faint, and the title drifts away from its neuron when orbiting (depth parallax). Neurons on the far side show through and clutter | `c-closeup.jpg` |
+
+**Footprint (D1-3), shown on B:**
+- **Off:** neurons only.
+- **Soft glow:** a faint patch of light on the surface under each neuron. Amber under the AI-led chats, blue under c10 (the only human-led chat); provisional colour (Session 4). `b-footprint-glow.jpg`
+- **Cells:** last round's cell patch under each neuron. `b-footprint-cells.jpg`
+
+**Provisional in this session** (not decided):
+- sizes: soma `0.014 + 0.0021·√mass`, head `0.008 + 0.0015·√mass`, dendrite base `0.0045 + 0.0006·√mass` tapering to 35% (Session 3)
+- the neutral pearl material (art direction)
+- neuron positions, which come from the topic lobes + territory packing (Session 11)
+
+**Claude's recommendation:** **B**, with footprint **soft glow** kept as a candidate for the far-zoom read (Session 13). C is only worth revisiting if the art direction goes "glass brain".
+
+**Owner decision needed:** pick A, B or C, and off, glow or cells.
 
 ## Sources
 - [Obsidian graph view help](https://obsidian.md/help/plugins/graph); [forum: text fade threshold should consider node size](https://forum.obsidian.md/t/graph-text-fade-threshold-consider-node-size/6737)
