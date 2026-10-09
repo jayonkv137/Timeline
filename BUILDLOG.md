@@ -1645,6 +1645,42 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
 - **Next:** S2.7 — `scripts/perf_report.py`: §6A performance metrics (first load, chat open, Brain fps, API latency) -> `docs/plans/reports/S2_perf.md` (AG).
 
+---
+
+## 2026-10-09 21:28 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S2.7 — Performance report & §6A benchmark metrics (AG)
+- **Did:**
+  - `scripts/workspace-tests/bench.cjs` — created Playwright benchmark script:
+    - Auto-detects desktop Google Chrome on macOS to enable native Metal ANGLE hardware GPU acceleration.
+    - Measures app first load time to conversation scroll and canvas render.
+    - Measures chat open / tab switch latency across 6 iterations (p50, mean, p95).
+    - Measures 3D Brain WebGL canvas rendering frame rate via `window.cotraceBrain.getState().frames`.
+  - `scripts/perf_report.py` — created §6A performance runner and markdown report generator:
+    - Measures REST API latency over 50 iterations per endpoint against live FastAPI backend (`/api/health`, `/api/chats`, `/api/chats/{id}`).
+    - Runs frontend browser benchmarks and aggregates metrics.
+    - Evaluates measured metrics against STANDALONE_V1_PLAN §6A T3 budgets.
+    - Commits structured report to `docs/plans/reports/S2_perf.md`.
+  - `tests/test_perf_report.py` — added 2 tier1 tests verifying quantile computations and markdown report generation.
+  - `docs/plans/reports/S2_perf.md` — generated and committed benchmark report:
+    - **App first load:** 305.1 ms (Budget: ≤ 2.0 s — **6.6× faster than budget**, PASS).
+    - **Open a chat:** 50.1 ms (Budget: ≤ 500 ms — **10.0× faster than budget**, PASS).
+    - **Brain frame rate:** 59.8 fps (Budget: ≥ 45 fps — **+14.8 fps over target**, PASS).
+    - **API /health:** 2.40 ms (Budget: ≤ 50 ms, PASS).
+    - **API /chats:** 2.43 ms (Budget: ≤ 100 ms, PASS).
+    - **API /chats/{id}:** 1.35 ms (Budget: ≤ 100 ms, PASS).
+  - `docs/plans/STANDALONE_V1_PLAN.md` — marked S2.7 complete (✅).
+- **Decisions made:**
+  - Automated detection of system Chrome enables real hardware GPU profiling matching real user desktop conditions while preserving headless CI compatibility.
+  - Verified AG+ sacred fixture numbers: Δ_you=87.0, Δ_AI=314.0 (21.7% / 78.3%), 4 You · 10 AI, COPILOT; 0 diffs on frozen fixture.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `.venv/bin/python scripts/perf_report.py`: generated `docs/plans/reports/S2_perf.md` (100% budgets PASS).
+  - `npm run e2e`: 2/2 suites passed against live server with 0 errors.
+  - `.venv/bin/python -m pytest -q`: 213 passed in 2.25s (up from 211; baseline 102 intact).
+  - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+- **Next:** S2.T — Owner test (§6A): run `./cotrace start`, open 5 chats, scrub, use Brain, delete and restore one chat (Owner).
+
+
 
 
 
