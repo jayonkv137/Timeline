@@ -1,0 +1,875 @@
+{
+  "chat_id": "c10_research_short",
+  "dialogue_summary": "The user requests a deep, critical analysis of their own and the AI's contributions, roles, and interaction patterns throughout their project. The AI provides this evaluation, categorizing their collaboration styles and offering to suggest ways to improve the user's technical engagement.",
+  "total_pairs": 1,
+  "total_ledger_rows": 27,
+  "step_1_outcomes": [
+    {
+      "id": "outcome 1",
+      "text": "Comprehensive analysis of project contributions and interaction patterns",
+      "turn_id": "U(1,1)",
+      "parent": null,
+      "children": [
+        "outcome 2",
+        "outcome 3",
+        "outcome 4"
+      ],
+      "related": []
+    },
+    {
+      "id": "outcome 2",
+      "text": "Analysis of individual contributions (user's creative vs. AI's technical)",
+      "turn_id": "U(1,1)",
+      "parent": "outcome 1",
+      "children": [],
+      "related": []
+    },
+    {
+      "id": "outcome 3",
+      "text": "Evaluation of user's role and interaction style using study analogies",
+      "turn_id": "U(1,2)",
+      "parent": "outcome 1",
+      "children": [],
+      "related": []
+    },
+    {
+      "id": "outcome 4",
+      "text": "Proposal for improving technical engagement",
+      "turn_id": "A(1,5)",
+      "parent": "outcome 1",
+      "children": [],
+      "related": []
+    }
+  ],
+  "step_1_intentions": [
+    {
+      "intention_id": "I1",
+      "intention": "Analyze collaboration and interaction patterns",
+      "outcome_ids": [
+        "outcome 1",
+        "outcome 2",
+        "outcome 3"
+      ]
+    },
+    {
+      "intention_id": "I2",
+      "intention": "Recommend engagement improvements",
+      "outcome_ids": [
+        "outcome 4"
+      ]
+    }
+  ],
+  "step_2_requirements": [
+    {
+      "outcome_id": "outcome 1",
+      "req_id": "req 1",
+      "text": "The AI must perform a comprehensive analysis of the user's interaction patterns and contributions, excavating patterns across prompts and interactions.",
+      "type": "task",
+      "status": "active",
+      "creation_action_ids": [
+        "A(1,1)"
+      ],
+      "contributing_action_ids": [
+        "U(1,1)",
+        "U(1,2)",
+        "U(1,3)",
+        "U(1,4)",
+        "U(1,5)"
+      ],
+      "implementation_action_ids": [],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "The action explicitly states that the AI performs a comprehensive analysis of the user's interaction patterns and contributions, which is the core success condition for this outcome.",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 2",
+      "req_id": "req 1",
+      "text": "The AI must provide an analysis of the user's contributions and the AI's contributions to the project.",
+      "type": "task",
+      "status": "active",
+      "creation_action_ids": [
+        "U(1,1)"
+      ],
+      "contributing_action_ids": [
+        "A(1,2)",
+        "A(1,3)"
+      ],
+      "implementation_action_ids": [
+        "A(1,2)",
+        "A(1,3)"
+      ],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "The user explicitly requests an analysis of what they have contributed and what the AI has contributed to the project so far.",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 3",
+      "req_id": "req 1",
+      "text": "The AI must identify the user's role in the project based on all previous prompts and chats.",
+      "type": "task",
+      "status": "active",
+      "creation_action_ids": [
+        "U(1,2)"
+      ],
+      "contributing_action_ids": [
+        "U(1,1)",
+        "A(1,4)"
+      ],
+      "implementation_action_ids": [
+        "A(1,4)"
+      ],
+      "revise_action_ids": [
+        "U(1,3)",
+        "U(1,4)",
+        "U(1,5)"
+      ],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "The user explicitly requests the AI to identify their role in the project from all previous prompts and chats.",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 3",
+      "req_id": "req 2",
+      "text": "The AI must provide a highly critical, honest, and deep analysis of the user's interaction patterns, prompting patterns, and level of participation.",
+      "type": "constraint",
+      "status": "active",
+      "creation_action_ids": [
+        "U(1,3)",
+        "U(1,5)"
+      ],
+      "contributing_action_ids": [
+        "U(1,1)",
+        "U(1,2)",
+        "U(1,4)",
+        "A(1,4)"
+      ],
+      "implementation_action_ids": [
+        "A(1,4)"
+      ],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "The user explicitly requests a very honest, 100% critical, and deep analysis of their interaction patterns, prompting ways, and participation level.",
+      "created_at_pair": 1
+    },
+    {
+      "outcome_id": "outcome 3",
+      "req_id": "req 3",
+      "text": "The AI must categorize the user's interaction style using analogies from the study (specifically Cyborg/Centaur and Self-Automator).",
+      "type": "task",
+      "status": "active",
+      "creation_action_ids": [
+        "U(1,4)"
+      ],
+      "contributing_action_ids": [
+        "U(1,1)",
+        "U(1,2)",
+        "U(1,3)",
+        "U(1,5)",
+        "A(1,4)"
+      ],
+      "implementation_action_ids": [
+        "A(1,4)"
+      ],
+      "revise_action_ids": [],
+      "related_to": [],
+      "explicit_or_implicit": "explicit",
+      "rationale": "The user suggests using analogies from the study to categorize them, which the AI adopts and implements by evaluating them as a Cyborg/Centaur and Self-Automator.",
+      "created_at_pair": 1
+    }
+  ],
+  "step_2_slots": [
+    {
+      "slot_id": "slot 1",
+      "outcome_id": "outcome 4",
+      "text": "Whether the proposal should provide a concrete, low-cost way to convert a slice of the technical axis from abdicated to Centaur without slowing the build.",
+      "type": "task",
+      "origin": "AI",
+      "status": "open",
+      "creation_action_ids": [
+        "A(1,5)"
+      ],
+      "contributing_action_ids": [],
+      "resolved_into": null
+    }
+  ],
+  "step_3_all_actions": [
+    {
+      "id": "U(1,1)",
+      "type": "Request",
+      "text": "User asks for an analysis of their contributions and the AI's contributions to the project.",
+      "role": "SHAPER",
+      "evidence_quote": "What have I contributed to this so far in this full project, and what have you contributed in this full project?"
+    },
+    {
+      "id": "U(1,2)",
+      "type": "Request",
+      "text": "User asks the AI to identify their role in the project based on previous prompts and chats.",
+      "role": "SHAPER",
+      "evidence_quote": "identify my role in this full project from all the prompts and chats and stuff i have givne"
+    },
+    {
+      "id": "U(1,3)",
+      "type": "Request",
+      "text": "User requests a critical and honest analysis of their interaction patterns.",
+      "role": "SHAPER",
+      "evidence_quote": "be a very veyr honest and 100 5 crittical anlaysis og how i ahve interacted with you till now"
+    },
+    {
+      "id": "U(1,4)",
+      "type": "Suggest",
+      "text": "User suggests using analogies from a study to categorize their interaction style.",
+      "role": "SHAPER",
+      "evidence_quote": "maybe u can use the analogies mentioned in this study to cagorize, me"
+    },
+    {
+      "id": "U(1,5)",
+      "type": "Request",
+      "text": "User requests a deep analysis of their prompting patterns and participation level.",
+      "role": "SHAPER",
+      "evidence_quote": "be honest and with patterns and how i have prompted anlyze deeply and my ways and how i ignore or ask u to and talk to u and how much of aprticipation i have"
+    },
+    {
+      "id": "A(1,1)",
+      "type": "Analyze",
+      "text": "AI performs a comprehensive analysis of the user's interaction patterns and contributions.",
+      "role": "EXECUTOR",
+      "evidence_quote": "Excavating patterns across prompts and interactions comprehensively."
+    },
+    {
+      "id": "A(1,2)",
+      "type": "Report",
+      "text": "AI reports on the user's creative contributions to the project.",
+      "role": "EXECUTOR",
+      "evidence_quote": "The entire creative vision is yours and only yours."
+    },
+    {
+      "id": "A(1,3)",
+      "type": "Report",
+      "text": "AI reports on its own contributions regarding technical implementation and translation.",
+      "role": "EXECUTOR",
+      "evidence_quote": "Translation and execution-knowledge. ... I brought the technical layer you don't have"
+    },
+    {
+      "id": "A(1,4)",
+      "type": "Evaluate",
+      "text": "AI evaluates the user's role as a Cyborg/Centaur on creative direction and a Self-Automator on technical execution.",
+      "role": "EXECUTOR",
+      "evidence_quote": "On creative direction and orchestration, you are a Cyborg bordering on Centaur. ... On technical execution, you are, bluntly, a Self-Automator."
+    },
+    {
+      "id": "A(1,5)",
+      "type": "Invite",
+      "text": "AI invites the user to receive suggestions for improving their technical engagement.",
+      "role": "SHAPER",
+      "evidence_quote": "Want me to suggest a concrete, low-cost way to convert a slice of the technical axis from abdicated to Centaur without slowing the build?"
+    }
+  ],
+  "step_3_operations_log": [
+    {
+      "pair": 1,
+      "outcome_id": "outcome 1",
+      "op": "create",
+      "target_id": "req 1",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 2",
+      "op": "create",
+      "target_id": "req 1",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 3",
+      "op": "create",
+      "target_id": "req 1",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 3",
+      "op": "create",
+      "target_id": "req 2",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 3",
+      "op": "create",
+      "target_id": "req 3",
+      "target_type": "requirement"
+    },
+    {
+      "pair": 1,
+      "outcome_id": "outcome 4",
+      "op": "open_slot",
+      "target_id": "slot 1",
+      "target_type": "slot"
+    }
+  ],
+  "step_4_mode_split": {
+    "CENTAUR": 100.0
+  },
+  "step_4_pairs": [
+    {
+      "pair": 1,
+      "user_actions": [
+        {
+          "id": "U(1,1)",
+          "type": "Request",
+          "text": "User asks for an analysis of their contributions and the AI's contributions to the project.",
+          "role": "SHAPER",
+          "evidence_quote": "What have I contributed to this so far in this full project, and what have you contributed in this full project?"
+        },
+        {
+          "id": "U(1,2)",
+          "type": "Request",
+          "text": "User asks the AI to identify their role in the project based on previous prompts and chats.",
+          "role": "SHAPER",
+          "evidence_quote": "identify my role in this full project from all the prompts and chats and stuff i have givne"
+        },
+        {
+          "id": "U(1,3)",
+          "type": "Request",
+          "text": "User requests a critical and honest analysis of their interaction patterns.",
+          "role": "SHAPER",
+          "evidence_quote": "be a very veyr honest and 100 5 crittical anlaysis og how i ahve interacted with you till now"
+        },
+        {
+          "id": "U(1,4)",
+          "type": "Suggest",
+          "text": "User suggests using analogies from a study to categorize their interaction style.",
+          "role": "SHAPER",
+          "evidence_quote": "maybe u can use the analogies mentioned in this study to cagorize, me"
+        },
+        {
+          "id": "U(1,5)",
+          "type": "Request",
+          "text": "User requests a deep analysis of their prompting patterns and participation level.",
+          "role": "SHAPER",
+          "evidence_quote": "be honest and with patterns and how i have prompted anlyze deeply and my ways and how i ignore or ask u to and talk to u and how much of aprticipation i have"
+        }
+      ],
+      "ai_actions": [
+        {
+          "id": "A(1,1)",
+          "type": "Analyze",
+          "text": "AI performs a comprehensive analysis of the user's interaction patterns and contributions.",
+          "role": "EXECUTOR",
+          "evidence_quote": "Excavating patterns across prompts and interactions comprehensively."
+        },
+        {
+          "id": "A(1,2)",
+          "type": "Report",
+          "text": "AI reports on the user's creative contributions to the project.",
+          "role": "EXECUTOR",
+          "evidence_quote": "The entire creative vision is yours and only yours."
+        },
+        {
+          "id": "A(1,3)",
+          "type": "Report",
+          "text": "AI reports on its own contributions regarding technical implementation and translation.",
+          "role": "EXECUTOR",
+          "evidence_quote": "Translation and execution-knowledge. ... I brought the technical layer you don't have"
+        },
+        {
+          "id": "A(1,4)",
+          "type": "Evaluate",
+          "text": "AI evaluates the user's role as a Cyborg/Centaur on creative direction and a Self-Automator on technical execution.",
+          "role": "EXECUTOR",
+          "evidence_quote": "On creative direction and orchestration, you are a Cyborg bordering on Centaur. ... On technical execution, you are, bluntly, a Self-Automator."
+        },
+        {
+          "id": "A(1,5)",
+          "type": "Invite",
+          "text": "AI invites the user to receive suggestions for improving their technical engagement.",
+          "role": "SHAPER",
+          "evidence_quote": "Want me to suggest a concrete, low-cost way to convert a slice of the technical axis from abdicated to Centaur without slowing the build?"
+        }
+      ],
+      "requirements_created": [
+        {
+          "outcome_id": "outcome 1",
+          "req_id": "req 1",
+          "text": "The AI must perform a comprehensive analysis of the user's interaction patterns and contributions, excavating patterns across prompts and interactions.",
+          "type": "task",
+          "status": "active",
+          "creation_action_ids": [
+            "A(1,1)"
+          ],
+          "contributing_action_ids": [
+            "U(1,1)",
+            "U(1,2)",
+            "U(1,3)",
+            "U(1,4)",
+            "U(1,5)"
+          ],
+          "implementation_action_ids": [],
+          "revise_action_ids": [],
+          "related_to": [],
+          "explicit_or_implicit": "explicit",
+          "rationale": "The action explicitly states that the AI performs a comprehensive analysis of the user's interaction patterns and contributions, which is the core success condition for this outcome.",
+          "created_at_pair": 1
+        },
+        {
+          "outcome_id": "outcome 2",
+          "req_id": "req 1",
+          "text": "The AI must provide an analysis of the user's contributions and the AI's contributions to the project.",
+          "type": "task",
+          "status": "active",
+          "creation_action_ids": [
+            "U(1,1)"
+          ],
+          "contributing_action_ids": [
+            "A(1,2)",
+            "A(1,3)"
+          ],
+          "implementation_action_ids": [
+            "A(1,2)",
+            "A(1,3)"
+          ],
+          "revise_action_ids": [],
+          "related_to": [],
+          "explicit_or_implicit": "explicit",
+          "rationale": "The user explicitly requests an analysis of what they have contributed and what the AI has contributed to the project so far.",
+          "created_at_pair": 1
+        },
+        {
+          "outcome_id": "outcome 3",
+          "req_id": "req 1",
+          "text": "The AI must identify the user's role in the project based on all previous prompts and chats.",
+          "type": "task",
+          "status": "active",
+          "creation_action_ids": [
+            "U(1,2)"
+          ],
+          "contributing_action_ids": [
+            "U(1,1)",
+            "A(1,4)"
+          ],
+          "implementation_action_ids": [
+            "A(1,4)"
+          ],
+          "revise_action_ids": [
+            "U(1,3)",
+            "U(1,4)",
+            "U(1,5)"
+          ],
+          "related_to": [],
+          "explicit_or_implicit": "explicit",
+          "rationale": "The user explicitly requests the AI to identify their role in the project from all previous prompts and chats.",
+          "created_at_pair": 1
+        },
+        {
+          "outcome_id": "outcome 3",
+          "req_id": "req 2",
+          "text": "The AI must provide a highly critical, honest, and deep analysis of the user's interaction patterns, prompting patterns, and level of participation.",
+          "type": "constraint",
+          "status": "active",
+          "creation_action_ids": [
+            "U(1,3)",
+            "U(1,5)"
+          ],
+          "contributing_action_ids": [
+            "U(1,1)",
+            "U(1,2)",
+            "U(1,4)",
+            "A(1,4)"
+          ],
+          "implementation_action_ids": [
+            "A(1,4)"
+          ],
+          "revise_action_ids": [],
+          "related_to": [],
+          "explicit_or_implicit": "explicit",
+          "rationale": "The user explicitly requests a very honest, 100% critical, and deep analysis of their interaction patterns, prompting ways, and participation level.",
+          "created_at_pair": 1
+        },
+        {
+          "outcome_id": "outcome 3",
+          "req_id": "req 3",
+          "text": "The AI must categorize the user's interaction style using analogies from the study (specifically Cyborg/Centaur and Self-Automator).",
+          "type": "task",
+          "status": "active",
+          "creation_action_ids": [
+            "U(1,4)"
+          ],
+          "contributing_action_ids": [
+            "U(1,1)",
+            "U(1,2)",
+            "U(1,3)",
+            "U(1,5)",
+            "A(1,4)"
+          ],
+          "implementation_action_ids": [
+            "A(1,4)"
+          ],
+          "revise_action_ids": [],
+          "related_to": [],
+          "explicit_or_implicit": "explicit",
+          "rationale": "The user suggests using analogies from the study to categorize them, which the AI adopts and implements by evaluating them as a Cyborg/Centaur and Self-Automator.",
+          "created_at_pair": 1
+        }
+      ],
+      "slots_created": [
+        {
+          "slot_id": "slot 1",
+          "outcome_id": "outcome 4",
+          "text": "Whether the proposal should provide a concrete, low-cost way to convert a slice of the technical axis from abdicated to Centaur without slowing the build.",
+          "type": "task",
+          "origin": "AI",
+          "status": "open",
+          "creation_action_ids": [
+            "A(1,5)"
+          ],
+          "contributing_action_ids": [],
+          "resolved_into": null
+        }
+      ],
+      "operations": [
+        {
+          "pair": 1,
+          "outcome_id": "outcome 1",
+          "op": "create",
+          "target_id": "req 1",
+          "target_type": "requirement"
+        },
+        {
+          "pair": 1,
+          "outcome_id": "outcome 2",
+          "op": "create",
+          "target_id": "req 1",
+          "target_type": "requirement"
+        },
+        {
+          "pair": 1,
+          "outcome_id": "outcome 3",
+          "op": "create",
+          "target_id": "req 1",
+          "target_type": "requirement"
+        },
+        {
+          "pair": 1,
+          "outcome_id": "outcome 3",
+          "op": "create",
+          "target_id": "req 2",
+          "target_type": "requirement"
+        },
+        {
+          "pair": 1,
+          "outcome_id": "outcome 3",
+          "op": "create",
+          "target_id": "req 3",
+          "target_type": "requirement"
+        },
+        {
+          "pair": 1,
+          "outcome_id": "outcome 4",
+          "op": "open_slot",
+          "target_id": "slot 1",
+          "target_type": "slot"
+        }
+      ],
+      "ledger_rows": [
+        {
+          "pair_added": 1,
+          "action_id": "A(1,1)",
+          "speaker": "A",
+          "role": "EXECUTOR",
+          "outcome_id": "outcome 1",
+          "req_id": "req 1",
+          "score": 5.0,
+          "kind": "creation"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,1)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 1",
+          "req_id": "req 1",
+          "score": 3.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,2)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 1",
+          "req_id": "req 1",
+          "score": 3.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,3)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 1",
+          "req_id": "req 1",
+          "score": 3.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,4)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 1",
+          "req_id": "req 1",
+          "score": 2.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,5)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 1",
+          "req_id": "req 1",
+          "score": 3.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,1)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 2",
+          "req_id": "req 1",
+          "score": 5.0,
+          "kind": "creation"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "A(1,2)",
+          "speaker": "A",
+          "role": "EXECUTOR",
+          "outcome_id": "outcome 2",
+          "req_id": "req 1",
+          "score": 4.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "A(1,3)",
+          "speaker": "A",
+          "role": "EXECUTOR",
+          "outcome_id": "outcome 2",
+          "req_id": "req 1",
+          "score": 4.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,2)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 3",
+          "req_id": "req 1",
+          "score": 5.0,
+          "kind": "creation"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,3)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 3",
+          "req_id": "req 2",
+          "score": 5.0,
+          "kind": "creation"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,5)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 3",
+          "req_id": "req 2",
+          "score": 5.0,
+          "kind": "creation"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,4)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 3",
+          "req_id": "req 3",
+          "score": 5.0,
+          "kind": "creation"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,1)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 3",
+          "req_id": "req 1",
+          "score": 3.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,3)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 3",
+          "req_id": "req 1",
+          "score": 4.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,4)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 3",
+          "req_id": "req 1",
+          "score": 4.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,5)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 3",
+          "req_id": "req 1",
+          "score": 4.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "A(1,4)",
+          "speaker": "A",
+          "role": "EXECUTOR",
+          "outcome_id": "outcome 3",
+          "req_id": "req 1",
+          "score": 5.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,1)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 3",
+          "req_id": "req 2",
+          "score": 3.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,2)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 3",
+          "req_id": "req 2",
+          "score": 3.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,4)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 3",
+          "req_id": "req 2",
+          "score": 3.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "A(1,4)",
+          "speaker": "A",
+          "role": "EXECUTOR",
+          "outcome_id": "outcome 3",
+          "req_id": "req 2",
+          "score": 5.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,1)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 3",
+          "req_id": "req 3",
+          "score": 2.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,2)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 3",
+          "req_id": "req 3",
+          "score": 2.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,3)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 3",
+          "req_id": "req 3",
+          "score": 3.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "U(1,5)",
+          "speaker": "U",
+          "role": "SHAPER",
+          "outcome_id": "outcome 3",
+          "req_id": "req 3",
+          "score": 2.0,
+          "kind": "labeled"
+        },
+        {
+          "pair_added": 1,
+          "action_id": "A(1,4)",
+          "speaker": "A",
+          "role": "EXECUTOR",
+          "outcome_id": "outcome 3",
+          "req_id": "req 3",
+          "score": 5.0,
+          "kind": "labeled"
+        }
+      ],
+      "influence": {
+        "user_score": 72.0,
+        "ai_score": 28.0,
+        "total": 100.0,
+        "user_pct": 72.0,
+        "ai_pct": 28.0
+      },
+      "mode": {
+        "classification": "CENTAUR",
+        "signals": {
+          "w_you": 5,
+          "w_ai": 1,
+          "h_you": 47.0,
+          "h_ai": 23.0,
+          "substantive_user": true
+        }
+      },
+      "cumulative_direction": {
+        "user_pct": 72.0,
+        "ai_pct": 28.0
+      }
+    }
+  ]
+}

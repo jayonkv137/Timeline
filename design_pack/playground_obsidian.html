@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CoTrace · Authentic Obsidian Graph View</title>
+  <script src="all_chats_data.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    select, input, button { user-select: auto; }
+    body {
+      background: #141417;
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", monospace, sans-serif;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+    #graph-canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      cursor: grab;
+    }
+    #graph-canvas:active {
+      cursor: grabbing;
+    }
+
+    /* Minimal Obsidian Top Bar */
+    .obsidian-bar {
+      position: absolute;
+      top: 16px; left: 20px;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      pointer-events: auto;
+    }
+    .obsidian-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #94a3b8;
+      letter-spacing: -0.2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      pointer-events: auto;
+    }
+    .obsidian-title strong {
+      color: #f1f5f9;
+    }
+
+    /* View Switcher */
+    .view-switcher {
+      position: absolute;
+      top: 16px; right: 20px;
+      z-index: 10;
+      display: flex;
+      gap: 8px;
+    }
+    .view-btn {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #94a3b8;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .view-btn:hover {
+      background: #334155;
+      color: #fff;
+    }
+    .view-btn.active {
+      background: #3b82f6;
+      border-color: #60a5fa;
+      color: #fff;
+    }
+
+    /* Minimal Bottom Legend / Hint */
+    .bottom-hint {
+      position: absolute;
+      bottom: 16px; left: 20px;
+      font-size: 11px;
+      color: #64748b;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .hint-item { display: flex; align-items: center; gap: 6px; }
+    .dot-u { width: 8px; height: 8px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 6px #38bdf8; }
+    .dot-a { width: 8px; height: 8px; border-radius: 50%; background: #fb923c; box-shadow: 0 0 6px #fb923c; }
+    .line-solid-sample { width: 16px; height: 2px; background: rgba(255,255,255,0.4); border-radius: 1px; }
+    .line-dashed-sample { width: 16px; height: 0px; border-top: 1.5px dashed rgba(148,163,184,0.6); }
+
+    /* Pair Switcher */
+    .pair-switcher {
+      display: inline-flex;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 6px;
+      padding: 2px;
+      margin-left: 14px;
+    }
+    .pair-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      padding: 3px 9px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .pair-btn:hover { color: #f1f5f9; }
+    .pair-btn.active {
+      background: #334155;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    /* Floating Bottom Timeline Scrubber */
+    .timeline-scrubber-capsule {
+      position: absolute;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(9, 10, 15, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 9999px;
+      padding: 6px 14px 6px 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 150;
+      box-shadow: 0 14px 38px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      user-select: none;
+    }
+
+    .scrubber-nav-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.05);
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .scrubber-nav-btn:hover:not(:disabled) {
+      background: rgba(56, 189, 248, 0.2);
+      color: #38bdf8;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .scrubber-nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .scrubber-track-container {
+      position: relative;
+      width: 240px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+    }
+
+    .scrubber-rail {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 2px;
+    }
+
+    .scrubber-fill {
+      position: absolute;
+      left: 12px;
+      height: 4px;
+      background: linear-gradient(90deg, #38bdf8, #fb923c);
+      border-radius: 2px;
+      transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .scrubber-notches {
+      position: absolute;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 4px;
+    }
+
+    .scrubber-notch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+    .scrubber-notch:hover .notch-tag {
+      color: #f8fafc;
+    }
+
+    .notch-marker {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #1e293b;
+      border: 2px solid #64748b;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 2;
+    }
+
+    .scrubber-notch.active .notch-marker {
+      background: #38bdf8;
+      border-color: #ffffff;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+      transform: scale(1.15);
+    }
+
+    .scrubber-notch.current .notch-marker {
+      background: #fb923c;
+      border-color: #ffffff;
+      box-shadow: 0 0 12px rgba(251, 146, 60, 0.9);
+      transform: scale(1.3);
+    }
+
+    .notch-tag {
+      font-size: 10px;
+      font-weight: 500;
+      color: #64748b;
+      letter-spacing: 0.02em;
+      transition: color 0.15s;
+    }
+    .scrubber-notch.active .notch-tag {
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+    .scrubber-notch.current .notch-tag {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .scrubber-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      font-size: 10.5px;
+      color: #cbd5e1;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #38bdf8;
+      box-shadow: 0 0 6px #38bdf8;
+    }
+
+    /* Controls Badge */
+    .controls-hint {
+      position: absolute;
+      bottom: 26px; right: 24px;
+      font-size: 11px;
+      color: #475569;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="graph-canvas"></canvas>
+
+  <div id="satellite-tooltip" style="position: absolute; display: none; pointer-events: none; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 8px; padding: 10px 14px; font-size: 11px; color: #f1f5f9; max-width: 320px; line-height: 1.4; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.7);"></div>
+
+  <div id="chat-jump-toast" style="display: none; position: absolute; bottom: 84px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 12px; padding: 10px 18px; color: #e2e8f0; font-size: 12px; box-shadow: 0 12px 36px rgba(0,0,0,0.7); z-index: 200; align-items: center; gap: 14px;"></div>
+
+  <div class="obsidian-bar">
+    <div class="obsidian-title" style="display:flex;align-items:center;gap:12px;">
+      <span style="display:flex;align-items:center;gap:8px;">
+        <strong>Graph view</strong> ·
+        <select id="chat-select" onchange="switchChat(this.value)" style="background:#1e293b;color:#f8fafc;border:1px solid rgba(255,255,255,0.22);border-radius:6px;padding:3px 8px;font-size:11px;font-weight:600;outline:none;cursor:pointer;max-width:240px;pointer-events:auto;">
+        </select>
+        <span id="pair-title-text" style="color:#94a3b8;font-size:12px;margin-left:4px;">Pair 1 Complete</span>
+      </span>
+      <div class="pair-switcher" id="pair-switcher">
+        <button class="pair-btn active" id="btn-p1" onclick="switchPair(1)">P1</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="view-switcher">
+    <span class="view-btn active">2D Obsidian View</span>
+    <a href="playground_3d.html" id="view-3d-link" class="view-btn">Switch to 3D Universe ↗</a>
+  </div>
+
+  <!-- FLOATING BOTTOM TIMELINE SCRUBBER -->
+  <div class="timeline-scrubber-capsule">
+    <button class="scrubber-nav-btn" id="scrubber-prev-btn" onclick="prevPair()" title="Previous Pair (Left Arrow)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+
+    <div class="scrubber-track-container" style="width: 360px;">
+      <div class="scrubber-rail"></div>
+      <div class="scrubber-fill" id="scrubber-fill" style="width: 100%;"></div>
+      <div class="scrubber-notches" id="scrubber-notches">
+        <div class="scrubber-notch active current" id="notch-1" onclick="switchPair(1)">
+          <div class="notch-marker"></div>
+          <span class="notch-tag">P1</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="scrubber-nav-btn" id="scrubber-next-btn" onclick="nextPair()" title="Next Pair (Right Arrow)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+
+    <div class="scrubber-badge" id="scrubber-badge">
+      <div class="badge-dot"></div>
+      <span id="scrubber-badge-text">Pair 1 · Mass 62 (Genesis)</span>
+    </div>
+  </div>
+
+  <div class="bottom-hint">
+    <div class="hint-item"><div class="dot-u"></div> User Req</div>
+    <div class="hint-item"><div class="dot-a"></div> AI Req</div>
+    <div class="hint-item"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;border:1.5px solid #fb923c;"></span> Open Question</div>
+    <div class="hint-item">
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:11px;height:11px;border-radius:50%;border:1.3px solid #fb923c;">
+        <span style="width:5px;height:5px;border-radius:50%;background:#38bdf8;"></span>
+      </span>
+      Resolved Slot
+    </div>
+    <div class="hint-item"><div class="line-solid-sample"></div> Tether</div>
+    <div class="hint-item"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;border:1.5px solid #38bdf8;"></span> Active Focus</div>
+  </div>
+
+  <div class="controls-hint">
+    Arrows (◀ / ▶) to scrub pairs &nbsp;|&nbsp; Drag canvas &nbsp;|&nbsp; Scroll zoom
+  </div>
+
+  <script>
+    const canvas = document.getElementById('graph-canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Pan & Zoom state
+    let zoom = 1.0;
+    let panX = 0;
+    let panY = 0;
+    let isPanning = false;
+    let dragNode = null;
+    let dragStartX = 0, dragStartY = 0;
+    let hoveredNode = null;
+
+    // Canvas sizing
+    function resize() {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      ctx.resetTransform();
+      ctx.scale(dpr, dpr);
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // EXACT PIPELINE LEDGER & STATE DATA ACROSS PAIRS
+    // ─────────────────────────────────────────────────────────────
+    let currentChatId = 'c05_research_medium';
+    let currentPair = 1;
+    let nodes = [];
+    let links = [];
+
+    function initChatSelector() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const paramChat = urlParams.get('chat');
+      const paramPair = parseInt(urlParams.get('pair'), 10);
+
+      const selectEl = document.getElementById('chat-select');
+      if (selectEl && typeof ALL_CHATS_DATA !== 'undefined') {
+        selectEl.innerHTML = '';
+        const chatIds = Object.keys(ALL_CHATS_DATA);
+        chatIds.forEach(id => {
+          const c = ALL_CHATS_DATA[id];
+          const opt = document.createElement('option');
+          opt.value = id;
+          const rootText = (c.pairs && c.pairs[1] && c.pairs[1].nodes && c.pairs[1].nodes[0]) ? c.pairs[1].nodes[0].text : id;
+          const shortText = rootText.length > 34 ? rootText.substring(0, 34) + '...' : rootText;
+          opt.textContent = `${id} (${c.totalPairs}P) · ${shortText}`;
+          selectEl.appendChild(opt);
+        });
+
+        const initialChat = (paramChat && ALL_CHATS_DATA[paramChat]) ? paramChat : (ALL_CHATS_DATA['c05_research_medium'] ? 'c05_research_medium' : chatIds[0]);
+        selectEl.value = initialChat;
+        const initialPair = (!isNaN(paramPair) && paramPair >= 1) ? paramPair : 1;
+        switchChat(initialChat, initialPair);
+      }
+    }
+
+    function switchChat(chatId, targetPair = 1) {
+      if (!ALL_CHATS_DATA || !ALL_CHATS_DATA[chatId]) return;
+      currentChatId = chatId;
+      const chat = ALL_CHATS_DATA[chatId];
+      const totalPairs = chat.totalPairs;
+
+      // Sync select dropdown element
+      const sel = document.getElementById('chat-select');
+      if (sel && sel.value !== chatId) sel.value = chatId;
+
+      try {
+        history.replaceState(null, '', `?chat=${encodeURIComponent(chatId)}&pair=${targetPair}`);
+      } catch (e) {}
+
+      // 1. Rebuild top pair buttons
+      const switcher = document.getElementById('pair-switcher');
+      if (switcher) {
+        let btnsHtml = '';
+        for (let i = 1; i <= totalPairs; i++) {
+          const label = (i === totalPairs && totalPairs > 1) ? `P${i} (Final)` : `P${i}`;
+          btnsHtml += `<button class="pair-btn ${i === targetPair ? 'active' : ''}" id="btn-p${i}" onclick="switchPair(${i})">${label}</button>`;
+        }
+        switcher.innerHTML = btnsHtml;
+      }
+
+      // 2. Rebuild scrubber notches
+      const notchesEl = document.getElementById('scrubber-notches');
+      if (notchesEl) {
+        let notchesHtml = '';
+        for (let i = 1; i <= totalPairs; i++) {
+          notchesHtml += `
+            <div class="scrubber-notch ${i <= targetPair ? 'active' : ''} ${i === targetPair ? 'current' : ''}" id="notch-${i}" onclick="switchPair(${i})">
+              <div class="notch-marker"></div>
+              <span class="notch-tag">P${i}</span>
+            </div>`;
+        }
+        notchesEl.innerHTML = notchesHtml;
+      }
+
+      // 3. Dynamic scrubber width
+      const trackContainer = document.querySelector('.scrubber-track-container');
+      if (trackContainer) {
+        trackContainer.style.width = Math.max(140, Math.min(380, totalPairs * 54)) + 'px';
+      }
+
+      // 4. Reset pan/zoom
+      zoom = 1.0;
+      panX = 0;
+      panY = 0;
+
+      // 5. Switch to desired pair
+      switchPair(targetPair);
+    }
+
+    function switchPair(pairNum) {
+      if (!ALL_CHATS_DATA || !ALL_CHATS_DATA[currentChatId]) return;
+      const currentChat = ALL_CHATS_DATA[currentChatId];
+      const totalPairs = currentChat.totalPairs;
+      if (pairNum < 1) pairNum = 1;
+      if (pairNum > totalPairs) pairNum = totalPairs;
+      currentPair = pairNum;
+
+      try {
+        history.replaceState(null, '', `?chat=${encodeURIComponent(currentChatId)}&pair=${pairNum}`);
+      } catch (e) {}
+
+      // Top buttons
+      for (let i = 1; i <= totalPairs; i++) {
+        const el = document.getElementById('btn-p' + i);
+        if (el) el.classList.toggle('active', pairNum === i);
+      }
+
+      // Scrubber fill & notches
+      const fillEl = document.getElementById('scrubber-fill');
+      if (fillEl) {
+        const pct = totalPairs === 1 ? 100 : ((pairNum - 1) / (totalPairs - 1)) * 100;
+        fillEl.style.width = pct + '%';
+      }
+
+      for (let i = 1; i <= totalPairs; i++) {
+        const notch = document.getElementById('notch-' + i);
+        if (notch) {
+          notch.classList.toggle('active', i <= pairNum);
+          notch.classList.toggle('current', i === pairNum);
+        }
+      }
+
+      // Scrubber prev/next buttons
+      const prevBtn = document.getElementById('scrubber-prev-btn');
+      const nextBtn = document.getElementById('scrubber-next-btn');
+      if (prevBtn) prevBtn.disabled = (pairNum === 1);
+      if (nextBtn) nextBtn.disabled = (pairNum === totalPairs);
+
+      // Scrubber badge
+      const badgeEl = document.getElementById('scrubber-badge-text');
+      const pData = currentChat.pairs[pairNum];
+      if (badgeEl && pData) {
+        badgeEl.textContent = pData.badgeText || `Pair ${pairNum}`;
+      }
+
+      const titleEl = document.getElementById('pair-title-text');
+      if (titleEl && pData) {
+        titleEl.textContent = pData.title;
+      }
+
+      // Sync 3D view link with chat and pair
+      const link3d = document.getElementById('view-3d-link');
+      if (link3d) {
+        link3d.href = `playground_3d.html?chat=${encodeURIComponent(currentChatId)}&pair=${currentPair}`;
+      }
+
+      if (pData) {
+        nodes = JSON.parse(JSON.stringify(pData.nodes));
+        links = JSON.parse(JSON.stringify(pData.links));
+        nodes.forEach(n => {
+          n.vx = 0;
+          n.vy = 0;
+        });
+      }
+
+      hoveredNode = null;
+      dragNode = null;
+      const tooltip = document.getElementById('satellite-tooltip');
+      if (tooltip) tooltip.style.display = 'none';
+    }
+
+    function prevPair() {
+      if (currentPair > 1) switchPair(currentPair - 1);
+    }
+
+    function nextPair() {
+      if (!ALL_CHATS_DATA || !ALL_CHATS_DATA[currentChatId]) return;
+      const totalPairs = ALL_CHATS_DATA[currentChatId].totalPairs;
+      if (currentPair < totalPairs) switchPair(currentPair + 1);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') prevPair();
+      if (e.key === 'ArrowRight') nextPair();
+    });
+
+    // Node lookup
+    function getNode(id) {
+      return nodes.find(n => n.id === id);
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // SPRING FORCE SIMULATION (Authentic Obsidian Mechanics)
+    // ─────────────────────────────────────────────────────────────
+    // Solves coordinate scaling and keeps labels separated naturally
+    function updatePhysics() {
+      const springK = 0.005;
+      const repulsionK = 6500;
+      const damping = 0.86;
+
+      // 1. Spring forces across links
+      for (const link of links) {
+        const u = getNode(link.source);
+        const v = getNode(link.target);
+        if (!u || !v) continue;
+
+        const dx = v.x - u.x;
+        const dy = v.y - u.y;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        const targetLen = link.length;
+        const force = (dist - targetLen) * (link.type === 'parent_child' ? springK : springK * 0.5);
+
+        const fx = (dx / dist) * force;
+        const fy = (dy / dist) * force;
+
+        if (!u.pinned && u !== dragNode) {
+          u.vx = (u.vx || 0) + fx;
+          u.vy = (u.vy || 0) + fy;
+        }
+        if (!v.pinned && v !== dragNode) {
+          v.vx = (v.vx || 0) - fx;
+          v.vy = (v.vy || 0) - fy;
+        }
+      }
+
+      // 2. Node-node electrostatic repulsion (keeps text from overlapping)
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i];
+          const b = nodes[j];
+          const dx = b.x - a.x;
+          const dy = b.y - a.y;
+          const distSq = dx * dx + dy * dy || 1;
+          const dist = Math.sqrt(distSq);
+
+          const minSafeDist = a.radius + b.radius + 120; // ample margin for labels
+          const force = repulsionK / (distSq + 400);
+
+          const fx = (dx / dist) * force;
+          const fy = (dy / dist) * force;
+
+          if (!a.pinned && a !== dragNode) {
+            a.vx = (a.vx || 0) - fx;
+            a.vy = (a.vy || 0) - fy;
+          }
+          if (!b.pinned && b !== dragNode) {
+            b.vx = (b.vx || 0) + fx;
+            b.vy = (b.vy || 0) + fy;
+          }
+        }
+      }
+
+      // 3. Integrate velocities and damp
+      for (const n of nodes) {
+        if (n.pinned || n === dragNode) {
+          n.vx = 0;
+          n.vy = 0;
+          continue;
+        }
+        n.vx = n.vx || 0;
+        n.vy = n.vy || 0;
+        if (!isNaN(n.vx)) n.x += n.vx;
+        if (!isNaN(n.vy)) n.y += n.vy;
+        n.vx *= damping;
+        n.vy *= damping;
+      }
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // CLIPPED LINE & TEXT WRAPPING HELPERS
+    // ─────────────────────────────────────────────────────────────
+    // Lines start and end strictly on the outer circumferences (never cutting inside spheres)
+    function drawClippedLine(x1, y1, r1, x2, y2, r2, isDashed = false, strokeStyle = 'rgba(255,255,255,0.3)', lineWidth = 1.2) {
+      const dx = x2 - x1;
+      const dy = y2 - y1;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (isNaN(dist) || dist <= r1 + r2 || dist === 0) return;
+
+      const ux = dx / dist;
+      const uy = dy / dist;
+
+      const sx = x1 + ux * r1;
+      const sy = y1 + uy * r1;
+      const ex = x2 - ux * r2;
+      const ey = y2 - uy * r2;
+
+      ctx.beginPath();
+      if (isDashed) {
+        ctx.setLineDash([5, 5]);
+      } else {
+        ctx.setLineDash([]);
+      }
+      ctx.moveTo(sx, sy);
+      ctx.lineTo(ex, ey);
+      ctx.strokeStyle = strokeStyle;
+      ctx.lineWidth = lineWidth;
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    function drawWrappedText(text, x, y, maxWidth, lineHeight, opacity, fontSize = 11.5, isRoot = false) {
+      if (opacity <= 0.05 && !isRoot) return;
+      ctx.font = `${isRoot ? '500 12.5px' : '400 11.5px'} -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.fillStyle = isRoot ? '#ffffff' : `rgba(226, 232, 240, ${opacity.toFixed(2)})`;
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+      ctx.shadowBlur = 5;
+
+      const words = text.split(' ');
+      const lines = [];
+      let currentLine = words[0];
+
+      for (let i = 1; i < words.length; i++) {
+        const word = words[i];
+        const width = ctx.measureText(currentLine + " " + word).width;
+        if (width < maxWidth) {
+          currentLine += " " + word;
+        } else {
+          lines.push(currentLine);
+          currentLine = word;
+        }
+      }
+      lines.push(currentLine);
+
+      for (let i = 0; i < lines.length; i++) {
+        ctx.fillText(lines[i], x, y + i * lineHeight);
+      }
+      ctx.shadowBlur = 0;
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // RENDERING
+    // ─────────────────────────────────────────────────────────────
+    function render() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      // Obsidian background
+      ctx.fillStyle = '#141417';
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.save();
+      // Apply pan & zoom
+      ctx.translate(w / 2 + panX, h / 2 + panY);
+      ctx.scale(zoom, zoom);
+
+      // 1. Draw Links (CLIPPED TO OUTER CIRCUMFERENCES)
+      for (const link of links) {
+        const u = getNode(link.source);
+        const v = getNode(link.target);
+        if (!u || !v) continue;
+
+        const isDormant = link.isDormant || false;
+        if (link.type === 'parent_child') {
+          // SOLID TETHER (Direct Parent -> Child)
+          if (isDormant) {
+            drawClippedLine(u.x, u.y, u.radius, v.x, v.y, v.radius, false, 'rgba(71, 85, 105, 0.32)', 1.0);
+          } else {
+            drawClippedLine(u.x, u.y, u.radius, v.x, v.y, v.radius, false, 'rgba(255, 255, 255, 0.70)', 1.5);
+          }
+        } else {
+          // DASHED RELATIONAL LINK (Cross-Branch Related)
+          if (isDormant) {
+            drawClippedLine(u.x, u.y, u.radius, v.x, v.y, v.radius, true, 'rgba(100, 116, 139, 0.25)', 1.0);
+          } else {
+            drawClippedLine(u.x, u.y, u.radius, v.x, v.y, v.radius, true, 'rgba(148, 163, 184, 0.55)', 1.2);
+          }
+        }
+      }
+
+      // 2. Draw Nodes
+      for (const node of nodes) {
+        if (node.isRoot) {
+          drawRootNode(node);
+        } else {
+          drawChildNodeWithInternalLight(node);
+        }
+      }
+
+      ctx.restore();
+    }
+
+    // Draw Root Node (Singularity Anchor)
+    function drawRootNode(node) {
+      // Soft radial glow
+      const grad = ctx.createRadialGradient(node.x, node.y, node.radius * 0.5, node.x, node.y, node.radius * 2.4);
+      grad.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
+      grad.addColorStop(0.5, 'rgba(255, 255, 255, 0.25)');
+      grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, node.radius * 2.4, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Solid central core
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = 'rgba(255, 255, 255, 0.85)';
+      ctx.shadowBlur = 14;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // 2 Concentric origin rings (Obsidian visual signature)
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, node.radius * 1.55, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.22)';
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, node.radius * 2.1, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // ROOT LABEL: ALWAYS 100% VISIBLE across all zoom levels (compact wrapped text)
+      drawWrappedText(node.text, node.x, node.y + node.radius * 2.1 + 8, 180, 16, 1.0, 12.5, true);
+    }
+
+    // Draw Child Node with Physical Dual Internal Light Mixing
+    function drawChildNodeWithInternalLight(node) {
+      const r = node.radius;
+      const totalScore = (node.userScore || 0) + (node.aiScore || 0);
+      const userRatio = totalScore > 0 ? (node.userScore || 0) / totalScore : 0.5;
+      const aiRatio = totalScore > 0 ? (node.aiScore || 0) / totalScore : 0.5;
+
+      // 1. Dual internal radiance bleeding outward
+      // User Blue Aura (scaled by user mass ratio)
+      const blueGrad = ctx.createRadialGradient(node.x - r * 0.4, node.y, 0, node.x, node.y, r * 1.9);
+      blueGrad.addColorStop(0, `rgba(56, 189, 248, ${(0.75 + userRatio * 0.25).toFixed(2)})`);
+      blueGrad.addColorStop(0.5, 'rgba(56, 189, 248, 0.32)');
+      blueGrad.addColorStop(1, 'rgba(56, 189, 248, 0)');
+      ctx.fillStyle = blueGrad;
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, r * 1.9, 0, Math.PI * 2);
+      ctx.fill();
+
+      // AI Orange Aura (scaled by AI mass ratio)
+      const orangeGrad = ctx.createRadialGradient(node.x + r * 0.4, node.y, 0, node.x, node.y, r * 2.0);
+      orangeGrad.addColorStop(0, `rgba(251, 146, 60, ${(0.80 + aiRatio * 0.25).toFixed(2)})`);
+      orangeGrad.addColorStop(0.5, 'rgba(251, 146, 60, 0.38)');
+      orangeGrad.addColorStop(1, 'rgba(251, 146, 60, 0)');
+      ctx.fillStyle = orangeGrad;
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, r * 2.0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 2. Frosted translucent spherical body with photon mixing
+      const bodyGrad = ctx.createLinearGradient(node.x - r, node.y, node.x + r, node.y);
+      bodyGrad.addColorStop(0, '#7dd3fc');    // soft diffused user blue
+      bodyGrad.addColorStop(0.48, '#ffffff'); // bright fused white mixing core
+      bodyGrad.addColorStop(1, '#fdba74');    // soft diffused AI orange
+
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = bodyGrad;
+      ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
+      ctx.shadowBlur = 8;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Delicate frosted glass rim
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.55)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // 4. TERMINAL ACTIVE FOCUS BEACON (Breathing aura if node is terminal active focus)
+      if (node.isTerminalActive) {
+        const pulse = (Math.sin(Date.now() * 0.004) + 1) * 0.5; // 0 to 1
+        const beaconRadius = r + 4 + pulse * 6;
+        ctx.strokeStyle = `rgba(56, 189, 248, ${(0.6 - pulse * 0.4).toFixed(2)})`;
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, beaconRadius, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.strokeStyle = `rgba(251, 146, 60, ${(0.4 - pulse * 0.3).toFixed(2)})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, beaconRadius + 3, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // 5. DRAW SATELLITE MICRO-ATOMS (Lines clipped to outer circumferences!)
+      if (node.satellites && node.satellites.length > 0) {
+        for (const s of node.satellites) {
+          const sx = node.x + Math.cos(s.angle) * s.dist;
+          const sy = node.y + Math.sin(s.angle) * s.dist;
+          s.currentX = sx;
+          s.currentY = sy;
+
+          // Tether line begins strictly at outer circumference of sphere and ends at satellite edge!
+          drawClippedLine(node.x, node.y, node.radius, sx, sy, s.radius, false, s.color === '#fb923c' ? 'rgba(251, 146, 60, 0.45)' : 'rgba(56, 189, 248, 0.45)', 0.95);
+
+          if (s.isHollowRing) {
+            // Open Question / Slot: Hollow glowing ring with breathing pulse
+            const ringPulse = (Math.sin(Date.now() * 0.005) + 1) * 0.5;
+            ctx.beginPath();
+            ctx.arc(sx, sy, s.radius + ringPulse * 0.8, 0, Math.PI * 2);
+            ctx.strokeStyle = s.color;
+            ctx.lineWidth = 1.6;
+            ctx.shadowColor = s.color;
+            ctx.shadowBlur = 6;
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+          } else if (s.isResolvedSlot) {
+            // Resolved Slot: Shows History! (Outer Provenance Amber Ring + Solid Resolution Core)
+            // 1. Outer ancestry ring showing it originated from an open question
+            ctx.beginPath();
+            ctx.arc(sx, sy, s.radius + 2.5, 0, Math.PI * 2);
+            ctx.strokeStyle = '#fb923c'; // Provenance Amber Ring
+            ctx.lineWidth = 1.4;
+            ctx.stroke();
+
+            // 2. Inner solid core showing who finalized it (Blue = Human, Orange = AI)
+            ctx.beginPath();
+            ctx.arc(sx, sy, s.radius, 0, Math.PI * 2);
+            ctx.fillStyle = s.color;
+            ctx.shadowColor = s.color;
+            ctx.shadowBlur = 6;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          } else {
+            // Requirement Atom: Solid glowing bead
+            ctx.beginPath();
+            ctx.arc(sx, sy, s.radius, 0, Math.PI * 2);
+            ctx.fillStyle = s.color;
+            ctx.shadowColor = s.color;
+            ctx.shadowBlur = 6;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          }
+        }
+      }
+
+      // CHILD TEXT: EXACT OUTCOME TEXT ONLY (Wrapped into compact pedestal lines below the sphere)
+      // Satellites are in upper crown, text is below -> ZERO COLLISION GUARANTEED!
+      const baseOpacity = Math.min(Math.max((zoom - 0.45) / 0.4, 0), 1);
+      const opacity = node.isDormant ? baseOpacity * 0.60 : baseOpacity;
+      drawWrappedText(node.text, node.x, node.y + r + 11, 165, 15, opacity, 11.5, false);
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // INTERACTION & EVENT LISTENERS
+    // ─────────────────────────────────────────────────────────────
+    function getMouseWorldPos(e) {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const mx = e.clientX - (w / 2 + panX);
+      const my = e.clientY - (h / 2 + panY);
+      return { x: mx / zoom, y: my / zoom };
+    }
+
+    function findNodeAt(wx, wy) {
+      for (const n of nodes) {
+        const dx = n.x - wx;
+        const dy = n.y - wy;
+        if (Math.sqrt(dx * dx + dy * dy) <= n.radius + 8) {
+          return n;
+        }
+      }
+      return null;
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+      const pos = getMouseWorldPos(e);
+      const clickedNode = findNodeAt(pos.x, pos.y);
+
+      if (clickedNode && !clickedNode.pinned) {
+        dragNode = clickedNode;
+      } else {
+        isPanning = true;
+        dragStartX = e.clientX - panX;
+        dragStartY = e.clientY - panY;
+      }
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (dragNode) {
+        const pos = getMouseWorldPos(e);
+        dragNode.x = pos.x;
+        dragNode.y = pos.y;
+        dragNode.vx = 0;
+        dragNode.vy = 0;
+      } else if (isPanning) {
+        panX = e.clientX - dragStartX;
+        panY = e.clientY - dragStartY;
+      } else {
+        const pos = getMouseWorldPos(e);
+        
+        // Check satellite hover
+        let foundSatellite = null;
+        for (const n of nodes) {
+          if (n.satellites) {
+            for (const s of n.satellites) {
+              if (s.currentX !== undefined) {
+                const dx = s.currentX - pos.x;
+                const dy = s.currentY - pos.y;
+                if (Math.sqrt(dx * dx + dy * dy) <= s.radius + 6) {
+                  foundSatellite = { sat: s, node: n };
+                  break;
+                }
+              }
+            }
+          }
+          if (foundSatellite) break;
+        }
+
+        const tip = document.getElementById('satellite-tooltip');
+        if (foundSatellite) {
+          tip.style.display = 'block';
+          tip.style.left = `${e.clientX + 14}px`;
+          tip.style.top = `${e.clientY + 10}px`;
+          const s = foundSatellite.sat;
+
+          if (s.isResolvedSlot) {
+            const res = s.resolutionData || {};
+            const isUser = res.resolver === 'user' || s.origin === 'user';
+            const accentColor = isUser ? '#38bdf8' : '#fb923c';
+            const headerTitle = isUser ? 'Human-Resolved' : 'AI-Resolved';
+
+            let optionsHtml = '';
+            if (res.options && res.options.length > 0) {
+              optionsHtml = `
+                <div style="margin-bottom:8px;padding-left:8px;border-left:2px solid ${accentColor};display:flex;flex-direction:column;gap:3px;">
+                  ${res.selectedChoice ? `<div style="color:${accentColor};font-size:11px;font-weight:600;">✓ ${isUser ? 'User Chose' : 'AI Chose'}: ${res.selectedChoice}</div>` : ''}
+                  ${res.options.map(opt => `<div style="color:#64748b;font-size:10px;line-height:1.3;">• ${opt}</div>`).join('')}
+                </div>
+              `;
+            }
+
+            tip.style.background = '#090a0f';
+            tip.style.border = `1px solid ${isUser ? 'rgba(56, 189, 248, 0.45)' : 'rgba(251, 146, 60, 0.45)'}`;
+            tip.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.9), 0 0 16px rgba(251, 146, 60, 0.12)';
+            tip.innerHTML = `
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                <div style="font-size:9.5px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:${accentColor};">${headerTitle}</div>
+                <span style="font-size:8.5px;padding:1px 5px;border-radius:3px;background:rgba(251,146,60,0.15);color:#fb923c;border:1px solid rgba(251,146,60,0.35);letter-spacing:0.5px;text-transform:uppercase;">From AI Question</span>
+              </div>
+              ${res.question ? `
+                <div style="color:#cbd5e1;font-size:11px;line-height:1.35;margin-bottom:7px;">
+                  <span style="color:#94a3b8;">Question:</span> ${res.question}
+                </div>
+              ` : ''}
+              ${optionsHtml}
+              <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:7px;color:#f1f5f9;font-size:11.5px;line-height:1.4;">
+                ${s.text}
+              </div>
+            `;
+          } else if (s.origin === 'user') {
+            tip.style.background = '#090a0f';
+            tip.style.border = '1px solid rgba(56, 189, 248, 0.35)';
+            tip.style.boxShadow = '0 10px 28px rgba(0, 0, 0, 0.85), 0 0 16px rgba(56, 189, 248, 0.12)';
+            tip.innerHTML = `
+              <div style="font-size: 9.5px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #38bdf8; margin-bottom: 5px;">User Requirement</div>
+              <div style="color: #f1f5f9; font-size: 12px; font-weight: 400; line-height: 1.45;">${s.text}</div>
+            `;
+          } else if (s.type === 'requirement') {
+            tip.style.background = '#090a0f';
+            tip.style.border = '1px solid rgba(251, 146, 60, 0.4)';
+            tip.style.boxShadow = '0 10px 28px rgba(0, 0, 0, 0.85), 0 0 16px rgba(251, 146, 60, 0.15)';
+            tip.innerHTML = `
+              <div style="font-size: 9.5px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #fb923c; margin-bottom: 5px;">AI Requirement</div>
+              <div style="color: #f8fafc; font-size: 12px; font-weight: 400; line-height: 1.45;">${s.text}</div>
+            `;
+          } else {
+            tip.style.background = '#090a0f';
+            tip.style.border = '1px solid rgba(251, 146, 60, 0.4)';
+            tip.style.boxShadow = '0 10px 28px rgba(0, 0, 0, 0.85), 0 0 16px rgba(251, 146, 60, 0.15)';
+            let choicesHtml = '';
+            if (s.choices && s.choices.length > 0) {
+              choicesHtml = `
+                <div style="margin-top: 7px; padding-left: 8px; border-left: 2px solid rgba(251, 146, 60, 0.5); display: flex; flex-direction: column; gap: 4px;">
+                  ${s.choices.map(c => `<div style="color: #cbd5e1; font-size: 11px; line-height: 1.35;">${c}</div>`).join('')}
+                </div>
+              `;
+            }
+            tip.innerHTML = `
+              <div style="font-size: 9.5px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #fb923c; margin-bottom: 5px;">AI Open Question</div>
+              <div style="color: #f8fafc; font-size: 12px; font-weight: 500; line-height: 1.4;">${s.text}</div>
+              ${choicesHtml}
+            `;
+          }
+          canvas.style.cursor = 'pointer';
+        } else {
+          tip.style.display = 'none';
+          hoveredNode = findNodeAt(pos.x, pos.y);
+          canvas.style.cursor = hoveredNode ? (hoveredNode.pinned ? 'pointer' : 'grab') : (isPanning ? 'grabbing' : 'grab');
+        }
+      }
+    });
+
+    // ─────────────────────────────────────────────────────────────
+    // JUMP TO CHAT INTERACTION (KISS: Minimalist Black + Accent Pill)
+    // ─────────────────────────────────────────────────────────────
+    let jumpTimeout = null;
+    function triggerChatJump(type, text) {
+      const toast = document.getElementById('chat-jump-toast');
+      const isUser = type.includes('User');
+      const isAi = type.includes('AI') || type.includes('Slot') || type.includes('Question');
+      const accent = isUser ? '#38bdf8' : (isAi ? '#fb923c' : '#ffffff');
+      const border = isUser ? 'rgba(56, 189, 248, 0.4)' : (isAi ? 'rgba(251, 146, 60, 0.45)' : 'rgba(255, 255, 255, 0.25)');
+      
+      toast.style.background = '#090a0f';
+      toast.style.border = `1px solid ${border}`;
+      toast.style.boxShadow = `0 12px 32px rgba(0, 0, 0, 0.9), 0 0 20px ${accent}22`;
+      toast.style.display = 'flex';
+      toast.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:7px;height:7px;border-radius:50%;background:${accent};box-shadow:0 0 8px ${accent};"></div>
+          <span style="font-size:10px;font-weight:700;color:${accent};letter-spacing:0.8px;text-transform:uppercase;">Chat Jump</span>
+        </div>
+        <div style="border-left:1px solid rgba(255,255,255,0.12);padding-left:12px;color:#f1f5f9;font-size:11.5px;max-width:440px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+          ${text}
+        </div>
+        <button onclick="document.getElementById('chat-jump-toast').style.display='none'" style="background:transparent;border:none;color:#64748b;cursor:pointer;font-size:13px;padding:0 4px;margin-left:6px;">✕</button>
+      `;
+      clearTimeout(jumpTimeout);
+      jumpTimeout = setTimeout(() => {
+        toast.style.display = 'none';
+      }, 5000);
+    }
+
+    canvas.addEventListener('click', (e) => {
+      const pos = getMouseWorldPos(e);
+
+      // Check satellite click first
+      for (const n of nodes) {
+        if (n.satellites) {
+          for (const s of n.satellites) {
+            if (s.currentX !== undefined) {
+              const dx = s.currentX - pos.x;
+              const dy = s.currentY - pos.y;
+              if (Math.sqrt(dx * dx + dy * dy) <= s.radius + 6) {
+                triggerChatJump(
+                  s.origin === 'user' ? 'User Requirement' : 'AI Open Question',
+                  s.text
+                );
+                return;
+              }
+            }
+          }
+        }
+      }
+
+      // Check node click
+      const clickedNode = findNodeAt(pos.x, pos.y);
+      if (clickedNode) {
+        triggerChatJump(
+          clickedNode.isRoot ? 'Root Goal' : 'Deliverable',
+          clickedNode.text
+        );
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      dragNode = null;
+      isPanning = false;
+    });
+
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const zoomFactor = e.deltaY < 0 ? 1.08 : 0.92;
+      const newZoom = Math.min(Math.max(zoom * zoomFactor, 0.4), 3.5);
+
+      const mouseX = e.clientX - (window.innerWidth / 2);
+      const mouseY = e.clientY - (window.innerHeight / 2);
+
+      panX -= mouseX * (zoomFactor - 1);
+      panY -= mouseY * (zoomFactor - 1);
+      zoom = newZoom;
+    });
+
+    window.addEventListener('resize', resize);
+
+    // Animation Loop
+    function loop() {
+      try {
+        updatePhysics();
+        render();
+      } catch (e) {
+        console.error("Canvas render error:", e);
+      }
+      requestAnimationFrame(loop);
+    }
+
+    function start() {
+      initChatSelector();
+      resize();
+      loop();
+    }
+
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', start);
+    } else {
+      start();
+    }
+  </script>
+</body>
+</html>

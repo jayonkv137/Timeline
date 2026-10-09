@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CoTrace 3D · Pair 1 Complete Universe (3 Outcomes)</title>
+  <script src="all_chats_data.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    select, input, button { user-select: auto; }
+    body {
+      background: #06060a;
+      color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+    #canvas-container {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+    }
+    #labels-layer {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Pure Obsidian Floating Labels: EXACT text only, zero metadata */
+    .obsidian-label {
+      position: absolute;
+      transform: translate(-50%, 0);
+      pointer-events: auto;
+      cursor: default;
+      text-align: center;
+      white-space: nowrap;
+      transition: opacity 0.2s ease;
+    }
+    .label-root {
+      font-size: 15px;
+      font-weight: 500;
+      color: #ffffff;
+      letter-spacing: -0.2px;
+      text-shadow: 
+        0 0 16px rgba(255, 255, 255, 0.9),
+        0 0 32px rgba(255, 255, 255, 0.45),
+        0 2px 10px rgba(0, 0, 0, 0.95);
+    }
+    .label-child {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #f1f5f9;
+      letter-spacing: -0.2px;
+      text-shadow: 
+        0 0 14px rgba(255, 255, 255, 0.8),
+        0 2px 10px rgba(0, 0, 0, 0.95);
+    }
+
+    /* Top HUD */
+    .top-bar {
+      position: absolute;
+      top: 20px; left: 24px; right: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      z-index: 200;
+      pointer-events: none;
+    }
+    .brand-box {
+      pointer-events: auto;
+      background: rgba(10, 10, 16, 0.75);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 12px 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    .brand-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .brand-title span {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .brand-desc {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 4px;
+      max-width: 480px;
+      line-height: 1.4;
+    }
+
+    /* View Switcher */
+    .view-switcher {
+      pointer-events: auto;
+      display: flex;
+      gap: 8px;
+    }
+    .view-btn {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #94a3b8;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .view-btn:hover { background: #334155; color: #fff; }
+    .view-btn.active { background: #3b82f6; border-color: #60a5fa; color: #fff; }
+
+    /* Bottom Bar */
+    .bottom-bar {
+      position: absolute;
+      bottom: 24px; left: 50%;
+      transform: translateX(-50%);
+      width: min(92%, 820px);
+      background: rgba(10, 10, 16, 0.82);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 14px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+      z-index: 10;
+    }
+    .pair-badge {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pair-badge span { color: #38bdf8; }
+    .step-info { font-size: 11px; color: #94a3b8; display: flex; align-items: center; gap: 14px; }
+    .legend-tag { display: flex; align-items: center; gap: 5px; }
+    .line-solid-icon { width: 14px; height: 2px; background: rgba(255,255,255,0.7); }
+    .line-dashed-icon { width: 14px; height: 0px; border-top: 2px dashed rgba(148,163,184,0.9); }
+
+    /* Timeline Scrubber in 3D */
+    .timeline-scrubber-capsule {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 9999px;
+      padding: 5px 12px 5px 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      user-select: none;
+      pointer-events: auto;
+    }
+
+    .scrubber-nav-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.06);
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .scrubber-nav-btn:hover:not(:disabled) {
+      background: rgba(56, 189, 248, 0.2);
+      color: #38bdf8;
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .scrubber-nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .scrubber-track-container {
+      position: relative;
+      width: 320px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+    }
+
+    .scrubber-rail {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.14);
+      border-radius: 2px;
+    }
+
+    .scrubber-fill {
+      position: absolute;
+      left: 10px;
+      height: 4px;
+      background: linear-gradient(90deg, #38bdf8, #fb923c);
+      border-radius: 2px;
+      transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .scrubber-notches {
+      position: absolute;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2px;
+    }
+
+    .scrubber-notch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+    .scrubber-notch:hover .notch-tag {
+      color: #f8fafc;
+    }
+
+    .notch-marker {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #1e293b;
+      border: 2px solid #64748b;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 2;
+    }
+
+    .scrubber-notch.active .notch-marker {
+      background: #38bdf8;
+      border-color: #ffffff;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+      transform: scale(1.15);
+    }
+
+    .scrubber-notch.current .notch-marker {
+      background: #fb923c;
+      border-color: #ffffff;
+      box-shadow: 0 0 12px rgba(251, 146, 60, 0.9);
+      transform: scale(1.3);
+    }
+
+    .notch-tag {
+      font-size: 10px;
+      font-weight: 500;
+      color: #64748b;
+      letter-spacing: 0.02em;
+      transition: color 0.15s;
+    }
+    .scrubber-notch.active .notch-tag {
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+    .scrubber-notch.current .notch-tag {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+
+    .btn-reset-view {
+      position: absolute;
+      bottom: 24px; right: 28px;
+      z-index: 10;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-reset-view:hover {
+      background: #1e293b;
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+
+  <div id="canvas-container"></div>
+  <div id="labels-layer">
+    <!-- Root Goal Label: ONLY EXACT TEXT -->
+    <div class="obsidian-label" id="root-label">
+      <div class="label-root" id="root-label-text">Course assignment strategy and deliverables</div>
+    </div>
+  </div>
+
+  <div id="satellite-tooltip" style="position: absolute; display: none; pointer-events: none; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 8px; padding: 10px 14px; font-size: 11px; color: #f1f5f9; max-width: 320px; line-height: 1.4; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.7);"></div>
+
+  <div id="chat-jump-toast" style="display: none; position: absolute; bottom: 85px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(56, 189, 248, 0.4); border-radius: 12px; padding: 10px 18px; color: #e2e8f0; font-size: 12px; box-shadow: 0 12px 36px rgba(0,0,0,0.7); z-index: 200; align-items: center; gap: 14px;"></div>
+
+  <div class="top-bar">
+    <div class="brand-box">
+      <div class="brand-title" style="display:flex;align-items:center;gap:10px;">
+        CoTrace 3D Universe
+        <select id="chat-select-3d" onchange="switchChat3D(this.value)" style="background:#1e293b;color:#f8fafc;border:1px solid rgba(255,255,255,0.22);border-radius:6px;padding:3px 8px;font-size:11px;font-weight:600;outline:none;cursor:pointer;max-width:240px;pointer-events:auto;">
+        </select>
+        <span id="pair-badge-text">Pair 1 Complete</span>
+      </div>
+      <div class="brand-desc" id="pair-desc-text">Root Origin anchored at (0,0,0). Outcome 4 REACTIVATES from dormancy (Mass surges from 50 to 138, tether re-illuminates crisp white, req 3 added). Outcomes 2, 3, 5, 6 remain dormant. Terminal focus on Outcome 4.</div>
+    </div>
+
+    <div class="view-switcher">
+      <div class="pair-switcher" id="pair-switcher-3d" style="display:inline-flex;background:rgba(15,23,42,0.85);border:1px solid rgba(255,255,255,0.14);border-radius:6px;padding:2px;margin-right:8px;pointer-events:auto;">
+        <button class="view-btn active" id="btn-3d-p1" onclick="switchPair3D(1)" style="padding:4px 7px;font-size:11px;">P1</button>
+      </div>
+      <a href="playground_obsidian.html" id="view-2d-link" class="view-btn">Switch to 2D Obsidian View ↗</a>
+      <span class="view-btn active">3D Universe View</span>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="pair-badge" id="bottom-pair-badge">
+      <span>Pair 7 Universe:</span> Root ──► 5 Deliverables (Mass 1137 · Outcome 4 Reactivated, 4 Dormant)
+    </div>
+
+    <!-- Centered Timeline Scrubber -->
+    <div class="timeline-scrubber-capsule">
+      <button class="scrubber-nav-btn" id="scrubber-prev-btn" onclick="prevPair3D()" title="Previous Pair (Left Arrow)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+
+      <div class="scrubber-track-container" style="width: 320px;">
+        <div class="scrubber-rail"></div>
+        <div class="scrubber-fill" id="scrubber-fill" style="width: 100%;"></div>
+        <div class="scrubber-notches" id="scrubber-notches-3d">
+          <div class="scrubber-notch active current" id="notch-3d-1" onclick="switchPair3D(1)">
+            <div class="notch-marker"></div>
+            <span class="notch-tag">P1</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="scrubber-nav-btn" id="scrubber-next-btn" onclick="nextPair3D()" title="Next Pair (Right Arrow)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+
+    <div class="step-info">
+      <div class="legend-tag"><div style="width:8px;height:8px;border-radius:50%;background:#38bdf8;box-shadow:0 0 6px #38bdf8;"></div> User Req</div>
+      <div class="legend-tag"><div style="width:8px;height:8px;border-radius:50%;background:#fb923c;box-shadow:0 0 6px #fb923c;"></div> AI Req</div>
+      <div class="legend-tag"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;border:1.5px solid #fb923c;"></span> Open Question</div>
+      <div class="legend-tag">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:10px;height:10px;border-radius:50%;border:1.2px solid #fb923c;">
+          <span style="width:4px;height:4px;border-radius:50%;background:#38bdf8;"></span>
+        </span>
+        Resolved Slot
+      </div>
+      <div class="legend-tag"><div class="line-solid-icon"></div> Solid Tether</div>
+    </div>
+  </div>
+
+  <button class="btn-reset-view" id="btn-reset">⟲ Reset Camera</button>
+
+  <script>
+    let scene, camera, renderer, controls;
+    let rootGroup, deliverablesGroup, linesGroup;
+    let activeBeaconMesh, activeSlotTorus;
+    const interactiveSatellites = [];
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    const rootLabelEl = document.getElementById('root-label');
+
+    const ROOT_POS = new THREE.Vector3(0, 0, 0);
+    let CHILD1_POS = new THREE.Vector3(-46, 22, -10);
+    let CHILD2_POS = new THREE.Vector3(0, 36, 10);
+    let CHILD3_POS = new THREE.Vector3(46, -14, 18);
+    let CHILD4_POS = new THREE.Vector3(-38, -32, 14);
+    let CHILD5_POS = new THREE.Vector3(36, -34, -16);
+
+    function init() {
+      scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x06060a, 0.0016);
+
+      camera = new THREE.PerspectiveCamera(46, window.innerWidth / window.innerHeight, 0.1, 1500);
+      camera.position.set(0, 18, 145);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+      if (typeof THREE.OrbitControls !== 'undefined') {
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.06;
+        controls.minDistance = 25;
+        controls.maxDistance = 500;
+        controls.target.set(0, 12, 0);
+      }
+
+      // Studio Ambient Light
+      const ambient = new THREE.AmbientLight(0x1e293b, 1.3);
+      scene.add(ambient);
+
+      const dirLight = new THREE.DirectionalLight(0xffffff, 1.4);
+      dirLight.position.set(50, 80, 70);
+      scene.add(dirLight);
+
+      // Root Point Light
+      const rootLight = new THREE.PointLight(0xffffff, 2.5, 120);
+      rootLight.position.copy(ROOT_POS);
+      scene.add(rootLight);
+
+      // Dynamic scene groups
+      deliverablesGroup = new THREE.Group();
+      linesGroup = new THREE.Group();
+      scene.add(deliverablesGroup);
+      scene.add(linesGroup);
+
+      // Build static root & particle backdrop
+      buildRootSphere();
+      buildSpaceParticles();
+
+      // Default to Pair 7 Final
+      initChatSelector3D();
+
+      window.addEventListener('resize', onWindowResize);
+      document.getElementById('btn-reset').addEventListener('click', () => {
+        camera.position.set(0, 18, 145);
+        if (controls) controls.target.set(0, 12, 0);
+      });
+
+      // Hover Raycasting for Satellites
+      const tip = document.getElementById('satellite-tooltip');
+      let jumpTimeout = null;
+      function triggerChatJump(type, text) {
+        const toast = document.getElementById('chat-jump-toast');
+        const isUser = type.includes('User');
+        const isAi = type.includes('AI') || type.includes('Slot') || type.includes('Question');
+        const accent = isUser ? '#38bdf8' : (isAi ? '#fb923c' : '#ffffff');
+        const border = isUser ? 'rgba(56, 189, 248, 0.4)' : (isAi ? 'rgba(251, 146, 60, 0.45)' : 'rgba(255, 255, 255, 0.25)');
+        
+        toast.style.background = '#090a0f';
+        toast.style.border = `1px solid ${border}`;
+        toast.style.boxShadow = `0 12px 32px rgba(0, 0, 0, 0.9), 0 0 20px ${accent}22`;
+        toast.style.display = 'flex';
+        toast.innerHTML = `
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:7px;height:7px;border-radius:50%;background:${accent};box-shadow:0 0 8px ${accent};"></div>
+            <span style="font-size:10px;font-weight:700;color:${accent};letter-spacing:0.8px;text-transform:uppercase;">Chat Jump</span>
+          </div>
+          <div style="border-left:1px solid rgba(255,255,255,0.12);padding-left:12px;color:#f1f5f9;font-size:11.5px;max-width:440px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            ${text}
+          </div>
+          <button onclick="document.getElementById('chat-jump-toast').style.display='none'" style="background:transparent;border:none;color:#64748b;cursor:pointer;font-size:13px;padding:0 4px;margin-left:6px;">✕</button>
+        `;
+        clearTimeout(jumpTimeout);
+        jumpTimeout = setTimeout(() => { toast.style.display = 'none'; }, 5000);
+      }
+
+      window.addEventListener('mousemove', (e) => {
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(interactiveSatellites);
+
+        if (intersects.length > 0) {
+          const hit = intersects[0].object;
+          const d = hit.userData;
+          if (d && d.text) {
+            tip.style.display = 'block';
+            tip.style.left = `${e.clientX + 14}px`;
+            tip.style.top = `${e.clientY + 10}px`;
+
+            if (d.isResolvedSlot) {
+              const res = d.resolutionData || {};
+              const isUser = res.resolver === 'user' || d.color === '#38bdf8';
+              const accentColor = isUser ? '#38bdf8' : '#fb923c';
+              const headerTitle = isUser ? 'Human-Resolved' : 'AI-Resolved';
+
+              let optionsHtml = '';
+              if (res.options && res.options.length > 0) {
+                optionsHtml = `
+                  <div style="margin-bottom:8px;padding-left:8px;border-left:2px solid ${accentColor};display:flex;flex-direction:column;gap:3px;">
+                    ${res.selectedChoice ? `<div style="color:${accentColor};font-size:11px;font-weight:600;">✓ ${isUser ? 'User Chose' : 'AI Chose'}: ${res.selectedChoice}</div>` : ''}
+                    ${res.options.map(opt => `<div style="color:#64748b;font-size:10px;line-height:1.3;">• ${opt}</div>`).join('')}
+                  </div>
+                `;
+              }
+
+              tip.style.background = '#090a0f';
+              tip.style.border = `1px solid ${isUser ? 'rgba(56, 189, 248, 0.45)' : 'rgba(251, 146, 60, 0.45)'}`;
+              tip.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.9), 0 0 16px rgba(251, 146, 60, 0.12)';
+              tip.innerHTML = `
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                  <div style="font-size:9.5px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:${accentColor};">${headerTitle}</div>
+                  <span style="font-size:8.5px;padding:1px 5px;border-radius:3px;background:rgba(251,146,60,0.15);color:#fb923c;border:1px solid rgba(251,146,60,0.35);letter-spacing:0.5px;text-transform:uppercase;">From AI Question</span>
+                </div>
+                ${res.question ? `
+                  <div style="color:#cbd5e1;font-size:11px;line-height:1.35;margin-bottom:7px;">
+                    <span style="color:#94a3b8;">Question:</span> ${res.question}
+                  </div>
+                ` : ''}
+                ${optionsHtml}
+                <div style="border-top:1px solid rgba(255,255,255,0.1);padding-top:7px;color:#f1f5f9;font-size:11.5px;line-height:1.4;">
+                  ${d.text}
+                </div>
+              `;
+            } else if (d.color === '#38bdf8' || d.label.includes('User')) {
+              tip.style.background = '#090a0f';
+              tip.style.border = '1px solid rgba(56, 189, 248, 0.35)';
+              tip.style.boxShadow = '0 10px 28px rgba(0, 0, 0, 0.85), 0 0 16px rgba(56, 189, 248, 0.12)';
+              tip.innerHTML = `
+                <div style="font-size: 9.5px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #38bdf8; margin-bottom: 5px;">User Requirement</div>
+                <div style="color: #f1f5f9; font-size: 12px; font-weight: 400; line-height: 1.45;">${d.text}</div>
+              `;
+            } else if (d.label === 'AI Requirement' || (!d.choices && d.color === '#fb923c')) {
+              tip.style.background = '#090a0f';
+              tip.style.border = '1px solid rgba(251, 146, 60, 0.4)';
+              tip.style.boxShadow = '0 10px 28px rgba(0, 0, 0, 0.85), 0 0 16px rgba(251, 146, 60, 0.15)';
+              tip.innerHTML = `
+                <div style="font-size: 9.5px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #fb923c; margin-bottom: 5px;">AI Requirement</div>
+                <div style="color: #f8fafc; font-size: 12px; font-weight: 400; line-height: 1.45;">${d.text}</div>
+              `;
+            } else {
+              tip.style.background = '#090a0f';
+              tip.style.border = '1px solid rgba(251, 146, 60, 0.4)';
+              tip.style.boxShadow = '0 10px 28px rgba(0, 0, 0, 0.85), 0 0 16px rgba(251, 146, 60, 0.15)';
+              let choicesHtml = '';
+              if (d.choices && d.choices.length > 0) {
+                choicesHtml = `
+                  <div style="margin-top: 7px; padding-left: 8px; border-left: 2px solid rgba(251, 146, 60, 0.5); display: flex; flex-direction: column; gap: 4px;">
+                    ${d.choices.map(c => `<div style="color: #cbd5e1; font-size: 11px; line-height: 1.35;">${c}</div>`).join('')}
+                  </div>
+                `;
+              }
+              tip.innerHTML = `
+                <div style="font-size: 9.5px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #fb923c; margin-bottom: 5px;">AI Open Question</div>
+                <div style="color: #f8fafc; font-size: 12px; font-weight: 500; line-height: 1.4;">${d.text}</div>
+                ${choicesHtml}
+              `;
+            }
+            document.body.style.cursor = 'pointer';
+          } else if (d && d.isNode) {
+            tip.style.display = 'block';
+            tip.style.left = `${e.clientX + 14}px`;
+            tip.style.top = `${e.clientY + 10}px`;
+            tip.style.background = '#090a0f';
+            tip.style.border = '1px solid rgba(255, 255, 255, 0.25)';
+            tip.style.boxShadow = '0 10px 28px rgba(0, 0, 0, 0.85)';
+            tip.innerHTML = `
+              <div style="font-size: 9.5px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #94a3b8; margin-bottom: 5px;">${d.id === 'outcome 1' ? 'Root Goal' : 'Deliverable'}</div>
+              <div style="color: #f8fafc; font-size: 12px; font-weight: 500; line-height: 1.4;">${d.title.replace(/^(ROOT GOAL|DELIVERABLE):\s*/, '')}</div>
+            `;
+            document.body.style.cursor = 'pointer';
+          }
+        } else {
+          tip.style.display = 'none';
+          document.body.style.cursor = 'default';
+        }
+      });
+
+      window.addEventListener('click', (e) => {
+        if (e.target.closest('.brand-box') || e.target.closest('.view-switcher') || e.target.closest('.btn-reset-view') || e.target.closest('#chat-jump-toast')) return;
+
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(interactiveSatellites);
+
+        if (intersects.length > 0) {
+          const hit = intersects[0].object;
+          const d = hit.userData;
+          if (d.isNode) {
+            triggerChatJump(
+              d.id === 'outcome 1' ? 'Root Goal' : 'Deliverable',
+              d.title.replace(/^(ROOT GOAL|DELIVERABLE):\s*/, '')
+            );
+          } else if (d.text) {
+            triggerChatJump(
+              d.color === '#38bdf8' ? 'User Requirement' : 'AI Open Question',
+              d.text
+            );
+          }
+        }
+      });
+
+      animate();
+    }
+
+    function buildRootSphere() {
+      rootGroup = new THREE.Group();
+      rootGroup.position.copy(ROOT_POS);
+      scene.add(rootGroup);
+
+      const sphereGeo = new THREE.SphereGeometry(9.0, 64, 64);
+      const mat = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        emissive: 0xffffff,
+        emissiveIntensity: 0.85,
+        roughness: 0.1,
+        transparent: true,
+        opacity: 0.88,
+        transmission: 0.4,
+        clearcoat: 1.0
+      });
+      const rootMesh = new THREE.Mesh(sphereGeo, mat);
+      rootMesh.userData = {
+        isNode: true,
+        id: "outcome 1",
+        title: "ROOT GOAL: Course assignment strategy and deliverables",
+        turn: "Pair 1 · Turn 0 (User Prompt)",
+        quote: "Okay, so I have written my thoughts and ideas on how for the AI and creative team designing for competence courses...",
+        action: "U(1,1)"
+      };
+      rootGroup.add(rootMesh);
+      interactiveSatellites.push(rootMesh);
+
+      const coreGeo = new THREE.SphereGeometry(5.5, 32, 32);
+      const coreMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.95 });
+      rootGroup.add(new THREE.Mesh(coreGeo, coreMat));
+
+      const rMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.55, side: THREE.DoubleSide });
+      rootGroup.add(new THREE.Mesh(new THREE.RingGeometry(13.5, 13.9, 64), rMat));
+      rootGroup.add(new THREE.Mesh(new THREE.RingGeometry(19.0, 19.3, 64), rMat));
+      rootGroup.add(new THREE.Mesh(new THREE.RingGeometry(26.0, 26.3, 64), rMat));
+
+      rootGroup.rotation.x = Math.PI * 0.12;
+      rootGroup.rotation.y = Math.PI * 0.08;
+    }
+
+    // Helper: Clip line strictly between outer circumferences of two 3D spheres
+    function createClippedLine(p1, r1, p2, r2, isDashed = false, color = 0xffffff, opacity = 0.45) {
+      const dir = new THREE.Vector3().subVectors(p2, p1).normalize();
+      const start = p1.clone().add(dir.clone().multiplyScalar(r1));
+      const end = p2.clone().sub(dir.clone().multiplyScalar(r2));
+      const geo = new THREE.BufferGeometry().setFromPoints([start, end]);
+      if (isDashed) {
+        geo.computeLineDistances();
+        return new THREE.Line(geo, new THREE.LineDashedMaterial({ color: color, dashSize: 2.5, gapSize: 2.0, transparent: true, opacity: opacity }));
+      } else {
+        return new THREE.Line(geo, new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: opacity, linewidth: 1.5 }));
+      }
+    }
+
+    let currentChatId3D = 'c05_research_medium';
+    let currentPair3D = 1;
+    const activeLights = [];
+    const activeDeliverableNodes = [];
+
+    // Shared reusable materials & geometries
+    const beadGeo = new THREE.SphereGeometry(1.6, 16, 16);
+    const uBeadMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+    const aBeadMat = new THREE.MeshBasicMaterial({ color: 0xfb923c });
+    const satGeo = new THREE.SphereGeometry(1.2, 16, 16);
+    const userSatMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+    const aiSatMat = new THREE.MeshBasicMaterial({ color: 0xfb923c });
+    const satLineMat = new THREE.LineBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.45 });
+    const aiSatLineMat = new THREE.LineBasicMaterial({ color: 0xfb923c, transparent: true, opacity: 0.45 });
+    const dimSatLineMat = new THREE.LineBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.18 });
+    const dimAiSatLineMat = new THREE.LineBasicMaterial({ color: 0xfb923c, transparent: true, opacity: 0.18 });
+    const activeBeaconMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.70, side: THREE.DoubleSide });
+    const activeSlotTorusMat = new THREE.MeshBasicMaterial({ color: 0xfb923c, transparent: true, opacity: 0.85 });
+
+    const frostedMat = new THREE.MeshPhysicalMaterial({
+      color: 0xffffff,
+      roughness: 0.38,
+      metalness: 0.05,
+      transmission: 0.65,
+      ior: 1.33,
+      transparent: true,
+      opacity: 0.82,
+      clearcoat: 0.6,
+      clearcoatRoughness: 0.2,
+      side: THREE.DoubleSide
+    });
+
+    const dormantShellMat = new THREE.MeshPhysicalMaterial({
+      color: 0x334155,
+      roughness: 0.80,
+      metalness: 0.10,
+      transmission: 0.25,
+      ior: 1.20,
+      transparent: true,
+      opacity: 0.35,
+      side: THREE.DoubleSide
+    });
+
+    function initChatSelector3D() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const paramChat = urlParams.get('chat');
+      const paramPair = parseInt(urlParams.get('pair'), 10);
+
+      const selectEl = document.getElementById('chat-select-3d');
+      if (selectEl && typeof ALL_CHATS_DATA !== 'undefined') {
+        selectEl.innerHTML = '';
+        const chatIds = Object.keys(ALL_CHATS_DATA);
+        chatIds.forEach(id => {
+          const c = ALL_CHATS_DATA[id];
+          const opt = document.createElement('option');
+          opt.value = id;
+          const rootText = (c.pairs && c.pairs[1] && c.pairs[1].nodes && c.pairs[1].nodes[0]) ? c.pairs[1].nodes[0].text : id;
+          const shortText = rootText.length > 30 ? rootText.substring(0, 30) + '...' : rootText;
+          opt.textContent = `${id} (${c.totalPairs}P) · ${shortText}`;
+          selectEl.appendChild(opt);
+        });
+
+        const initialChat = (paramChat && ALL_CHATS_DATA[paramChat]) ? paramChat : (ALL_CHATS_DATA['c05_research_medium'] ? 'c05_research_medium' : chatIds[0]);
+        selectEl.value = initialChat;
+        const initialPair = (!isNaN(paramPair) && paramPair >= 1) ? paramPair : 1;
+        switchChat3D(initialChat, initialPair);
+      }
+    }
+
+    function switchChat3D(chatId, targetPair = 1) {
+      if (!ALL_CHATS_DATA || !ALL_CHATS_DATA[chatId]) return;
+      currentChatId3D = chatId;
+      const chat = ALL_CHATS_DATA[chatId];
+      const totalPairs = chat.totalPairs;
+
+      const sel = document.getElementById('chat-select-3d');
+      if (sel && sel.value !== chatId) sel.value = chatId;
+
+      try {
+        history.replaceState(null, '', `?chat=${encodeURIComponent(chatId)}&pair=${targetPair}`);
+      } catch (e) {}
+
+      // 1. Rebuild top pair buttons
+      const switcher = document.getElementById('pair-switcher-3d');
+      if (switcher) {
+        let btnsHtml = '';
+        for (let i = 1; i <= totalPairs; i++) {
+          const label = (i === totalPairs && totalPairs > 1) ? `P${i} (Final)` : `P${i}`;
+          btnsHtml += `<button class="view-btn ${i === targetPair ? 'active' : ''}" id="btn-3d-p${i}" onclick="switchPair3D(${i})" style="padding:4px 7px;font-size:11px;">${label}</button>`;
+        }
+        switcher.innerHTML = btnsHtml;
+      }
+
+      // 2. Rebuild scrubber notches
+      const notchesEl = document.getElementById('scrubber-notches-3d');
+      if (notchesEl) {
+        let notchesHtml = '';
+        for (let i = 1; i <= totalPairs; i++) {
+          notchesHtml += `
+            <div class="scrubber-notch ${i <= targetPair ? 'active' : ''} ${i === targetPair ? 'current' : ''}" id="notch-3d-${i}" onclick="switchPair3D(${i})">
+              <div class="notch-marker"></div>
+              <span class="notch-tag">P${i}</span>
+            </div>`;
+        }
+        notchesEl.innerHTML = notchesHtml;
+      }
+
+      // 3. Dynamic scrubber width
+      const trackContainer = document.querySelector('.timeline-scrubber-capsule .scrubber-track-container');
+      if (trackContainer) {
+        trackContainer.style.width = Math.max(120, Math.min(320, totalPairs * 48)) + 'px';
+      }
+
+      // 4. Switch to target pair
+      switchPair3D(targetPair);
+    }
+
+    function switchPair3D(pairNum) {
+      if (!ALL_CHATS_DATA || !ALL_CHATS_DATA[currentChatId3D]) return;
+      const currentChat = ALL_CHATS_DATA[currentChatId3D];
+      const totalPairs = currentChat.totalPairs;
+      if (pairNum < 1) pairNum = 1;
+      if (pairNum > totalPairs) pairNum = totalPairs;
+      currentPair3D = pairNum;
+
+      try {
+        history.replaceState(null, '', `?chat=${encodeURIComponent(currentChatId3D)}&pair=${pairNum}`);
+      } catch (e) {}
+
+      for (let i = 1; i <= totalPairs; i++) {
+        const b = document.getElementById('btn-3d-p' + i);
+        if (b) b.classList.toggle('active', pairNum === i);
+      }
+
+      const fillEl = document.getElementById('scrubber-fill');
+      if (fillEl) {
+        const pct = totalPairs === 1 ? 100 : ((pairNum - 1) / (totalPairs - 1)) * 100;
+        fillEl.style.width = pct + '%';
+      }
+
+      for (let i = 1; i <= totalPairs; i++) {
+        const notch = document.getElementById('notch-3d-' + i);
+        if (notch) {
+          notch.classList.toggle('active', i <= pairNum);
+          notch.classList.toggle('current', i === pairNum);
+        }
+      }
+
+      const prevBtn = document.getElementById('scrubber-prev-btn');
+      const nextBtn = document.getElementById('scrubber-next-btn');
+      if (prevBtn) prevBtn.disabled = (pairNum === 1);
+      if (nextBtn) nextBtn.disabled = (pairNum === totalPairs);
+
+      const pData = currentChat.pairs[pairNum];
+      if (!pData) return;
+
+      const pBadge = document.getElementById('pair-badge-text');
+      const pDesc = document.getElementById('pair-desc-text');
+      const botBadge = document.getElementById('bottom-pair-badge');
+
+      if (pBadge) pBadge.textContent = pData.title;
+      if (pDesc) pDesc.textContent = pData.descText;
+
+      const childNodes = pData.nodes.filter(n => !n.isRoot);
+      const activeCount = childNodes.filter(n => !n.isDormant).length;
+      const dormantCount = childNodes.filter(n => n.isDormant).length;
+      const totalMass = pData.nodes.reduce((acc, n) => acc + (n.isRoot ? (n.userScore + n.aiScore) : (n.mass || 0)), 0);
+
+      if (botBadge) {
+        botBadge.innerHTML = `<span>Pair ${pairNum} Universe:</span> Root ──► ${childNodes.length} Deliverables (Mass ${Math.round(totalMass)} · ${activeCount} Active, ${dormantCount} Dormant)`;
+      }
+
+      const link2d = document.getElementById('view-2d-link');
+      if (link2d) {
+        link2d.href = `playground_obsidian.html?chat=${encodeURIComponent(currentChatId3D)}&pair=${currentPair3D}`;
+      }
+
+      while (deliverablesGroup.children.length > 0) {
+        deliverablesGroup.remove(deliverablesGroup.children[0]);
+      }
+      while (linesGroup.children.length > 0) {
+        linesGroup.remove(linesGroup.children[0]);
+      }
+
+      interactiveSatellites.length = 0;
+      if (rootGroup && rootGroup.children[0]) {
+        interactiveSatellites.push(rootGroup.children[0]);
+      }
+
+      activeBeaconMesh = null;
+      activeSlotTorus = null;
+      activeLights.length = 0;
+      activeDeliverableNodes.length = 0;
+
+      const labelsLayer = document.getElementById('labels-layer');
+      if (labelsLayer) {
+        const existing = labelsLayer.querySelectorAll('.dynamic-child-label');
+        existing.forEach(el => el.remove());
+      }
+
+      buildPairEntitiesFromData(pData);
+    }
+
+    function prevPair3D() {
+      if (currentPair3D > 1) switchPair3D(currentPair3D - 1);
+    }
+
+    function nextPair3D() {
+      if (!ALL_CHATS_DATA || !ALL_CHATS_DATA[currentChatId3D]) return;
+      const totalPairs = ALL_CHATS_DATA[currentChatId3D].totalPairs;
+      if (currentPair3D < totalPairs) switchPair3D(currentPair3D + 1);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') prevPair3D();
+      if (e.key === 'ArrowRight') nextPair3D();
+    });
+
+    function addSatellite(group, pos, satGeo, satMat, lineMat, sphereRadius, userData) {
+      const sat = new THREE.Mesh(satGeo, satMat);
+      sat.position.copy(pos);
+      sat.userData = userData;
+      group.add(sat);
+      interactiveSatellites.push(sat);
+      const d = pos.clone().normalize();
+      group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([d.clone().multiplyScalar(sphereRadius), pos.clone().sub(d.clone().multiplyScalar(1.1))]), lineMat));
+      return sat;
+    }
+
+    function addBullseyeSatellite(group, pos, satGeo, coreMat, lineMat, sphereRadius, userData) {
+      const sat = new THREE.Mesh(satGeo, coreMat);
+      sat.position.copy(pos);
+      sat.userData = userData;
+      group.add(sat);
+      interactiveSatellites.push(sat);
+
+      const ancestryTorus = new THREE.Mesh(new THREE.TorusGeometry(1.6, 0.16, 16, 32), new THREE.MeshBasicMaterial({ color: 0xfb923c, transparent: true, opacity: 0.90 }));
+      ancestryTorus.position.copy(pos);
+      group.add(ancestryTorus);
+
+      const d = pos.clone().normalize();
+      group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([d.clone().multiplyScalar(sphereRadius), pos.clone().sub(d.clone().multiplyScalar(1.6))]), lineMat));
+      return sat;
+    }
+
+    function addHollowSlotSatellite(group, pos, lineMat, sphereRadius, userData) {
+      const torusGeo = new THREE.TorusGeometry(1.6, 0.22, 16, 32);
+      const sat = new THREE.Mesh(torusGeo, activeSlotTorusMat);
+      sat.position.copy(pos);
+      sat.userData = userData;
+      group.add(sat);
+      interactiveSatellites.push(sat);
+      const d = pos.clone().normalize();
+      group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([d.clone().multiplyScalar(sphereRadius), pos.clone().sub(d.clone().multiplyScalar(1.6))]), lineMat));
+      return sat;
+    }
+
+    function buildPairEntitiesFromData(pData) {
+      const rootNode = pData.nodes.find(n => n.isRoot) || pData.nodes[0];
+      const childNodes = pData.nodes.filter(n => !n.isRoot);
+
+      // Update root text
+      const rootLabelText = document.getElementById('root-label-text');
+      if (rootLabelText && rootNode) {
+        rootLabelText.textContent = rootNode.text;
+      }
+      if (rootGroup && rootGroup.children[0] && rootNode) {
+        rootGroup.children[0].userData = {
+          isNode: true,
+          id: rootNode.id,
+          title: "ROOT GOAL: " + rootNode.text,
+          turn: rootNode.chatJump.turn,
+          quote: rootNode.chatJump.quote,
+          action: rootNode.chatJump.action
+        };
+      }
+
+      // Child Nodes
+      const labelsLayer = document.getElementById('labels-layer');
+
+      childNodes.forEach(cNode => {
+        const cGroup = new THREE.Group();
+        const pos = new THREE.Vector3(cNode.x3d, cNode.y3d, cNode.z3d);
+        cGroup.position.copy(pos);
+        deliverablesGroup.add(cGroup);
+
+        // Photon Lights
+        const lightOffset = Math.max(1.8, cNode.radius3d * 0.32);
+        const uIntensity = cNode.isDormant ? 1.0 : 3.5;
+        const aIntensity = cNode.isDormant ? 1.4 : 5.5;
+
+        const uLight = new THREE.PointLight(0x38bdf8, uIntensity, 45);
+        uLight.position.set(-lightOffset, 0, 0);
+        cGroup.add(uLight);
+
+        const aLight = new THREE.PointLight(0xfb923c, aIntensity, 50);
+        aLight.position.set(lightOffset, 0, 0);
+        cGroup.add(aLight);
+
+        activeLights.push({ uLight, aLight, baseU: uIntensity, baseA: aIntensity });
+
+        // Internal Beads
+        const beadRadius = Math.max(0.9, Math.min(2.0, cNode.radius3d * 0.2));
+        const bGeo = new THREE.SphereGeometry(beadRadius, 16, 16);
+        const uBead = new THREE.Mesh(bGeo, uBeadMat);
+        uBead.position.set(-lightOffset, 0, 0);
+        cGroup.add(uBead);
+
+        const aBead = new THREE.Mesh(bGeo, aBeadMat);
+        aBead.position.set(lightOffset, 0, 0);
+        cGroup.add(aBead);
+
+        // Shell Sphere
+        const shellMat = cNode.isDormant ? dormantShellMat : frostedMat;
+        const sphereMesh = new THREE.Mesh(new THREE.SphereGeometry(cNode.radius3d, 48, 48), shellMat);
+        sphereMesh.userData = {
+          isNode: true,
+          id: cNode.id,
+          title: "DELIVERABLE: " + cNode.text,
+          turn: cNode.chatJump.turn,
+          quote: cNode.chatJump.quote,
+          action: cNode.chatJump.action
+        };
+        cGroup.add(sphereMesh);
+        interactiveSatellites.push(sphereMesh);
+
+        // Active Terminal Focus Beacon Halo
+        if (cNode.isTerminalActive) {
+          activeBeaconMesh = new THREE.Mesh(
+            new THREE.RingGeometry(cNode.radius3d * 1.05, cNode.radius3d * 1.55, 48),
+            activeBeaconMat
+          );
+          cGroup.add(activeBeaconMesh);
+        }
+
+        // Satellites
+        (cNode.satellites || []).forEach(sat => {
+          const satPos = new THREE.Vector3(sat.relX3d, sat.relY3d, sat.relZ3d);
+          const uData = {
+            label: sat.label,
+            id: sat.id,
+            text: sat.text,
+            actionId: sat.actionId,
+            color: sat.color,
+            isResolvedSlot: sat.isResolvedSlot,
+            resolutionData: sat.resolutionData
+          };
+
+          if (sat.isResolvedSlot) {
+            addBullseyeSatellite(cGroup, satPos, satGeo, (sat.origin === 'user' ? userSatMat : aiSatMat), (cNode.isDormant ? dimSatLineMat : satLineMat), cNode.radius3d, uData);
+          } else if (sat.isHollowRing) {
+            const torusSat = addHollowSlotSatellite(cGroup, satPos, (cNode.isDormant ? dimAiSatLineMat : aiSatLineMat), cNode.radius3d, uData);
+            activeSlotTorus = torusSat;
+          } else {
+            const lineMat = cNode.isDormant ? (sat.origin === 'user' ? dimSatLineMat : dimAiSatLineMat) : (sat.origin === 'user' ? satLineMat : aiSatLineMat);
+            addSatellite(cGroup, satPos, satGeo, (sat.origin === 'user' ? userSatMat : aiSatMat), lineMat, cNode.radius3d, uData);
+          }
+        });
+
+        // Dynamic HTML Label
+        if (labelsLayer) {
+          const labelDiv = document.createElement('div');
+          labelDiv.className = 'obsidian-label dynamic-child-label';
+          labelDiv.innerHTML = `<div class="label-child">${cNode.text}</div>`;
+          labelsLayer.appendChild(labelDiv);
+          activeDeliverableNodes.push({ id: cNode.id, pos: pos, radius3d: cNode.radius3d, el: labelDiv });
+        }
+      });
+
+      // Links
+      (pData.links || []).forEach(link => {
+        let sourcePos, sourceR, targetPos, targetR;
+        if (link.source === rootNode.id) {
+          sourcePos = ROOT_POS;
+          sourceR = rootNode.radius3d || 9.0;
+        } else {
+          const sNode = childNodes.find(n => n.id === link.source);
+          if (!sNode) return;
+          sourcePos = new THREE.Vector3(sNode.x3d, sNode.y3d, sNode.z3d);
+          sourceR = sNode.radius3d;
+        }
+
+        const tNode = childNodes.find(n => n.id === link.target);
+        if (!tNode) return;
+        targetPos = new THREE.Vector3(tNode.x3d, tNode.y3d, tNode.z3d);
+        targetR = tNode.radius3d;
+
+        if (link.type === 'parent_child') {
+          const color = link.isDormant ? 0x334155 : 0xffffff;
+          const opacity = link.isDormant ? 0.25 : 0.65;
+          linesGroup.add(createClippedLine(sourcePos, sourceR, targetPos, targetR, false, color, opacity));
+        } else {
+          const color = 0x94a3b8;
+          const opacity = link.isDormant ? 0.20 : 0.55;
+          linesGroup.add(createClippedLine(sourcePos, sourceR, targetPos, targetR, true, color, opacity));
+        }
+      });
+    }
+
+    function buildSpaceParticles() {
+      const starCount = 300;
+      const positions = new Float32Array(starCount * 3);
+      for (let i = 0; i < starCount * 3; i += 3) {
+        positions[i] = (Math.random() - 0.5) * 500;
+        positions[i + 1] = (Math.random() - 0.5) * 500;
+        positions[i + 2] = (Math.random() - 0.5) * 500;
+      }
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      const mat = new THREE.PointsMaterial({ color: 0xffffff, size: 1.1, transparent: true, opacity: 0.3 });
+      scene.add(new THREE.Points(geo, mat));
+    }
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function updateLabelPos(el, pos, yOffset) {
+      if (!el || el.style.display === 'none') return;
+      const p = new THREE.Vector3(pos.x, pos.y - yOffset, pos.z);
+      p.project(camera);
+
+      const px = (p.x * 0.5 + 0.5) * window.innerWidth;
+      const py = (-(p.y * 0.5) + 0.5) * window.innerHeight;
+      el.style.left = `${px}px`;
+      el.style.top = `${py}px`;
+
+      const targetOp = parseFloat(el.dataset.targetOpacity || '1.0');
+      const camDist = camera.position.distanceTo(pos);
+      if (camDist > 320) {
+        el.style.opacity = '0';
+      } else if (camDist > 190) {
+        const t = 1 - (camDist - 190) / 130;
+        el.style.opacity = (targetOp * t).toFixed(2);
+      } else {
+        el.style.opacity = targetOp.toFixed(2);
+      }
+      el.style.display = p.z > 1 ? 'none' : 'block';
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      if (controls) controls.update();
+
+      const time = Date.now() * 0.002;
+      activeLights.forEach((l, idx) => {
+        if (l.uLight) l.uLight.intensity = l.baseU + Math.sin(time + idx) * 0.25;
+        if (l.aLight) l.aLight.intensity = l.baseA + Math.cos(time + idx) * 0.35;
+      });
+
+      if (activeBeaconMesh && activeBeaconMat) {
+        const pulse = (Math.sin(time * 2.5) + 1) * 0.5;
+        activeBeaconMesh.scale.set(1 + pulse * 0.25, 1 + pulse * 0.25, 1);
+        activeBeaconMat.opacity = 0.70 - pulse * 0.45;
+      }
+
+      if (activeSlotTorus && activeSlotTorusMat) {
+        const torusPulse = (Math.sin(time * 3.0) + 1) * 0.5;
+        activeSlotTorus.scale.set(1 + torusPulse * 0.18, 1 + torusPulse * 0.18, 1 + torusPulse * 0.18);
+        activeSlotTorusMat.opacity = 0.85 - torusPulse * 0.35;
+      }
+
+      // 1. Root Label Position
+      if (rootLabelEl) {
+        const rootAnchor = new THREE.Vector3(0, -17.5, 0);
+        rootAnchor.applyMatrix4(rootGroup.matrixWorld);
+        rootAnchor.project(camera);
+
+        const rx = (rootAnchor.x * 0.5 + 0.5) * window.innerWidth;
+        const ry = (-(rootAnchor.y * 0.5) + 0.5) * window.innerHeight;
+        rootLabelEl.style.left = `${rx}px`;
+        rootLabelEl.style.top = `${ry}px`;
+        rootLabelEl.style.opacity = '1';
+        rootLabelEl.style.display = rootAnchor.z > 1 ? 'none' : 'block';
+      }
+
+      // Deliverable Label Positions
+      activeDeliverableNodes.forEach(item => {
+        updateLabelPos(item.el, item.pos, item.radius3d + 3.2);
+      });
+
+      renderer.render(scene, camera);
+    }
+
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Co-Creation Design System · Mockups Index</title>
+  <link rel="stylesheet" href="_theme.css">
+  <style>
+    .index-container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: var(--space-8) var(--space-6);
+    }
+    .index-header {
+      margin-bottom: var(--space-8);
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: var(--space-6);
+    }
+    .index-title {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0 0 var(--space-2) 0;
+    }
+    .index-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+    .index-grid {
+      display: grid;
+      gap: var(--space-4);
+      margin-bottom: var(--space-8);
+    }
+    .surface-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: var(--space-4) var(--space-5);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+      box-shadow: var(--shadow-sm);
+    }
+    .surface-card:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    .surface-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .surface-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .surface-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .status-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      text-transform: uppercase;
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+    }
+    .status-badge.draft {
+      background: rgba(0, 87, 255, 0.1);
+      color: var(--party-user);
+    }
+    .status-badge.planned {
+      background: var(--bg-subtle);
+      color: var(--text-muted);
+    }
+    .captures-box {
+      background: var(--bg-surface-raised);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: var(--space-5);
+      font-size: 12px;
+    }
+    .captures-box h3 {
+      margin: 0 0 var(--space-2) 0;
+      font-size: 13px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="index-container">
+    <header class="index-header">
+      <h1 class="index-title">Human × AI Co-Creation Design System</h1>
+      <p class="index-subtitle">Mockup Explorer & Surface Test Harness · Phase D0.S4</p>
+    </header>
+
+    <main>
+      <section>
+        <h2 style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: var(--space-4);">
+          Surfaces & Prototypes
+        </h2>
+
+        <div class="index-grid">
+          <a href="graph-view.html" class="surface-card">
+            <div class="surface-info">
+              <span class="surface-name">Graph View (v0)</span>
+              <span class="surface-desc">Frosted spheres, photon light mixing, tethers, and satellite atom crowns (G1 Target)</span>
+            </div>
+            <span class="status-badge draft">Gate D0.S5</span>
+          </a>
+
+          <div class="surface-card" style="opacity: 0.6; cursor: not-allowed;">
+            <div class="surface-info">
+              <span class="surface-name">Zoom Ladder Specimen</span>
+              <span class="surface-desc">Brain → Project → Chat → Pair → Source continuous spatial traversal</span>
+            </div>
+            <span class="status-badge planned">Phase D2</span>
+          </div>
+
+          <div class="surface-card" style="opacity: 0.6; cursor: not-allowed;">
+            <div class="surface-info">
+              <span class="surface-name">Foundation Specimens</span>
+              <span class="surface-desc">Colour palette mix tests, typographic scale, motion curves, and hit targets</span>
+            </div>
+            <span class="status-badge planned">Phase D4</span>
+          </div>
+
+          <div class="surface-card" style="opacity: 0.6; cursor: not-allowed;">
+            <div class="surface-info">
+              <span class="surface-name">Agency Panel & Drawer</span>
+              <span class="surface-desc">Goal view, direction odometer, countable agency ledger, and exchange accordion</span>
+            </div>
+            <span class="status-badge planned">Phase D6</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="captures-box" id="capture-summary">
+        <h3>Loaded Chat Fixtures (DDR-000a Real-Data Protocol)</h3>
+        <p id="fixture-details">Loading capture fixtures...</p>
+      </section>
+    </main>
+  </div>
+
+  <script type="module">
+    import { renderMockBar, loadCapture } from './_shell.js';
+
+    renderMockBar({
+      title: 'Mockup Directory',
+      status: 'active'
+    });
+
+    const c05 = await loadCapture('c05');
+    const details = document.getElementById('fixture-details');
+    if (c05) {
+      details.innerHTML = `
+        <strong>${c05.title}</strong> (<code>${c05.chat_id}</code>)<br>
+        Pairs: <strong>${c05.total_pairs}</strong> | Outcomes: <strong>${c05.outcomes.length}</strong> | 
+        Mode: <strong>${c05.metrics.mode || 'COPILOT'}</strong> | Split: <strong>${c05.metrics.direction?.you_pct}% You · ${c05.metrics.direction?.ai_pct}% AI</strong>
+      `;
+    } else {
+      details.textContent = 'No capture fixture found. Run scripts/design_system/capture.py.';
+    }
+  </script>
+</body>
+</html>

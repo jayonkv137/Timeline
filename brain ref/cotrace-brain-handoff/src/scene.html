@@ -1,0 +1,29 @@
+<div id="cotrace-brain">
+ <header class="bar"><div class="brand">COTRACE <span>/ Brain</span></div><span class="prototype">INTERACTIVE STUDY · v0.1</span><div class="mode" role="group" aria-label="View mode"><button data-mode="base" aria-pressed="true">Base material</button><button data-mode="map" aria-pressed="false">Sample map</button></div></header>
+ <div class="workspace">
+  <main class="viewport" aria-label="Interactive three-dimensional brain">
+   <div class="scene-caption"><span class="eyebrow">FORM BEFORE INFORMATION</span><h1>A place for your thinking.</h1><p class="subtitle">Neutral anatomy. Living material. Stable meaning.</p></div>
+   <canvas class="brain-canvas" aria-label="Drag to orbit the brain, scroll or pinch to zoom. Use the view buttons or sample list for keyboard navigation."></canvas>
+   <div class="labels"></div><div class="hover-tip" hidden></div>
+   <div class="fallback" hidden>WebGL is unavailable. Open this file in a browser with hardware acceleration enabled.</div>
+   <div class="scene-bottom"><div class="views" role="group" aria-label="Camera views"><button data-view="home">Three-quarter</button><button data-view="side">Side</button><button data-view="front">Front</button><button data-view="top">Top</button></div><span class="gestures">Drag to orbit · scroll to zoom</span></div>
+   <div class="legend" hidden><span><i class="human-dot"></i>Human</span><span><i class="ai-dot"></i>AI</span><span class="demo-tag">Illustrative data</span></div>
+  </main>
+  <aside class="inspector">
+   <div class="aside-title"><span>Scene direction</span><button class="reset">Reset</button></div>
+   <div class="section material-section"><span class="eyebrow">MATERIAL</span><h2>Pearl / graphite</h2><p>A folded surface, flowing fibers and fine grain. Color stays available for the data.</p>
+    <label class="range-label">Surface presence <output class="surface-value">55%</output><input class="surface" type="range" min="15" max="95" value="55"></label>
+    <label class="range-label">Fiber light <output class="fiber-value">55%</output><input class="fiber" type="range" min="10" max="100" value="55"></label>
+    <div class="switches"><label><input class="motion" type="checkbox" checked> Surface motion</label><label><input class="particles" type="checkbox" checked> Fine particles</label></div>
+   </div>
+   <div class="section"><span class="eyebrow">CONTRIBUTOR TREATMENT</span><label class="select-label" for="brain-palette">Palette</label><select id="brain-palette" class="palette"><option value="neutral">Neutral study</option><option value="clay">Clay / blue</option><option value="rose">Rose / teal</option><option value="ochre">Ochre / blue</option><option value="cyan">Raspberry / cyan</option></select><p class="palette-hint">Palette changes affect graph marks only.</p></div>
+   <div class="map-controls section" hidden><span class="eyebrow">CONVERSATION STATE</span><label class="range-label">Pair <output class="pair-value">6 / 6</output><input class="pair" type="range" min="1" max="6" value="6"></label><label class="check"><input class="focus-only" type="checkbox" checked> Focus connected outcomes</label><label class="check"><input class="show-labels" type="checkbox" checked> Show labels</label><button class="clear-selection">Clear selection</button><label class="select-label" for="brain-outcome">Find an outcome</label><select id="brain-outcome" class="node-list" aria-label="Sample outcomes"></select></div>
+
+  </aside>
+ </div>
+ <section class="selection" hidden aria-live="polite">
+  <div><span class="eyebrow">SELECTED OUTCOME</span><h2 class="selected-title"></h2><p class="selected-description"></p><div class="contributions"></div></div>
+  <div class="atom-list"></div>
+  <div><button class="source-button">Open source turn</button><p class="source-feedback" role="status"></p></div>
+ </section>
+</div>

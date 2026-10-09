@@ -1,0 +1,1400 @@
+{
+  "pair": 8,
+  "snapshot": {
+    "pair": 8,
+    "delta_you": 0,
+    "delta_ai": 0,
+    "c_you": 182.0,
+    "c_ai": 389.0,
+    "you_pct": 31.9,
+    "ai_pct": 68.1,
+    "decisions": {
+      "you": 10,
+      "ai": 4
+    },
+    "open_slots": 5,
+    "total_requirements": 14,
+    "summary": "The user and AI are collaborating to transition the 'About' page into an interactive AI video portfolio. They are developing the script, narrative structure, and interactive click-gate mechanics for a hybrid film styled after David Attenborough's nature documentaries."
+  },
+  "state": {
+    "actions": [
+      {
+        "id": "U(1,1)",
+        "type": "Describe",
+        "text": "User describes the current state of their about page.",
+        "role": "SHAPER",
+        "evidence_quote": "currently, we have this about play page. Like, it is kind kind of like a written text"
+      },
+      {
+        "id": "U(1,2)",
+        "type": "Instruct",
+        "text": "User instructs the AI to review the about page based on previous chats.",
+        "role": "SHAPER",
+        "evidence_quote": "Please look at that and come back."
+      },
+      {
+        "id": "A(1,1)",
+        "type": "Analyze",
+        "text": "AI analyzes the user's request to review the about page.",
+        "role": "EXECUTOR",
+        "evidence_quote": "The user is asking me to review their about page, and they've mentioned I can look at previous conversations"
+      },
+      {
+        "id": "A(1,2)",
+        "type": "Plan",
+        "text": "AI plans to search conversation history and project files.",
+        "role": "EXECUTOR",
+        "evidence_quote": "I should search the conversation history to see what we've discussed about their about page before, and I can also check the project files if needed."
+      },
+      {
+        "id": "A(1,3)",
+        "type": "Report",
+        "text": "AI reports the findings regarding the about page's history and technical implementation.",
+        "role": "EXECUTOR",
+        "evidence_quote": "I'm piecing together the about page's history\u2014it was created during Phase 7 with a three-step build process"
+      },
+      {
+        "id": "A(1,4)",
+        "type": "Summarize",
+        "text": "AI summarizes the current state and mechanics of the about page.",
+        "role": "EXECUTOR",
+        "evidence_quote": "Current About page (built in Phase 7, live on jayonkvinod.xyz): It's a scroll-scrub typographic narrative"
+      },
+      {
+        "id": "A(1,5)",
+        "type": "Ask",
+        "text": "AI asks the user for the next steps regarding the about page.",
+        "role": "SHAPER",
+        "evidence_quote": "What do you want to do with it?"
+      },
+      {
+        "id": "U(2,1)",
+        "type": "Propose",
+        "text": "User proposes replacing the written About page with an AI video portfolio.",
+        "role": "SHAPER",
+        "evidence_quote": "instead of this written about me page, instead i was thinking of adding a portfolio AI Video about me in this page"
+      },
+      {
+        "id": "U(2,2)",
+        "type": "Describe",
+        "text": "User describes the video as a 45-60 second hybrid film-making style video to sell their story and skills.",
+        "role": "SHAPER",
+        "evidence_quote": "create a video ai video ( hybrid) - film-amking style with me selling me, 45- 1 minute."
+      },
+      {
+        "id": "U(2,3)",
+        "type": "Request",
+        "text": "User requests collaboration to develop the video concept.",
+        "role": "SHAPER",
+        "evidence_quote": "what i am trying to do here is to develop this idea in my head with you and help me in the process"
+      },
+      {
+        "id": "U(2,4)",
+        "type": "Provide",
+        "text": "User commits to providing existing work in future chats.",
+        "role": "SHAPER",
+        "evidence_quote": "i have alrady done some work and in the coming chats i will rpovide them and we will work together through this"
+      },
+      {
+        "id": "A(2,1)",
+        "type": "Confirm",
+        "text": "AI confirms the reopening of Phase 7 for About page development.",
+        "role": "EXECUTOR",
+        "evidence_quote": "Command center \u2014 reopening Phase 7 (About page), concept development."
+      },
+      {
+        "id": "A(2,2)",
+        "type": "Evaluate",
+        "text": "AI evaluates the user's idea as a strong strategic move for a creative technologist.",
+        "role": "SHAPER",
+        "evidence_quote": "Strong call, and worth naming why so we build on solid ground: your signature work is AI film. An About page that is an AI film about you makes the medium the message"
+      },
+      {
+        "id": "A(2,3)",
+        "type": "Constrain",
+        "text": "AI sets a constraint that the video must focus on the user's story rather than just being a showreel.",
+        "role": "SHAPER",
+        "evidence_quote": "This film can't be a second showreel. . . Its distinct job is you \u2014 the story, the person, the why, visualised."
+      },
+      {
+        "id": "A(2,4)",
+        "type": "Note",
+        "text": "AI flags the decision of video-only versus text-hybrid for later consideration.",
+        "role": "SHAPER",
+        "evidence_quote": "(Park for later, don't decide now: whether the video fully replaces the text or sits over a thin text layer for recruiters who skim / accessibility / SEO."
+      },
+      {
+        "id": "A(2,5)",
+        "type": "Ask",
+        "text": "AI asks the user to define the narrative spine and the level of personal presence in the video.",
+        "role": "SHAPER",
+        "evidence_quote": "To start developing the concept, the first real fork is the spine \u2014 what holds 45\u201360 seconds together \u2014 and how much of the real you is in it."
+      },
+      {
+        "id": "U(3,1)",
+        "type": "Describe",
+        "text": "The user describes the concept of a third-person narrated video story.",
+        "role": "SHAPER",
+        "evidence_quote": "the idea for the film is to make a third person narating kind of video story about my joruney and stuff"
+      },
+      {
+        "id": "U(3,2)",
+        "type": "State",
+        "text": "The user states they have already developed the idea and rough dialogue.",
+        "role": "EXECUTOR",
+        "evidence_quote": "i ahve already flushed out the idea and a rough dialogue"
+      },
+      {
+        "id": "U(3,3)",
+        "type": "Request",
+        "text": "The user requests the AI to wait for additional materials.",
+        "role": "SHAPER",
+        "evidence_quote": "please wait"
+      },
+      {
+        "id": "U(3,4)",
+        "type": "Describe",
+        "text": "The user describes the technical composition of the film.",
+        "role": "SHAPER",
+        "evidence_quote": "it wouldit would be combianiton of ai hyrbid filmaking, ai shots and david attenborug and then also maybe some of my stuff in the end"
+      },
+      {
+        "id": "A(3,1)",
+        "type": "Summarize",
+        "text": "The AI summarizes the user's concept of a nature-documentary style film.",
+        "role": "OTHER",
+        "evidence_quote": "The spine is a third-person nature-documentary narration \u2014 Attenborough-style, observing \"the creative technologist\" as if he were a rare species in his habitat."
+      },
+      {
+        "id": "A(3,2)",
+        "type": "Evaluate",
+        "text": "The AI evaluates the concept as sharp and effective.",
+        "role": "OTHER",
+        "evidence_quote": "That's a genuinely sharp concept, and worth naming why it works so we protect it"
+      },
+      {
+        "id": "A(3,3)",
+        "type": "Explain",
+        "text": "The AI explains why the nature-documentary genre is a strong narrative choice.",
+        "role": "SHAPER",
+        "evidence_quote": "It solves the self-promo cringe problem. You're not bragging about yourself \u2014 a wry, affectionate narrator is observing you."
+      },
+      {
+        "id": "A(3,4)",
+        "type": "Warn",
+        "text": "The AI warns about the legal/ethical constraints of using a real person's voice.",
+        "role": "SHAPER",
+        "evidence_quote": "Cloning a real person's voice is a likeness problem we don't want on a public portfolio."
+      },
+      {
+        "id": "A(3,5)",
+        "type": "Suggest",
+        "text": "The AI suggests using an Attenborough-style tone rather than a voice clone.",
+        "role": "SHAPER",
+        "evidence_quote": "we'll do Attenborough-style \u2014 a plummy British natural-history VO that evokes the genre \u2014 not a clone of his actual voice."
+      },
+      {
+        "id": "A(3,6)",
+        "type": "Plan",
+        "text": "The AI commits to waiting for the user's script and writings.",
+        "role": "EXECUTOR",
+        "evidence_quote": "I'll hold here. Send the script and writings whenever you're ready and we'll build from your material, not from scratch."
+      },
+      {
+        "id": "U(4,1)",
+        "type": "Describe",
+        "text": "User provides a rough draft of a script written in a nature-documentary style.",
+        "role": "SHAPER",
+        "evidence_quote": "okay this is a very very rough first draft of this i ahve tried write in his style and its loong and elaborate and stuff, and also not well strucuter but this is the idea"
+      },
+      {
+        "id": "U(4,2)",
+        "type": "Critique",
+        "text": "User identifies that the ending of their draft is lazy and poorly written.",
+        "role": "SHAPER",
+        "evidence_quote": "so i think tghe ending protion is lazy and the words starts feeling sluggish and poorly written in the later portions mostl was rushed so needs much more work"
+      },
+      {
+        "id": "A(4,1)",
+        "type": "Analyze",
+        "text": "AI evaluates the user's draft, identifying the strengths of the nature-documentary metaphor and the structural issues.",
+        "role": "OTHER",
+        "evidence_quote": "The core framing is solid \u2014 the lab setting with the water cylinder and lights creates a compelling visual metaphor"
+      },
+      {
+        "id": "A(4,2)",
+        "type": "Explain",
+        "text": "AI explains the pacing and word count constraints inherent to the nature-documentary style.",
+        "role": "OTHER",
+        "evidence_quote": "Attenborough narration is slow \u2014 maybe 110\u2013130 words per minute with the dramatic pauses. So 45\u201360s \u2248 roughly 100\u2013130 words of actual VO."
+      },
+      {
+        "id": "A(4,3)",
+        "type": "Draft",
+        "text": "AI provides a tightened, structured version of the script with visual cues and voiceover.",
+        "role": "EXECUTOR",
+        "evidence_quote": "Here's a tightened pass \u2014 separated into what we SEE and what we HEAR, since it's a hybrid film"
+      },
+      {
+        "id": "A(4,4)",
+        "type": "Recommend",
+        "text": "AI suggests a structural shift involving a pronoun change from 'it' to 'I' to improve the ending.",
+        "role": "SHAPER",
+        "evidence_quote": "So the spine is a pronoun shift \u2014 the film observes an object (\"it\") for 50 seconds, then hard-cuts to the real you, where it becomes \"I.\""
+      },
+      {
+        "id": "A(4,5)",
+        "type": "Ask",
+        "text": "AI requests user input on the final line, the framing of the EY experience, and whether any cut content was essential.",
+        "role": "SHAPER",
+        "evidence_quote": "Three things only you can decide: The final line... The EY framing... What got cut"
+      },
+      {
+        "id": "U(5,1)",
+        "type": "Request",
+        "text": "User asks for guidance on David Attenborough clips to study his narration style.",
+        "role": "SHAPER",
+        "evidence_quote": "can u guide me to some david attenorughs stuff where its descirbing some species and tlakign about some exmaple videos to look and get inspired from and to learn the writing or narating style"
+      },
+      {
+        "id": "U(5,2)",
+        "type": "Ask",
+        "text": "User asks what specific terms to search for to find these examples.",
+        "role": "SHAPER",
+        "evidence_quote": "so what to look and search for?"
+      },
+      {
+        "id": "A(5,1)",
+        "type": "Plan",
+        "text": "AI plans to curate specific clips and distill Attenborough's narrative techniques.",
+        "role": "SHAPER",
+        "evidence_quote": "Curating specific clips and distilling Attenborough's narrative techniques."
+      },
+      {
+        "id": "A(5,2)",
+        "type": "List",
+        "text": "AI provides a list of specific David Attenborough sequences to study.",
+        "role": "EXECUTOR",
+        "evidence_quote": "The essential sequences (search these on YouTube): \"Planet Earth II iguana vs snakes\"... \"Attenborough bird of paradise courtship\"... \"Attenborough pebble toad\"... \"Life of Mammals chimpanzee\""
+      },
+      {
+        "id": "A(5,3)",
+        "type": "Explain",
+        "text": "AI explains the writing principles behind Attenborough's narration style.",
+        "role": "EXECUTOR",
+        "evidence_quote": "What to listen for specifically \u2014 these are the writing rules under the voice"
+      },
+      {
+        "id": "A(5,4)",
+        "type": "Instruct",
+        "text": "AI instructs the user to transcribe Attenborough's sentences to internalize the rhythm.",
+        "role": "SHAPER",
+        "evidence_quote": "One practical move: while you watch, pause after each narrated line and transcribe 5\u20136 of his actual sentences into a notes file."
+      },
+      {
+        "id": "A(5,5)",
+        "type": "Invite",
+        "text": "AI invites the user to decide whether to wait or rework the draft immediately.",
+        "role": "SHAPER",
+        "evidence_quote": "Want me to wait for that, or rework the current draft now using these rules so you have a target to compare against?"
+      },
+      {
+        "id": "U(6,1)",
+        "type": "Request",
+        "text": "User requests a video of Attenborough describing a species' life metaphorically rather than clinically.",
+        "role": "SHAPER",
+        "evidence_quote": "i want to look at this video where he is describing or telling a anrative a baout a specie and his life in a metaphorical way, not closely obseving but in a more metaphoric way"
+      },
+      {
+        "id": "A(6,1)",
+        "type": "Acknowledge",
+        "text": "AI acknowledges the user's preference for metaphorical, narrative-driven content over clinical observation.",
+        "role": "OTHER",
+        "evidence_quote": "Identified metaphorical life-narrative content over clinical observation."
+      },
+      {
+        "id": "A(6,2)",
+        "type": "Analyze",
+        "text": "AI analyzes the user's request to identify the specific tone and narrative style desired.",
+        "role": "SHAPER",
+        "evidence_quote": "I'm realizing the user is looking for those more poetic Attenborough moments\u2014the ones where he frames nature as an epic narrative rather than clinical observation"
+      },
+      {
+        "id": "A(6,3)",
+        "type": "Plan",
+        "text": "AI plans to identify specific examples that fit the requested mythic and sweeping quality.",
+        "role": "SHAPER",
+        "evidence_quote": "Let me think through some specific examples that capture that mythic, sweeping quality."
+      },
+      {
+        "id": "A(6,4)",
+        "type": "List",
+        "text": "AI lists potential subjects for the requested metaphorical narration.",
+        "role": "EXECUTOR",
+        "evidence_quote": "Attenborough most poetic metaphorical narration about a creature's whole life journey mayfly salmon eel"
+      },
+      {
+        "id": "A(6,5)",
+        "type": "Evaluate",
+        "text": "AI evaluates the BBC's Life Story series as the ideal reference point for the user's request.",
+        "role": "SHAPER",
+        "evidence_quote": "The BBC's Life Story series is the perfect reference point since it explicitly structures each episode around universal life stages"
+      },
+      {
+        "id": "A(6,6)",
+        "type": "Recommend",
+        "text": "AI recommends the series 'Life Story' as the primary study material.",
+        "role": "EXECUTOR",
+        "evidence_quote": "The series to study: \"Life Story\" (BBC, 2014). This is the one."
+      },
+      {
+        "id": "A(6,7)",
+        "type": "Describe",
+        "text": "AI describes the structural parallels between the 'Life Story' series and the user's own life narrative.",
+        "role": "EXECUTOR",
+        "evidence_quote": "That's structurally identical to what you're doing with your own life: origin \u2192 discovery \u2192 captivity \u2192 migration \u2192 now."
+      },
+      {
+        "id": "A(6,8)",
+        "type": "List",
+        "text": "AI lists specific clips and examples of metaphorical life-arcs.",
+        "role": "EXECUTOR",
+        "evidence_quote": "Specific metaphorical life-arc clips to search: \"Attenborough mayfly one day to live\"... \"Attenborough salmon journey home to spawn\"... \"Attenborough emperor penguin march\""
+      },
+      {
+        "id": "A(6,9)",
+        "type": "Explain",
+        "text": "AI explains the linguistic and stylistic differences between the 'metaphoric mode' and the 'clinical mode'.",
+        "role": "EXECUTOR",
+        "evidence_quote": "What makes these the \"metaphoric mode\" vs. the clinical one \u2014 listen for the shift: He stops describing behaviour... and starts describing meaning"
+      },
+      {
+        "id": "A(6,10)",
+        "type": "Suggest",
+        "text": "AI suggests a tonal blend for the user's film project.",
+        "role": "SHAPER",
+        "evidence_quote": "For your film, the sweet spot is probably a blend: open in the wry clinical register... then let it tilt into the metaphoric mode at the migration beat"
+      },
+      {
+        "id": "A(6,11)",
+        "type": "Instruct",
+        "text": "AI instructs the user on the next steps for their project.",
+        "role": "SHAPER",
+        "evidence_quote": "Watch the mayfly and the Life Story opening first. Those two will give you the metaphoric cadence fastest. Then bring your draft back."
+      },
+      {
+        "id": "A(6,12)",
+        "type": "Provide",
+        "text": "AI provides a list of sources for further research.",
+        "role": "EXECUTOR",
+        "evidence_quote": "Sources: Attenborough\u2019s Life Journey ~ About | Nature | PBS..."
+      },
+      {
+        "id": "U(7,1)",
+        "type": "Describe",
+        "text": "The user describes a new concept for an interactive video experience on their website.",
+        "role": "SHAPER",
+        "evidence_quote": "So I was right now having an idea of, like, creating an interactive video effect kind of an experience in in this in this, like, rather than a movie."
+      },
+      {
+        "id": "U(7,2)",
+        "type": "Describe",
+        "text": "The user details the specific interactive steps of the proposed video experience.",
+        "role": "SHAPER",
+        "evidence_quote": "Like, a new form of medium of of of, you know, made... that set, like, the thin website itself, like, with videos and using the the the, like, video story elements, uh, to make the user to click click on some things to go to next video and video and, you know, uh, guide the user to tell a story."
+      },
+      {
+        "id": "U(7,3)",
+        "type": "Describe",
+        "text": "The user provides a concrete example of the interactive flow, starting with turning on a light.",
+        "role": "SHAPER",
+        "evidence_quote": "Like, for example, uh, I was thinking of, like, okay. You come to the page and then And then, uh, you... it is black, and then you kind of show in a highlight to to turn on the light."
+      },
+      {
+        "id": "U(7,4)",
+        "type": "Describe",
+        "text": "The user describes the visual elements of the first video segment.",
+        "role": "SHAPER",
+        "evidence_quote": "So first, how our video is, uh, I'm imagining, like, a kind of, like, um, a white short in which there is a gradient line in the middle separating"
+      },
+      {
+        "id": "U(7,5)",
+        "type": "Describe",
+        "text": "The user describes the second interactive beat involving opening a containment pod.",
+        "role": "SHAPER",
+        "evidence_quote": "The next thing is next thing is to... we need to guide the user to, uh, turn on the light in the, uh, in the containment pot."
+      },
+      {
+        "id": "U(7,6)",
+        "type": "Describe",
+        "text": "The user describes the final narrative beat of falling into the containment pod.",
+        "role": "SHAPER",
+        "evidence_quote": "The next thing which is happening is, like, I am I am falling down into the... in... from the light."
+      },
+      {
+        "id": "A(7,1)",
+        "type": "Validate",
+        "text": "The AI validates the user's interactive concept and confirms the reference image as the foundation.",
+        "role": "SHAPER",
+        "evidence_quote": "That reference shot is the cold open, locked. A silhouette sealed in a lit glass pod against a dark teal horizon \u2014 it's exactly the specimen-in-glass you scripted"
+      },
+      {
+        "id": "A(7,2)",
+        "type": "Explain",
+        "text": "The AI explains why the interactive concept aligns with the user's core thesis.",
+        "role": "SHAPER",
+        "evidence_quote": "The interaction is the thesis. Medium-as-message, twice: interactive and AI-film."
+      },
+      {
+        "id": "A(7,3)",
+        "type": "Clarify",
+        "text": "The AI clarifies the distinction between branching video and a guided linear sequence with click-gates.",
+        "role": "SHAPER",
+        "evidence_quote": "What you described is not branching interactive video (a tree of choices). It's a guided linear sequence with click-gates"
+      },
+      {
+        "id": "A(7,4)",
+        "type": "Warn",
+        "text": "The AI warns about the risks of AI video continuity between segments.",
+        "role": "SHAPER",
+        "evidence_quote": "The honest risk, and the move that protects you: The danger isn't the interactivity \u2014 it's AI video continuity."
+      },
+      {
+        "id": "A(7,5)",
+        "type": "Recommend",
+        "text": "The AI recommends producing the linear film first and layering interactivity on top.",
+        "role": "EXECUTOR",
+        "evidence_quote": "Produce the linear film first \u2014 same beats (light, pod, fall, reveal) \u2014 get the footage consistent and good while the creative risk is contained. Then wrap click-gates around cuts you already have."
+      },
+      {
+        "id": "U(8,1)",
+        "type": "Refuse",
+        "text": "User refuses to confirm the interaction model immediately.",
+        "role": "SHAPER",
+        "evidence_quote": "no no i am first thinking the feasibilty of this"
+      },
+      {
+        "id": "U(8,2)",
+        "type": "Request",
+        "text": "User requests time to think through the idea properly.",
+        "role": "SHAPER",
+        "evidence_quote": "let me think through this properly please"
+      },
+      {
+        "id": "U(8,3)",
+        "type": "Request",
+        "text": "User requests to postpone the decision on the build approach.",
+        "role": "SHAPER",
+        "evidence_quote": "please i will think throught he full idea and then decied those"
+      },
+      {
+        "id": "A(8,1)",
+        "type": "Acknowledge",
+        "text": "AI acknowledges the user's need for time.",
+        "role": "OTHER",
+        "evidence_quote": "Understood \u2014 take the time."
+      },
+      {
+        "id": "A(8,2)",
+        "type": "Frame",
+        "text": "AI frames the current state of the project as an idea stage.",
+        "role": "SHAPER",
+        "evidence_quote": "You're at the idea stage, not the decide stage, and forcing a build decision now would be premature."
+      },
+      {
+        "id": "A(8,3)",
+        "type": "Explain",
+        "text": "AI explains the technical feasibility challenges regarding visual continuity in AI video generation.",
+        "role": "EXECUTOR",
+        "evidence_quote": "The interactive experience lives or dies on continuity between clips. ... AI video tools are weakest exactly here"
+      },
+      {
+        "id": "A(8,4)",
+        "type": "Explain",
+        "text": "AI explains a technical solution for continuity using hard cuts.",
+        "role": "EXECUTOR",
+        "evidence_quote": "If each clip starts and ends on a clean, dark, or matched frame (black \u2192 light blooms \u2192 black), the seams disappear."
+      },
+      {
+        "id": "A(8,5)",
+        "type": "Suggest",
+        "text": "AI suggests the user decide on the number of gated beats.",
+        "role": "SHAPER",
+        "evidence_quote": "The thing genuinely worth deciding in your head before any build talk: how many gated beats?"
+      },
+      {
+        "id": "A(8,6)",
+        "type": "Reframe",
+        "text": "AI reframes the project as a linear film to reduce pressure on the interactive mechanism.",
+        "role": "SHAPER",
+        "evidence_quote": "even the \"fully interactive\" version is still, underneath, your linear film."
+      },
+      {
+        "id": "A(8,7)",
+        "type": "Invite",
+        "text": "AI invites the user to return when the idea is clearer.",
+        "role": "OTHER",
+        "evidence_quote": "Bring it back when it's clearer in your head \u2014 the script, the beats, whatever shape it's in \u2014 and we'll work from there."
+      }
+    ],
+    "outcomes": [
+      {
+        "id": "outcome 1",
+        "text": "Interactive AI video portfolio for the About page",
+        "turn_id": "U(1,1)",
+        "parent": null,
+        "children": [
+          "outcome 2",
+          "outcome 3",
+          "outcome 4",
+          "outcome 5",
+          "outcome 6"
+        ],
+        "related": []
+      },
+      {
+        "id": "outcome 2",
+        "text": "Review and analysis of the existing Phase 7 About page",
+        "turn_id": "U(1,1)",
+        "parent": "outcome 1",
+        "children": [],
+        "related": []
+      },
+      {
+        "id": "outcome 3",
+        "text": "Concept and narrative structure for the nature-documentary style AI video",
+        "turn_id": "U(2,1)",
+        "parent": "outcome 1",
+        "children": [],
+        "related": []
+      },
+      {
+        "id": "outcome 4",
+        "text": "Draft script for the AI video",
+        "turn_id": "U(4,1)",
+        "parent": "outcome 1",
+        "children": [],
+        "related": []
+      },
+      {
+        "id": "outcome 5",
+        "text": "Curated list of Attenborough narration style references and writing principles",
+        "turn_id": "U(5,1)",
+        "parent": "outcome 1",
+        "children": [],
+        "related": []
+      },
+      {
+        "id": "outcome 6",
+        "text": "Interactive click-gate mechanics and technical feasibility plan",
+        "turn_id": "U(7,1)",
+        "parent": "outcome 1",
+        "children": [],
+        "related": []
+      }
+    ],
+    "intentions": [
+      {
+        "intention_id": "I1",
+        "intention": "Strategic Analysis and Technical Planning",
+        "outcome_ids": [
+          "outcome 2",
+          "outcome 6"
+        ]
+      },
+      {
+        "intention_id": "I2",
+        "intention": "Creative Concept and Script Development",
+        "outcome_ids": [
+          "outcome 3",
+          "outcome 4",
+          "outcome 5"
+        ]
+      },
+      {
+        "intention_id": "I3",
+        "intention": "Interactive Video Implementation",
+        "outcome_ids": [
+          "outcome 1"
+        ]
+      }
+    ],
+    "requirements": [
+      {
+        "outcome_id": "outcome 1",
+        "req_id": "req 1",
+        "text": "Review the history, mechanics, and current state of the about page based on previous conversations.",
+        "type": "task",
+        "status": "active",
+        "creation_action_ids": [
+          "U(1,2)"
+        ],
+        "contributing_action_ids": [
+          "U(1,1)",
+          "A(1,1)",
+          "A(1,2)",
+          "A(1,3)",
+          "A(1,4)"
+        ],
+        "implementation_action_ids": [
+          "A(1,3)",
+          "A(1,4)"
+        ],
+        "revise_action_ids": [],
+        "related_to": [],
+        "explicit_or_implicit": "explicit",
+        "rationale": "The user explicitly instructs the AI to look at the previous chats regarding the about page and come back with a review.",
+        "created_at_pair": 1
+      },
+      {
+        "outcome_id": "outcome_2",
+        "req_id": "req_1",
+        "text": "The AI video must have a duration of 45 to 60 seconds.",
+        "type": "constraint",
+        "status": "active",
+        "creation_action_ids": [
+          "U(2,2)"
+        ],
+        "contributing_action_ids": [
+          "U(2,1)",
+          "A(2,5)"
+        ],
+        "implementation_action_ids": [],
+        "revise_action_ids": [],
+        "related_to": [],
+        "explicit_or_implicit": "explicit",
+        "rationale": "The user explicitly specifies the video length constraint as '45- 1 minute' (45 to 60 seconds).",
+        "created_at_pair": 2
+      },
+      {
+        "outcome_id": "outcome_2",
+        "req_id": "req_2",
+        "text": "The video must be created in a hybrid AI filmmaking style.",
+        "type": "constraint",
+        "status": "active",
+        "creation_action_ids": [
+          "U(2,2)"
+        ],
+        "contributing_action_ids": [
+          "U(2,1)",
+          "U(2,3)",
+          "A(2,2)",
+          "A(2,3)",
+          "A(2,5)"
+        ],
+        "implementation_action_ids": [],
+        "revise_action_ids": [],
+        "related_to": [],
+        "explicit_or_implicit": "explicit",
+        "rationale": "The user explicitly requests a 'video ai video ( hybrid) - film-amking style'.",
+        "created_at_pair": 2
+      },
+      {
+        "outcome_id": "outcome_2",
+        "req_id": "req_3",
+        "text": "The video must focus on the user's personal story, identity, and 'why' (selling themselves) rather than functioning as a second showreel.",
+        "type": "constraint",
+        "status": "active",
+        "creation_action_ids": [
+          "A(2,3)"
+        ],
+        "contributing_action_ids": [
+          "U(2,2)",
+          "U(2,1)",
+          "A(2,2)",
+          "A(2,5)"
+        ],
+        "implementation_action_ids": [],
+        "revise_action_ids": [],
+        "related_to": [],
+        "explicit_or_implicit": "explicit",
+        "rationale": "The AI sets a binding constraint that the film 'can't be a second showreel' and must focus on 'the story, the person, the why', which directly aligns with and refines the user's goal of 'selling me'.",
+        "created_at_pair": 2
+      },
+      {
+        "outcome_id": "outcome 3",
+        "req_id": "req 1",
+        "text": "The AI video must be a hybrid filmmaking style video with a duration of 45 to 60 seconds.",
+        "type": "constraint",
+        "status": "active",
+        "creation_action_ids": [
+          "U(2,2)"
+        ],
+        "contributing_action_ids": [
+          "U(1,1)",
+          "U(1,2)",
+          "A(1,5)",
+          "U(2,1)",
+          "U(2,3)",
+          "A(2,2)",
+          "A(2,3)",
+          "A(2,5)",
+          "U(3,1)",
+          "U(3,4)",
+          "A(3,1)",
+          "A(3,3)",
+          "A(3,5)",
+          "U(4,1)",
+          "A(4,1)",
+          "A(4,2)",
+          "A(4,4)",
+          "A(6,7)",
+          "A(6,10)"
+        ],
+        "implementation_action_ids": [
+          "A(4,3)"
+        ],
+        "revise_action_ids": [],
+        "related_to": [],
+        "explicit_or_implicit": "explicit",
+        "rationale": "The user explicitly specifies the video style as hybrid filmmaking and sets a strict duration constraint of 45 seconds to 1 minute.",
+        "created_at_pair": 3
+      },
+      {
+        "outcome_id": "outcome 3",
+        "req_id": "req 2",
+        "text": "The video must focus on the user's personal story, journey, and 'why' rather than serving as a standard showreel.",
+        "type": "constraint",
+        "status": "active",
+        "creation_action_ids": [
+          "A(2,3)"
+        ],
+        "contributing_action_ids": [
+          "U(3,1)",
+          "U(1,1)",
+          "U(2,1)",
+          "U(2,2)",
+          "A(2,2)",
+          "A(2,5)",
+          "U(3,4)",
+          "A(3,3)",
+          "U(4,1)",
+          "U(4,2)",
+          "A(4,1)",
+          "A(4,5)",
+          "U(6,1)",
+          "A(6,1)",
+          "A(6,2)",
+          "A(6,3)",
+          "A(6,4)",
+          "A(6,5)",
+          "A(6,6)",
+          "A(6,8)",
+          "A(6,9)",
+          "A(6,11)"
+        ],
+        "implementation_action_ids": [
+          "U(3,1)",
+          "A(3,1)",
+          "A(4,3)",
+          "A(4,4)",
+          "A(6,7)",
+          "A(6,10)"
+        ],
+        "revise_action_ids": [],
+        "related_to": [],
+        "explicit_or_implicit": "explicit",
+        "rationale": "The AI sets a firm constraint that the film cannot be a second showreel and must focus on the user's story, which the user adopts by describing it as a story about their journey.",
+        "created_at_pair": 3
+      },
+      {
+        "outcome_id": "outcome 3",
+        "req_id": "req 3",
+        "text": "The video narrative must use a third-person nature-documentary style, observing the user as a creative technologist.",
+        "type": "constraint",
+        "status": "active",
+        "creation_action_ids": [
+          "U(3,1)"
+        ],
+        "contributing_action_ids": [
+          "A(3,1)",
+          "U(2,1)",
+          "U(2,2)",
+          "A(2,2)",
+          "A(2,3)",
+          "A(2,5)",
+          "U(3,2)",
+          "U(3,4)",
+          "A(3,2)",
+          "A(3,3)",
+          "A(3,4)",
+          "U(4,2)",
+          "A(4,1)",
+          "A(4,2)",
+          "A(4,5)",
+          "A(6,1)",
+          "A(6,2)",
+          "A(6,3)",
+          "A(6,4)",
+          "A(6,5)",
+          "A(6,11)"
+        ],
+        "implementation_action_ids": [
+          "U(4,1)",
+          "A(4,3)",
+          "A(6,6)",
+          "A(6,7)",
+          "A(6,8)",
+          "A(6,9)",
+          "A(6,10)",
+          "A(6,12)"
+        ],
+        "revise_action_ids": [
+          "A(3,5)",
+          "A(4,4)",
+          "U(6,1)"
+        ],
+        "related_to": [],
+        "explicit_or_implicit": "explicit",
+        "rationale": "The user proposes a third-person narrating video story, which is agreed upon and defined as a nature-documentary style observing the creative technologist.",
+        "created_at_pair": 3
+      },
+      {
+        "outcome_id": "outcome 3",
+        "req_id": "req 4",
+        "text": "The video voiceover must not clone a real person's voice (specifically David Attenborough) and must instead use an original voice in an Attenborough-style (plummy British natural-history tone).",
+        "type": "constraint",
+        "status": "active",
+        "creation_action_ids": [
+          "A(3,4)",
+          "A(3,5)"
+        ],
+        "contributing_action_ids": [
+          "U(2,1)",
+          "U(2,2)",
+          "A(2,5)",
+          "U(3,1)",
+          "U(3,4)",
+          "A(3,1)",
+          "A(3,3)",
+          "U(4,1)",
+          "A(4,2)",
+          "U(6,1)",
+          "A(6,1)",
+          "A(6,2)",
+          "A(6,3)",
+          "A(6,4)",
+          "A(6,5)",
+          "A(6,6)",
+          "A(6,7)",
+          "A(6,8)",
+          "A(6,9)",
+          "A(6,10)",
+          "A(6,11)",
+          "A(6,12)"
+        ],
+        "implementation_action_ids": [
+          "A(4,3)"
+        ],
+        "revise_action_ids": [],
+        "related_to": [],
+        "explicit_or_implicit": "explicit",
+        "rationale": "The AI establishes a strict legal/ethical constraint against cloning a real person's voice, mandating an original voice that evokes the style instead.",
+        "created_at_pair": 3
+      },
+      {
+        "outcome_id": "outcome 3",
+        "req_id": "req 5",
+        "text": "The script must be structured to clearly separate visual cues (what we SEE) and voiceover/audio (what we HEAR).",
+        "type": "constraint",
+        "status": "active",
+        "creation_action_ids": [
+          "A(4,3)"
+        ],
+        "contributing_action_ids": [
+          "U(3,4)",
+          "U(4,1)",
+          "A(4,1)",
+          "A(4,2)"
+        ],
+        "implementation_action_ids": [],
+        "revise_action_ids": [],
+        "related_to": [],
+        "explicit_or_implicit": "explicit",
+        "rationale": "The AI drafts the script with this specific separation because it is a hybrid film, establishing a structural requirement for the script format.",
+        "created_at_pair": 4
+      },
+      {
+        "outcome_id": "outcome 4",
+        "req_id": "req 1",
+        "text": "The study guide must provide specific David Attenborough video sequences to study along with search terms to find them.",
+        "type": "task",
+        "status": "active",
+        "creation_action_ids": [
+          "U(5,1)",
+          "U(5,2)"
+        ],
+        "contributing_action_ids": [
+          "A(5,1)",
+          "U(3,1)",
+          "U(3,4)",
+          "A(3,1)",
+          "A(3,5)",
+          "U(4,1)",
+          "A(4,2)",
+          "A(5,2)",
+          "A(5,3)"
+        ],
+        "implementation_action_ids": [
+          "A(5,2)"
+        ],
+        "revise_action_ids": [],
+        "related_to": [],
+        "explicit_or_implicit": "explicit",
+        "rationale": "The user explicitly asks for examples of David Attenborough videos to look at and what specific terms to search for to find them, which the AI provides.",
+        "created_at_pair": 5
+      },
+      {
+        "outcome_id": "outcome 4",
+        "req_id": "req 2",
+        "text": "The study guide must explain the writing principles and narrative techniques behind David Attenborough's narration style.",
+        "type": "task",
+        "status": "active",
+        "creation_action_ids": [
+          "U(5,1)"
+        ],
+        "contributing_action_ids": [
+          "A(5,1)",
+          "U(3,1)",
+          "U(3,4)",
+          "A(3,1)",
+          "A(3,3)",
+          "A(3,5)",
+          "U(4,1)",
+          "A(4,1)",
+          "A(4,2)",
+          "U(5,2)",
+          "A(5,2)",
+          "A(5,3)",
+          "A(5,4)"
+        ],
+        "implementation_action_ids": [
+          "A(5,3)"
+        ],
+        "revise_action_ids": [],
+        "related_to": [],
+        "explicit_or_implicit": "explicit",
+        "rationale": "The user asks to learn the writing or narrating style of David Attenborough, which the AI addresses by explaining the writing rules under the voice.",
+        "created_at_pair": 5
+      },
+      {
+        "outcome_id": "outcome 3",
+        "req_id": "req 6",
+        "text": "The study guide must include a curated list of specific David Attenborough sequences to search for and study, including 'Planet Earth II iguana vs snakes', 'Attenborough bird of paradise courtship', 'Attenborough pebble toad', and 'Life of Mammals chimpanzee'.",
+        "type": "constraint",
+        "status": "active",
+        "creation_action_ids": [
+          "U(5,1)",
+          "U(5,2)"
+        ],
+        "contributing_action_ids": [
+          "A(5,1)",
+          "A(5,2)",
+          "U(3,1)",
+          "U(3,4)",
+          "A(3,1)",
+          "A(3,5)",
+          "U(4,1)",
+          "A(4,2)",
+          "U(6,1)"
+        ],
+        "implementation_action_ids": [
+          "A(5,2)"
+        ],
+        "revise_action_ids": [
+          "A(6,8)"
+        ],
+        "related_to": [],
+        "explicit_or_implicit": "explicit",
+        "rationale": "The user explicitly requested guidance on specific David Attenborough clips to study his narration style and asked what terms to search for. The AI provided a specific list of sequences to fulfill this.",
+        "created_at_pair": 6
+      },
+      {
+        "outcome_id": "outcome 3",
+        "req_id": "req 7",
+        "text": "The study guide must explain the writing principles and rules behind David Attenborough's narration style.",
+        "type": "constraint",
+        "status": "active",
+        "creation_action_ids": [
+          "U(5,1)"
+        ],
+        "contributing_action_ids": [
+          "A(5,3)",
+          "U(3,1)",
+          "U(3,4)",
+          "A(3,1)",
+          "A(3,5)",
+          "U(4,1)",
+          "A(4,2)",
+          "A(5,1)",
+          "A(5,4)",
+          "U(6,1)"
+        ],
+        "implementation_action_ids": [
+          "A(5,3)",
+          "A(6,9)"
+        ],
+        "revise_action_ids": [],
+        "related_to": [],
+        "explicit_or_implicit": "explicit",
+        "rationale": "The user requested to learn the writing or narrating style of David Attenborough, and the AI provided specific writing rules/principles under the voice to satisfy this.",
+        "created_at_pair": 6
+      },
+      {
+        "outcome_id": "outcome 3",
+        "req_id": "req 8",
+        "text": "The study guide must include specific examples and clips of Attenborough's metaphorical narration style (focusing on a species' life journey rather than clinical observation), specifically recommending the BBC series 'Life Story' (2014) and clips such as the mayfly, salmon, and emperor penguin.",
+        "type": "constraint",
+        "status": "active",
+        "creation_action_ids": [
+          "U(6,1)"
+        ],
+        "contributing_action_ids": [
+          "A(6,1)",
+          "A(6,2)",
+          "A(6,3)",
+          "A(6,4)",
+          "A(6,5)",
+          "A(6,6)",
+          "A(6,8)",
+          "A(6,9)",
+          "A(6,12)",
+          "U(3,1)",
+          "U(3,4)",
+          "A(3,1)",
+          "U(5,1)",
+          "U(5,2)",
+          "A(5,1)",
+          "A(5,2)",
+          "A(5,3)"
+        ],
+        "implementation_action_ids": [
+          "A(6,1)",
+          "A(6,2)",
+          "A(6,3)",
+          "A(6,4)",
+          "A(6,5)",
+          "A(6,6)",
+          "A(6,7)",
+          "A(6,8)",
+          "A(6,9)",
+          "A(6,11)",
+          "A(6,12)"
+        ],
+        "revise_action_ids": [],
+        "related_to": [],
+        "explicit_or_implicit": "explicit",
+        "rationale": "The user explicitly requested examples where Attenborough describes a species' life in a metaphorical, narrative-driven way rather than clinical observation. The AI fulfilled this by recommending the 'Life Story' series and specific metaphorical life-arc clips.",
+        "created_at_pair": 6
+      }
+    ],
+    "slots": [
+      {
+        "slot_id": "slot 1",
+        "outcome_id": "outcome 1",
+        "text": "Determine the next steps or modifications to be made to the about page.",
+        "type": "task",
+        "origin": "AI",
+        "status": "abandoned",
+        "creation_action_ids": [
+          "A(1,5)"
+        ],
+        "contributing_action_ids": [],
+        "resolved_into": null
+      },
+      {
+        "slot_id": "slot_1",
+        "outcome_id": "outcome_2",
+        "text": "Whether the AI video fully replaces the written About page text or sits over a thin text layer for accessibility, SEO, and quick scanning.",
+        "type": "constraint",
+        "origin": "AI",
+        "status": "abandoned",
+        "creation_action_ids": [
+          "A(2,4)"
+        ],
+        "contributing_action_ids": [],
+        "resolved_into": null
+      },
+      {
+        "slot_id": "slot_2",
+        "outcome_id": "outcome_2",
+        "text": "The narrative spine of the video and the level of personal presence of the user in it.",
+        "type": "constraint",
+        "origin": "AI",
+        "status": "abandoned",
+        "creation_action_ids": [
+          "A(2,5)"
+        ],
+        "contributing_action_ids": [],
+        "resolved_into": null
+      },
+      {
+        "slot_id": "slot_3",
+        "outcome_id": "outcome_2",
+        "text": "Integration of the user's existing work into the collaborative concept development process.",
+        "type": "task",
+        "origin": "user",
+        "status": "abandoned",
+        "creation_action_ids": [
+          "U(2,4)"
+        ],
+        "contributing_action_ids": [],
+        "resolved_into": null
+      },
+      {
+        "slot_id": "slot 1",
+        "outcome_id": "outcome 3",
+        "text": "Whether the video fully replaces the written About page text or sits over a thin text layer for SEO, accessibility, and recruiters.",
+        "type": "constraint",
+        "origin": "AI",
+        "status": "abandoned",
+        "creation_action_ids": [
+          "A(2,4)"
+        ],
+        "contributing_action_ids": [],
+        "resolved_into": null
+      },
+      {
+        "slot_id": "slot 2",
+        "outcome_id": "outcome 3",
+        "text": "Whether to include some of the user's actual work/projects at the end of the video.",
+        "type": "preference",
+        "origin": "user",
+        "status": "abandoned",
+        "creation_action_ids": [
+          "U(3,4)"
+        ],
+        "contributing_action_ids": [],
+        "resolved_into": null
+      },
+      {
+        "slot_id": "slot 3",
+        "outcome_id": "outcome 3",
+        "text": "The final line of the script.",
+        "type": "preference",
+        "origin": "AI",
+        "status": "abandoned",
+        "creation_action_ids": [
+          "A(4,5)"
+        ],
+        "contributing_action_ids": [],
+        "resolved_into": null
+      },
+      {
+        "slot_id": "slot 4",
+        "outcome_id": "outcome 3",
+        "text": "How to frame the EY (Ernst & Young) experience in the script.",
+        "type": "preference",
+        "origin": "AI",
+        "status": "abandoned",
+        "creation_action_ids": [
+          "A(4,5)"
+        ],
+        "contributing_action_ids": [],
+        "resolved_into": null
+      },
+      {
+        "slot_id": "slot 5",
+        "outcome_id": "outcome 3",
+        "text": "Whether any of the content cut from the user's original draft is essential and needs to be reintegrated.",
+        "type": "preference",
+        "origin": "AI",
+        "status": "abandoned",
+        "creation_action_ids": [
+          "A(4,5)"
+        ],
+        "contributing_action_ids": [],
+        "resolved_into": null
+      },
+      {
+        "slot_id": "slot 6",
+        "outcome_id": "outcome 3",
+        "text": "Whether to structure the script around a pronoun shift from 'it' (observing the object) to 'I' (the real user) at the end.",
+        "type": "constraint",
+        "origin": "AI",
+        "status": "abandoned",
+        "creation_action_ids": [
+          "A(4,4)"
+        ],
+        "contributing_action_ids": [],
+        "resolved_into": null
+      },
+      {
+        "slot_id": "slot 7",
+        "outcome_id": "outcome 3",
+        "text": "The exact word count of the voiceover script, targeted at approximately 100 to 130 words to fit the slow nature-documentary pacing.",
+        "type": "constraint",
+        "origin": "AI",
+        "status": "abandoned",
+        "creation_action_ids": [
+          "A(4,2)"
+        ],
+        "contributing_action_ids": [],
+        "resolved_into": null
+      },
+      {
+        "slot_id": "slot 1",
+        "outcome_id": "outcome 4",
+        "text": "Whether the AI should wait for the user to transcribe Attenborough's sentences or immediately rework the current draft using the identified narration rules.",
+        "type": "task",
+        "origin": "AI",
+        "status": "abandoned",
+        "creation_action_ids": [
+          "A(5,5)"
+        ],
+        "contributing_action_ids": [],
+        "resolved_into": null
+      },
+      {
+        "slot_id": "slot 8",
+        "outcome_id": "outcome 3",
+        "text": "Whether the AI should wait for the user to transcribe Attenborough's sentences or immediately rework the current script draft using the narration rules.",
+        "type": "preference",
+        "origin": "AI",
+        "status": "open",
+        "creation_action_ids": [
+          "A(5,5)"
+        ],
+        "contributing_action_ids": [],
+        "resolved_into": null
+      },
+      {
+        "slot_id": "slot 9",
+        "outcome_id": "outcome 3",
+        "text": "Whether to structure the script as a tonal blend that opens in a wry clinical register and tilts into a metaphoric mode at the migration beat.",
+        "type": "preference",
+        "origin": "AI",
+        "status": "open",
+        "creation_action_ids": [
+          "A(6,10)"
+        ],
+        "contributing_action_ids": [],
+        "resolved_into": null
+      },
+      {
+        "slot_id": "interactive_flow_strategy",
+        "outcome_id": "outcome_4",
+        "text": "The interactive video experience should be structured as a guided linear sequence with click-gates (including beats like turning on a light, a containment pod, and falling), potentially implemented by producing the linear film first and layering interactivity on top.",
+        "type": "constraint",
+        "origin": "user",
+        "status": "open",
+        "creation_action_ids": [
+          "U(7,1)",
+          "U(7,2)",
+          "U(7,3)",
+          "U(7,4)",
+          "U(7,5)",
+          "U(7,6)"
+        ],
+        "contributing_action_ids": [
+          "A(7,3)",
+          "A(7,5)"
+        ],
+        "resolved_into": null
+      },
+      {
+        "slot_id": "slot 1",
+        "outcome_id": "outcome 6",
+        "text": "Decision on the interactive build approach and whether to implement it as a guided linear sequence with click-gates.",
+        "type": "task",
+        "origin": "user",
+        "status": "open",
+        "creation_action_ids": [
+          "U(8,1)",
+          "U(8,3)"
+        ],
+        "contributing_action_ids": [],
+        "resolved_into": null
+      },
+      {
+        "slot_id": "slot 2",
+        "outcome_id": "outcome 6",
+        "text": "Determination of the number of gated beats in the interactive experience.",
+        "type": "constraint",
+        "origin": "AI",
+        "status": "open",
+        "creation_action_ids": [
+          "A(8,5)"
+        ],
+        "contributing_action_ids": [],
+        "resolved_into": null
+      }
+    ],
+    "action_to_outcome": {
+      "U(1,1)": "outcome 2",
+      "U(1,2)": "outcome 2",
+      "A(1,1)": "outcome 2",
+      "A(1,2)": "outcome 2",
+      "A(1,3)": "outcome 2",
+      "A(1,4)": "outcome 2",
+      "A(1,5)": "outcome 2",
+      "U(2,1)": "outcome 3",
+      "U(2,2)": "outcome 3",
+      "U(2,3)": "outcome 3",
+      "U(2,4)": "outcome 3",
+      "A(2,1)": "outcome 3",
+      "A(2,2)": "outcome 3",
+      "A(2,3)": "outcome 3",
+      "A(2,4)": "outcome 3",
+      "A(2,5)": "outcome 3",
+      "U(3,1)": "outcome 3",
+      "U(3,2)": "outcome 3",
+      "U(3,3)": "outcome 3",
+      "U(3,4)": "outcome 3",
+      "A(3,1)": "outcome 3",
+      "A(3,2)": "outcome 3",
+      "A(3,3)": "outcome 3",
+      "A(3,4)": "outcome 3",
+      "A(3,5)": "outcome 3",
+      "A(3,6)": "outcome 3",
+      "U(4,1)": "outcome 4",
+      "U(4,2)": "outcome 4",
+      "A(4,1)": "outcome 4",
+      "A(4,2)": "outcome 4",
+      "A(4,3)": "outcome 4",
+      "A(4,4)": "outcome 4",
+      "A(4,5)": "outcome 4",
+      "U(5,1)": "outcome 5",
+      "U(5,2)": "outcome 5",
+      "A(5,1)": "outcome 5",
+      "A(5,2)": "outcome 5",
+      "A(5,3)": "outcome 5",
+      "A(5,4)": "outcome 5",
+      "A(5,5)": "outcome 5",
+      "U(6,1)": "outcome 5",
+      "A(6,1)": "outcome 5",
+      "A(6,2)": "outcome 5",
+      "A(6,3)": "outcome 5",
+      "A(6,4)": "outcome 5",
+      "A(6,5)": "outcome 5",
+      "A(6,6)": "outcome 5",
+      "A(6,7)": "outcome 5",
+      "A(6,8)": "outcome 5",
+      "A(6,9)": "outcome 5",
+      "A(6,10)": "outcome 5",
+      "A(6,11)": "outcome 5",
+      "A(6,12)": "outcome 5",
+      "U(7,1)": "outcome 6",
+      "U(7,2)": "outcome 6",
+      "U(7,3)": "outcome 6",
+      "U(7,4)": "outcome 6",
+      "U(7,5)": "outcome 6",
+      "U(7,6)": "outcome 6",
+      "A(7,1)": "outcome 6",
+      "A(7,2)": "outcome 6",
+      "A(7,3)": "outcome 6",
+      "A(7,4)": "outcome 6",
+      "A(7,5)": "outcome 6",
+      "U(8,1)": "outcome 6",
+      "U(8,2)": "outcome 6",
+      "U(8,3)": "outcome 6",
+      "A(8,1)": "outcome 6",
+      "A(8,2)": "outcome 6",
+      "A(8,3)": "outcome 6",
+      "A(8,4)": "outcome 6",
+      "A(8,5)": "outcome 6",
+      "A(8,6)": "outcome 6",
+      "A(8,7)": "outcome 6"
+    }
+  }
+}

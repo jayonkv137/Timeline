@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CoTrace 3D · Focused Node Playground</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body {
+      background: #06060a;
+      color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+    #canvas-container {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+    }
+    #labels-layer {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Pure Floating CosmoGraph Typography: Crisp, pure white, zero boxes */
+    .cosmo-label {
+      position: absolute;
+      transform: translate(-50%, 0);
+      pointer-events: auto;
+      cursor: default;
+      text-align: center;
+      transition: opacity 0.2s ease;
+      white-space: nowrap;
+    }
+    .cosmo-text {
+      font-size: 15px;
+      font-weight: 500;
+      color: #ffffff;
+      letter-spacing: -0.2px;
+      text-shadow: 
+        0 0 14px rgba(255, 255, 255, 0.85),
+        0 0 28px rgba(255, 255, 255, 0.45),
+        0 2px 10px rgba(0, 0, 0, 0.95);
+    }
+
+    /* Top HUD */
+    .top-hud {
+      position: absolute;
+      top: 24px; left: 28px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      pointer-events: none;
+    }
+    .hud-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hud-title span {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .hud-desc {
+      font-size: 12px;
+      color: #94a3b8;
+      max-width: 440px;
+      line-height: 1.4;
+    }
+
+    /* Controls Panel */
+    .controls-panel {
+      position: absolute;
+      top: 24px; right: 28px;
+      z-index: 10;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    .panel-header {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #64748b;
+    }
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 12px;
+      color: #cbd5e1;
+      cursor: pointer;
+    }
+    .toggle-row:hover { color: #fff; }
+    .toggle-switch {
+      width: 32px; height: 18px;
+      background: #334155;
+      border-radius: 9999px;
+      position: relative;
+      transition: background 0.2s;
+    }
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform 0.2s;
+    }
+    .toggle-switch.active { background: #ffffff; }
+    .toggle-switch.active::after { transform: translateX(14px); background: #0f172a; }
+
+    .bottom-hint {
+      position: absolute;
+      bottom: 24px; left: 28px;
+      z-index: 10;
+      font-size: 11px;
+      color: #64748b;
+      pointer-events: none;
+    }
+    .bottom-hint span { color: #94a3b8; }
+
+    .btn-reset-view {
+      position: absolute;
+      bottom: 24px; right: 28px;
+      z-index: 10;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-reset-view:hover {
+      background: #1e293b;
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+
+  <div id="canvas-container"></div>
+  <div id="labels-layer">
+    <div class="cosmo-label" id="root-label">
+      <div class="cosmo-text">Course assignment strategy and deliverables</div>
+    </div>
+  </div>
+
+  <div class="top-hud">
+    <div class="hud-title">CoTrace 3D <span>Node Design Studio</span></div>
+    <div class="hud-desc">Distraction-free environment. Focused strictly on designing the Root Goal node, concentric origin rings, and upcoming conversation hierarchy.</div>
+  </div>
+
+  <div class="controls-panel">
+    <div class="panel-header">Design Controls</div>
+    <div class="toggle-row" id="toggle-rings">
+      <span>Concentric Origin Rings</span>
+      <div class="toggle-switch active" id="sw-rings"></div>
+    </div>
+    <div class="toggle-row" id="toggle-rays">
+      <span>Radial Coordinate Rays</span>
+      <div class="toggle-switch active" id="sw-rays"></div>
+    </div>
+    <div class="toggle-row" id="toggle-spin">
+      <span>Auto-Rotation</span>
+      <div class="toggle-switch" id="sw-spin"></div>
+    </div>
+  </div>
+
+  <div class="bottom-hint">
+    Left-click drag: <span>Rotate 3D Sphere</span> &nbsp;|&nbsp; Scroll: <span>Zoom</span> &nbsp;|&nbsp; Right-click: <span>Pan</span>
+  </div>
+
+  <button class="btn-reset-view" id="btn-reset">⟲ Reset Camera</button>
+
+  <script>
+    let scene, camera, renderer, controls;
+    let rootGroup, rootSphere, haloMesh, ringsGroup, raysGroup;
+    let autoSpin = false;
+    const labelEl = document.getElementById('root-label');
+
+    // Central Coordinate Origin
+    const ROOT_ORIGIN = new THREE.Vector3(0, 0, 0);
+
+    function init() {
+      scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x06060a, 0.0018);
+
+      camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1500);
+      camera.position.set(0, 0, 110);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+      if (typeof THREE.OrbitControls !== 'undefined') {
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.06;
+        controls.minDistance = 20;
+        controls.maxDistance = 400;
+        controls.target.copy(ROOT_ORIGIN);
+      }
+
+      // Lights: Ethereal CosmoGraph Studio Lighting
+      const ambient = new THREE.AmbientLight(0x1e293b, 1.4);
+      scene.add(ambient);
+
+      const topLight = new THREE.DirectionalLight(0xffffff, 1.6);
+      topLight.position.set(60, 80, 70);
+      scene.add(topLight);
+
+      const bottomRim = new THREE.DirectionalLight(0xe2e8f0, 1.0);
+      bottomRim.position.set(-50, -60, -50);
+      scene.add(bottomRim);
+
+      // Localized soft white light radiating from the core node
+      const coreLight = new THREE.PointLight(0xffffff, 3.0, 140);
+      coreLight.position.copy(ROOT_ORIGIN);
+      scene.add(coreLight);
+
+      // Build the Root Origin Node
+      buildRootOriginNode();
+
+      // Subtle Background Celestial Particles for 3D Depth
+      buildSpaceParticles();
+
+      // Events
+      window.addEventListener('resize', onWindowResize);
+      document.getElementById('btn-reset').addEventListener('click', () => {
+        camera.position.set(0, 0, 110);
+        if (controls) controls.target.copy(ROOT_ORIGIN);
+      });
+
+      setupToggles();
+      animate();
+    }
+
+    function buildRootOriginNode() {
+      rootGroup = new THREE.Group();
+      rootGroup.position.copy(ROOT_ORIGIN);
+      scene.add(rootGroup);
+
+      // 1. LUMINOUS GLOWING TRANSLUCENT WHITE SPHERE (Volumetric 3D Glass/Core)
+      // Radius = 9.0
+      const sphereGeo = new THREE.SphereGeometry(9.0, 64, 64);
+      const outerMat = new THREE.MeshPhysicalMaterial({
+        color: 0xffffff,
+        emissive: 0xffffff,
+        emissiveIntensity: 0.90,
+        roughness: 0.12,
+        metalness: 0.08,
+        transparent: true,
+        opacity: 0.88,
+        transmission: 0.35,
+        clearcoat: 0.9,
+        clearcoatRoughness: 0.08
+      });
+      rootSphere = new THREE.Mesh(sphereGeo, outerMat);
+      rootGroup.add(rootSphere);
+
+      // 2. INNER CORE RADIANCE
+      const coreGeo = new THREE.SphereGeometry(5.8, 32, 32);
+      const coreMat = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.95
+      });
+      rootGroup.add(new THREE.Mesh(coreGeo, coreMat));
+
+      // 3. ETHEREAL OPTICAL HALO DISC (CosmoGraph Glow)
+      const haloGeo = new THREE.RingGeometry(8.8, 13.5, 64);
+      const haloMat = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.35,
+        side: THREE.DoubleSide
+      });
+      haloMesh = new THREE.Mesh(haloGeo, haloMat);
+      rootGroup.add(haloMesh);
+
+      // 4. CONCENTRIC ORIGIN RINGS (Astrolabe / Radial Origin)
+      ringsGroup = new THREE.Group();
+      rootGroup.add(ringsGroup);
+
+      // Ring 1 (Inner resonant ring)
+      const ring1Geo = new THREE.RingGeometry(14.8, 15.3, 96);
+      const ring1Mat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.85, side: THREE.DoubleSide });
+      ringsGroup.add(new THREE.Mesh(ring1Geo, ring1Mat));
+
+      // Ring 2 (Middle fine ring)
+      const ring2Geo = new THREE.RingGeometry(21.0, 21.4, 96);
+      const ring2Mat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.65, side: THREE.DoubleSide });
+      ringsGroup.add(new THREE.Mesh(ring2Geo, ring2Mat));
+
+      // Ring 3 (Outer radar horizon ring)
+      const ring3Geo = new THREE.RingGeometry(29.0, 29.3, 96);
+      const ring3Mat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.40, side: THREE.DoubleSide });
+      ringsGroup.add(new THREE.Mesh(ring3Geo, ring3Mat));
+
+      // 5. RADIAL COORDINATE RAYS (Emanating outward 360°)
+      raysGroup = new THREE.Group();
+      rootGroup.add(raysGroup);
+
+      const rayCount = 24;
+      for (let r = 0; r < rayCount; r++) {
+        const angle = (r / rayCount) * Math.PI * 2;
+        const p1 = new THREE.Vector3(Math.cos(angle) * 9.2, Math.sin(angle) * 9.2, 0);
+        const p2 = new THREE.Vector3(Math.cos(angle) * 38.0, Math.sin(angle) * 38.0, 0);
+        const lineGeo = new THREE.BufferGeometry().setFromPoints([p1, p2]);
+        const lineMat = new THREE.LineBasicMaterial({
+          color: 0xffffff,
+          transparent: true,
+          opacity: 0.28
+        });
+        raysGroup.add(new THREE.Line(lineGeo, lineMat));
+      }
+
+      // Tilt slightly in 3D so it looks dynamic when camera is static
+      rootGroup.rotation.x = Math.PI * 0.12;
+      rootGroup.rotation.y = Math.PI * 0.06;
+    }
+
+    function buildSpaceParticles() {
+      const starCount = 350;
+      const positions = new Float32Array(starCount * 3);
+      for (let i = 0; i < starCount * 3; i += 3) {
+        positions[i] = (Math.random() - 0.5) * 500;
+        positions[i + 1] = (Math.random() - 0.5) * 500;
+        positions[i + 2] = (Math.random() - 0.5) * 500;
+      }
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      const mat = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 1.1,
+        transparent: true,
+        opacity: 0.35
+      });
+      scene.add(new THREE.Points(geo, mat));
+    }
+
+    function setupToggles() {
+      setupToggle('toggle-rings', 'sw-rings', (active) => { ringsGroup.visible = active; });
+      setupToggle('toggle-rays', 'sw-rays', (active) => { raysGroup.visible = active; });
+      setupToggle('toggle-spin', 'sw-spin', (active) => { autoSpin = active; });
+    }
+
+    function setupToggle(rowId, swId, callback) {
+      const row = document.getElementById(rowId);
+      const sw = document.getElementById(swId);
+      row.addEventListener('click', () => {
+        const isActive = sw.classList.toggle('active');
+        callback(isActive);
+      });
+    }
+
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      if (controls) controls.update();
+
+      if (autoSpin && rootGroup) {
+        rootGroup.rotation.z += 0.002;
+        rootGroup.rotation.y += 0.0015;
+      }
+
+      // Update Label Position: Anchored cleanly below the outermost ring
+      if (labelEl && rootGroup) {
+        const anchor = new THREE.Vector3(0, -34.0, 0);
+        anchor.applyMatrix4(rootGroup.matrixWorld);
+        anchor.project(camera);
+
+        const x = (anchor.x * 0.5 + 0.5) * window.innerWidth;
+        const y = (-(anchor.y * 0.5) + 0.5) * window.innerHeight;
+
+        labelEl.style.left = `${x}px`;
+        labelEl.style.top = `${y}px`;
+
+        // Smooth distance fade (LOD)
+        const camDist = camera.position.distanceTo(ROOT_ORIGIN);
+        if (camDist > 320) {
+          labelEl.style.opacity = '0';
+        } else if (camDist > 200) {
+          const t = 1 - (camDist - 200) / 120;
+          labelEl.style.opacity = t.toFixed(2);
+        } else {
+          labelEl.style.opacity = '1';
+        }
+
+        if (anchor.z > 1) {
+          labelEl.style.display = 'none';
+        } else {
+          labelEl.style.display = 'block';
+        }
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
