@@ -1342,5 +1342,25 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `git diff data/chats/fixture_pair1/`: 0 diffs.
 - **Next:** S1.3 — Equivalence test across all 10 chats (CC / AG+).
 
+---
+
+## 2026-10-09 19:16 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S1.3 — Workspace projection equivalence test across all 10 chats (AG+)
+- **Did:**
+  - `tests/test_workspace_equivalence.py` — created tier1 equivalence test parameterizing over all 10 prototype chats in `web/src/workspace/data.generated.json`. Loads each chat from `data/chats/<cid>/` (`dialogue.json`, `state.json`, `ledger.jsonl`) and summary from `design_pack/sample_data/<cid>.json`, projects via `project_workspace()`, validates against schema, and asserts byte/value equivalence across all fields: `id`, `title`, `rootTitle`, `category`, `totalPairs`, `dialogue`, `atoms`, `snapshots`, `summary`, and `nodes` (excluding `x, y` layout).
+  - Added performance test asserting all 10 projections complete in <200ms (measured at 90ms).
+  - `docs/plans/STANDALONE_V1_PLAN.md` — marked S1.3 complete (✅).
+- **Decisions made:**
+  - Verified exact match across all 10 chats for every field except layout coordinates (`x, y`), which were systematically upgraded to deterministic concentric depth rings in S1.2.
+  - Asserted `status == "ready"` and `source.platform == "archive"` on all projected bundles per contract.
+  - Verified AG+ sacred fixture numbers: Δ_you=87.0, Δ_AI=314.0 (21.7% / 78.3%), 4 You · 10 AI, COPILOT; 0 diffs on frozen fixture.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `.venv/bin/python -m pytest tests/test_workspace_equivalence.py -v`: 13 passed in 0.09s (<200ms constraint met).
+  - `.venv/bin/python -m pytest -q`: 131 passed in 0.67s (up from 118; baseline 102 intact).
+  - `npm run e2e`: 2/2 suites passed with 0 page/console errors.
+  - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+- **Next:** S1.4 — Workspace invariants W1–W6 in `tests/invariants.py` (CC).
+
 
 
