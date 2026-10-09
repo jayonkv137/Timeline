@@ -349,6 +349,54 @@ The owner decides.
 - Glow intensity and motion (signal along dendrites, Session 8).
 - Final art-direction polish.
 
+## 10. Fix pass 2: hybrid neurons and a hybrid cortex
+
+**Owner (9 Oct 2026):**
+- "the share ring is a big misfit … absolutely bullshit, but the twigs are good"
+- "give a glow to the neuron, the branches and also the outcome ends … everything based on empirical stuff, the two mix colours"
+- "the AI lines to look synthetic and human to look like [nerves] … so the brain will start looking like a mix of human and synthetic" (`owner-ref-18`: gold circuit traces on a head)
+
+**Decisions:**
+- Share rings **removed**.
+- Twigs **kept** (§9.2).
+- Synthetic vs organic now carries the share everywhere, as pure light.
+
+### 10.1 Hybrid membrane (the share as form + light, never as a blended colour)
+Every part of a neuron is **organic nerve tissue lit blue from within** and **synthetic circuitry** (dark substrate with glowing orange traces and pads), in the exact proportion of who did that part's work:
+
+| Part | Share used | How the synthetic portion is laid out |
+|---|---|---|
+| Dendrite (outcome) | outcome human share | three bands along the branch; synthetic length = AI share **exactly** |
+| Bouton (outcome end) | outcome human share | calibrated noise patches; synthetic area ≈ AI share |
+| Cell body (chat) | chat human share | calibrated noise patches with PCB traces on the surface; synthetic area ≈ AI share |
+| Unmeasured outcome | — | neutral tissue (missing ≠ 50/50) |
+| Axon | — | neutral (links to other chats, Session 12) |
+
+A 25%-you chat is about a quarter blue nerve and three-quarters orange circuitry; c10 (72% you) is mostly blue nerve. Both colours stay pure; nothing is mixed into brown or grey.
+
+### 10.2 Cortex etching (the brain itself becomes visibly human and synthetic)
+- **Traces:** around each neuron the cortex is etched with PCB traces radiating from the soma, as in `owner-ref-18`. Each trace has a 45° bend, a via at the bend and a pad at the end. Of 22 possible traces, a trace is drawn with probability = the chat's **AI share** of the work, so the trace count tracks the AI share.
+- **Your share** shows as soft blue nerve light on the same patch of cortex.
+- **The patch** is about the neuron's dendritic field (territory radius) and fades at the edge.
+- **At the overview** this is the owner's "which areas of my brain became synthetic": orange chip-like areas where the AI did the work, blue glow where you did.
+
+### 10.3 What carries what now
+- **Membrane + cortex etching:** who did the work (contribution mass, the panel's *Direction*).
+- **Twigs:** who made each decision (requirement creators, the panel's *Decisions*).
+- **Shape of a twig:** organic (yours) vs synthetic (the AI's).
+- **End of a twig:** state (requirement, open question, answered).
+
+### 10.4 Screenshots (`brain-neuron/fix-pass-2/`)
+- `overview-hybrid.jpg`
+- `c05-ai-led-25pct-you.jpg`
+- `c10-human-led-72pct-you.jpg`
+
+### 10.5 Open
+- Etching density and brightness at 300 chats (overlap rules, Session 13).
+- Small chats are still tiny (Session 3).
+- Twig crowding (Session 7).
+- Titles (Session 9).
+
 ## Sources
 - [Obsidian graph view help](https://obsidian.md/help/plugins/graph); [forum: text fade threshold should consider node size](https://forum.obsidian.md/t/graph-text-fade-threshold-consider-node-size/6737)
 - [Self Reflected, Greg Dunn and Brian Edwards (Penn)](https://blog.seas.upenn.edu/?p=777); [Scientific American on Self Reflected](https://www.scientificamerican.com/article/watch-the-human-brain-come-to-life-in-this-stunning-piece-of-art)
