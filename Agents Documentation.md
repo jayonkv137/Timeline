@@ -73,7 +73,14 @@ quote. It is a mirror, not a judge.
   schemas, configs), pause for owner review before building on top of it.
 
 ## Current phase
-Phase E2 — Stage 4 Math & Projections (CLOSED — Tagged `e2-done`). Ready for Phase E3 (Long-chat evaluation) / Phase C (Frontend UI & Visualisation).
+**Track S: Standalone v1.** Plan: `docs/plans/STANDALONE_V1_PLAN.md` (the brief for every S phase).
+S0.1, S0.2 and S0.4 are done (baseline committed, tag `prototype-v0.1`). **Next step: S0.3** (Playwright + `npm run e2e`), then S1.
+The owner tests and approves every phase by hand: §6A of the plan, results in `docs/plans/OWNER_TEST_LOG.md`.
+Every step ends with an "Owner check" block. Cost and performance reports go in `docs/plans/reports/`.
+Tests run with the project venv: `.venv/bin/python -m pytest` (102 passing at baseline).
+
+### Previous phase
+Phase E2 — Stage 4 Math & Projections (CLOSED — Tagged `e2-done`).
 
 All Phase E2 deliverables are 100% complete and verified via `scripts/phase_report.py`:
 - Stage 4 deterministic mathematical engine implemented in `engine/quant.py`:
