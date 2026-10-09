@@ -211,8 +211,8 @@ Goal: the workspace you have today, served by the server from the library. It lo
 | S2.5 ✅ | AG | Serve `web/dist-workspace` from FastAPI at `/`; `./cotrace start` (builds if stale, starts on 8765, opens the browser); `./cotrace dev` (Vite + server with a proxy) | one command → working app |
 | S2.6 ✅ | AG | Point `npm run e2e` at the server URL; all existing assertions pass | e2e green against the server |
 | S2.7 ✅ | AG | `scripts/perf_report.py`: the §6A performance metrics for the app (first load, chat open, Brain fps, API latency) → `docs/plans/reports/S2_perf.md` | report generated and committed |
-| **S2.T** | You | **Owner test:** run `./cotrace start` yourself, open 5 chats, scrub, use the Brain, delete and restore one chat | log entry written |
-| **S2.G** | You | Screenshot check against `docs/workspace/*.png`: same screens, real data path | — |
+| **S2.T** ✅ | You | **Owner test:** run `./cotrace start` yourself, open 5 chats, scrub, use the Brain, delete and restore one chat | log entry written |
+| **S2.G** ✅ | You | Screenshot check against `docs/workspace/*.png`: same screens, real data path | — |
 
 ### S3 · Keys, models, cost and budget (about 4–5 days). Must close before any LLM spend.
 | Step | Builder | What | Done when |

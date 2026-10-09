@@ -73,11 +73,11 @@ quote. It is a mirror, not a judge.
   schemas, configs), pause for owner review before building on top of it.
 
 ## Current phase
-**Track S: Standalone v1, Phase S2 (Local server and library).** Plan: `docs/plans/STANDALONE_V1_PLAN.md` (the brief for every S phase).
-Phase S0 and Phase S1 are complete (tagged `prototype-v0.1` and `s1-done`). **Next step: S2.1** (`server/library.py`: library layout §3.4, `COTRACE_HOME`, atomic writes, trash and restore).
+**Track S: Standalone v1, Phase S3 (Keys, models, cost and budget).** Plan: `docs/plans/STANDALONE_V1_PLAN.md` (the brief for every S phase).
+Phases S0, S1, and S2 are complete (tagged `prototype-v0.1`, `s1-done`, and `s2-done`). **Next step: S3.1** (Usage meter in `engine/llm.py`: tokens in and out per call → `run/usage.jsonl`; price table in `engine/models.yaml`).
 The owner tests and approves every phase by hand: §6A of the plan, results in `docs/plans/OWNER_TEST_LOG.md`.
 Every step ends with an "Owner check" block. Cost and performance reports go in `docs/plans/reports/`.
-Tests run with the project venv: `.venv/bin/python -m pytest` (181 passing). E2E: `npm run e2e`.
+Tests run with the project venv: `.venv/bin/python -m pytest` (213 passing). E2E: `npm run e2e`.
 
 ### Previous phase
 Phase E2 — Stage 4 Math & Projections (CLOSED — Tagged `e2-done`).
