@@ -1588,6 +1588,39 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
 - **Next:** S2.5 — Serve `web/dist-workspace` from FastAPI at `/`; `./cotrace start` and `./cotrace dev` (AG).
 
+---
+
+## 2026-10-09 20:34 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S2.5 — Serve static workspace and `./cotrace` unified CLI (AG)
+- **Did:**
+  - `server/app.py` — configured static serving of `web/dist-workspace` from FastAPI:
+    - Serves `workspace.html` at `/` and `/workspace.html`.
+    - Serves `favicon.svg` and `icons.svg`.
+    - Mounts `/assets` to `web/dist-workspace/assets` and `/fixture` to `web/dist-workspace/fixture`.
+    - Ensures API routes (`/api/*`) maintain precedence over static routes.
+  - `web/vite.workspace.config.ts` — configured development server proxy routing `/api` requests to `http://127.0.0.1:8765`.
+  - `cotrace` — created root executable runner (`chmod +x`):
+    - `./cotrace start`: checks if frontend is stale and builds if needed, auto-seeds library with 10 reference chats if empty, runs FastAPI on port 8765, and automatically opens the browser.
+    - `./cotrace dev`: runs FastAPI backend concurrently with Vite hot dev server and `/api` proxy.
+    - `./cotrace seed`: utility command to re-seed local library directly.
+  - `tests/test_cotrace_cli.py` — added 4 tier1 tests verifying:
+    - FastAPI serving `dist-workspace` at `/` and asset paths.
+    - Real repository `dist-workspace/workspace.html` serving.
+    - `./cotrace --help` CLI execution.
+    - Stale bundle detection logic.
+  - `docs/plans/STANDALONE_V1_PLAN.md` — marked S2.5 complete (✅).
+- **Decisions made:**
+  - Implemented `./cotrace` in Python for platform portability (macOS / Linux), native signal handling, and clean process lifecycle management.
+  - Verified AG+ sacred fixture numbers: Δ_you=87.0, Δ_AI=314.0 (21.7% / 78.3%), 4 You · 10 AI, COPILOT; 0 diffs on frozen fixture.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `.venv/bin/python -m pytest tests/test_cotrace_cli.py -v`: 4 passed in 0.41s.
+  - `.venv/bin/python -m pytest -q`: 211 passed in 2.20s (up from 207; baseline 102 intact).
+  - `npm run e2e`: 2/2 suites passed with 0 page/console errors.
+  - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+- **Next:** S2.6 — Point `npm run e2e` at the server URL (`WORKSPACE_URL=http://localhost:8765`) (AG).
+
+
 
 
 

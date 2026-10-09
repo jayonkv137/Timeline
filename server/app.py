@@ -171,7 +171,17 @@ def create_router() -> APIRouter:
     return router
 
 
-def create_app(library: Library | None = None) -> FastAPI:
+from pathlib import Path
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
+from fastapi.staticfiles import StaticFiles
+
+DEFAULT_DIST_DIR = Path(__file__).resolve().parent.parent / "web" / "dist-workspace"
+
+
+def create_app(
+    library: Library | None = None,
+    dist_dir: Path | str | None = None,
+) -> FastAPI:
     """Application factory for the COTRACE server."""
     app = FastAPI(title="COTRACE Local Server", version="1.0.0")
 
@@ -195,8 +205,42 @@ def create_app(library: Library | None = None) -> FastAPI:
     app.include_router(router, prefix="/api")
     app.include_router(router, prefix="")
 
+    # Serve static frontend from dist-workspace if available
+    dist_path = Path(dist_dir).resolve() if dist_dir is not None else DEFAULT_DIST_DIR
+    if dist_path.is_dir():
+        workspace_html = dist_path / "workspace.html"
+        if workspace_html.is_file():
+            @app.get("/", include_in_schema=False)
+            def root_index() -> FileResponse:
+                return FileResponse(workspace_html)
+
+            @app.get("/workspace.html", include_in_schema=False)
+            def root_workspace_html() -> FileResponse:
+                return FileResponse(workspace_html)
+
+        favicon_file = dist_path / "favicon.svg"
+        if favicon_file.is_file():
+            @app.get("/favicon.svg", include_in_schema=False)
+            def root_favicon() -> FileResponse:
+                return FileResponse(favicon_file)
+
+        icons_file = dist_path / "icons.svg"
+        if icons_file.is_file():
+            @app.get("/icons.svg", include_in_schema=False)
+            def root_icons() -> FileResponse:
+                return FileResponse(icons_file)
+
+        assets_dir = dist_path / "assets"
+        if assets_dir.is_dir():
+            app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+        fixture_dir = dist_path / "fixture"
+        if fixture_dir.is_dir():
+            app.mount("/fixture", StaticFiles(directory=fixture_dir), name="fixture")
+
     return app
 
 
 # Default singleton app instance
 app = create_app()
+
