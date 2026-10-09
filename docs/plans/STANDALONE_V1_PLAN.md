@@ -189,7 +189,7 @@ Goal: replace the hand-run `compile-workspace.py` with an engine projection that
 | S1.4 ✅ | CC / AG+ | Workspace invariants W1–W6 in `tests/invariants.py`: W1 per-pair snapshot mass sums equal ledger sums · W2 an outcome is never born after its first ledger row · W3 every atom's action ids exist · W4 `len(snapshots) == totalPairs` · W5 every non-root parent exists · W6 shares are in [0,1] | 10 chats + fixture green |
 | S1.5 ✅ | CC / AG+ | Call the projection at the end of each pair in `run_chat`, and from a `python -m engine project <chat_dir>` CLI | rerunning replay on one chat writes `workspace_bundle.json` |
 | S1.6 ✅ | AG | `web/scripts/compile-workspace.py` becomes a 10-line wrapper over the projection (offline sample data stays reproducible) | `data.generated.json` regenerates through the engine |
-| S1.7 | AG | `python -m engine report <chat>` writes a readable one-page Markdown for a chat: outcomes with their shares, decisions, top quotes, flagged pairs. This is for **you** to judge maps against your memory | report renders for all 10 chats |
+| S1.7 ✅ | AG | `python -m engine report <chat>` writes a readable one-page Markdown for a chat: outcomes with their shares, decisions, top quotes, flagged pairs. This is for **you** to judge maps against your memory | report renders for all 10 chats |
 | **S1.T** | You | **Owner test (§6A):** open the reports for 3 chats you remember well and mark each map right, partly right or wrong in the test log | log entry written |
 | **S1.G** | You | **Contract freeze**: read §3.1 and one generated bundle; accept the schema v1.0 | — |
 

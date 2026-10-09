@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 
 from engine.projections.workspace import project_chat_directory
+from engine.report import generate_chat_report
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -37,6 +38,24 @@ def main(argv: list[str] | None = None) -> int:
         help="Custom output file path (defaults to <chat_dir>/workspace_bundle.json)",
     )
 
+    # Subcommand: report
+    report_parser = subparsers.add_parser(
+        "report",
+        help="Generate a readable Markdown report for a chat",
+    )
+    report_parser.add_argument(
+        "chat",
+        type=str,
+        help="Chat identifier or directory path (e.g. c05_research_medium or data/chats/c05_research_medium)",
+    )
+    report_parser.add_argument(
+        "--output",
+        "-o",
+        type=str,
+        default=None,
+        help="Optional output file path to write Markdown (defaults to stdout)",
+    )
+
     args = parser.parse_args(argv)
 
     if args.subcommand == "project":
@@ -55,6 +74,22 @@ def main(argv: list[str] | None = None) -> int:
             f"({bundle['id']}, {bundle['totalPairs']} pairs, "
             f"{len(bundle['nodes'])} nodes, {len(bundle['atoms'])} atoms)"
         )
+        return 0
+
+    if args.subcommand == "report":
+        try:
+            report_md = generate_chat_report(args.chat)
+        except Exception as e:
+            print(f"Error generating report: {e}", file=sys.stderr)
+            return 1
+
+        if args.output:
+            out_file = Path(args.output)
+            out_file.parent.mkdir(parents=True, exist_ok=True)
+            out_file.write_text(report_md, encoding="utf-8")
+            print(f"Report written to {out_file}")
+        else:
+            print(report_md)
         return 0
 
     return 0
