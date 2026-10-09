@@ -32,6 +32,7 @@ data/calude/
 data/Takeout/
 data/Takeout 2/
 data/Claude Manifest*.json
+*.zip
 
 # OS
 .DS_Store
