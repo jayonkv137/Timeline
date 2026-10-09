@@ -19,13 +19,27 @@ def test_models_yaml_loads_standard_models() -> None:
     table = load_price_table()
     assert "gemini-3.5-flash" in table
     assert "gemini-3.1-flash-lite" in table
+    assert "gemini-2.5-flash" in table
+    assert "claude-3-7-sonnet" in table
     assert "claude-3-5-sonnet" in table
+    assert "deepseek-chat" in table
+    assert "deepseek-reasoner" in table
     assert "gpt-4o-mini" in table
 
     # Verify rates (Gemini 3.5 Flash: $0.075 / $0.30 per 1M)
     in_rate, out_rate = get_model_price("gemini-3.5-flash")
     assert in_rate == 0.075
     assert out_rate == 0.300
+
+    # Verify DeepSeek Chat: $0.14 / $0.28 per 1M
+    ds_in, ds_out = get_model_price("deepseek-chat")
+    assert ds_in == 0.140
+    assert ds_out == 0.280
+
+    # Verify Claude 3.7 Sonnet: $3.00 / $15.00 per 1M
+    c_in, c_out = get_model_price("claude-3-7-sonnet")
+    assert c_in == 3.000
+    assert c_out == 15.000
 
 
 @pytest.mark.tier1

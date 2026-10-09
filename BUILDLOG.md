@@ -1712,7 +1712,7 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
 ## 2026-10-09 23:29 · Antigravity · Gemini 3.8 Flash
 - **Phase/Step:** S3.1 — Usage meter and price table (Keys, models, cost and budget)
 - **Did:**
-  - Created `engine/models.yaml` containing model price table across Gemini, Claude, and OpenAI families with standard prompt/completion rates per million tokens.
+  - Created `engine/models.yaml` containing model price table across Gemini (3.5, 3.1, 2.5, 2.0, 1.5), Claude (3.7 Sonnet, 3.5 Sonnet, 3.5 Haiku, Opus), DeepSeek (Chat/V3, Reasoner/R1, V4-Flash), open-weights (gpt-oss-120b, Qwen 3.5 9B / 2.5 72B), and OpenAI families with standard prompt/completion rates per million tokens.
   - Created `engine/models.py` with zero-dependency simple YAML parser (`parse_simple_yaml`), `load_price_table`, `get_model_price`, and `compute_token_cost` (guaranteeing exact $0.00 cost in replay mode).
   - Implemented `UsageMeter` in `engine/llm.py` logging per-call token counts and dollar costs to `<out>/run/usage.jsonl` matching the required schema (`timestamp`, `step`, `call`, `pair`, `model`, `tokens`, `cost`, `mode`).
   - Updated `LLMClient` in `engine/llm.py` to record live OpenAI-compatible API usage and fallback estimations, logging to `UsageMeter`.
