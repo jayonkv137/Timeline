@@ -1529,6 +1529,35 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
 - **Next:** S2.3 — `scripts/seed_library.py`: copy 10 processed chats into library and project bundles (AG).
 
+---
+
+## 2026-10-09 20:04 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S2.3 — Seed library script (AG)
+- **Did:**
+  - `scripts/seed_library.py` — created library seeding script:
+    - Copies 10 processed chats (`c03`, `c04`, `c05`, `c07`, `c10`, `c16`, `c17`, `c20`, `c27`, `c30`) from `data/chats/` to the target library directory.
+    - Copies dialogue, state, ledger, snapshots, panel bundle, full export, source metadata, and run directory.
+    - Deterministically projects `workspace_bundle.json` for each chat through `project_chat_directory` with 0 LLM calls.
+    - Syncs `meta.json` with the bundle's title, category, pairs, and source.
+    - CLI options: `--library <path>`, `--clean`, `--force`, `--source <path>`, with formatted summary table output.
+  - `tests/test_seed_library.py` — added 4 tier1 tests verifying:
+    - Seeding populates all 10 chats with dialogues, meta, and bundles.
+    - All 10 generated workspace bundles strictly validate against `workspace_bundle.schema.json` with `status="ready"` and platform metadata.
+    - FastAPI `TestClient` serves all 10 chats via `GET /api/chats` and `GET /api/chats/{id}`.
+    - Seeding idempotency and `--clean` re-seeding behavior.
+  - `docs/plans/STANDALONE_V1_PLAN.md` — marked S2.3 complete (✅).
+- **Decisions made:**
+  - Used pure in-memory deterministic engine projection (`project_chat_directory`) with 0 API calls and zero network dependencies.
+  - Verified AG+ sacred fixture numbers: Δ_you=87.0, Δ_AI=314.0 (21.7% / 78.3%), 4 You · 10 AI, COPILOT; 0 diffs on frozen fixture.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `.venv/bin/python -m pytest tests/test_seed_library.py -v`: 4 passed in 0.45s.
+  - `.venv/bin/python -m pytest -q`: 207 passed in 1.40s (up from 203; baseline 102 intact).
+  - `npm run e2e`: 2/2 suites passed with 0 page/console errors.
+  - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+- **Next:** S2.4 — Frontend data layer `web/src/workspace/api.ts` (store loads from `/api/chats` and bundles on tab open) (AG).
+
+
 
 
 
