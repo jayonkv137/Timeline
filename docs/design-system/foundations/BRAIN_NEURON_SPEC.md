@@ -310,6 +310,45 @@ The 2D graph already rejected this kind of colour blend (DDR-006); proportion mu
 
 The owner decides.
 
+## 9. Fix pass 1 (after review 1)
+
+**Owner decisions (9 Oct 2026):** "blue is human and AI is orange colour". "The brain can have white or neutral dark slate, whatever will look good." Then: "do the fix pass and proceed".
+
+### 9.1 What changed in the template (Lab: `brain-lab.html`, screenshots in `brain-neuron/fix-pass-1/`)
+
+| Review item | Fix |
+|---|---|
+| 1 Colour meaning | **No blended colour anywhere.** Membrane and dendrites are neutral tissue; who-made-it appears only as pure party light (blue = you, orange = AI) |
+| 2 Anatomy | Smaller soma (provisional `0.010 + 0.0013·√mass`), slimmer trunks, **twigs**: one per requirement or question (§9.2). It now reads as a neuron, not a starfish |
+| 3 Material | Tissue lit from within: a white nucleus light that is brightest where the body faces you, a cool rim, fine grain; no stripes |
+| 4 Light | Real **bloom** (bright pass → two blur levels → additive composite). Light spills into the dark, as in the owner's references |
+| 5 Integration | Each neuron's nucleus **lights the cortex around it** (up to 12 local lights in the surface shader) |
+| 6 Brain surface | Fold "ribbon" noise cut to 22%; finish switch **dark slate** / **white glass** |
+| 7 Composition | Nested outcomes now continue outward from their parent's end (no V-bend) |
+
+### 9.2 Twigs (requirements and questions), the 2D bead grammar in 3D
+- **Shape = who made it:**
+  - yours = **organic** (curved, tapering, round spine head)
+  - the AI's = **synthetic** (straight segments, constant width, a square node at the bend and a square pad at the end)
+- **End = state:** a filled end = requirement · a **ring** = open question · a ring + core = answered (ring in the asker's colour, core in the answerer's).
+- **Placement:** along the far half of their outcome's dendrite, alternating sides, lying on the cortex.
+
+### 9.3 Colour options rendered (Session 4) and what they reveal
+- **Share rings:** a ring on the cortex around the soma and each bouton, split by the exact share, clockwise from 12 o'clock. This is **who did the work** (contribution mass, the panel's *Direction*).
+- **Counted twigs:** each twig glows in its maker's colour. This is **who made the decisions** (requirement creators, the panel's *Decisions*).
+- **Finding:** these two measure different things, and the Lab shows it. c05 "AI creativity" is 25% you by mass (ring mostly orange) but you created 13 of its 18 requirements (twigs mostly blue). "Twigs only" would therefore misstate the share. **Recommendation: rings + twigs**, labelled as "work" and "decisions", the same two facts the chat panel already shows.
+
+### 9.4 Brain finish (owner delegated: "whatever will look good")
+- **Recommendation: dark slate.** The light carries the meaning, and bloom reads best on a dark ground (`owner-ref-15`, `-16`).
+- White glass is kept as a switch; the owner has the final say.
+
+### 9.5 Still open
+- Sizes and small-chat legibility (Session 3).
+- The label sits over the soma (Session 9).
+- Twigs crowd on long dendrites with many requirements (Session 7 spacing rule).
+- Glow intensity and motion (signal along dendrites, Session 8).
+- Final art-direction polish.
+
 ## Sources
 - [Obsidian graph view help](https://obsidian.md/help/plugins/graph); [forum: text fade threshold should consider node size](https://forum.obsidian.md/t/graph-text-fade-threshold-consider-node-size/6737)
 - [Self Reflected, Greg Dunn and Brian Edwards (Penn)](https://blog.seas.upenn.edu/?p=777); [Scientific American on Self Reflected](https://www.scientificamerican.com/article/watch-the-human-brain-come-to-life-in-this-stunning-piece-of-art)

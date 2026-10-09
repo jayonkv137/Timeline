@@ -48,15 +48,16 @@ const graph = {
 };
 
 type Option = { value: string; label: string; note: string };
-const GLOW: Option[] = [
-  { value: 'on', label: 'Self-glow', note: 'Each part emits its own light: the cell body for the chat, each branch and end for its outcome.' },
-  { value: 'off', label: 'Off', note: 'The bare membrane, to judge form and texture.' },
+const COLOUR: Option[] = [
+  { value: 'both', label: 'Share rings + counted twigs', note: 'Exact share as a ring at the cell body and each outcome end, plus one coloured twig per requirement or question.' },
+  { value: 'ring', label: 'Share rings only', note: 'Rings carry the colour; twigs stay neutral light (their shape still shows who made them).' },
+  { value: 'counted', label: 'Counted twigs only', note: 'No rings; the mix of blue and orange twigs is the proportion.' },
 ];
-const FOOT: Option[] = [
-  { value: 'off', label: 'Off', note: 'Only the neuron.' },
-  { value: 'cells', label: 'Cells', note: 'Last round’s blue / amber cell patch under each neuron (for the far-zoom read, Session 13).' },
+const BRAIN: Option[] = [
+  { value: 'slate', label: 'Dark slate', note: 'Neutral dark glass so the light carries the meaning.' },
+  { value: 'white', label: 'White glass', note: 'A pale, brighter cortex.' },
 ];
-const state = { place: 'B', glow: 'on', footprint: 'off', axon: true, sparks: true, dim: true };
+const state = { place: 'B', colour: 'both', brain: 'slate', twigs: true, bloom: true, axon: true, footprint: 'off' };
 
 const root = document.getElementById('lab')!;
 root.innerHTML = `
@@ -64,30 +65,30 @@ root.innerHTML = `
   <iframe class="lab-frame" title="Neuron brain on 10 real chats"></iframe>
   <aside class="lab-panel" aria-label="Lab controls">
     <header>
-      <span class="lab-eyebrow">Brain Lab · Session 2b</span>
-      <h1>One neuron template</h1>
-      <p>Placement B (decided). Every chat is built from the same neuron form; only size, branches and glow come from its data. Orbit, then click a chat and its outcome ends.</p>
+      <span class="lab-eyebrow">Brain Lab · fix pass 1</span>
+      <h1>Neuron template, review 1 fixes</h1>
+      <p>Blue = you, orange = AI, pure light only (no blended colours). The body is neutral tissue lit from within; twigs are your requirements (organic) and the AI's (synthetic). Click a chat or an outcome end.</p>
     </header>
-    <fieldset><legend>Glow</legend><div class="lab-options" data-key="glow"></div></fieldset>
-    <fieldset><legend>Surface footprint</legend><div class="lab-options" data-key="footprint"></div></fieldset>
-    <label class="lab-check"><input type="checkbox" data-key="dim" checked> Dimmed brain surface, so the emitted light can be judged (art-direction preview)</label>
-    <label class="lab-check"><input type="checkbox" data-key="sparks" checked> Requirement sparks: one light per requirement or question, coloured by who made it (Session 7 preview)</label>
-    <label class="lab-check"><input type="checkbox" data-key="axon" checked> Axon: where links to other chats will leave (no data yet)</label>
+    <fieldset><legend>Colour <span class="lab-tag">Session 4 options</span></legend><div class="lab-options" data-key="colour"></div></fieldset>
+    <fieldset><legend>Brain surface <span class="lab-tag">art direction</span></legend><div class="lab-options" data-key="brain"></div></fieldset>
+    <label class="lab-check"><input type="checkbox" data-key="twigs" checked> Requirement twigs</label>
+    <label class="lab-check"><input type="checkbox" data-key="bloom" checked> Bloom (light spilling into the dark)</label>
+    <label class="lab-check"><input type="checkbox" data-key="axon" checked> Axon (where links to other chats will leave)</label>
+    <label class="lab-check"><input type="checkbox" data-key="cells"> Cell footprint under each neuron</label>
     <section class="lab-evidence" aria-live="polite"><h2>Evidence</h2><p class="lab-empty">Click a neuron to see the engine numbers behind it.</p></section>
-    <p class="lab-note">Provisional, not decided yet: sizes (Session 3), glow colour (Session 4), texture by work mode (Session 5), endings (Session 7), the brain surface (art direction).</p>
+    <p class="lab-note">Provisional, not decided yet: sizes (Session 3), the colour option (Session 4), texture by work mode (Session 5), the brain surface (art direction), titles (Session 9).</p>
   </aside>
 </div>`;
 const iframe = root.querySelector<HTMLIFrameElement>('.lab-frame')!;
-function renderOptions(key: 'glow' | 'footprint', opts: Option[]) {
+function renderOptions(key: 'colour' | 'brain', opts: Option[]) {
   const box = root.querySelector(`[data-key="${key}"]`)!;
   box.innerHTML = opts.map(o => `<button type="button" class="lab-option" aria-pressed="${state[key] === o.value}" data-value="${o.value}"><b>${o.label}</b><span>${o.note}</span></button>`).join('');
   box.querySelectorAll<HTMLButtonElement>('button').forEach(b => b.onclick = () => { state[key] = b.dataset.value!; renderOptions(key, opts); push(); });
 }
-function push() { iframe.contentWindow?.postMessage({ type: 'cotrace-lab-set', lab: { ...state, glow: state.glow === 'on' } }, '*'); }
-renderOptions('glow', GLOW); renderOptions('footprint', FOOT);
-root.querySelector<HTMLInputElement>('[data-key="axon"]')!.onchange = e => { state.axon = (e.target as HTMLInputElement).checked; push(); };
-root.querySelector<HTMLInputElement>('[data-key="dim"]')!.onchange = e => { state.dim = (e.target as HTMLInputElement).checked; push(); };
-root.querySelector<HTMLInputElement>('[data-key="sparks"]')!.onchange = e => { state.sparks = (e.target as HTMLInputElement).checked; push(); };
+function push() { iframe.contentWindow?.postMessage({ type: 'cotrace-lab-set', lab: { ...state } }, '*'); }
+renderOptions('colour', COLOUR); renderOptions('brain', BRAIN);
+for (const key of ['twigs', 'bloom', 'axon'] as const) root.querySelector<HTMLInputElement>(`[data-key="${key}"]`)!.onchange = e => { state[key] = (e.target as HTMLInputElement).checked; push(); };
+root.querySelector<HTMLInputElement>('[data-key="cells"]')!.onchange = e => { state.footprint = (e.target as HTMLInputElement).checked ? 'cells' : 'off'; push(); };
 
 const evidenceBox = root.querySelector('.lab-evidence')!;
 type Evidence = { kind: string; title: string; rows: [string, string | number, string][] };
