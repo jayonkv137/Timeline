@@ -1139,6 +1139,7 @@ def run_chat(
         write_status,
     )
     from engine.projections.panel import export_panel_projections
+    from engine.projections.workspace import export_workspace_bundle, load_chat_metadata
     from engine.quant import compute_decisions, compute_direction, compute_mode
 
     if isinstance(dialogue, (str, Path)):
@@ -1179,6 +1180,8 @@ def run_chat(
     with open(out_dir / "dialogue.json", "w", encoding="utf-8") as f:
         json.dump(dialogue_list, f, indent=2, ensure_ascii=False)
         f.write("\n")
+
+    source_meta, meta, file_summary = load_chat_metadata(out_dir)
 
     if initial_state is None:
         if not clear_existing and (out_dir / "state.json").exists():
@@ -1251,6 +1254,21 @@ def run_chat(
             max_pair=pair_number,
         )
 
+        # Workspace bundle projection (incremental per pair)
+        summary_text = state.run.get("dialogue_summary") or file_summary or ""
+        export_workspace_bundle(
+            output_path=out_dir / "workspace_bundle.json",
+            dialogue=dialogue_list,
+            state=state.to_dict(),
+            ledger=ledger_writer.rows,
+            source_meta=source_meta,
+            meta=meta,
+            chat_id=chat_id,
+            summary=summary_text,
+            status="processing",
+            processed_pairs=pair_number,
+        )
+
         # Run runtime invariants
         chk_res = run_pair_checks(
             state=state,
@@ -1321,6 +1339,20 @@ def run_chat(
             final_info = None
 
     # All pairs finished successfully
+    summary_text = state.run.get("dialogue_summary") or file_summary or ""
+    export_workspace_bundle(
+        output_path=out_dir / "workspace_bundle.json",
+        dialogue=dialogue_list,
+        state=state.to_dict(),
+        ledger=ledger_writer.rows,
+        source_meta=source_meta,
+        meta=meta,
+        chat_id=chat_id,
+        summary=summary_text,
+        status="ready",
+        processed_pairs=len(sorted_pairs),
+    )
+
     report_file = write_report(
         out_dir=out_dir,
         chat_id=chat_id,

@@ -1386,6 +1386,30 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
 - **Next:** S1.5 — Incremental projection in `run_chat` and CLI `python -m engine project <chat_dir>` (CC / AG+).
 
+---
+
+## 2026-10-09 19:30 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S1.5 — Incremental projection in `run_chat` and CLI `python -m engine project <chat_dir>` (AG+)
+- **Did:**
+  - `engine/projections/workspace.py` — added `load_chat_metadata` to automatically resolve source_meta, meta, and summary, and `project_chat_directory` to project a chat directory to `workspace_bundle.json`.
+  - `engine/pipeline.py` (`run_chat`) — wired `export_workspace_bundle` at the end of each pair (`status="processing"`, `processed_pairs=pair_number`) and after full completion (`status="ready"`).
+  - `scripts/replay_stage4.py` (`replay_chat`) — wired `project_chat_directory` so rerunning offline replay writes `workspace_bundle.json`.
+  - `engine/__main__.py` — implemented CLI entry point with subcommand `project <chat_dir> [--output <path>]`.
+  - `tests/test_cli_project.py` — created tier1 tests for `python -m engine project`, metadata resolution, replay bundle generation, and directory projection across all 10 chats.
+  - `docs/plans/STANDALONE_V1_PLAN.md` — marked S1.5 complete (✅).
+- **Decisions made:**
+  - Implemented graceful metadata fallback in `load_chat_metadata` looking in both chat dir and corpus dir for `source_meta.json`, `meta.json`/`meta.yaml`, and `full_export.json`/`sample_data`.
+  - CLI `python -m engine project` defaults to writing `<chat_dir>/workspace_bundle.json`, with optional `--output` flag for custom export destinations.
+  - Verified AG+ sacred fixture numbers: Δ_you=87.0, Δ_AI=314.0 (21.7% / 78.3%), 4 You · 10 AI, COPILOT; 0 diffs on frozen fixture.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `.venv/bin/python -m pytest tests/test_cli_project.py -v`: 16 passed in 0.25s.
+  - `.venv/bin/python -m pytest -q`: 166 passed in 0.89s (up from 150; baseline 102 intact).
+  - `npm run e2e`: 2/2 suites passed with 0 page/console errors.
+  - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+- **Next:** S1.6 — `web/scripts/compile-workspace.py` wrapper over the projection (AG).
+
+
 
 
 

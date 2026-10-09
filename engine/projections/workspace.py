@@ -7,6 +7,7 @@ Adheres strictly to STANDALONE_V1_PLAN §3.1 and web/src/workspace/types.ts.
 from __future__ import annotations
 
 import hashlib
+import json
 import math
 import re
 from pathlib import Path
@@ -369,3 +370,128 @@ def export_workspace_bundle(
     )
     write_json_artifact(output_path, bundle, "workspace_bundle")
     return bundle
+
+
+def load_chat_metadata(chat_dir: str | Path) -> tuple[dict[str, Any], dict[str, Any], str]:
+    """Resolve source_meta, meta, and summary from chat directory or fallback corpus."""
+    chat_path = Path(chat_dir)
+    cid = chat_path.name
+    repo_root = Path(__file__).resolve().parent.parent.parent
+
+    source_meta: dict[str, Any] = {}
+    meta: dict[str, Any] = {}
+    summary: str = ""
+
+    # 1. source_meta
+    for sm_path in [
+        chat_path / "source_meta.json",
+        repo_root / "data" / "corpus" / cid / "source_meta.json",
+    ]:
+        if sm_path.exists():
+            try:
+                source_meta = json.loads(sm_path.read_text(encoding="utf-8"))
+                break
+            except Exception:
+                pass
+
+    # 2. meta (JSON or YAML)
+    for m_path in [
+        chat_path / "meta.json",
+        repo_root / "data" / "corpus" / cid / "meta.json",
+    ]:
+        if m_path.exists():
+            try:
+                meta = json.loads(m_path.read_text(encoding="utf-8"))
+                break
+            except Exception:
+                pass
+    if not meta:
+        for my_path in [
+            chat_path / "meta.yaml",
+            repo_root / "data" / "corpus" / cid / "meta.yaml",
+        ]:
+            if my_path.exists():
+                try:
+                    for line in my_path.read_text(encoding="utf-8").splitlines():
+                        line = line.strip()
+                        if line.startswith("task_type:"):
+                            meta["category"] = line.split(":", 1)[1].strip()
+                        elif line.startswith("title:") and not source_meta.get("title"):
+                            t = line.split(":", 1)[1].strip().strip('"').strip("'")
+                            if t:
+                                source_meta["title"] = t
+                    break
+                except Exception:
+                    pass
+
+    # 3. summary
+    for s_path in [
+        chat_path / "full_export.json",
+        repo_root / "design_pack" / "sample_data" / f"{cid}.json",
+    ]:
+        if s_path.exists():
+            try:
+                d = json.loads(s_path.read_text(encoding="utf-8"))
+                s = d.get("dialogue_summary")
+                if s:
+                    summary = s
+                    break
+            except Exception:
+                pass
+
+    return source_meta, meta, summary
+
+
+def project_chat_directory(
+    chat_dir: str | Path,
+    output_path: str | Path | None = None,
+    status: str = "ready",
+    processed_pairs: int | None = None,
+    flagged_pairs: list[Any] | None = None,
+) -> dict[str, Any]:
+    """Project an entire chat directory into a validated workspace_bundle.json artifact."""
+    chat_path = Path(chat_dir)
+    cid = chat_path.name
+    repo_root = Path(__file__).resolve().parent.parent.parent
+
+    # Find dialogue
+    dialogue_path = chat_path / "dialogue.json"
+    if not dialogue_path.exists():
+        dialogue_path = repo_root / "data" / "corpus" / cid / "dialogue.json"
+    if not dialogue_path.exists():
+        raise FileNotFoundError(f"dialogue.json not found in {chat_dir}")
+    dialogue = json.loads(dialogue_path.read_text(encoding="utf-8"))
+
+    # Find state
+    state_path = chat_path / "state.json"
+    if not state_path.exists():
+        raise FileNotFoundError(f"state.json not found in {chat_dir}")
+    state = json.loads(state_path.read_text(encoding="utf-8"))
+
+    # Find ledger
+    ledger_path = chat_path / "ledger.jsonl"
+    ledger: list[dict[str, Any]] = []
+    if ledger_path.exists():
+        ledger = [
+            json.loads(line)
+            for line in ledger_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+
+    source_meta, meta, summary = load_chat_metadata(chat_path)
+
+    out_file = Path(output_path) if output_path else (chat_path / "workspace_bundle.json")
+    return export_workspace_bundle(
+        output_path=out_file,
+        dialogue=dialogue,
+        state=state,
+        ledger=ledger,
+        source_meta=source_meta,
+        meta=meta,
+        chat_id=cid,
+        summary=summary,
+        status=status,
+        processed_pairs=processed_pairs,
+        flagged_pairs=flagged_pairs,
+    )
+

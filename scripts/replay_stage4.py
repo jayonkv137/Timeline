@@ -18,6 +18,7 @@ if str(REPO_ROOT) not in sys.path:
 
 from engine.checks import run_pair_checks
 from engine.projections.panel import export_panel_projections
+from engine.projections.workspace import project_chat_directory
 from engine.quant import compute_decisions, compute_direction, compute_mode
 
 DEFAULT_CORPUS_CHATS = [
@@ -63,6 +64,9 @@ def replay_chat(chat_id: str) -> dict[str, Any]:
         ledger_rows=ledger_rows,
         state_dict=state_dict,
     )
+
+    # Workspace bundle projection
+    project_chat_directory(chat_dir=chat_dir)
 
     num_pairs = len(bundle["pairs"])
 
