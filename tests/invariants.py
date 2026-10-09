@@ -636,3 +636,303 @@ def inv_21_provenance(dialogue: list[dict[str, Any]] | None, ledger_rows: list[d
 
     return violations
 
+
+# ==============================================================================
+# Workspace Invariants (W1 - W6) — Track S (STANDALONE_V1_PLAN §4)
+# ==============================================================================
+
+def inv_w1_snapshot_mass_sums_match_ledger(
+    bundle: dict[str, Any] | None,
+    ledger_rows: list[dict[str, Any]] | None,
+) -> list[str]:
+    """W1. Per-pair snapshot mass sums equal cumulative ledger sums, and deltas match pair rows."""
+    if bundle is None or ledger_rows is None:
+        return ["skipped: bundle or ledger_rows absent"]
+
+    violations: list[str] = []
+    snapshots = bundle.get("snapshots", [])
+
+    for s_idx, snap in enumerate(snapshots):
+        pair = snap.get("pair", s_idx + 1)
+        mass = snap.get("mass", {})
+
+        # Snapshot aggregated sums
+        snap_human = sum(float(m.get("human", 0.0)) for m in mass.values())
+        snap_ai = sum(float(m.get("ai", 0.0)) for m in mass.values())
+        snap_delta = sum(float(m.get("delta", 0.0)) for m in mass.values())
+
+        # Ledger calculated sums
+        ledger_human = sum(
+            float(r.get("score", 0.0))
+            for r in ledger_rows
+            if r.get("pair_added", 1) <= pair and r.get("speaker") == "U"
+        )
+        ledger_ai = sum(
+            float(r.get("score", 0.0))
+            for r in ledger_rows
+            if r.get("pair_added", 1) <= pair and r.get("speaker") == "A"
+        )
+        ledger_delta = sum(
+            float(r.get("score", 0.0))
+            for r in ledger_rows
+            if r.get("pair_added", 1) == pair
+        )
+
+        if abs(snap_human - ledger_human) > 1e-5:
+            violations.append(
+                f"pair {pair}: snapshot human mass ({snap_human}) != ledger human sum ({ledger_human})"
+            )
+        if abs(snap_ai - ledger_ai) > 1e-5:
+            violations.append(
+                f"pair {pair}: snapshot AI mass ({snap_ai}) != ledger AI sum ({ledger_ai})"
+            )
+        if abs(snap_delta - ledger_delta) > 1e-5:
+            violations.append(
+                f"pair {pair}: snapshot delta mass ({snap_delta}) != ledger delta sum ({ledger_delta})"
+            )
+
+        # Per-outcome checks
+        for oid, m in mass.items():
+            expected_oid_delta = sum(
+                float(r.get("score", 0.0))
+                for r in ledger_rows
+                if r.get("pair_added", 1) == pair and r.get("outcome_id") == oid
+            )
+            if abs(float(m.get("delta", 0.0)) - expected_oid_delta) > 1e-5:
+                violations.append(
+                    f"pair {pair} outcome '{oid}': delta mass ({m.get('delta')}) != ledger delta sum ({expected_oid_delta})"
+                )
+
+    return violations
+
+
+def inv_w2_outcome_born_before_or_at_first_ledger_row(
+    bundle: dict[str, Any] | None,
+    ledger_rows: list[dict[str, Any]] | None,
+) -> list[str]:
+    """W2. An outcome is never born after its first ledger row."""
+    if bundle is None or ledger_rows is None:
+        return ["skipped: bundle or ledger_rows absent"]
+
+    violations: list[str] = []
+    nodes = bundle.get("nodes", [])
+
+    for node in nodes:
+        nid = node.get("id")
+        born = node.get("born", 1)
+        related = [r for r in ledger_rows if r.get("outcome_id") == nid]
+        if related:
+            first_pair = min(r.get("pair_added", 1) for r in related if "pair_added" in r)
+            if born > first_pair:
+                violations.append(
+                    f"node '{nid}': born pair ({born}) is after first ledger row pair ({first_pair})"
+                )
+
+    return violations
+
+
+def inv_w3_atom_action_ids_exist(
+    bundle: dict[str, Any] | None,
+    state: dict[str, Any] | None,
+) -> list[str]:
+    """W3. Every atom's action ids exist in state.actions."""
+    if state is None:
+        return ["skipped: state absent"]
+
+    violations: list[str] = []
+    state_actions = {a.get("id") for a in state.get("actions", []) if isinstance(a, dict) and "id" in a}
+
+    for req in state.get("requirements", []):
+        req_id = f"{req.get('outcome_id')}:{req.get('req_id')}"
+        creation_ids = req.get("creation_action_ids") or []
+        for aid in creation_ids:
+            if aid not in state_actions:
+                violations.append(
+                    f"requirement '{req_id}': creation action id '{aid}' not found in state.actions"
+                )
+
+    for slot in state.get("slots", []):
+        slot_id = f"{slot.get('outcome_id')}:{slot.get('slot_id')}"
+        creation_ids = slot.get("creation_action_ids") or []
+        for aid in creation_ids:
+            if aid not in state_actions:
+                violations.append(
+                    f"slot '{slot_id}': creation action id '{aid}' not found in state.actions"
+                )
+
+    return violations
+
+
+def inv_w4_snapshots_count_equals_total_pairs(
+    bundle: dict[str, Any] | None,
+) -> list[str]:
+    """W4. len(snapshots) == totalPairs and snapshot pairs are sequential 1..N."""
+    if bundle is None:
+        return ["skipped: bundle absent"]
+
+    violations: list[str] = []
+    total_pairs = bundle.get("totalPairs")
+    snapshots = bundle.get("snapshots", [])
+
+    if not isinstance(total_pairs, int) or total_pairs < 0:
+        violations.append(f"invalid totalPairs: {total_pairs}")
+        return violations
+
+    if len(snapshots) != total_pairs:
+        violations.append(
+            f"snapshot count ({len(snapshots)}) does not equal totalPairs ({total_pairs})"
+        )
+
+    for idx, snap in enumerate(snapshots):
+        expected_pair = idx + 1
+        actual_pair = snap.get("pair")
+        if actual_pair != expected_pair:
+            violations.append(
+                f"snapshot index {idx} has pair {actual_pair}, expected {expected_pair}"
+            )
+
+    return violations
+
+
+def inv_w5_non_root_parents_exist(
+    bundle: dict[str, Any] | None,
+) -> list[str]:
+    """W5. Every non-root outcome has a parent that exists in nodes, with no parent cycles."""
+    if bundle is None:
+        return ["skipped: bundle absent"]
+
+    violations: list[str] = []
+    nodes = bundle.get("nodes", [])
+    node_ids = {n.get("id") for n in nodes if n.get("id")}
+    root_nodes = [n for n in nodes if n.get("root") is True]
+
+    if len(root_nodes) != 1:
+        violations.append(f"expected exactly 1 root node, found {len(root_nodes)}")
+
+    parent_map: dict[str, str | None] = {}
+    for node in nodes:
+        nid = node.get("id")
+        parent = node.get("parent")
+        is_root = node.get("root", False)
+        parent_map[nid] = parent
+
+        if is_root:
+            if parent is not None:
+                violations.append(f"root node '{nid}' must have parent None, got '{parent}'")
+        else:
+            if parent is None:
+                violations.append(f"non-root node '{nid}' has parent None")
+            elif parent not in node_ids:
+                violations.append(f"node '{nid}' references nonexistent parent '{parent}'")
+
+    # Cycle detection
+    for nid in node_ids:
+        visited = set()
+        curr = nid
+        while curr:
+            if curr in visited:
+                violations.append(f"cycle detected in parent ancestry involving node '{curr}'")
+                break
+            visited.add(curr)
+            curr = parent_map.get(curr)
+
+    return violations
+
+
+def inv_w6_shares_in_bounds(
+    bundle: dict[str, Any] | None,
+) -> list[str]:
+    """W6. Outcome and chat contribution shares are in [0, 1] and sum to 1.0."""
+    if bundle is None:
+        return ["skipped: bundle absent"]
+
+    violations: list[str] = []
+    snapshots = bundle.get("snapshots", [])
+
+    for s_idx, snap in enumerate(snapshots):
+        pair = snap.get("pair", s_idx + 1)
+        mass = snap.get("mass", {})
+
+        tot_h = sum(float(m.get("human", 0.0)) for m in mass.values())
+        tot_a = sum(float(m.get("ai", 0.0)) for m in mass.values())
+        tot = tot_h + tot_a
+
+        if tot < 0.0:
+            violations.append(f"pair {pair}: total mass ({tot}) is negative")
+
+        if tot > 0.0:
+            chat_h_share = tot_h / tot
+            chat_a_share = tot_a / tot
+            if not (0.0 <= chat_h_share <= 1.0):
+                violations.append(f"pair {pair}: human share ({chat_h_share}) out of [0, 1] bounds")
+            if not (0.0 <= chat_a_share <= 1.0):
+                violations.append(f"pair {pair}: AI share ({chat_a_share}) out of [0, 1] bounds")
+            if abs((chat_h_share + chat_a_share) - 1.0) > 1e-5:
+                violations.append(
+                    f"pair {pair}: chat share sum ({chat_h_share + chat_a_share}) does not equal 1.0"
+                )
+
+        for oid, m in mass.items():
+            h = float(m.get("human", 0.0))
+            a = float(m.get("ai", 0.0))
+            d = float(m.get("delta", 0.0))
+
+            if h < 0.0:
+                violations.append(f"pair {pair} node '{oid}': human mass ({h}) is negative")
+            if a < 0.0:
+                violations.append(f"pair {pair} node '{oid}': AI mass ({a}) is negative")
+            if d < 0.0:
+                violations.append(f"pair {pair} node '{oid}': delta mass ({d}) is negative")
+
+            node_tot = h + a
+            if node_tot > 0.0:
+                node_h_share = h / node_tot
+                node_a_share = a / node_tot
+                if not (0.0 <= node_h_share <= 1.0):
+                    violations.append(
+                        f"pair {pair} node '{oid}': human share ({node_h_share}) out of [0, 1] bounds"
+                    )
+                if not (0.0 <= node_a_share <= 1.0):
+                    violations.append(
+                        f"pair {pair} node '{oid}': AI share ({node_a_share}) out of [0, 1] bounds"
+                    )
+                if abs((node_h_share + node_a_share) - 1.0) > 1e-5:
+                    violations.append(
+                        f"pair {pair} node '{oid}': share sum ({node_h_share + node_a_share}) does not equal 1.0"
+                    )
+
+            if tot > 0.0:
+                node_share = node_tot / tot
+                if not (0.0 <= node_share <= 1.0):
+                    violations.append(
+                        f"pair {pair} node '{oid}': overall node share ({node_share}) out of [0, 1] bounds"
+                    )
+
+    return violations
+
+
+# Aliases for convenience
+inv_w1 = inv_w1_snapshot_mass_sums_match_ledger
+inv_w2 = inv_w2_outcome_born_before_or_at_first_ledger_row
+inv_w3 = inv_w3_atom_action_ids_exist
+inv_w4 = inv_w4_snapshots_count_equals_total_pairs
+inv_w5 = inv_w5_non_root_parents_exist
+inv_w6 = inv_w6_shares_in_bounds
+
+
+def run_workspace_invariants(
+    bundle: dict[str, Any] | None,
+    ledger_rows: list[dict[str, Any]] | None = None,
+    state: dict[str, Any] | None = None,
+) -> list[str]:
+    """Execute all workspace invariants W1-W6 and return aggregated violations."""
+    violations: list[str] = []
+    violations.extend(inv_w1_snapshot_mass_sums_match_ledger(bundle, ledger_rows))
+    violations.extend(inv_w2_outcome_born_before_or_at_first_ledger_row(bundle, ledger_rows))
+    violations.extend(inv_w3_atom_action_ids_exist(bundle, state))
+    violations.extend(inv_w4_snapshots_count_equals_total_pairs(bundle))
+    violations.extend(inv_w5_non_root_parents_exist(bundle))
+    violations.extend(inv_w6_shares_in_bounds(bundle))
+    return violations
+
+

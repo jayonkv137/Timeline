@@ -1360,7 +1360,32 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `.venv/bin/python -m pytest -q`: 131 passed in 0.67s (up from 118; baseline 102 intact).
   - `npm run e2e`: 2/2 suites passed with 0 page/console errors.
   - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
-- **Next:** S1.4 — Workspace invariants W1–W6 in `tests/invariants.py` (CC).
+- **Next:** S1.4 — Workspace invariants W1–W6 in `tests/invariants.py` (CC / AG+).
+
+---
+
+## 2026-10-09 19:23 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S1.4 — Workspace invariants W1–W6 in `tests/invariants.py` (AG+)
+- **Did:**
+  - `tests/invariants.py` — implemented workspace invariant catalogue functions `inv_w1_snapshot_mass_sums_match_ledger`, `inv_w2_outcome_born_before_or_at_first_ledger_row`, `inv_w3_atom_action_ids_exist`, `inv_w4_snapshots_count_equals_total_pairs`, `inv_w5_non_root_parents_exist`, `inv_w6_shares_in_bounds`, along with convenient aliases `inv_w1`..`inv_w6` and aggregate harness `run_workspace_invariants`.
+  - `tests/test_workspace_invariants.py` — created tier1 test verifying W1–W6 and `run_workspace_invariants` return 0 violations across all 10 prototype chats and `fixture_pair1`, with full negative tests for each invariant and graceful guards for missing data.
+  - `docs/plans/STANDALONE_V1_PLAN.md` — marked S1.4 complete (✅).
+- **Decisions made:**
+  - Enforced exact cumulative score matches and pair delta equality in W1.
+  - Enforced birth order $\le \min(\text{pair\_added})$ in W2.
+  - Verified creation action IDs across all requirements and slots exist in `state.actions` in W3.
+  - Enforced `len(snapshots) == totalPairs` with strict $1 \dots N$ sequential pair indices in W4.
+  - Enforced exactly 1 root outcome (`root=True`, `parent=None`), existing non-root parents, and acyclic parent hierarchies in W5.
+  - Enforced $[0, 1]$ bounds for all participant and outcome contribution shares and exact unit sum in W6.
+  - Verified AG+ sacred fixture numbers: Δ_you=87.0, Δ_AI=314.0 (21.7% / 78.3%), 4 You · 10 AI, COPILOT; 0 diffs on frozen fixture.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `.venv/bin/python -m pytest tests/test_workspace_invariants.py -v`: 19 passed in 0.10s.
+  - `.venv/bin/python -m pytest -q`: 150 passed in 0.72s (up from 131; baseline 102 intact).
+  - `npm run e2e`: 2/2 suites passed with 0 page/console errors.
+  - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+- **Next:** S1.5 — Incremental projection in `run_chat` and CLI `python -m engine project <chat_dir>` (CC / AG+).
+
 
 
 
