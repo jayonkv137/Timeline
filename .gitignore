@@ -39,3 +39,17 @@ Thumbs.db
 
 # Chrome temp
 .tmp_chrome/
+
+# Design system local reference research (third-party screenshots)
+docs/design-system/research/_local/
+
+
+# Track S: build output and the private library (STANDALONE_V1_PLAN S-D2)
+web/dist-workspace/
+web/cotrace-workspace.html
+data/library/
+secrets.json
+.claude/settings.local.json
+
+# Superseded handoff copy (its source duplicates web/; the handoff .md is kept)
+Cotrace Workspace Handoff/
