@@ -50,4 +50,40 @@ verdict. A phase cannot close while any entry for it says **Changes needed**.
 
 **Verdict:** Approved
 
+---
+
+### S2.T · 2026-10-09 · Phase S2 (A local server and the library)
+**Build:** commit `1225129` · run `./cotrace start`
+
+**Checklist** (prepared by Antigravity from §6A):
+1. Run `./cotrace start` in terminal:
+   - Expected: Server checks frontend bundle, auto-seeds library with 10 reference chats if empty, starts FastAPI on `http://127.0.0.1:8765`, and opens browser.
+   - Result:
+2. Open 5 different chats from sidebar (e.g., `AI creativity · paper research`, `Human–AI interaction design`, `Interactive portfolio`, `Co-creation research`, `Figma migration`):
+   - Expected: Tabs open smoothly, conversation dialogue loads, right-rail graph renders cleanly with live data served from `$COTRACE_HOME`.
+   - Result:
+3. Scrub conversation pairs:
+   - Expected: Scrubbing between pairs (notches or Next/Prev buttons) updates graph nodes, resolved atoms, and scroll synchronization cleanly.
+   - Result:
+4. Interact with the 3D Brain tab:
+   - Expected: Canvas animates smoothly (≥ 45 fps), territories render in topic lobes, selecting territory highlights conversation.
+   - Result:
+5. Test chat trash and restore lifecycle:
+   - Expected: Trashing moves chat to library `trash/`, removes it from sidebar and active tabs; restoring recovers it with full data intact.
+   - Result:
+
+**Cost and performance:**
+- Report: [`docs/plans/reports/S2_perf.md`](reports/S2_perf.md) — 100% of §6A T3 budgets met:
+  - First load: `305.1 ms` (Budget: $\le 2.0\text{ s}$, **6.6× faster than budget**).
+  - Open a chat: `50.1 ms` (Budget: $\le 500\text{ ms}$, **10.0× faster than budget**).
+  - Brain frame rate: `59.8 fps` (Budget: $\ge 45\text{ fps}$, **+14.8 fps over target**).
+  - API p50 latency: `1.35 ms` – `2.43 ms` (Budget: $\le 50\text{ ms} / 100\text{ ms}$).
+- API spend: $0.00 (local desktop application; 0 LLM calls).
+
+**Findings:**
+- 
+
+**Verdict:** 
+
+
 
