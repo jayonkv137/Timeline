@@ -252,6 +252,64 @@ Budget: 45 fps or more on the desktop.
 - Small chats are tiny next to c05 (Session 3, size).
 - Texture by work mode (Session 5) will modulate §7.3; it never replaces the template.
 
+## 8. Design review 1 (owner screenshot, 9 Oct 2026)
+
+Owner: "why are some fully orange and fully blue … I don't like the texture colour … something is off … think like a world-best designer".
+
+### 8.1 Why some neurons are fully orange or blue (not decided; the provisional §7.4 rule)
+The glow colour is `white → party colour` by how one-sided the share is (lean^0.6). On the 10 chats:
+
+| Chats | Real human share | What the rule paints |
+|---|---|---|
+| c05, c07, c03, c20, c30 | 21–30% | mostly orange |
+| c10 | 72% | mostly blue |
+| c04, c16, c17, c27 | 46–54% | near white, so **grey on the dark body: looks dead** |
+
+**Verdict: the rule is wrong for this metaphor.**
+1. It exaggerates: 25% of c05 is you, yet it reads as two-thirds orange.
+2. It erases the minority: you can't see your 25% at all.
+3. Co-created chats, the most "symbiotic", look the least alive.
+4. Mixing white into amber over a grey body makes the brown and salmon "texture colour" the owner dislikes.
+
+The 2D graph already rejected this kind of colour blend (DDR-006); proportion must be read from length or count, not from a blended hue.
+
+### 8.2 Full scrutiny
+
+| # | Area | What is off | Cause | Direction |
+|---|---|---|---|---|
+| 1 | Colour meaning | All-or-nothing hues; balanced = grey | §8.1 blend rule | **Never mix party colours.** Pure sky and pure amber light only, proportion shown by length and count (§8.3). Decide in Session 4 |
+| 2 | Anatomy | Reads as starfish, octopus or tadpole, not a neuron: big body, short thick arms, bulbs like suckers | Soma too large against branch length; no fine branching | Real neurons are mostly "wire": the branch field is 10–30× the cell body. Smaller soma, longer and thinner dendrites, and fine twigs at the far ends (§8.3) |
+| 3 | Material | Matte brown rubber body; candy-cane stripes on branches | Neutral body + blended glow = brown; sparks and fibre stripes alias into bands; no translucency | Translucent cool tissue **lit from within** (a glowing nucleus seen through the membrane, `owner-ref-14` and `-16`); stripes removed |
+| 4 | Light | Flat, plastic; nothing actually glows | No bloom; halo too weak; one flat key light | Real bloom pass + tone mapping; emission drives the bloom, so light bleeds into the dark as in every owner reference |
+| 5 | Integration | Neurons look stuck on top like toys | No light falls on the cortex; no contact | The neuron's light illuminates the cortex around it (local light in the surface shader). It comes from the neuron, as the owner asked |
+| 6 | Brain surface | Grey rubber balloon with white topographic squiggles | The surface "ribbon" noise reads as contour lines, not folds; the dim preview just greys it | Art direction: dark glass, rim-lit fold edges, far quieter noise. Brain tint is an open question (§8.4) |
+| 7 | Composition | Figma and Interactive overlap; a sharp V-bend on one branch; big empty areas; no focal point | Lobe placeholder packing; path through two close control points | Wider spacing between neurons; minimum bend radius on paths; one bright focus at a time (Sessions 9–11) |
+| 8 | Text | Titles sit on top of somas and branches; no hierarchy | Label anchored at the soma, offset 19 px | Map-label rules: offset outside the dendritic field, size priority, halo (Session 9) |
+| 9 | Scale | c05 dominates; small chats are tadpoles | Provisional √ scale | Session 3 (one universal scale + minimum readable size) |
+
+### 8.3 Proposal for the next pass (to be rendered as variants, owner decides)
+- **Colour, Session 4 options:**
+  - **(a) Share collar:** every nucleus glows white (alive). A thin luminous ring at the soma base is split blue / amber by the exact share, clockwise from 12 o'clock, the same as the 2D share ring.
+  - **(b) Counted light:** each requirement or question is one point of pure party light, so the neuron's mix of blue and amber points *is* the proportion (a unit chart).
+  - **(a + b)** together.
+  - In every option there is no blended colour anywhere.
+- **Anatomy (merges Session 7's endings into the form):** requirements become **twigs** branching off the far half of their outcome's dendrite. Human-made twigs are organic (curved, tapering); AI-made twigs are synthetic (straight segments, a small pad at the end), the owner's original "nerves vs logic-gate wires" idea. This gives the fine branching of `owner-ref-14` and stays 100% data: 120 twigs across the 10 chats, 4–24 per neuron.
+- **Craft fixes (no meaning change):**
+  - bloom
+  - translucent membrane with a glowing nucleus
+  - cooler neutral body
+  - no stripes
+  - slimmer, longer proportions
+  - light spill on the cortex
+  - quieter brain surface
+
+### 8.4 Open question for art direction
+`owner-ref-15` and `-16` use blue or teal brains, but blue means "you" in our grammar. Two options:
+- a neutral ink-slate brain
+- deliberately reading the untouched brain as faintly "human" (it becomes amber "unit by unit"). This would tie back to the symbiotic-brain idea, but it adds a meaning to blue.
+
+The owner decides.
+
 ## Sources
 - [Obsidian graph view help](https://obsidian.md/help/plugins/graph); [forum: text fade threshold should consider node size](https://forum.obsidian.md/t/graph-text-fade-threshold-consider-node-size/6737)
 - [Self Reflected, Greg Dunn and Brian Edwards (Penn)](https://blog.seas.upenn.edu/?p=777); [Scientific American on Self Reflected](https://www.scientificamerican.com/article/watch-the-human-brain-come-to-life-in-this-stunning-piece-of-art)
