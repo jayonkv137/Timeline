@@ -71,7 +71,7 @@ def test_missing_required_field_fails(validator, sample_chats):
 def test_missing_status_or_source_fails(validator, sample_chats):
     """Omitting status or source without default must fail validation."""
     chat = copy.deepcopy(sample_chats[0])
-    # chat has no status or source initially
+    chat.pop("status", None)
     with pytest.raises(ValidationError):
         validator.validate(chat)
 

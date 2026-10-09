@@ -1409,6 +1409,27 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
 - **Next:** S1.6 — `web/scripts/compile-workspace.py` wrapper over the projection (AG).
 
+---
+
+## 2026-10-09 19:33 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S1.6 — `web/scripts/compile-workspace.py` wrapper over engine projection (AG)
+- **Did:**
+  - `web/scripts/compile-workspace.py` — refactored legacy hand-written extraction logic into a concise wrapper over `engine.projections.workspace.project_workspace`, maintaining offline sample data compilation support (`--exports`).
+  - `web/src/workspace/data.generated.json` — regenerated through the engine projection; output is schema-valid with concentric depth-ring node layouts, default `status="ready"`, and `source.platform="archive"`.
+  - `tests/test_workspace_bundle_schema.py` — updated `test_missing_status_or_source_fails` to pop `status` from regenerated chat.
+  - `docs/plans/STANDALONE_V1_PLAN.md` — marked S1.6 complete (✅).
+- **Decisions made:**
+  - Handled both direct chat directory loading and fallback extraction from `--exports` JSON files for offline reproducibility.
+  - Verified AG+ sacred fixture numbers: Δ_you=87.0, Δ_AI=314.0 (21.7% / 78.3%), 4 You · 10 AI, COPILOT; 0 diffs on frozen fixture.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `web/scripts/compile-workspace.py`: compiled 10 chats, 28 pairs, 263,300 bytes, 0 warnings.
+  - `.venv/bin/python -m pytest -q`: 166 passed in 0.99s.
+  - `npm run e2e`: 2/2 suites passed with 0 page/console errors.
+  - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+- **Next:** S1.7 — `python -m engine report <chat>` readable one-page Markdown report (AG).
+
+
 
 
 
