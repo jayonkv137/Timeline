@@ -981,6 +981,300 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `data/chats/fixture_pair1/` untouched.
 - **Next:** Phase E3 (Long-chat evaluation) / Phase C (Frontend UI & Visualisation).
 
+---
+
+## 2026-10-08 18:12 · Antigravity · Gemini
+- **Phase/Step:** D0.S1 — Visual Audit & Conflict Inventory
+- **Did:**
+  - Ran `ui-craft/scripts/detect.mjs` against `web/` (5 findings) and `design_pack/` (7 findings).
+  - Audited all existing visual decisions, CSS variables, components, and specs (`PANEL_SPEC.md`, `GRAPH_SYSTEM_SPEC.md`, `Brain Vision.md`, `Build Playbook.md`).
+  - Compiled and wrote `docs/design-system/research/AUDIT.md` containing full token inventories, 5-dimension diagnostic audit scores, anti-pattern breakdown, and a prioritized 7-point conflicts list led by Party Colours.
+- **Decisions made:**
+  - Pre-v1 baseline audit health scored at 7/20 (Poor), documenting the divergence between warm paper (`web/`), dark obsidian (`design_pack/`), and stock shadcn (`AI Chatbot Interface (Copy)/`).
+  - Catalogued 7 core conflicts for subsequent D Track phases (Party Colours, Theme & Atmosphere, Size vs Thickness encoding, Dark Glow, Typography scale, Width transitions, Touch target sizing).
+- **Spec contradictions/gaps flagged:**
+  - Priority 1: Blue `#0057FF` / Orange `#E85A0A` (`Build Playbook.md` §5 & `PANEL_SPEC.md`) vs Cyan `#38bdf8` / Amber `#fb923c` (`GRAPH_SYSTEM_SPEC.md`) vs Cyan/Violet (`Brain Vision.md`).
+  - Priority 2: Node size = mass/contribution (`GRAPH_SYSTEM_SPEC.md`) vs size = significance and thickness = contribution (`Brain Vision.md` §4).
+- **Verification:**
+  - `node ui-craft/scripts/detect.mjs web/`: exit code 2, 5 anti-patterns.
+  - `node ui-craft/scripts/detect.mjs design_pack/`: exit code 2, 7 anti-patterns.
+  - `docs/design-system/research/AUDIT.md` written and verified.
+- **Next:** D0.S2 — Scope (Surfaces and component inventories).
+
+---
+
+## 2026-10-08 18:18 · Antigravity · Gemini
+- **Phase/Step:** D0.S2 — Scope (Surfaces & Component Inventory)
+- **Did:**
+  - Audited all target delivery surfaces and environmental constraints across `D Track Brief.md` §11, `Brain Vision.md` §9, and existing code.
+  - Formulated the 5-level continuous Zoom Ladder (Brain, Project, Chat/Map, Pair/Drawer, Source Transcript).
+  - Categorized master component taxonomy across 4 build batches (B1 Foundational Primitives, B2 Chat & Agency Panel, B3 Graph Data-Viz Atoms, B4 Workspace Shells & States).
+  - Drafted and committed `docs/design-system/research/SCOPE.md`.
+- **Decisions made:**
+  - Pinned 6 delivery surfaces: Web Application (desktop-first), Browser Side Panel (360–420px), MCP In-Chat Widget (sandboxed iframe), 3D Spatial Head (WebGL/numeric tokens), Print & Static Pack (ink-safe), and Mobile Touch Viewport (44px target floor).
+  - Established critical path handoff: D0.S5 Graph View v0 lock precedes general D-track token foundation to unblock APP role for Phase G1.
+- **Spec contradictions/gaps flagged:** none new.
+- **Verification:**
+  - `docs/design-system/research/SCOPE.md` created and verified.
+- **Next:** D0.S3 — Setup (Directories, templates, DDR-000 baseline settlements).
+
+---
+
+## 2026-10-08 18:29 · Antigravity · Gemini
+- **Phase/Step:** D0.S3 — Scaffolding, Governance & Baseline Settlements
+- **Did:**
+  - Created directory scaffolding: `docs/design-system/decisions/`, `foundations/`, `surfaces/`, `research/_local/`, `mockups/captures/`, `mockups/foundations/`, `.claude/qa/personas/`, `.impeccable/`.
+  - Created `docs/design-system/README.md` (orientation guide for agents) and `docs/design-system/STATE.md` (live phase/step tracker).
+  - Authored `docs/design-system/decisions/DDR-TEMPLATE.md` and indexed in `docs/design-system/decisions/INDEX.md`.
+  - Drafted and ratified DDR-000 (Deliberate AI Co-Creation & Pre-v1 Baseline Ground Truth) and settlements DDR-000a through DDR-000h (Real-Data Protocol, Pre-v1 Precedence, DTCG Tokens, Sphere Glow Policy, 24px Touch Target floor, Rendering Environment, Degraded Critique, License Compliance).
+  - Initialized `mockups/INDEX.md` as the official surface ledger.
+  - Added `docs/design-system/research/_local/` to `.gitignore` and copied reference research screenshots safely.
+  - Configured `.claude/launch.json` for mockups local server.
+  - Authored `docs/design-system/research/PHILOSOPHY.md` enshrining Katie Dill's "Raise the ceiling" manifesto (4 pillars: Point of View, Encoding standards, Rejecting done=good / burrito trap, Protecting the strange) and wired into `README.md`.
+- **Decisions made:**
+  - Ratified all 8 foundational operational settlements (A1–A8) as binding DDR records.
+  - Preserved owner's visual reference screenshots in gitignored `docs/design-system/research/_local/`.
+  - Adopted Katie Dill / Stripe craft manifesto as the non-negotiable philosophical foundation for the design system.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `git status`: confirmed clean ignore of `docs/design-system/research/_local/`.
+  - All 11 DDR files, PHILOSOPHY.md, and index links verified on filesystem.
+- **Next:** D0.S4 — Scaffold and Captures (capture.py and mockup test harness).
+
+---
+
+## 2026-10-08 18:52 · Antigravity · Gemini
+- **Phase/Step:** D0.S4 — Scaffold and Captures
+- **Did:**
+  - Implemented `scripts/design_system/capture.py` packaging processed engine runs into safe, sanitized mockup fixtures under DDR-000a.
+  - Generated `mockups/captures/c05.json` (7 pairs, 6 outcomes, metrics, dialogue turns).
+  - Authored `mockups/_theme.css` with neutral tokens supporting Light (Paper), Dark (Obsidian), High-Contrast, and Comfortable / Compact densities.
+  - Built `mockups/_shell.js` universal test harness providing dynamic theme switching, density selection, pair scrubbing, deep-link URL state, and real-time SVG Color-Vision Deficiency (CVD) simulation filters (Deuteranopia, Protanopia, Tritanopia).
+  - Authored `mockups/SCAFFOLD.md` authoring guide and `mockups/index.html` mockup navigator portal.
+  - Implemented automated verification checks: `scripts/design_system/check_contrast.py` (WCAG 2.2 AA audit, 9/9 pass) and `scripts/design_system/lint_tokens.py` (token & anti-pattern linter, 3/3 clean pass).
+- **Decisions made:**
+  - Injected non-destructive SVG feColorMatrix matrix filters for real-time color blindness preview across any mock mounting against `_shell.js`.
+  - Caught and corrected layout-transition anti-pattern in `mockups/index.html` during initial lint pass.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `python3 scripts/design_system/capture.py c05`: generated `mockups/captures/c05.json`.
+  - `python3 scripts/design_system/check_contrast.py`: all 9 color combinations pass WCAG 2.2 AA.
+  - `python3 scripts/design_system/lint_tokens.py`: 3 files checked, ALL CLEAN.
+- **Next:** D0.S5 — Graph View v0 Lock (freeze v0 contract for G1 APP handoff).
+
+---
+
+## 2026-10-08 19:40 · Antigravity · Gemini
+- **Phase/Step:** D0.S5 — Graph View v0 Lock (HANDOFF to APP)
+- **Did:**
+  - Extended `mockups/_theme.css` with Section 6 G1 fallback token definitions (`--graph-*`, `--node-*`, `--tether-*`, `--atom-*`, `--focus-*`, `--label-*`, `--tooltip-*`, `--scrub-*`, `--motion-*`).
+  - Expanded `mockups/_shell.js:resolveColors()` to dynamically expose all G1 token values to canvas renderers.
+  - Implemented `mockups/graph-view.html` mounting against the shared harness, powered by real `c05.json` data, applying G1 fixes D1–D8 (edges from `outcome.related[]`, real parent-child hierarchy, open question persistence, zero invented fallback values, masses from engine).
+  - Passed token lint check: `python3 scripts/design_system/lint_tokens.py` (4/4 files ALL CLEAN).
+  - Authored and frozen `mockups/graph-view.lock.md` (Lock Manifest covering 9 eye terms and 6 gate terms).
+  - Swept interactive behavior into `mockups/graph-view.behavior.md` (6 stories: pan/zoom, pair scrub, hover/tooltips, click-to-transcript jump, live SSE replay choreography, reduced motion).
+  - Updated `mockups/INDEX.md` marking Graph View v0 as `★ LOCKED`.
+  - Updated `docs/design-system/STATE.md` marking Phase D0 CLOSED (100% complete).
+- **Decisions made:**
+  - Locked Graph View v0 contract on fallback tokens without waiting for general design system foundation, unblocking APP role for Phase G1.S6.
+  - Guaranteed 0% collision between satellite atom crowns and outcome text pedestal.
+  - Enforced 24px invisible hit area padding on satellite beads.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `python3 scripts/design_system/lint_tokens.py`: 4/4 files ALL CLEAN.
+  - `python3 scripts/design_system/check_contrast.py`: 9/9 PASS.
+  - `mockups/graph-view.html`, `graph-view.lock.md`, and `graph-view.behavior.md` verified on filesystem.
+- **Next:** Phase D1 — People, moments and principles (`ui-craft init`).
+
+---
+
+## 2026-10-08 20:00 · Antigravity · Gemini
+- **Phase/Step:** D1.S1 — Interview Round 1 (Register, Users, Moments & Desired Outcomes)
+- **Did:**
+  - Conducted Round 1 interview with the owner establishing core strategic pillars for `PRODUCT.md`.
+  - Confirmed product register: operational side-panel cockpit adjacent to chat, where the spatial graph node structure is the primary thinking canvas.
+  - Codified the "Rigorous AI Power User" archetype across coding, creative, app building, and research.
+  - Synthesized 4 canonical moments:
+    1. *The Returning Context Recoverer (Traceback)* — clicking a requirement atom jumps immediately to the exact chat turn.
+    2. *The Agency & Steering Checker* — verifying who is deciding things and steering the outcome.
+    3. *The Active Session Tracker* — graph grows in real time as the chat unfolds, with bidirectional scroll/scrub synchronization.
+    4. *The Cosmic Brain Recaller* — macro-to-micro retrieval from long-term project constellations down to a single turn.
+  - Bound emotional boundaries: clarity, calm orientation, effortless traceability; banned algorithmic judgment, guilt, casino gamification, and cognitive noise.
+  - Updated `docs/design-system/STATE.md` marking D1.S1 complete.
+- **Decisions made:**
+  - Ratified bidirectional scroll/scrubbing: scrolling in the chat scrubs the graph, and clicking satellite beads jumps the chat.
+  - Re-anchored the spatial model: the graph node structure and the macro brain are the core UI paradigms.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `docs/design-system/STATE.md` updated cleanly.
+- **Next:** D1.S2 — Interview Round 2: Personality Scales, Anti-References & Accessibility.
+
+---
+
+## 2026-10-08 20:15 · Antigravity · Gemini
+- **Phase/Step:** D1.S2 — Interview Round 2 (Personality Scales, Anti-References & Accessibility)
+- **Did:**
+  - Evaluated and locked brand personality spectrums: Calm (4), Instrument (3), Humane (7), Quiet (3), Organism+Machine Hybrid (symbiosis of living thought & mathematical precision), Observatory with Notebook intimacy (4).
+  - Deconstructed user-provided Obsidian CosmoGraph 3D visual references (`media_1791482820137_4f799f35.png`, `media_1791482820139_26596057.jpg`, `media_1791482915345_d58a6c5f.png`), preserving images in `docs/design-system/research/_local/`.
+  - Defined the Macro "Brain View" architectural vision: a Symbiotic Human × AI 3D Form / Cortex mapping all historical chats as constellation clusters, seamlessly branching into chat graph node panels and tabbed workspaces.
+  - Formulated practical execution constraints: WebGL instancing, lightweight shaders, deterministic data mapping from COTRACE pipeline.
+  - Confirmed strict anti-reference bans: sci-fi gaming HUDs, generic card dashboards, casino gamification, sterile JSON debuggers.
+  - Updated `docs/design-system/STATE.md` marking D1.S2 complete.
+- **Decisions made:**
+  - Replaced generic earth/planet metaphor with a bespoke Symbiotic Human × AI 3D Form / Cortex.
+  - Enshrined tabbed spatial continuity: clicking a macro cluster opens the focused atomic graph panel alongside its chat tab.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `docs/design-system/research/_local/` contains reference images.
+  - `docs/design-system/STATE.md` updated cleanly.
+- **Next:** D1.S3 — Author & Ratify `PRODUCT.md`.
+
+---
+
+## 2026-10-08 20:25 · Antigravity · Gemini
+- **Phase/Step:** D1.S3 — Author & Ratify `PRODUCT.md`
+- **Did:**
+  - Authored `docs/PRODUCT.md` synthesizing all strategic alignments from Rounds 1 & 2.
+  - Set register to `product` (operational cockpit, side panel adjacent to chat, and cosmic 3D workspace).
+  - Codified the "Rigorous AI Power User" archetype and 4 canonical moments (Traceback, Agency Check, Live Tracking, Cosmic Brain Recaller).
+  - Enshrined brand personality (Calm 4, Instrument 3, Humane 7, Quiet 3, Symbiotic Hybrid, Observatory with Notebook intimacy 4).
+  - Locked strict anti-references (Zombie UI, microwave burrito trap, sci-fi gaming HUDs, SaaS card grids, casino gamification, sterile terminal debuggers).
+  - Formulated 6 strategic design principles, each with an exact failure test:
+    1. *A Mirror, Not a Judge*
+    2. *Every Mark Traces to Its Source*
+    3. *Geometry Before Typography*
+    4. *Bidirectional Temporal Synchronization*
+    5. *Stillness First, Motion for Meaning*
+    6. *The Engine is Complex; the Picture is Simple*
+  - Enforced accessibility and sensory floors (WCAG 2.2 AA 4.5:1, CVD safety, 24px/44px touch targets, 60 FPS WebGL rendering).
+  - Updated `docs/design-system/STATE.md` marking D1.S3 complete.
+- **Decisions made:**
+  - Established bidirectional temporal synchronization (chat scroll scrubs graph, bead click navigates chat) as a core non-negotiable design principle.
+  - Required each design principle to carry an empirical failure test.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `docs/PRODUCT.md` created and validated against `ui-craft/reference/init.md` schema.
+  - `docs/design-system/STATE.md` updated cleanly.
+- **Next:** D1.S4 — Derive QA Personas & Ranking (record DDR-001).
+
+---
+
+## 2026-10-08 20:30 · Antigravity · Gemini
+- **Phase/Step:** D1.S4 — Derive QA Personas & Ranking (Record DDR-001)
+- **Did:**
+  - Extracted and authored 3 concrete testing reviewer personas in `.claude/qa/personas/`:
+    - `agency-checker.md`: The Mid-Work Glancer (250ms pre-attentive clarity, no reading required, quiet periphery).
+    - `context-recoverer.md`: The Traceback Searcher (sub-3s recognition, 24px hit targets, verbatim tooltips, chat jump).
+    - `brain-navigator.md`: The Macro Explorer (3D Symbiotic Cortex, 60 FPS, spatial containment, zero sci-fi HUD tropes).
+  - Authored `.claude/qa/personas/RANKING.md` establishing binding tie-break precedence (`agency-checker` > `context-recoverer` > `brain-navigator`).
+  - Authored and ratified `docs/design-system/decisions/DDR-001-brand-personality-and-principles.md` and indexed in `INDEX.md`.
+  - Updated `docs/design-system/STATE.md` marking **Phase D1 100% COMPLETE & CLOSED**.
+- **Decisions made:**
+  - Codified tie-break hierarchy placing in-flow operational work and pre-attentive clarity above traceback and macro exploration whenever design conflicts arise.
+  - Formally ratified all D1 strategic choices as binding DDR-001.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - All 3 persona files and `RANKING.md` verified on filesystem.
+  - `DDR-001` recorded and marked Ratified in `INDEX.md`.
+  - `docs/design-system/STATE.md` reflects Phase D1 closed.
+- **Next:** Phase D2 — References and directions · Step D2.S1: Reference Hunt.
+
+---
+
+## 2026-10-08 20:35 · Antigravity · Gemini
+- **Phase/Step:** D2.S1 — Reference Hunt
+- **Did:**
+  - Researched, structured, and committed `docs/design-system/research/REFERENCES.md` covering benchmarks across knowledge graphs, observatories, and high-craft software.
+  - Integrated owner's `brain ref/` (Cotrace Brain Prototype & Handoff) as Section 0 (Primary Working Guide & Directional Inspiration, NOT rigid ground truth) under the KISS rule.
+  - Codified the neutral brain organ scaffold, data-only color assignments, shared semantic vocabulary across 3D Brain & Adjacent Chat Graph, and 1-click transcript jumps.
+  - Updated `docs/design-system/STATE.md` marking D2.S1 complete.
+- **Decisions made:**
+  - Adopted `brain ref/` as a flexible starting guide that the owner can freely modify, adjust, or change during visual exploration.
+  - Applied the KISS rule to strip out unnecessary theoretical bloat and focus on the real product mechanics.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `docs/design-system/research/REFERENCES.md` updated cleanly.
+  - `docs/design-system/STATE.md` updated cleanly.
+- **Next:** D2.S2 — System Teardowns (Material 3, IBM Carbon, GitHub Primer, Vercel Geist, Atlassian, Apple HIG, Radix).
+
+---
+
+## 2026-10-09 10:15 · Antigravity · Gemini
+- **Phase/Step:** D2.S2 — System Teardowns
+- **Did:**
+  - Authored and committed `docs/design-system/research/TEARDOWNS.md` deconstructing 7 major design systems under the KISS rule:
+    - IBM Carbon: Borrowed data-viz categorical palette rules and contrast separation.
+    - Radix Colors: Borrowed the 12-step semantic functional scale for dark/light symmetry.
+    - Apple HIG: Borrowed fluid spring physics and camera damping for 3D/2D orbit & zoom.
+    - GitHub Primer: Borrowed matte dark backgrounds and 1px translucent border discipline.
+    - Vercel Geist: Borrowed tabular numerals and restrained monochrome typography.
+    - Google Material 3: Borrowed surface tonal elevation tints and 24px/44px invisible touch targets.
+    - Atlassian: Borrowed compact micro-lozenge tags for requirement states.
+  - Built the Master Adoption Blueprint directly mapping each borrowed mechanic into our upcoming Phase D3/D4 token architecture.
+  - Updated `docs/design-system/STATE.md` marking D2.S2 complete.
+- **Decisions made:**
+  - Adopted Radix 12-step functional scale as the structural template for DTCG semantic tokens in D3.
+  - Bound IBM Carbon data-viz contrast rules to resolve the user vs. AI party color conflict in D4.S1.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `docs/design-system/research/TEARDOWNS.md` verified on filesystem.
+  - `docs/design-system/STATE.md` updated cleanly.
+- **Next:** D2.S3 — Three Directions Exploration (`lock`, `critique`, `consensus`).
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+## 2026-10-09 · Claude Code · Opus — [DESIGN SYSTEM] WORK — Design System v0.1 foundation (DDR-002)
+- **Files:** `web/src/design-system/tokens/{tokens.json,build.mjs,tokens.css,tokens.ts,tokens.numeric.json}`; `docs/DESIGN.md` (generated); `docs/design-system/{DESIGN.body.md,AGENT_GUIDE.md,DEBT.md,STATE.md,README.md}`; `docs/design-system/foundations/{architecture,color,typography,layout,motion,dataviz,accessibility,voice}.md`; `docs/design-system/components/INVENTORY.md`; `docs/design-system/surfaces/README.md`; `docs/design-system/decisions/{DDR-002-prototype-baseline-v0-1,DDR-006-graph-share-ring-and-bead-rules,INDEX}.md`; `scripts/design_system/{inventory_prototype,migrate_to_tokens}.py`; `web/src/workspace/{workspace.css,obsidian-graph.css,LocalGraph.tsx,Workspace.tsx,main.tsx}`; `web/package.json` (tokens, tokens:check, workspace scripts).
+- **Did:** Inventoried the workspace prototype (176 distinct colours, 137 one-off greys, 19 font sizes, 15 radii, 54 spacing values, two contradictory party palettes). Built 289 DTCG tokens over three tiers with a dependency-free generator. Migrated 545 stylesheet values to tokens by property role; graph canvas reads `tokens.ts`. Added the `.theme-dark` stage scope, alpha scales, provisional light mode. Wrote foundations, agent guide, component inventory, surfaces map, debt register. Earlier the same day: ported the playground graph into the right panel, plan-B click, share ring and bead rules (DDR-006).
+- **Decided (owner):** Prototype look adopted as v0.1 baseline; three-direction exploration deferred until after backend integration (DDR-002). One party palette everywhere, provisionally cyan/amber (DDR-005 still open).
+- **Ran:** `npm run tokens:check` → up to date. `npx tsc -p tsconfig.app.json --noEmit` → clean. `npx vite build --config vite.workspace.config.ts` → built. `node ui-craft/scripts/detect.mjs web/src/workspace` → undocumented colours in our code 27 → 3 (36 remain in the bundled brain renderer). Browser: computed colours on main surfaces within one scale step of baseline; light theme switch works; graph stays dark; no console errors.
+- **Not done:** Playwright workspace tests not run (not installed). Component extraction (D6), gallery route, D4/D5 decisions. See `docs/design-system/DEBT.md`.
+- **Next:** Backend integration plan (connect the workspace to the engine and server), then the UI/UX phase from DEBT.md.
+
+---
+
+## 2026-10-09 · Claude Code · Opus — [DESIGN SYSTEM] WORK — v0.1 full application + gallery
+- **Files:** `web/src/workspace/{brain-engine.js,brain-frame.html,Brain.tsx,workspace.css,obsidian-graph.css,LocalGraph.tsx}`; `web/src/design-system/tokens/tokens.json` (brain tokens, 294 total); `web/design-system.html`; `web/src/design-system/gallery/{gallery.ts,gallery.css}`; `web/vite.workspace.config.ts` (comment); `scripts/design_system/snap_spacing.py`; `docs/design-system/{DEBT,STATE,README}.md`.
+- **Did:** 3D Brain now reads tokens through `window.COTRACE_TOKENS` and defaults to the party palette (was a grey "neutral study"); brain frame CSS migrated. Snapped 127 off-grid spacing values to the 4px grid. Removed dead side-stripe rules from the old SVG graph; tooltip stripes became tinted panels; scrubber fill animates with transform. Built the living gallery from the tokens.
+- **Ran:** `tokens:check` up to date; `tsc` clean; workspace build + standalone package OK; detector 48 → 8 findings (no side-tabs or layout transitions); browser: workspace, Brain (WebGL renders, party colours), gallery dark and light, no console errors, no horizontal overflow.
+- **Open:** four looping animations (owner decision); 14 one-off tints; canvas keyboard access; D4/D5 decisions. See DEBT.md.
+
+---
+
+## 2026-10-09 · Claude Code · Opus — [DESIGN SYSTEM] WORK — Brain chat mapping proposal (DDR-007, proposed)
+- **Files:** `web/src/workspace/{brain-engine.js,Brain.tsx,brain-frame.html}`; `docs/design-system/decisions/{DDR-007-brain-chat-lights-and-unfold,INDEX}.md`; `docs/design-system/{STATE.md,foundations/dataviz.md}`.
+- **Did:** Each chat in the Brain is now a light coloured by its human/AI split (amber AI-led, cyan human-led, white co-created) with a size-scaled glow and a cortex light pool; overview labels limited to the 5 most active chats; clicking a chat unfolds its final-state outcome map (outcome lights, tethers, dashed related links, names) while other chats dim; chats grouped into topic lobes (provisional, until cross-chat evidence); no chat-to-chat links drawn. `?brain=legacy` keeps the old spheres for comparison.
+- **Ran:** `tsc` clean; browser: overview and unfold on c05 render, labels resolve, no console errors (WebGL frames throttle in the preview pane, so screenshots needed waits).
+- **Next:** Owner decision on DDR-007 and its open questions.
+
+---
+
+## 2026-10-09 · Claude Code · Opus — [DESIGN SYSTEM] WORK — Symbiotic cortex + Brain rulebook (DDR-008, proposed)
+- **Files:** `web/src/workspace/{brain-engine.js,Brain.tsx,brain-frame.html}`; `web/src/design-system/tokens/tokens.json` (+ `component.brain.cortex.*` 22 rules, `component.brain.dendrite`; 317 tokens); `docs/design-system/foundations/{BRAIN_SYSTEM_SPEC,dataviz}.md`; `docs/design-system/decisions/{DDR-008-symbiotic-cortex,DDR-007-brain-chat-lights-and-unfold,INDEX}.md`; `docs/design-system/STATE.md`.
+- **Did:** Replaced DDR-007's floating lights with a cell lattice on the cortex (2,378 spherical-Voronoi cells that bend with the folds). Each chat claims a territory, sized linearly by mass (1 cell = 20 mass; global unit doubling), with a one-cell moat between territories and first-seen claim order. Cells are human or symbiotic in the final share, as a clockwise sector. The outcome graph is drawn flat on the territory: root soma, neurons placed from the 2D layout, tapered surface dendrites, a signal in the open territory, share rings only when open. Text is the chat title only; outcome names on hover. The camera focuses along the smooth normal. Wrote BRAIN_SYSTEM_SPEC (rulebook with empirical table, mapping matrix, interaction table, future tracts and time rules).
+- **Ran:** `tsc` clean; `tokens:check` up to date; workspace build + package OK. Browser (preview pane): overview from both sides, c05/c04/c07/c20 opened; real canvas click on a territory selects the chat and the right panel follows; panel list click opens the territory; `getTerritories()` counts match the spec table; no console errors.
+- **Not run:** Playwright workspace tests (`playwright` not installed on this machine).
+- **Next:** Owner decision on DDR-008 open questions; then backend integration plan.
+
+---
+
+## 2026-10-09 · Claude Code · Opus — [PLANNING] Standalone v1 plan (Track S)
+- **Files:** `docs/plans/STANDALONE_V1_PLAN.md` (new); `docs/ROADMAP.md` (pointer to Track S).
+- **Did:** Audited the seams between engine and workspace: no server in the tree (the Phase 3 FastAPI server is in history at `27e7d68`); the workspace reads a static `data.generated.json` built by a hand-run script with hard-coded ids and positions; the composer is unwired; only the Claude export parser exists. Wrote the plan: end state, target architecture, decisions S-D1–S-D12, contracts (workspace_bundle, API, events, library), phases S0–S7 with per-step builder and done-when, lanes, Antigravity ritual and kickoff prompt, testing, cost and privacy, risks, owner decisions.
+- **Ran:** `.venv/bin/python -m pytest` → 102 passed (baseline).
+- **Next:** Owner answers §10 decisions; S0 (commit the prototype baseline) before any other tool starts.
