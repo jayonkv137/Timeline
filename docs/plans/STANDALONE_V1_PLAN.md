@@ -319,7 +319,9 @@ This is the workflow we have used so far, made explicit.
 4. Antigravity ends every step with an **Owner check** block: what to open or run, what to click, and what you should see. You do it yourself. Tests green? Done-when met? Diff size sensible? Any engine number changed (it must not)? Then reply **"Finish Step"**, or report what's wrong (it becomes a fix step).
 5. Gate steps: you decide, then the command center records the decision (a DDR for contract or visual changes).
 
-**Kickoff prompt (paste at the start of every session):**
+**Full prompts** (first session, resume, owner test, gate): [`GEMINI_KICKOFF.md`](GEMINI_KICKOFF.md).
+
+**Short kickoff prompt:**
 ```
 You are the build agent for COTRACE (repo: Timeline). Read, in order:
 AGENTS.md (all), docs/plans/STANDALONE_V1_PLAN.md §0–§3 and the section for phase <S#>,
