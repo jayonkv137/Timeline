@@ -1,0 +1,292 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "workspace_bundle.schema.json",
+  "title": "WorkspaceBundle",
+  "description": "Normalized chat workspace bundle contract. Corresponds to web/src/workspace/types.ts (Chat) and STANDALONE_V1_PLAN §3.1.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stable chat identifier derived from folder or source conversation id."
+    },
+    "title": {
+      "type": "string",
+      "description": "Display title of the conversation."
+    },
+    "rootTitle": {
+      "type": "string",
+      "description": "Text of the root outcome at the latest pair."
+    },
+    "category": {
+      "type": "string",
+      "description": "Conversation category (e.g. Research, Coding, Writing, Creative, Uncategorised)."
+    },
+    "totalPairs": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total number of dialogue pairs in this chat."
+    },
+    "dialogue": {
+      "type": "array",
+      "description": "Chronological turns forming dialogue pairs.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pair": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Pair index (1-based)."
+          },
+          "speaker": {
+            "type": "string",
+            "enum": ["user", "ai"],
+            "description": "Speaker for this turn."
+          },
+          "text": {
+            "type": "string",
+            "description": "Verbatim message content."
+          },
+          "attachments": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "List of attached file names or references."
+          },
+          "ts": {
+            "type": "string",
+            "description": "Timestamp of the turn."
+          }
+        },
+        "required": ["pair", "speaker", "text", "attachments", "ts"],
+        "additionalProperties": false
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "description": "Outcomes mapped as graph nodes.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Outcome identifier (e.g. 'outcome 1')."
+          },
+          "title": {
+            "type": "string",
+            "description": "Outcome headline/text."
+          },
+          "parent": {
+            "type": ["string", "null"],
+            "description": "Parent outcome id, or null for root outcome."
+          },
+          "related": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "IDs of related non-parent outcomes."
+          },
+          "born": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Pair index at which this outcome was born."
+          },
+          "x": {
+            "type": "number",
+            "description": "Layout X coordinate."
+          },
+          "y": {
+            "type": "number",
+            "description": "Layout Y coordinate."
+          },
+          "root": {
+            "type": "boolean",
+            "description": "True if this node is the single root outcome."
+          },
+          "sourcePair": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Pair index containing the originating turn."
+          },
+          "sourceSpeaker": {
+            "type": "string",
+            "enum": ["human", "ai"],
+            "description": "Party that originated this outcome."
+          }
+        },
+        "required": ["id", "title", "parent", "related", "born", "x", "y", "root", "sourcePair", "sourceSpeaker"],
+        "additionalProperties": false
+      }
+    },
+    "atoms": {
+      "type": "array",
+      "description": "Requirement and slot atoms attached to outcome nodes.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Compound atom identifier (e.g. 'outcome 1:req 1' or 'outcome 1:slot 1')."
+          },
+          "nodeId": {
+            "type": "string",
+            "description": "Parent outcome node id."
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["requirement", "question", "resolved"],
+            "description": "Atom classification."
+          },
+          "text": {
+            "type": "string",
+            "description": "Verbatim requirement or question text."
+          },
+          "question": {
+            "type": ["string", "null"],
+            "description": "Underlying question text if resolved slot, else null."
+          },
+          "origin": {
+            "type": "string",
+            "enum": ["human", "ai"],
+            "description": "Party that first raised this requirement/question."
+          },
+          "resolver": {
+            "type": ["string", "null"],
+            "enum": ["human", "ai", null],
+            "description": "Party that resolved this atom, or null if unclosed."
+          },
+          "born": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Pair index when this atom appeared."
+          },
+          "end": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Pair index until which atom remains active (exclusive) or deleted/resolved."
+          },
+          "sourcePair": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Pair index of the originating action."
+          },
+          "sourceSpeaker": {
+            "type": "string",
+            "enum": ["human", "ai"],
+            "description": "Originating action speaker."
+          },
+          "quote": {
+            "type": "string",
+            "description": "Evidence quote from dialogue turn."
+          },
+          "choices": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Available choices if structured slot."
+          }
+        },
+        "required": ["id", "nodeId", "kind", "text", "question", "origin", "resolver", "born", "end", "sourcePair", "sourceSpeaker", "quote", "choices"],
+        "additionalProperties": false
+      }
+    },
+    "snapshots": {
+      "type": "array",
+      "description": "Per-pair cumulative mass and active terminal outcome state.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pair": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Pair index (1-based)."
+          },
+          "mass": {
+            "type": "object",
+            "description": "Cumulative scores per outcome id at this pair.",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "human": { "type": "number", "description": "Cumulative human contribution mass." },
+                "ai": { "type": "number", "description": "Cumulative AI contribution mass." },
+                "delta": { "type": "number", "description": "Mass gained during this pair." }
+              },
+              "required": ["human", "ai", "delta"],
+              "additionalProperties": false
+            }
+          },
+          "terminal": {
+            "type": "string",
+            "description": "Outcome id carrying the active terminal focus at this pair."
+          }
+        },
+        "required": ["pair", "mass", "terminal"],
+        "additionalProperties": false
+      }
+    },
+    "summary": {
+      "type": "string",
+      "description": "High-level summary of the entire dialogue."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ready", "processing", "needs_review", "error"],
+      "default": "ready",
+      "description": "Processing status of the chat."
+    },
+    "processedPairs": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of pairs processed so far if processing."
+    },
+    "flaggedPairs": {
+      "type": "array",
+      "description": "Pairs flagged for review or invariant violation.",
+      "items": {
+        "anyOf": [
+          { "type": "integer", "minimum": 1 },
+          {
+            "type": "object",
+            "properties": {
+              "pair": { "type": "integer", "minimum": 1 },
+              "invariant": { "type": "string" },
+              "detail": { "type": "string" }
+            },
+            "required": ["pair"]
+          }
+        ]
+      }
+    },
+    "source": {
+      "type": "object",
+      "description": "Origin platform and ingestion metadata.",
+      "properties": {
+        "platform": {
+          "type": "string",
+          "description": "Source platform name (e.g. claude, chatgpt, gemini, live, archive)."
+        },
+        "importedAt": {
+          "type": "string",
+          "description": "ISO timestamp of importation."
+        },
+        "conversationId": {
+          "type": "string",
+          "description": "Original platform conversation id."
+        }
+      },
+      "required": ["platform"],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "id",
+    "title",
+    "rootTitle",
+    "category",
+    "totalPairs",
+    "dialogue",
+    "nodes",
+    "atoms",
+    "snapshots",
+    "summary",
+    "status",
+    "source"
+  ],
+  "additionalProperties": false
+}

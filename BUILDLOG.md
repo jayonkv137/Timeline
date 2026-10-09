@@ -1301,3 +1301,24 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `.venv/bin/python -m pytest -q`: 102 passed in 0.65s (baseline intact).
 - **Next:** S0.G — Owner review of commit list and baseline tag; then Phase S1 (S1.1).
 
+---
+
+## 2026-10-09 18:50 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S1.1 — Workspace bundle schema (AG+)
+- **Did:**
+  - `engine/schemas/workspace_bundle.schema.json` — created JSON Schema Draft 2020-12 conforming to `web/src/workspace/types.ts` and Plan §3.1, including `status` and `source`.
+  - `tests/test_workspace_bundle_schema.py` — created tier1 test verifying Draft 2020-12 syntax, schema validation across all 10 prototype chats in `data.generated.json`, strict rejections on malformed/extra properties, and AG+ sacred fixture constants.
+  - `docs/plans/STANDALONE_V1_PLAN.md` — marked S1.1 complete (✅).
+- **Decisions made:**
+  - Enforced `additionalProperties: false` strictly throughout `workspace_bundle.schema.json` to preserve contract safety.
+  - Defaulted `status="ready"` and `source={"platform":"archive"}` when validating legacy `data.generated.json` chats per plan spec.
+  - Verified AG+ sacred fixture numbers: Δ_you=87.0, Δ_AI=314.0 (21.7% / 78.3%), 4 You · 10 AI, COPILOT.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `.venv/bin/python -m pytest tests/test_workspace_bundle_schema.py -v`: 10 passed in 0.10s.
+  - `.venv/bin/python -m pytest -q`: 112 passed in 0.69s (up from 102 baseline; 0 dropped).
+  - `npm run e2e`: 2/2 suites passed with 0 page/console errors.
+  - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+- **Next:** S1.2 — `engine/projections/workspace.py` pure projection function (CC / AG+).
+
+
