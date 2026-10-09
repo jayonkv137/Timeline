@@ -1501,6 +1501,35 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
 - **Next:** S2.2 — `server/app.py` (FastAPI): `/health`, `GET/PATCH/DELETE /chats`, `/chats/{id}`, `/events` (SSE broadcaster) (AG).
 
+---
+
+## 2026-10-09 19:58 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S2.2 — FastAPI read/write endpoints and SSE broadcaster (AG)
+- **Did:**
+  - `server/app.py` — created FastAPI application exposing §3.2 & §3.3 HTTP and SSE contracts:
+    - `/health` returning service status, version, library path, and active chat count.
+    - `GET /chats` returning summarized chat listings (`mass`, `share`, `totalPairs`, `source`).
+    - `GET /chats/{id}` returning full `workspace_bundle.json`.
+    - `PATCH /chats/{id}` updating title and category across `meta.json` and bundle.
+    - `DELETE /chats/{id}` trashing chat folder.
+    - `POST /chats/{id}/restore` restoring trashed chat with 409 conflict detection.
+    - `GET /events` Server-Sent Events stream using `SSEBroadcaster` (`asyncio.Queue` per subscriber).
+    - Dual routing at `/api/*` and top-level `/*` with CORS enabled for local frontend development.
+  - `tests/test_server_app.py` — added 7 tier1 tests with `TestClient` covering health checks, listing, bundle reading, metadata patching, trash/restore lifecycle, 404/409 error handling, and async SSE broadcasting.
+  - `docs/plans/STANDALONE_V1_PLAN.md` — marked S2.2 complete (✅).
+- **Decisions made:**
+  - Injected `Library` instance via `create_app(library=...)` factory into `app.state.library` for complete test isolation.
+  - Mirrored `/api` routes at top level for backwards and future frontend compatibility.
+  - Verified AG+ sacred fixture numbers: Δ_you=87.0, Δ_AI=314.0 (21.7% / 78.3%), 4 You · 10 AI, COPILOT; 0 diffs on frozen fixture.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `.venv/bin/python -m pytest tests/test_server_app.py -v`: 7 passed in 0.30s.
+  - `.venv/bin/python -m pytest -q`: 203 passed in 1.10s (up from 196; baseline 102 intact).
+  - `npm run e2e`: 2/2 suites passed with 0 page/console errors.
+  - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+- **Next:** S2.3 — `scripts/seed_library.py`: copy 10 processed chats into library and project bundles (AG).
+
+
 
 
 
