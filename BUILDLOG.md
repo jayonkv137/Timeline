@@ -1278,3 +1278,26 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
 - **Did:** Audited the seams between engine and workspace: no server in the tree (the Phase 3 FastAPI server is in history at `27e7d68`); the workspace reads a static `data.generated.json` built by a hand-run script with hard-coded ids and positions; the composer is unwired; only the Claude export parser exists. Wrote the plan: end state, target architecture, decisions S-D1–S-D12, contracts (workspace_bundle, API, events, library), phases S0–S7 with per-step builder and done-when, lanes, Antigravity ritual and kickoff prompt, testing, cost and privacy, risks, owner decisions.
 - **Ran:** `.venv/bin/python -m pytest` → 102 passed (baseline).
 - **Next:** Owner answers §10 decisions; S0 (commit the prototype baseline) before any other tool starts.
+
+---
+
+## 2026-10-09 18:42 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S0.3 — Install Playwright e2e test suite
+- **Did:**
+  - Created root `package.json` with Playwright devDependency and `build:workspace`, `e2e` scripts.
+  - Generated root `package-lock.json` and installed Chromium browser binary (`npx playwright install chromium`).
+  - Added `"build:workspace"` script in `web/package.json` chaining TypeScript compiler, Vite workspace config build, and `package-workspace.py`.
+  - Updated `scripts/workspace-tests/smoke.cjs` selectors to match the ported canvas graph (`.obsidian-graph[data-pair]`) and notched scrubber (`.og-notch`), adding lock settling timeout for manual scroll synchronization.
+  - Updated `docs/plans/STANDALONE_V1_PLAN.md` marking S0.3 complete (✅).
+  - Generated fresh test screenshots in `docs/workspace/`.
+- **Decisions made:**
+  - Placed Playwright runner scripts at the repository root so `npm run e2e` runs directly from the repo root as specified in the plan.
+  - Configured `npm run e2e` to trigger a fresh build and package of `web/cotrace-workspace.html` prior to test runs to prevent running against stale assets.
+  - Fixed legacy DOM selectors in `smoke.cjs` to target the active canvas graph and notched scrubber introduced in DDR-006.
+- **Spec contradictions/gaps flagged:**
+  - `smoke.cjs` had outdated selectors targeting an SVG-based `<input type="range">` scrubber and `.graph-node` elements, which failed against the newer canvas-based graph and notched capsule scrubber. Updated selectors in `smoke.cjs` without changing assertion logic.
+- **Verification:**
+  - `npm run e2e`: 2/2 test suites passed (`smoke.cjs` and `refinement.cjs`), zero page errors, zero console errors.
+  - `.venv/bin/python -m pytest -q`: 102 passed in 0.65s (baseline intact).
+- **Next:** S0.G — Owner review of commit list and baseline tag; then Phase S1 (S1.1).
+

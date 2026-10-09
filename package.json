@@ -1,0 +1,29 @@
+{
+  "name": "timeline",
+  "version": "1.0.0",
+  "description": "<div align=\"center\">   <img src=\"assets/banner.png\" alt=\"Agency Panel Banner\" width=\"100%\" /> </div>",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "private": true,
+  "scripts": {
+    "build:workspace": "npm --prefix web run build:workspace",
+    "e2e": "npm run build:workspace && node scripts/workspace-tests/smoke.cjs && node scripts/workspace-tests/refinement.cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jayonkv137/Timeline.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jayonkv137/Timeline/issues"
+  },
+  "homepage": "https://github.com/jayonkv137/Timeline#readme",
+  "devDependencies": {
+    "playwright": "^1.64.0"
+  }
+}

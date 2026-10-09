@@ -174,7 +174,7 @@ Goal: the repo is the shared brain, so the prototype must be in git before anoth
 |---|---|---|---|
 | S0.1 ✅ | CC | Commit today's work in logical commits on a branch `s/standalone-v1` (design system · workspace port · Brain cortex · docs · corpus promotions). Tag `prototype-v0.1` | `git status` clean except ignored data; tag exists |
 | S0.2 ✅ | CC | `.gitignore`: library paths, `secrets.json`, `dist-*`; `.env.example` gains `COTRACE_HOME`, `CHAT_MODEL`, `BUDGET_MONTHLY_USD` | no private data can be staged |
-| S0.3 | AG | Install Playwright (`npm i -D playwright` in the repo root, plus the browser) and add `npm run e2e` to run `scripts/workspace-tests/*.cjs` | `npm run e2e` passes on `cotrace-workspace.html` |
+| S0.3 ✅ | AG | Install Playwright (`npm i -D playwright` in the repo root, plus the browser) and add `npm run e2e` to run `scripts/workspace-tests/*.cjs` | `npm run e2e` passes on `cotrace-workspace.html` |
 | S0.4 ✅ | CC | AGENTS.md "Current phase" → "Track S, phase S1 (docs/plans/STANDALONE_V1_PLAN.md)". ROADMAP: link this plan | the next agent reads the right phase |
 | **S0.G** | You | Review the commit list and tag | — |
 

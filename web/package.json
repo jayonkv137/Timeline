@@ -11,7 +11,8 @@
     "sync-fixture": "node scripts/sync-fixture.js",
     "tokens": "node src/design-system/tokens/build.mjs",
     "tokens:check": "node src/design-system/tokens/build.mjs --check",
-    "workspace": "vite --config vite.workspace.config.ts"
+    "workspace": "vite --config vite.workspace.config.ts",
+    "build:workspace": "tsc -b && vite build --config vite.workspace.config.ts && python3 scripts/package-workspace.py"
   },
   "dependencies": {
     "lucide-react": "^1.23.0",
