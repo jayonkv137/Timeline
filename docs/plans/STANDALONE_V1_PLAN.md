@@ -190,8 +190,8 @@ Goal: replace the hand-run `compile-workspace.py` with an engine projection that
 | S1.5 ✅ | CC / AG+ | Call the projection at the end of each pair in `run_chat`, and from a `python -m engine project <chat_dir>` CLI | rerunning replay on one chat writes `workspace_bundle.json` |
 | S1.6 ✅ | AG | `web/scripts/compile-workspace.py` becomes a 10-line wrapper over the projection (offline sample data stays reproducible) | `data.generated.json` regenerates through the engine |
 | S1.7 ✅ | AG | `python -m engine report <chat>` writes a readable one-page Markdown for a chat: outcomes with their shares, decisions, top quotes, flagged pairs. This is for **you** to judge maps against your memory | report renders for all 10 chats |
-| **S1.T** | You | **Owner test (§6A):** open the reports for 3 chats you remember well and mark each map right, partly right or wrong in the test log | log entry written |
-| **S1.G** | You | **Contract freeze**: read §3.1 and one generated bundle; accept the schema v1.0 | — |
+| S1.T ✅ | You | **Owner test (§6A):** open the reports for 3 chats you remember well and mark each map right, partly right or wrong in the test log | log entry written |
+| S1.G ✅ | You | **Contract freeze**: read §3.1 and one generated bundle; accept the schema v1.0 | — |
 
 **Extra checks for AG+ steps:**
 - The frozen fixture stays untouched.

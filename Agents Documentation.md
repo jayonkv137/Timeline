@@ -73,11 +73,11 @@ quote. It is a mirror, not a judge.
   schemas, configs), pause for owner review before building on top of it.
 
 ## Current phase
-**Track S: Standalone v1.** Plan: `docs/plans/STANDALONE_V1_PLAN.md` (the brief for every S phase).
-S0.1, S0.2 and S0.4 are done (baseline committed, tag `prototype-v0.1`). **Next step: S0.3** (Playwright + `npm run e2e`), then S1.
+**Track S: Standalone v1, Phase S2 (Local server and library).** Plan: `docs/plans/STANDALONE_V1_PLAN.md` (the brief for every S phase).
+Phase S0 and Phase S1 are complete (tagged `prototype-v0.1` and `s1-done`). **Next step: S2.1** (`server/library.py`: library layout §3.4, `COTRACE_HOME`, atomic writes, trash and restore).
 The owner tests and approves every phase by hand: §6A of the plan, results in `docs/plans/OWNER_TEST_LOG.md`.
 Every step ends with an "Owner check" block. Cost and performance reports go in `docs/plans/reports/`.
-Tests run with the project venv: `.venv/bin/python -m pytest` (102 passing at baseline).
+Tests run with the project venv: `.venv/bin/python -m pytest` (181 passing). E2E: `npm run e2e`.
 
 ### Previous phase
 Phase E2 — Stage 4 Math & Projections (CLOSED — Tagged `e2-done`).
