@@ -48,7 +48,7 @@ def main():
     if args.mode in ("record", "off"):
         inner = LLMClient(config, out_dir=out_dir)
 
-    client = CachingLLMClient(inner_client=inner, mode=args.mode)
+    client = CachingLLMClient(inner_client=inner, mode=args.mode, out_dir=out_dir)
 
     print(f"Starting pipeline extraction for chat: {chat_id}")
     print(f"  Dialogue: {dialogue_path}")

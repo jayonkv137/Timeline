@@ -1707,6 +1707,32 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - Git diff `data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
 - **Next:** Phase S3 — Step S3.1: Usage meter in `engine/llm.py` (`run/usage.jsonl`) and price table in `engine/models.yaml` (CC / AG+).
 
+---
+
+## 2026-10-09 23:29 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S3.1 — Usage meter and price table (Keys, models, cost and budget)
+- **Did:**
+  - Created `engine/models.yaml` containing model price table across Gemini, Claude, and OpenAI families with standard prompt/completion rates per million tokens.
+  - Created `engine/models.py` with zero-dependency simple YAML parser (`parse_simple_yaml`), `load_price_table`, `get_model_price`, and `compute_token_cost` (guaranteeing exact $0.00 cost in replay mode).
+  - Implemented `UsageMeter` in `engine/llm.py` logging per-call token counts and dollar costs to `<out>/run/usage.jsonl` matching the required schema (`timestamp`, `step`, `call`, `pair`, `model`, `tokens`, `cost`, `mode`).
+  - Updated `LLMClient` in `engine/llm.py` to record live OpenAI-compatible API usage and fallback estimations, logging to `UsageMeter`.
+  - Updated `CachingLLMClient` in `engine/llm_cache.py` to preserve recorded tokens from cassettes, record tokens in cassettes during recording, and write zero-cost replay usage records to `usage.jsonl`.
+  - Updated `engine/pipeline.py` to configure `client.set_out_dir(out_dir)` in `run_chat` and clear `usage.jsonl` on clean runs.
+  - Updated `scripts/run_chat.py` and `scripts/run_corpus.py` to pass `out_dir` to `CachingLLMClient`.
+  - Created comprehensive test suite `tests/test_usage_meter.py` verifying YAML parsing, pricing calculation, `UsageMeter` JSONL schema, mock live LLMClient, and offline replay chat execution with $0.00 cost.
+- **Decisions made:**
+  - Zero-dependency rule (Build Playbook §5): Built lightweight Python YAML parser instead of introducing third-party `pyyaml` dependency.
+  - Replay cost guarantee: In replay mode (`LLM_CACHE_MODE=replay`), token counts are preserved from cassettes/prompts, but cost is strictly `$0.00` across prompt, completion, and total cost.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `pytest tests/test_usage_meter.py -v`: 5/5 tests passed.
+  - `.venv/bin/python -m pytest -q`: 218 passed in 2.87s (baseline 102 intact).
+  - Replay execution: `scripts/run_chat.py --chat-id c10_research_short --mode replay --out-dir /tmp/test_chat_run --clear` produced valid `<out>/run/usage.jsonl` with 12 call rows and 0.0 cost.
+  - Sacred fixture numbers: 21.7% / 78.3%, 4 · 10, COPILOT verified invariant.
+  - Git diff `data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+- **Next:** S3.2 — `estimate(dialogue) -> {low, high}` calibrated on recorded runs of 10 chats (CC).
+
+
 
 
 

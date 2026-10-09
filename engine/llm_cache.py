@@ -17,7 +17,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from engine.llm import LLMError
+from engine.llm import LLMError, UsageMeter
 
 
 class LLMCacheMissError(LLMError):
@@ -38,6 +38,7 @@ class CachingLLMClient:
         inner_client: Any = None,
         mode: str | None = None,
         cassettes_dir: Path | str | None = None,
+        out_dir: Path | str | None = None,
     ) -> None:
         if mode is None:
             mode = os.environ.get("LLM_CACHE_MODE", "off").lower()
@@ -58,6 +59,21 @@ class CachingLLMClient:
         self._call_count = 0
         self._retry_count = 0
         self._total_tokens = 0
+
+        usage_path = None
+        if out_dir is not None:
+            usage_path = Path(out_dir) / "run" / "usage.jsonl"
+        elif self._inner is not None and hasattr(self._inner, "usage_path"):
+            usage_path = self._inner.usage_path
+
+        self.usage_meter = UsageMeter(usage_path)
+
+    def set_out_dir(self, out_dir: Path | str) -> None:
+        """Update out_dir and point usage.jsonl to <out>/run/usage.jsonl."""
+        usage_path = Path(out_dir) / "run" / "usage.jsonl"
+        self.usage_meter.set_path(usage_path)
+        if self._inner is not None and hasattr(self._inner, "set_out_dir"):
+            self._inner.set_out_dir(out_dir)
 
     @property
     def call_count(self) -> int:
@@ -97,8 +113,24 @@ class CachingLLMClient:
                 data = json.load(f)
             self.cache_hits += 1
             self._call_count += 1
-            # Rough token estimate from prompt and serialized response
-            self._total_tokens += len(prompt.split()) + len(str(data.get("response", "")).split())
+            recorded_tokens = data.get("tokens")
+            if isinstance(recorded_tokens, dict):
+                prompt_tokens = recorded_tokens.get("prompt", 0)
+                completion_tokens = recorded_tokens.get("completion", 0)
+            else:
+                prompt_tokens = max(1, len(prompt) // 4)
+                resp_str = json.dumps(data.get("response", "")) if not isinstance(data.get("response"), str) else data.get("response")
+                completion_tokens = max(1, len(resp_str) // 4)
+
+            self._total_tokens += prompt_tokens + completion_tokens
+            self.usage_meter.record(
+                step=step,
+                model=model,
+                prompt_tokens=prompt_tokens,
+                completion_tokens=completion_tokens,
+                is_replay=True,
+                mode="replay",
+            )
             return data["response"]
 
         if self.mode == "record":
@@ -107,18 +139,49 @@ class CachingLLMClient:
                     data = json.load(f)
                 self.cache_hits += 1
                 self._call_count += 1
-                self._total_tokens += len(prompt.split()) + len(str(data.get("response", "")).split())
+                recorded_tokens = data.get("tokens")
+                if isinstance(recorded_tokens, dict):
+                    prompt_tokens = recorded_tokens.get("prompt", 0)
+                    completion_tokens = recorded_tokens.get("completion", 0)
+                else:
+                    prompt_tokens = max(1, len(prompt) // 4)
+                    resp_str = json.dumps(data.get("response", "")) if not isinstance(data.get("response"), str) else data.get("response")
+                    completion_tokens = max(1, len(resp_str) // 4)
+
+                self._total_tokens += prompt_tokens + completion_tokens
+                self.usage_meter.record(
+                    step=step,
+                    model=model,
+                    prompt_tokens=prompt_tokens,
+                    completion_tokens=completion_tokens,
+                    is_replay=True,
+                    mode="cache_hit",
+                )
                 return data["response"]
 
             if self._inner is None:
                 raise LLMError("inner LLMClient is required when cache mode is 'record'")
             response = self._inner.call_json(step, model, prompt)
+            usage_m = getattr(self._inner, "usage_meter", None)
+            if isinstance(usage_m, UsageMeter) and usage_m.records:
+                last_rec = usage_m.records[-1]
+                prompt_tokens = int(last_rec["tokens"]["prompt"])
+                completion_tokens = int(last_rec["tokens"]["completion"])
+            else:
+                prompt_tokens = max(1, len(prompt) // 4)
+                completion_tokens = max(1, len(str(response)) // 4)
+
             cassette_data = {
                 "key": key,
                 "step": step,
                 "model": model,
                 "prompt": prompt,
                 "response": response,
+                "tokens": {
+                    "prompt": prompt_tokens,
+                    "completion": completion_tokens,
+                    "total": prompt_tokens + completion_tokens,
+                },
                 "recorded_at": datetime.now(timezone.utc).isoformat(),
             }
             with open(cassette_path, "w", encoding="utf-8") as f:

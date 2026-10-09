@@ -1166,12 +1166,15 @@ def run_chat(
     run_dir = out_dir / "run"
     run_dir.mkdir(parents=True, exist_ok=True)
 
+    if hasattr(client, "set_out_dir"):
+        client.set_out_dir(out_dir)
+
     if clear_existing:
         for fname in ["ledger.jsonl", "state.json", "dialogue.json"]:
             p = out_dir / fname
             if p.exists():
                 p.unlink()
-        for fname in ["status.json", "report.json", "pipeline_state.json"]:
+        for fname in ["status.json", "report.json", "pipeline_state.json", "usage.jsonl"]:
             p = run_dir / fname
             if p.exists():
                 p.unlink()

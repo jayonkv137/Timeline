@@ -65,6 +65,94 @@ def parse_json_response(text):
     return repaired
 
 
+import re
+from typing import Any
+from engine.models import compute_token_cost
+
+
+class UsageMeter:
+    """Tracks token consumption and USD costs, logging to run/usage.jsonl.
+    
+    Adheres to STANDALONE_V1_PLAN §4 (Step S3.1):
+    {"timestamp": ..., "step": ..., "pair": ..., "model": ..., "tokens": {...}, "cost": {...}, "mode": ...}
+    """
+
+    def __init__(self, usage_path: Path | str | None = None):
+        self.usage_path = Path(usage_path).resolve() if usage_path else None
+        self.records: list[dict[str, Any]] = []
+        self.total_prompt_tokens: int = 0
+        self.total_completion_tokens: int = 0
+        self.total_cost: float = 0.0
+
+    def set_path(self, usage_path: Path | str) -> None:
+        self.usage_path = Path(usage_path).resolve()
+
+    def record(
+        self,
+        step: str,
+        model: str,
+        prompt_tokens: int,
+        completion_tokens: int,
+        is_replay: bool = False,
+        mode: str = "live",
+    ) -> dict[str, Any]:
+        prompt_tokens = max(0, int(prompt_tokens))
+        completion_tokens = max(0, int(completion_tokens))
+        total_tokens = prompt_tokens + completion_tokens
+
+        pair_num = None
+        match = re.search(r"pair(\d+)", step)
+        if match:
+            pair_num = int(match.group(1))
+
+        step_name = step.split(":")[0] if ":" in step else step
+
+        cost = compute_token_cost(
+            model_name=model,
+            prompt_tokens=prompt_tokens,
+            completion_tokens=completion_tokens,
+            is_replay=is_replay,
+        )
+
+        entry = {
+            "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "step": step_name,
+            "call": step,
+            "pair": pair_num,
+            "model": model,
+            "tokens": {
+                "prompt": prompt_tokens,
+                "completion": completion_tokens,
+                "total": total_tokens,
+            },
+            "cost": cost,
+            "mode": mode,
+        }
+
+        self.records.append(entry)
+        self.total_prompt_tokens += prompt_tokens
+        self.total_completion_tokens += completion_tokens
+        self.total_cost += cost["total"]
+
+        if self.usage_path:
+            self.usage_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(self.usage_path, "a", encoding="utf-8") as f:
+                f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
+        return entry
+
+    def summary(self) -> dict[str, Any]:
+        return {
+            "calls": len(self.records),
+            "tokens": {
+                "prompt": self.total_prompt_tokens,
+                "completion": self.total_completion_tokens,
+                "total": self.total_prompt_tokens + self.total_completion_tokens,
+            },
+            "cost": round(self.total_cost, 6),
+        }
+
+
 class LLMClient:
     def __init__(self, config, out_dir):
         """`out_dir` is the run's output folder (`<out>`); the monitor file is
@@ -73,12 +161,21 @@ class LLMClient:
         if not config.llm_api_key:
             raise LLMError("LLM_API_KEY is not set (check .env at repo root)")
         self._client = OpenAI(api_key=config.llm_api_key, base_url=config.llm_base_url)
-        self.monitor_path = Path(out_dir) / "run" / "llm_monitor.txt"
+        self.out_dir = Path(out_dir)
+        self.monitor_path = self.out_dir / "run" / "llm_monitor.txt"
         self.monitor_path.parent.mkdir(parents=True, exist_ok=True)
+        self.usage_path = self.out_dir / "run" / "usage.jsonl"
+        self.usage_meter = UsageMeter(self.usage_path)
         self.call_count = 0
         self.retry_count = 0
         self.total_tokens = 0
         self.cache_hits = 0
+
+    def set_out_dir(self, out_dir: Path | str) -> None:
+        self.out_dir = Path(out_dir)
+        self.monitor_path = self.out_dir / "run" / "llm_monitor.txt"
+        self.usage_path = self.out_dir / "run" / "usage.jsonl"
+        self.usage_meter.set_path(self.usage_path)
 
     def call_json(self, step, model, prompt):
         """One LLM call → parsed JSON object. `step` is a label for the
@@ -96,8 +193,24 @@ class LLMClient:
                 text = response.choices[0].message.content or ""
                 elapsed = time.monotonic() - started
                 usage = getattr(response, "usage", None)
+                prompt_tokens = getattr(usage, "prompt_tokens", 0) or 0
+                completion_tokens = getattr(usage, "completion_tokens", 0) or 0
+                if usage is None and text:
+                    prompt_tokens = max(1, len(prompt) // 4)
+                    completion_tokens = max(1, len(text) // 4)
                 if usage is not None:
                     self.total_tokens += getattr(usage, "total_tokens", 0) or 0
+                else:
+                    self.total_tokens += prompt_tokens + completion_tokens
+
+                self.usage_meter.record(
+                    step=step,
+                    model=model,
+                    prompt_tokens=prompt_tokens,
+                    completion_tokens=completion_tokens,
+                    is_replay=False,
+                    mode="live",
+                )
                 self._log(step, model, attempt, prompt, text, elapsed, usage, error=None)
                 return parse_json_response(text)
             except _TRANSIENT_EXCEPTIONS as exc:
