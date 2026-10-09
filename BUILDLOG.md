@@ -1474,6 +1474,34 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - git diff `data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
 - **Next:** S2.1 — `server/library.py`: library layout §3.4, `COTRACE_HOME`, atomic writes, trash and restore (AG).
 
+---
+
+## 2026-10-09 19:54 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S2.1 — Library layout, COTRACE_HOME, atomic writes, trash and restore (AG)
+- **Did:**
+  - `server/__init__.py` — created server package marker.
+  - `server/library.py` — created `Library` filesystem storage manager implementing §3.4 layout:
+    - Root resolution via `COTRACE_HOME` env var or `~/Cotrace`.
+    - Directory hierarchy: `chats/<id>/`, `imports/<importId>/`, `trash/<id>/`.
+    - Root files: `jobs.json`, `settings.json`, `secrets.json` (0600 mode).
+    - Crash-resilient atomic file writing: `atomic_write_text` and `atomic_write_json` using flush + fsync + `os.replace`.
+    - Chat lifecycle: `create_chat`, `chat_exists`, `list_chats` (summarized with `mass`, `share`, `totalPairs`, and `source`), `update_chat_meta`, `trash_chat`, `restore_chat`, `list_trash`, and `delete_chat_permanently`.
+    - Settings, secrets, and jobs persistence.
+  - `tests/test_library.py` — added 15 tier1 tests covering layout creation, env overrides, atomic writes, permissions, chat creation, duplicates, path traversal rejection, chat listing, metadata editing, trash/restore lifecycle, collision prevention, permanent deletion, and settings/secrets.
+  - `docs/plans/STANDALONE_V1_PLAN.md` — marked S2.1 complete (✅).
+- **Decisions made:**
+  - Validated all chat and import IDs against `^[A-Za-z0-9_-]+$` to strictly prevent path traversal.
+  - Restoring a trashed chat when an active chat with the same ID already exists raises `FileExistsError` to prevent silent overwrites.
+  - Verified AG+ sacred fixture numbers: Δ_you=87.0, Δ_AI=314.0 (21.7% / 78.3%), 4 You · 10 AI, COPILOT; 0 diffs on frozen fixture.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `.venv/bin/python -m pytest tests/test_library.py -v`: 15 passed in 0.07s.
+  - `.venv/bin/python -m pytest -q`: 196 passed in 0.97s (up from 181; baseline 102 intact).
+  - `npm run e2e`: 2/2 suites passed with 0 page/console errors.
+  - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+- **Next:** S2.2 — `server/app.py` (FastAPI): `/health`, `GET/PATCH/DELETE /chats`, `/chats/{id}`, `/events` (SSE broadcaster) (AG).
+
+
 
 
 

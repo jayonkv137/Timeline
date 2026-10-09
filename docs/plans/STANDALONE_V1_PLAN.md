@@ -204,7 +204,7 @@ Goal: the workspace you have today, served by the server from the library. It lo
 
 | Step | Builder | What | Done when |
 |---|---|---|---|
-| S2.1 | AG | `server/library.py`: library layout §3.4, `COTRACE_HOME`, atomic writes (write a temp file, then rename), trash and restore | unit tests: create, list, trash, restore |
+| S2.1 ✅ | AG | `server/library.py`: library layout §3.4, `COTRACE_HOME`, atomic writes (write a temp file, then rename), trash and restore | unit tests: create, list, trash, restore |
 | S2.2 | AG | `server/app.py` (FastAPI): `/health`, `GET/PATCH/DELETE /chats`, `/chats/{id}`, `/events` (SSE broadcaster; reuse the Phase 3 queue pattern from `27e7d68:server/main.py`) | tier1 API tests with `TestClient` |
 | S2.3 | AG | `scripts/seed_library.py`: copy the 10 processed chats into the library and project their bundles. No LLM | library has 10 chats; `GET /chats` returns them |
 | S2.4 | AG | Frontend data layer `web/src/workspace/api.ts`: the store loads the list from `/api/chats` and each bundle when its tab opens, and keeps the event stream open. `?offline=1` uses the bundled sample. Add loading, empty and error states | the workspace looks the same as the prototype, with data from the server |
