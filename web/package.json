@@ -8,7 +8,10 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "sync-fixture": "node scripts/sync-fixture.js"
+    "sync-fixture": "node scripts/sync-fixture.js",
+    "tokens": "node src/design-system/tokens/build.mjs",
+    "tokens:check": "node src/design-system/tokens/build.mjs --check",
+    "workspace": "vite --config vite.workspace.config.ts"
   },
   "dependencies": {
     "lucide-react": "^1.23.0",
