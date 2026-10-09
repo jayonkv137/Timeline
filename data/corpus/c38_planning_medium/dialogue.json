@@ -1,0 +1,184 @@
+[
+  {
+    "pair": 1,
+    "speaker": "user",
+    "text": "for this one writ em a messaeg accoproifn tot he instucritn iand form tje larnign form th efile sin ht eproject also please:\nThe room is 9 square meters and located on the first floor. It has a window facing the courtyard, so it's rather quiet and doesn't heat up too much in the summer.\nLocated in the heart of the river district, right next to Penny, Rewe, Aleco, Rossmann, kiosks, restaurants, bars, and green spaces. The street itself is quiet, though. Public transport is a 2-minute walk away. Bremen University is just around the corner, and Neustadtspark is a lovely place to relax.\n\nThe apartment is a 2-minute walk from the Neuenlander Straße tram stop (line 1), and from there it's only two stops to the university. Bus lines 26 and 102 are also within easy walking distance. Penny and Rewe supermarkets are also just a few minutes' walk away, and the nearby Pappelstraße offers everything else you might need (restaurants, pubs, pharmacies, etc.).\n\nCurrently, there are five of us living in the shared apartment. I (Clemens) and Jolanda are moving out on September 1st. The other roommates are Leo, 23, Tim, 27, and Julian, 27.\n\nLeo studies biology and enjoys drawing and singing in her free time. She also likes to cook and bake.\n\nTim studies European studies and is a big fan of electronic music and raves. He loves to travel and is always up for a beer or some other mischief. He also works at Paulaners.\n\nJulian also works at Paulaners and is an active member of the Rotation Neustadt football team.",
+    "attachments": [],
+    "ts": "2026-08-07T16:59:15.646431Z"
+  },
+  {
+    "pair": 1,
+    "speaker": "ai",
+    "text": "<german_message>: Moin Clemens,\n\neuer Zimmer im Viertel klingt gut, vor allem weil es zur Hofseite liegt und sich im Sommer nicht so aufheizt, das mag ich. Ich bin Jayank, mache meinen Master in Digital Media und arbeite nebenbei bei BEGO, komme also öfter mit der Linie 1 hier vorbei.\n\nIch habe zwei Jahre in einer WG gelebt, war dann eine Weile allein im Studio und habe gemerkt, dass mir das Zusammenleben fehlt. Ab dem 1. September suche ich langfristig ein neues Zuhause.\n\nJulian und der Fußball klingen gut, ich spiele selbst Touch Rugby und bin öfter aktiv unterwegs. Mit Leo mal zu kochen würde mir auch gefallen.\n\nHabt ihr Lust, mich kennenzulernen? Ich hätte Zeit für eine Besichtigung.\n\nViele Grüße\nJayank\n\n<english_message>: Moin Clemens,\n\nyour room sounds great, especially since it faces the courtyard and stays cooler in summer, I like that. I'm Jayank, doing my Master's in Digital Media and working part-time at BEGO, so I'd be riding the line 1 tram past here fairly often.\n\nI lived in a WG for two years, then spent a while alone in a studio, and realized I miss living with people. From September 1st I'm looking for a long-term place.\n\nJulian and the football sound good, I play touch rugby myself and stay pretty active. Cooking with Leo sounds fun too.\n\nWould you be up for meeting me? I'd have time for a viewing.\n\nBest,\nJayank\n\n<rationale>: The ad's vibe is social-but-calm (quiet courtyard room, but a lively flat with football and a cook), so I mirrored the courtyard detail for authenticity and picked touch rugby (mirrors Julian's football) and cooking (mirrors Leo) rather than the full hobby list, keeping the transit line as a subtle BEGO-commute anchor.",
+    "attachments": [],
+    "ts": "2026-08-07T16:59:35.033614Z"
+  },
+  {
+    "pair": 2,
+    "speaker": "user",
+    "text": "canw e make a automaiton where for evry house add coming startinf from septemebr in wg gesucht cna i send a auotmated messaehgs or liek a drafted message and ic an send to eeveryhting ina. customzed way is it possibel to do that?",
+    "attachments": [],
+    "ts": "2026-08-07T17:09:36.832806Z"
+  },
+  {
+    "pair": 2,
+    "speaker": "ai",
+    "text": "Short answer: fully automated sending isn't something I'd build for you, but a fast semi-automated pipeline is very doable and honestly works better anyway. Here's the real picture.\n\n**Why full auto-send is a bad idea, not just a technical hurdle**\n\n- **WG-Gesucht's terms almost certainly prohibit scraping and automated/bot messaging** on the platform. Getting your account flagged or banned right when you need it most (starting now, for a September 1 move) is a real risk, not a theoretical one.\n- **Auto-fired messages defeat the entire strategy in your own research.** Every source you've gathered agrees on one thing: personalization to the specific ad is the single biggest lever, and generic/templated-feeling messages get filtered out immediately. A script that fires the moment a listing appears has no way to judge fit (Frauen-WG, wrong dates, Zweckwohnung vibe, a hidden keyword test) or pull a genuinely specific detail — so you'd be sending fast, wrong messages instead of fast, right ones.\n- **Speed still matters, but reading takes 20 seconds.** The advantage of being first doesn't require zero human involvement, just low friction.\n\n**What I'd actually build instead: a fast human-in-the-loop pipeline**\n\n1. **Alerts**: WG-Gesucht's own saved search (Suchaufträge) with push/email notifications, set as narrow as possible per neighborhood so you get pinged within minutes of a new listing.\n2. **One-tap drafting**: the moment you get a notification, you open the listing, copy the ad text, paste it into this chat (or a Claude Project set up with your profile). I generate the German + English message in seconds using the system we've already built.\n3. **You skim and send**: 30 seconds to check the fit note and personalization line, then paste into WG-Gesucht and hit send yourself.\n\nIf you want, I can also help you set up a simple **tracker** (a spreadsheet or artifact) to log every listing you apply to, response times, and outcomes, so you can see what's actually converting after ~15-20 applications. Want me to build that next?",
+    "attachments": [],
+    "ts": "2026-08-07T17:09:55.177134Z"
+  },
+  {
+    "pair": 3,
+    "speaker": "user",
+    "text": "canw e do a autoamtd process of thjis so i can do and ehck erbyhting for this?",
+    "attachments": [],
+    "ts": "2026-08-07T17:10:29.353351Z"
+  },
+  {
+    "pair": 3,
+    "speaker": "ai",
+    "text": "I can't build something that auto-sends messages on WG-Gesucht itself — that would violate the platform's terms and also undercuts the whole personalization strategy that's actually working for you. But I can build you a real semi-automated system right now: you pa",
+    "attachments": [],
+    "ts": "2026-08-07T17:10:34.886401Z"
+  },
+  {
+    "pair": 4,
+    "speaker": "user",
+    "text": "canw e do a autoamtd process of thjis so i can do and ehck erbyhting for this?\n\nlike THIS ONE:\nAlerts: WG-Gesucht's own saved search (Suchaufträge) with push/email notifications, set as narrow as possible per neighborhood so you get pinged within minutes of a new listing.\nOne-tap drafting: the moment you get a notification, you open the listing, copy the ad text, paste it into this chat (or a Claude Project set up with your profile). I generate the German + English message in seconds using the system we've already built.\nYou skim and send: 30 seconds to check the fit note and personalization line, then paste into WG-Gesucht and hit send yourself.\n\nIF OS HOW I CAN DO IT N MY FONE AMD WUAKCKU SEE RBYTING RTRMNASLTAED AND RECIW IT U DRAFT ANDD I CJECL ADN MAKE TH EPEROSNALISED MESSGA AN DSNED IT RIGHT AWAY SEE HOW CAN I DO IT IN SCALE FOR ALL THIGNS COINGUP?",
+    "attachments": [],
+    "ts": "2026-08-07T17:11:28.185321Z"
+  },
+  {
+    "pair": 4,
+    "speaker": "ai",
+    "text": " ",
+    "attachments": [],
+    "ts": "2026-08-07T17:11:33.008602Z"
+  },
+  {
+    "pair": 5,
+    "speaker": "user",
+    "text": "canw e do a autoamtd process of thjis so i can do and ehck erbyhting for this?\n\nlike THIS ONE:\nAlerts: WG-Gesucht's own saved search (Suchaufträge) with push/email notifications, set as narrow as possible per neighborhood so you get pinged within minutes of a new listing.\nOne-tap drafting: the moment you get a notification, you open the listing, copy the ad text, paste it into this chat (or a Claude Project set up with your profile). I generate the German + English message in seconds using the system we've already built.\nYou skim and send: 30 seconds to check the fit note and personalization line, then paste into WG-Gesucht and hit send yourself.\n\nIF OS HOW I CAN DO IT N MY FONE AMD WUAKCKU SEE RBYTING RTRMNASLTAED AND RECIW IT U DRAFT ANDD I CJECL ADN MAKE TH EPEROSNALISED MESSGA AN DSNED IT RIGHT AWAY SEE HOW CAN I DO IT IN SCALE FOR ALL THIGNS COINGUP? HOW TO BUIDL THIS EXECUTION VEYR FAST",
+    "attachments": [],
+    "ts": "2026-08-07T17:11:53.023062Z"
+  },
+  {
+    "pair": 5,
+    "speaker": "ai",
+    "text": " ",
+    "attachments": [],
+    "ts": "2026-08-07T17:12:51.450208Z"
+  },
+  {
+    "pair": 6,
+    "speaker": "user",
+    "text": "canw e do a autoamtd process of thjis so i can do and ehck erbyhting for this?\n\nlike THIS ONE:\nAlerts: WG-Gesucht's own saved search (Suchaufträge) with push/email notifications, set as narrow as possible per neighborhood so you get pinged within minutes of a new listing.\nOne-tap drafting: the moment you get a notification, you open the listing, copy the ad text, paste it into this chat (or a Claude Project set up with your profile). I generate the German + English message in seconds using the system we've already built.\nYou skim and send: 30 seconds to check the fit note and personalization line, then paste into WG-Gesucht and hit send yourself.\n\nIF OS HOW I CAN DO IT N MY FONE AMD WUAKCKU SEE RBYTING RTRMNASLTAED AND RECIW IT U DRAFT ANDD I CJECL ADN MAKE TH EPEROSNALISED MESSGA AN DSNED IT RIGHT AWAY SEE HOW CAN I DO IT IN SCALE FOR ALL THIGNS COINGUP? HOW TO BUIDL THIS EXECUTION VEYR FAST\n\nI', FINE WITH PGONR OT LAPTIP OT ANYTHING POSSIBLE",
+    "attachments": [],
+    "ts": "2026-08-07T17:13:06.564452Z"
+  },
+  {
+    "pair": 6,
+    "speaker": "ai",
+    "text": "Yes, this is buildable and you can have it running in about 30 minutes. The honest constraint: the sending stays manual, because that's what keeps you out of trouble with WG-Gesucht and it's only about 15 seconds of the loop anyway. Everything before the send can be made near-instant.\n\nTarget: **under 90 seconds from notification to sent message.**\n\n**The loop, once it's set up:**\n\nNotification hits. Open the listing, **screenshot it** (2–3 shots is fine, no copying or typing needed). Open Claude, new chat in the project, attach the screenshots, hit send with no message at all. You get back a one-line GO/SKIP verdict, the ad summarised in English, and the German message in a code block with a copy button. Skim the verdict, tap copy, paste into WG-Gesucht, send.\n\nTwo things matter more than drafting speed. First, **the SKIP verdict saves you the most time** — half of what lands in your alerts will be Frauen-WGs, short sublets, or wrong dates, and killing those in five seconds is worth more than a perfect draft. Second, **use a fresh chat per listing.** A long chat gets slower and starts bleeding details from the previous ad into the new one.\n\nThe screenshot-instead-of-copy trick is really the unlock here, and it only works on the phone:\n\nHere's the file. Fill in Section 0 first, then upload it and paste it into project instructions.\n\nOnce you've done a dry run, send me the output and I'll tune whatever reads wrong.",
+    "attachments": [],
+    "ts": "2026-08-07T17:15:54.902404Z"
+  },
+  {
+    "pair": 7,
+    "speaker": "user",
+    "text": "Jayon K Vinod,\n\nage  27\n1641232748\nsmoking only outisde.\n\nanmeldun yes\n\nsyudent\n\ntrugger is mainlyy check if its startin form spetmeber is rthew majhor thing, \n\nupdate thes eplease",
+    "attachments": [],
+    "ts": "2026-08-07T17:18:31.713264Z"
+  },
+  {
+    "pair": 7,
+    "speaker": "ai",
+    "text": "Updated. Name is now **Jayon** throughout (so the Clemens draft I wrote earlier signs off wrong — regenerate that one if you still want to send it).\n\nThe biggest change is structural: the move-in date is now its own step that runs **before** anything else, and the verdict line always leads with it, e.g. `GO — frei ab 1.9.` or `SKIP — frei ab 1.10.` On a SKIP you get just the verdict and the English bullets, no drafted message, so you can kill a wrong listing in about three seconds. Anything free from late August to mid-September proceeds; if the ad gives no date at all, asking about it gets built into the German message.\n\nAnmeldung is now a hard filter too, since you need it — \"keine Anmeldung möglich\" is an automatic skip. Smoking outside only is in the profile and will be answered plainly if an ad asks.\n\nTwo things still blank, and both are worth two minutes:\n\n**German level** — without it, no message can mention your German at all, which loses a useful honesty signal. **Max warm rent** — without it, I can't filter out rooms you can't afford, so you'll get GO verdicts on listings you'd have skipped. Viewing availability and allergies are nice-to-have; those two are load-bearing.\n\nAlso check the phone number. You gave `1641232748` and I formatted it as `+49 164 123 2748` — confirm the leading digits, since a wrong number on a message that lands well would be a painful way to lose a room.\n\nSend me your German level and budget and I'll patch them straight in.",
+    "attachments": [],
+    "ts": "2026-08-07T17:19:46.410224Z"
+  },
+  {
+    "pair": 8,
+    "speaker": "user",
+    "text": "yeah filter out anything above 470 euros and i done ned to ,e ntojm herman level whjy do we need that",
+    "attachments": [],
+    "ts": "2026-08-07T17:20:45.596189Z"
+  },
+  {
+    "pair": 8,
+    "speaker": "ai",
+    "text": "Done. 470 € is now a hard ceiling, and the verdict line leads with date *then* rent: `GO — frei ab 1.9., 430 € warm` or `SKIP — 520 € warm, over budget`. Where an ad only lists Kaltmiete, I'll add up the Nebenkosten before judging, and if the parts are missing and the cold rent is near 400, you'll get a `GO, but check` plus a question about the Warmmiete built into the German message.\n\nOn German level — you're right to push back, and I've removed it as a default. It's an unforced weakness in a message nobody asked for, and it eats words in a 140-word budget.\n\nThe one place it genuinely earns its space is narrow: when the ad **asks directly**, or says the household is German-only. In that case, staying silent looks evasive, and a made-up level is worse. So the rule now is that I draft everything else and leave you a one-line blank to answer yourself, rather than guessing.\n\nThe other thing worth naming once: if your written German is noticeably better than your spoken German, that gap shows up at the casting. Your own research flags this — polished German that doesn't match the person in the room reads as a small dishonesty, and it can cost you a room you'd already won. It's not a reason to mention your level in the message. It *is* a reason to keep the German plain and conversational rather than impressive, which is what the length and banned-phrase rules already push toward.",
+    "attachments": [],
+    "ts": "2026-08-07T17:21:35.659984Z"
+  },
+  {
+    "pair": 9,
+    "speaker": "user",
+    "text": "Phonne nymber is 1631232748 and how cns i do it from\nMy phone app right jow start this working?",
+    "attachments": [],
+    "ts": "2026-08-08T11:25:36.867687Z"
+  },
+  {
+    "pair": 9,
+    "speaker": "ai",
+    "text": "Phone fixed to **+49 163 123 2748** (0163 is a real prefix, so that one checks out).\n\nGood news: you're already inside the project. You don't need to create anything. Three things, all doable on the phone in about 10 minutes.\n\n**1. Load the rules (3 min).** Open the file card below, tap into it, select all, copy. Then tap the project name at the top of this screen → **Set project instructions** → paste → save. Skip the file upload entirely; the instructions field is plain text and much less fiddly on mobile. While you're in there, **delete the three research reports** from project knowledge. They're reference material, and right now they load on every message and slow your drafts down.\n\n**2. Turn on the inflow (5 min).** This is the part that actually gates everything, so do it even if you skip the rest. In the WG-Gesucht app: allow notifications with sound, then create your saved searches (Suchaufträge) set to *sofort* — filtered to Bremen, from ~25 Aug to ~15 Sep, max 470 € warm. Make three or four narrow ones by area rather than one broad one. Then add a real photo to your profile.\n\n**3. Start now.** You don't have to wait for setup to finish. Open a **new chat inside this project**, screenshot any live listing, attach it, and send with no text. You'll get the verdict, the English gist, and a copy-ready German block.\n\nOne habit that matters: **new chat per listing.** A long chat gets slower and starts leaking details from the last ad into the next one.\n\n<invoke name=\"present_files\">\n<parameter name=\"filepaths\">[\"/mnt/user-data/outputs/WG-SYSTEM.md\"]</parameter>\n<parameter name=\"description\">Presenting the updated system file with the corrected phone number</parameter>\n</invoke>\n<invoke name=\"present_files\">\n<parameter name=\"filepaths\">[\"/mnt/user-data/outputs/WG-SYSTEM.md\"]</parameter>\n</invoke>\n</invoke>",
+    "attachments": [],
+    "ts": "2026-08-08T11:26:37.227245Z"
+  },
+  {
+    "pair": 10,
+    "speaker": "user",
+    "text": "Also can we somehow integrate kleinemsagen also intot his like to stt all the tooms form this and also like expalin the full user flow like in atkost detial how i need yo do this likr in the chat automatically will it fetch all the latest and also like track the ones which i have mot applied snd like frok the latets till backwayrds i can apply all and it is tracked so like w ekmow. We ar enot sending ckver kned and its trccked an dthebmemory is also porpely manges snd like how ill kleinasgen like form\nThat also there ar elot of posisble tooms or options and also it would be relly helpgull if i skil like\nColpletley empty and have soemhting which is like msotly smei or allost or fluy tusneshed eith required sutff an dall so how to encopriate this full system also?",
+    "attachments": [],
+    "ts": "2026-08-08T11:31:12.609985Z"
+  },
+  {
+    "pair": 10,
+    "speaker": "ai",
+    "text": "Three separate things here. Let me be straight about which are real.\n\n**The one thing I can't do: auto-fetch listings.** I only run when you message me, so there's no background process watching either site. I also can't reliably pull WG-Gesucht or Kleinanzeigen pages directly — both sit behind login walls and bot protection, and scraping them would put your account at risk. The sites' own push alerts are faster than anything I could poll anyway. Your screenshot stays the input.\n\n**Kleinanzeigen is now built into the rules**, and it needed its own branch because it behaves differently: mostly landlords rather than flatmates, so Sie by default; shorter messages, 70–110 words, leading with BEGO income rather than your studio-to-WG story; and two or three missing facts asked directly, since those ads routinely omit the warm rent, whether Anmeldung is possible, or the minimum duration. Scam density there is much higher, so the SKIP triggers are more aggressive. Also watch that many hits are whole flats, not rooms.\n\n**Furnishing is now a tracked field.** Möbliert and teilmöbliert show in the verdict as a plus. An empty room isn't a skip, because in Germany you normally ask about **Möbelübernahme** from the outgoing tenant, so that question gets built into the message automatically. If an **Ablöse** is named, that figure lands in the verdict since it's real money on top of your deposit.\n\n**The full loop, end to end:**\n\nAlert fires → open listing → screenshot → new chat in this project → attach, send blank. You get a source line, the verdict, English bullets, and the German block. Copy, paste, send on the site. Then paste the listing URL into the tracker and add it, which takes about fifteen seconds.\n\nThe tracker is where your \"have I done this one\" question gets answered. Paste a URL and it warns you if it's already logged, so you never double-apply. Anything sitting at \"waiting\" for three days surfaces in **Follow up today** at the top, which is your cue for the single follow-up in §8 of the rules. Data saves on the device you open it on, so use it from one place, ideally your phone.\n\nWork newest-first and don't try to clear a backlog. A listing more than about two days old has usually already picked someone.",
+    "attachments": [],
+    "ts": "2026-08-08T11:34:24.607485Z"
+  },
+  {
+    "pair": 11,
+    "speaker": "user",
+    "text": "So there js no podsibilty insnyway of automatic fetching at all?",
+    "attachments": [],
+    "ts": "2026-08-08T11:36:11.084928Z"
+  },
+  {
+    "pair": 11,
+    "speaker": "ai",
+    "text": " ",
+    "attachments": [],
+    "ts": "2026-08-08T11:36:11.641981Z"
+  },
+  {
+    "pair": 12,
+    "speaker": "user",
+    "text": "So there js no podsibilty insnyway of automatic fetching at all? Or atleatvkike if i opena. Chat and then ask for thr katest and goes and fecrhec an dfork theee one by ine i can donit form\nThenchat and like putting the medsageblartni can do?",
+    "attachments": [],
+    "ts": "2026-08-08T11:36:48.298793Z"
+  },
+  {
+    "pair": 12,
+    "speaker": "ai",
+    "text": "Fair challenge. Let me actually test it rather than just assert it.\n\nConfirmed with a real test: WG-Gesucht redirected me straight to a captcha wall (\"Please Confirm You're Human\"). That's not a policy I'm citing, it's what the site actually does to automated fetching. Let me check the other one.\n\nI tested both properly instead of guessing. Here's what's actually true.\n\n**Direct fetching is dead.** WG-Gesucht bounced me to a captcha page: it says bots are used to make abusive automatic submissions, so the site asks you to tick a checkbox and submit to prove you're a real human before continuing. That's not a rule I'm quoting at you, it's what the server did when I tried. No workaround I'd be willing to build.\n\n**Search partly works, but it's the wrong tool for your problem.** I can find listings through web search, and it did surface real things, including a September Nachmieter room in Utbremen/Walle and a Neustadt 5er-WG. But the index lags badly: mixed into those same results were ads from 2023, 2025, and April 2026. The freshest listings are precisely the ones not indexed yet, and those are the only ones you can still win. So a sweep is a **backfill tool**, useful for catching older ads still sitting live, useless for the first-hour advantage.\n\nSo: I can do a sweep when you ask, and it'll give you candidate titles and links to open yourself. Just don't build your day around it.\n\n**The real scale answer is batch mode, which I've now added to the rules.** Open the newest-first list (both sites default to newest at the top), screenshot four to six ads in one pass without opening each one, dump them all into a single message. You get back numbered results, with all the SKIPs compressed into one short group at the top and full drafts only for the GOs. That's roughly five listings in the time one used to take, and it's the answer to \"one by one from the chat.\"\n\nTwo bookmarks worth saving, both newest-first:\n`wg-gesucht.de/wg-zimmer-in-Bremen.17.0.1.0.html`\n`kleinanzeigen.de/s-auf-zeit-wg/bremen/wg-zimmer/k0c199l1`\n\nOne thing the Kleinanzeigen results confirmed nicely: one Bremen ad states outright that Anmeldung is not possible because there's no official contract. That's your automatic skip, and it shows up far more often there than on WG-Gesucht. The filter is already in the rules and it'll catch those.",
+    "attachments": [],
+    "ts": "2026-08-08T11:37:56.421478Z"
+  },
+  {
+    "pair": 13,
+    "speaker": "user",
+    "text": "Cna like relalu figur ereseaxhing deeply if there is any possibikty for rhis at all? Like in any way and any eorkflpw and like any possibilitiesbit dont have to be constrained to here like any meidum or stuff or anything csn bebposisblr think pit of thr nox and lik all possibikites",
+    "attachments": [],
+    "ts": "2026-08-08T11:39:53.223401Z"
+  },
+  {
+    "pair": 13,
+    "speaker": "ai",
+    "text": "Good challenge. Let me actually research the full space rather than repeat myself.\n\nNo Gmail tools on this connector set — worth knowing, since that closes one path and opens another. Let me research the wider landscape.\n\nI dug into this properly. Here's the honest map of the entire space, including the parts I won't build for you.\n\n**Full auto-send does exist.** There's a public GitHub project, `jonasdieker/wg-gesucht-bot`, that logs into your WG-Gesucht account with Playwright and sends messages to new listings, with an option to use a GPT model for more personalised messages. So I'm not telling you it's impossible. I'm telling you it's a bad trade, for one specific reason: it optimises the only variable that doesn't decide anything. Being message #3 instead of #30 helps. Being message #3 that reads like a template loses to message #30 that mentions Julian's football team. And if the account gets flagged three weeks before your move-in date, you have no channel at all. I won't help build it.\n\n**The legitimate automation path is your own inbox, not the sites.** Alert emails belong to you, so processing them isn't scraping. Zapier, Make, n8n or a Google Apps Script can watch a Gmail label, call the Claude API, and push a result to Telegram. I checked whether I could read your Gmail directly from this chat, and I can't — those tools aren't on your connector set. But the real limit is different: WG-Gesucht alert emails carry the title, price, district and a link, not the ad body. So automation can do **triage, dedup and notification** genuinely well, and **drafting** genuinely badly. That's several hours of building for a three-week search. Worth it only if you'd enjoy building it.\n\n**Claude in Chrome** is the closest legitimate version of what you actually asked for. It's a browsing agent that works inside your own logged-in browser under your supervision, so it can open your saved search and read listings without any scraping infrastructure. Still supervised, still you pressing send.\n\n**Now the part I think actually matters.** You've been trying to automate one channel. The bigger win is that you're only fishing in one or two ponds.\n\n**meinestadt.de** lists 327 WG rooms in Bremen and has free email Suchaufträge. Almost nobody applying on WG-Gesucht bothers with it. **Schwarzes Brett on bremen.de** carries free apartments from both private and commercial landlords, with WGs also advertising rooms there, plus a section where you can post your own request so landlords come to you. There's a Facebook page, \"WG Zimmer frei in Bremen,\" with about 2,600 followers, plus the `bremen.immo` group. Facebook group notifications are push alerts, free, already built.\n\nTwo Bremen-specific programmes worth ten minutes each. **Study Friends** gives students rent-free WG rooms in exchange for educational support at primary and secondary schools, and it's been running about five years. Don't bother with Wohnen für Hilfe — it was discontinued last summer for lack of suitable housing offers. And **Studierendenwerk Bremen** runs 12 complexes with roughly 2,166 places, usually furnished and cheaper than the open market, though the waiting list averages around 250 students. Apply anyway as a backstop.\n\nThe one you're most likely to skip and shouldn't: **BEGO**. You work there. An internal noticeboard post or a word to colleagues reaches people with zero competition, and a Bremen employer vouching for a working student is worth more than any message I can write.\n\n**And the inversion.** WG-Gesucht currently shows 114 people searching for a room in Bremen, and most of their Gesuche are lazy. Yours has real differentiators: steady BEGO income, long-term, definite September date. A strong Gesuch posted on WG-Gesucht, meinestadt, Schwarzes Brett and the Facebook groups is the only thing in this entire list that genuinely works while you sleep, and it's completely legitimate.\n\nIf I were ranking by payoff per hour: multi-channel alerts first, Gesuch everywhere second, BEGO and uni network third, batch mode in chat fourth. The email automation is sixth. The bot is last, and off the list.\n\nWant me to write the Gesuch text for all four platforms? That's the highest-leverage thing left, and it's about fifteen minutes of work.",
+    "attachments": [],
+    "ts": "2026-08-08T11:41:51.700769Z"
+  }
+]

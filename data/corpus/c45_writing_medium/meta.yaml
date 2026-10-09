@@ -1,0 +1,26 @@
+# filled by importer
+id: c45_writing_medium
+conv_id: claude_68fe697c-f629-4264-980b-6a43986cbe6e
+title: "Telefoninterview-Termin vereinbaren"
+source_file: "source.json"
+source_kind: claude_official
+provenance: owner
+pairs: 6
+length_band: medium
+fidelity_grade: clean
+contains: []
+
+# Layer 1: Descriptive facts (verified)
+language: en
+task_type: writing
+domain: "German professional scheduling"
+notes: >
+  Telefoninterview-Termin vereinbaren — promoted from official Claude archive for multi-chat benchmarking.
+
+# Layer 2: Judgement & predictive fields (HUMAN-LABELED ONLY — cleared to prevent circularity)
+prompt_style: null       # specified | vague | mixed (owner ground truth for E3)
+expected:
+  mode_hint: null        # centaur | copilot | autopilot
+  direction_hint: null   # user_heavy | balanced | ai_heavy
+  min_requirements: null
+  max_requirements: null

@@ -1,0 +1,26 @@
+# filled by importer
+id: c53_research_long
+conv_id: claude_2eef82f5-6d02-43d5-88d1-a8471a776752
+title: "Understanding Diehl Aviation's AI implementation strategy"
+source_file: "source.json"
+source_kind: claude_official
+provenance: owner
+pairs: 64
+length_band: long
+fidelity_grade: degraded
+contains: [long_message]
+
+# Layer 1: Descriptive facts (verified)
+language: en
+task_type: research
+domain: "aviation AI case study analysis"
+notes: >
+  Understanding Diehl Aviation's AI implementation strategy — promoted from official Claude archive for multi-chat benchmarking.
+
+# Layer 2: Judgement & predictive fields (HUMAN-LABELED ONLY — cleared to prevent circularity)
+prompt_style: null       # specified | vague | mixed (owner ground truth for E3)
+expected:
+  mode_hint: null        # centaur | copilot | autopilot
+  direction_hint: null   # user_heavy | balanced | ai_heavy
+  min_requirements: null
+  max_requirements: null

@@ -1,0 +1,536 @@
+{
+  "chat_id": "c49_coding_long",
+  "conv_id": "claude_8e7b589b-6ec5-4a72-a0bf-73430e450747",
+  "source_kind": "claude_official",
+  "source_file": "source.json",
+  "source_title": "Project revival guide for new engineer",
+  "imported_at": "2026-09-24T11:31:02Z",
+  "import_spec_version": "1.1",
+  "pairs": 26,
+  "turns": 52,
+  "assumed_utc": true,
+  "fidelity": {
+    "images_dropped": 4,
+    "attachments_dropped": 0,
+    "tool_narration_turns": 23,
+    "injected_turns": 0,
+    "empty_turns": 0,
+    "merged_turns": 1,
+    "dropped_trailing_user_turn": false,
+    "dropped_leading_ai_turn": false,
+    "grade": "degraded",
+    "image_ratio": 0.15
+  },
+  "turn_meta": [
+    {
+      "pair": 1,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 1,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 2,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 2,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 3,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "IMG_6448.jpg"
+      ]
+    },
+    {
+      "pair": 3,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 4,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 4,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 5,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "injected_prompt_block_block",
+        "Agents Documentation.md",
+        "README.md",
+        "Agents Documentation.md",
+        "README.md"
+      ]
+    },
+    {
+      "pair": 5,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 6,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "injected_prompt_block_block",
+        "Agents Documentation.md",
+        "Build Playbook.md",
+        "Claude.md",
+        "COMPARISON.md",
+        "CONTRIBUTING.md",
+        "requirements-dev.txt",
+        "requirements.txt",
+        "SPEC_QUESTIONS.md",
+        "BUILDLOG.md",
+        "Agents Documentation.md",
+        "Build Playbook.md",
+        "Claude.md",
+        "COMPARISON.md",
+        "CONTRIBUTING.md",
+        "requirements-dev.txt",
+        "requirements.txt",
+        "SPEC_QUESTIONS.md"
+      ]
+    },
+    {
+      "pair": 6,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 7,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "injected_prompt_block_block"
+      ]
+    },
+    {
+      "pair": 7,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 8,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "injected_prompt_block_block"
+      ]
+    },
+    {
+      "pair": 8,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 9,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "injected_prompt_block_block"
+      ]
+    },
+    {
+      "pair": 9,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 10,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "injected_prompt_block_block"
+      ]
+    },
+    {
+      "pair": 10,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 11,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "injected_prompt_block_block"
+      ]
+    },
+    {
+      "pair": 11,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 12,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 12,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 13,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "injected_prompt_block_block"
+      ]
+    },
+    {
+      "pair": 13,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 14,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "injected_prompt_block_block",
+        "Screenshot 2026-09-17 at 12.47.49 AM.png"
+      ]
+    },
+    {
+      "pair": 14,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 15,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "3D Portfolio Setup Continuation.json",
+        "AI Plans vs User Requirements Sept 17 2026.md",
+        "local-session-state.json",
+        "AI Creativity Task Clarification Sept 17.json",
+        "241d4965-a7f2-4468-ab8b-31bc1d950663.jsonl",
+        "metadata.json",
+        "transcript.jsonl",
+        "Screenshot 2026-09-17 at 1.02.32 AM.png",
+        "3D Portfolio Setup Continuation.json",
+        "AI Plans vs User Requirements Sept 17 2026.md",
+        "local-session-state.json"
+      ]
+    },
+    {
+      "pair": 15,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration",
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": [
+        "Screenshot 2026-05-18 at 1.26.01 PM.png"
+      ]
+    },
+    {
+      "pair": 16,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "injected_prompt_block_block"
+      ]
+    },
+    {
+      "pair": 16,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 17,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 17,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 18,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "injected_prompt_block_block",
+        "injected_prompt_block_block",
+        "phase_e0_architect_review.md"
+      ]
+    },
+    {
+      "pair": 18,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "tool_narration",
+        "thinking"
+      ],
+      "dropped_media": [
+        "..."
+      ]
+    },
+    {
+      "pair": 19,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 19,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 20,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 20,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 21,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Timeline master.zip"
+      ]
+    },
+    {
+      "pair": 21,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 22,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 22,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 23,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "injected_prompt_block_block",
+        "injected_prompt_block_block"
+      ]
+    },
+    {
+      "pair": 23,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 24,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 24,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 25,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 25,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 26,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 26,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking"
+      ],
+      "dropped_media": []
+    }
+  ]
+}

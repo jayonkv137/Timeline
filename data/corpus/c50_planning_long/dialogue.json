@@ -1,0 +1,380 @@
+[
+  {
+    "pair": 1,
+    "speaker": "user",
+    "text": "How to get a schfa in gemrany and germna voucheres how to egt that? In germany?",
+    "attachments": [],
+    "ts": "2026-08-13T11:01:03.229649Z"
+  },
+  {
+    "pair": 1,
+    "speaker": "ai",
+    "text": "**Schufa** (credit report landlords in Germany usually ask for):\n\n- Free version (Datenkopie, Art. 15 GDPR): request at meineschufa.de/de/datenkopie — takes about a week by post, limited to once a year\n- Paid version (Bonitätsauskunft, €29.95): what most landlords actually want — instant, tamper-proof certificate, can request as often as needed\n- New in 2026: SCHUFA also launched a free score-tracking account, but that doesn't replace the certificate for landlords\n\nFor a WG application, the €29.95 Bonitätsauskunft is usually the one to get.\n\nNot sure what you mean by \"vouchers\" though — could you clarify? If you mean the **Wohnberechtigungsschein (WBS)** — the eligibility certificate for subsidized housing — that's a different process through your local Wohnungsamt and depends on income. Let me know which one you're after.",
+    "attachments": [],
+    "ts": "2026-08-13T11:01:20.711463Z"
+  },
+  {
+    "pair": 2,
+    "speaker": "user",
+    "text": "Hi Jayon. something I forgot to ask is if you would be able to provide Schufa and a German guarantor vouching for you.\n\nEgT is this grmrna gurantor?",
+    "attachments": [],
+    "ts": "2026-08-13T11:01:57.332761Z"
+  },
+  {
+    "pair": 2,
+    "speaker": "ai",
+    "text": "A \"German guarantor\" here means a **Bürge** — someone (usually a German resident with regular income) who signs a **Bürgschaft** promising to cover your rent if you can't pay. Landlords/WGs ask for this alongside Schufa mainly to protect themselves, and it's a common extra hurdle for international students without family or a long-term contact in Germany.\n\nSince you likely don't have a German guarantor to offer, here's what actually works in practice:\n\n- **Say so honestly** — many WG hosts drop the guarantor requirement once they see a solid Schufa and proof of funds (BAföG, scholarship, blocked account, or income from freelance work)\n- **Offer a higher deposit** instead of a guarantor, if you can afford it\n- **Use a guarantor service** like Rentcaution or Deposit Guarantee — a paid third party acts as your Bürge for a yearly fee (~€30-60/year), commonly used by international students and workers\n- **University contacts**: some Bremen student services or your ZeMKI office may know of WGs used to dealing with international students who don't push the guarantor requirement\n\nWant help drafting a reply that addresses this directly — Schufa yes, guarantor no, here's why that's not a dealbreaker?",
+    "attachments": [],
+    "ts": "2026-08-13T11:02:10.884586Z"
+  },
+  {
+    "pair": 3,
+    "speaker": "user",
+    "text": "What foe sschugs chekc mostly?",
+    "attachments": [],
+    "ts": "2026-08-13T11:06:51.270814Z"
+  },
+  {
+    "pair": 3,
+    "speaker": "ai",
+    "text": "Schufa mainly checks your **payment history in Germany** — it doesn't look at your income or job. Specifically:\n\n- Existing contracts (bank accounts, credit cards, phone/mobile contracts, loans)\n- Any missed or late payments, defaults, or debt collection cases (negative entries)\n- Number of credit inquiries made about you recently\n- Your Schufa score (100–999 as of the 2026 reform), which sums up how risky you look as a payment partner\n\nFor someone new to Germany, the honest issue isn't bad credit — it's usually **no history at all** yet, since Schufa only tracks German contracts. That's actually not a negative entry, just a thin file, and worth explaining to a landlord directly rather than assuming it counts against you.",
+    "attachments": [],
+    "ts": "2026-08-13T11:06:56.149241Z"
+  },
+  {
+    "pair": 4,
+    "speaker": "user",
+    "text": "Hey Maheshwaran.I can provide my schufa but with the Getman Gutantor , I would need to get back to you, since I am a Expat I am not sure how that would work\n\n\nIf i want otnmaitnin my posisbikty of getying this room and like maintian rhat image of this i can handle the toom hoe to getvpats this?",
+    "attachments": [],
+    "ts": "2026-08-13T11:22:49.149031Z"
+  },
+  {
+    "pair": 4,
+    "speaker": "ai",
+    "text": "Both versions say the same thing: honest about the guarantor gap, but paired with a concrete next step (guarantor service or bigger deposit) so it reads as \"handling it,\" not \"stuck.\" That's what actually keeps you in the running — showing you're already solving it rather than just flagging a problem.",
+    "attachments": [],
+    "ts": "2026-08-13T11:23:01.761577Z"
+  },
+  {
+    "pair": 5,
+    "speaker": "user",
+    "text": "What si rentcaution? nd i dintkd to promis eot oropose antthing now",
+    "attachments": [],
+    "ts": "2026-08-13T11:23:45.732938Z"
+  },
+  {
+    "pair": 5,
+    "speaker": "ai",
+    "text": "**Rentcaution** is a German rent-guarantee (Bürgschaft) service aimed at people without a traditional guarantor — expats, students, freelancers. You pay a yearly fee (roughly €30-70 depending on the rent amount) and they act as your Bürge, guaranteeing your rent to the landlord instead of a person. It's one of the more commonly used ones alongside similar services like Deposit Guarantee.\n\nFair enough on not committing yet. Here's a version that just acknowledges and buys time, no promises:\n\nThis just states the fact and leaves it open — no deposit offer, no name-dropping a service, nothing you'd have to follow through on immediately.",
+    "attachments": [],
+    "ts": "2026-08-13T11:23:52.230056Z"
+  },
+  {
+    "pair": 6,
+    "speaker": "user",
+    "text": "How to apply for shcufa and rent gurantoru\n\nSchufa mention i ahve appkied and send it over in a week  chnage that",
+    "attachments": [],
+    "ts": "2026-08-13T11:24:55.479893Z"
+  },
+  {
+    "pair": 6,
+    "speaker": "ai",
+    "text": "**Applying for Schufa (free Datenkopie):**\n1. Go to meineschufa.de/de/datenkopie\n2. Fill in your details (name, birthdate, current German address)\n3. Upload a copy of a valid ID (passport works)\n4. Sent by post, takes about a week to arrive\n\nIf you need it faster, the paid Bonitätsauskunft (€29.95) at meineschufa.de is instant/digital — worth it if you're on a deadline for the room.\n\n**Applying for a rent guarantor (Rentcaution, as an example):**\n1. Go to rentcaution.de, pick the plan based on your monthly rent\n2. Register with your details and ID\n3. Pay the yearly fee (roughly €30-70 depending on rent amount)\n4. They issue a Bürgschaft certificate you send to the landlord/WG\n\nNow the reply:\n\nUpdated to reflect it's applied and coming in a week, guarantor part stays open as before.",
+    "attachments": [],
+    "ts": "2026-08-13T11:25:02.314679Z"
+  },
+  {
+    "pair": 7,
+    "speaker": "user",
+    "text": "Hi I am interested, can you share any photos of the rom\n\n\nDeaft this messgae",
+    "attachments": [],
+    "ts": "2026-08-13T14:13:43.856132Z"
+  },
+  {
+    "pair": 7,
+    "speaker": "ai",
+    "text": "Short and to the point.",
+    "attachments": [],
+    "ts": "2026-08-13T14:13:47.053956Z"
+  },
+  {
+    "pair": 8,
+    "speaker": "user",
+    "text": "guid em eliek where ot fins rhe gwemin wis ns pin dor he shcu aliek where did i eget that?",
+    "attachments": [],
+    "ts": "2026-08-13T15:24:33.718943Z"
+  },
+  {
+    "pair": 8,
+    "speaker": "ai",
+    "text": "This is very garbled — trying to parse what you're asking.\n\nBest guess: \"guide me where to find the German ... pin for the Schufa, where did I get that?\"\n\nIf you mean where to get the **Schufa itself** (the \"PIN\" being the ID verification step in the process): you go to meineschufa.de/de/datenkopie, and during registration they verify your identity via a video-ident or PostIdent step (this is where you might be thinking of a \"PIN\") — they send you a confirmation to your German address to complete it.\n\nCould you retype the question? I want to make sure I answer the right thing.",
+    "attachments": [],
+    "ts": "2026-08-13T15:24:37.133149Z"
+  },
+  {
+    "pair": 9,
+    "speaker": "user",
+    "text": "where to find this german eid or pin like from where or when did i get a pinnliek that is is sking for that int eh idnow eid page biut i dont lnow what this is abotu?",
+    "attachments": [],
+    "ts": "2026-08-13T15:26:38.850085Z"
+  },
+  {
+    "pair": 9,
+    "speaker": "ai",
+    "text": "The **eID PIN** is a 6-digit PIN tied to your German ID card or residence permit (eAT), used to verify your identity online — for government portals, banks, or things like Schufa's identity check.\n\nYou'd have set it when you first picked up your residence permit at the Ausländerbehörde (immigration office) or ID card at the Bürgeramt — they usually hand you a PIN letter (PIN-Brief) at that appointment, or let you set your own PIN on the spot.\n\nIf you don't remember setting one or lost the letter:\n- Check for a **PIN-Brief** among your immigration/registration documents — it often gets overlooked\n- If you truly never set one, you can activate/set it via the **AusweisApp2** app (needs an NFC-capable phone to read the chip)\n- If it's locked or you're stuck, you'll need to visit the Bürgeramt or Ausländerbehörde in person to reset it\n\nIs this coming up on the Schufa page specifically, or somewhere else — that'll tell me which flow you're actually stuck in.",
+    "attachments": [],
+    "ts": "2026-08-13T15:26:48.232443Z"
+  },
+  {
+    "pair": 10,
+    "speaker": "user",
+    "text": "Is this rleated to that?",
+    "attachments": [],
+    "ts": "2026-08-13T15:29:39.252194Z"
+  },
+  {
+    "pair": 10,
+    "speaker": "ai",
+    "text": "This is not related to the eID PIN itself — this is a different letter: it's the notice confirming your residence document was issued with the online ID function (eID) built in, and referencing that you were already given a separate PIN-Brief (transport PIN letter) with reference number **2032830020260983** at the time you applied.\n\nSo what you're looking for is that other letter — the one that actually contains your PIN, sent separately, with that reference number on it. This letter here doesn't have the PIN itself, just confirms it exists and tells you the reference to look for.\n\nTwo things worth noting:\n- The red **Sperrkennwort (TORMANN)** and Sperrsumme on this page are your blocking password, used only if you need to report your ID lost/stolen — not your login PIN\n- If you can't find the actual PIN-Brief, you can't have it resent by post for security reasons; you'd need to reset the PIN in person at the Bürgeramt or via a reset process using the AusweisApp2 (needs a reset via your registration address)",
+    "attachments": [],
+    "ts": "2026-08-13T15:29:44.154460Z"
+  },
+  {
+    "pair": 11,
+    "speaker": "user",
+    "text": "What i need ot do with thes efiles?",
+    "attachments": [],
+    "ts": "2026-08-13T15:30:58.492751Z"
+  },
+  {
+    "pair": 11,
+    "speaker": "ai",
+    "text": "Found it — **Image 4 is your actual PIN-Brief**, the one referenced in that first letter (reference number 2032 8300 2026 0983 matches).\n\nHere's what to do with each:\n\n- **Image 4 (PIN-Brief)** — this is the one you need. Scratch off the left red panel to reveal your 5-digit **PIN**, and the right one for your **PUK** (only needed if you lock yourself out). Use the 5-digit PIN once, together with the AusweisApp2 (via NFC on your phone) or a card reader, to set your own permanent 6-digit PIN for the eID function. Keep this letter safe until you've done that — don't scratch the PUK panel unless you actually get locked out.\n\n- **Image 1** — confirms your eAT was approved and gives your pickup appointment (02.04.2025). If you already picked up your card, this is just for your records.\n\n- **Image 2** — a blank Vollmacht (power of attorney) form, only needed if someone else picks up your ID/PIN-Brief on your behalf. Not needed if you collected it yourself.\n\n- **Image 3** — proof you paid the €100 fee for your residence permit. Keep for your records, no action needed.\n\nSo the actual step: scratch Image 4's PIN panel, then set up the AusweisApp2.",
+    "attachments": [],
+    "ts": "2026-08-13T15:31:08.778827Z"
+  },
+  {
+    "pair": 12,
+    "speaker": "user",
+    "text": "Ii donr fucking undedtsnd i sm enteirm ght exar pin 00615 and scanning my card and it sgetying fisled i dont knwo joe they are aksong of rrhis what to do in th ealrie attempt it ujnk i reahce ditll setting up thr new 6 digit pin and thne it got cancelled nad thne i had to satr again and afte rrhtsvit si sheoign ths begaiour and ko ei am hlcoked what to do?",
+    "attachments": [],
+    "ts": "2026-08-13T15:48:36.544108Z"
+  },
+  {
+    "pair": 12,
+    "speaker": "ai",
+    "text": "Okay, your card is now **blocked** because the eID PIN entry failed 3 times — that's normal after multiple failed/interrupted attempts, not something broken on your end.\n\nHere's what to do now:\n\n1. Tap **\"Open AusweisApp 2\"** on that screen (or open it directly)\n2. Choose the option to **unlock/change PIN using PUK**\n3. Enter your **PUK** — this is the code under the *second* red scratch panel on your PIN-Brief (Image 4 from before), not the PIN you were using\n4. It'll ask you to set a new 6-digit PIN — do this in one go without switching apps or letting your phone lock, since interruptions mid-process seem to be what caused the failed attempts before\n5. Hold your ID steady against the back of your phone (NFC) the whole time until it confirms\n\nOne likely cause of the repeated failures: NFC reading on iPhones is sensitive to phone case, hand movement, or the card shifting slightly mid-scan. Keep the card flat against the phone, don't move either, and stay in a spot with no interruptions (calls, notifications) until it finishes.\n\nIf PUK entry also fails 10 times, the card gets fully locked and you'd need to visit the Bürgeramt in person — so it's worth being careful and unhurried this attempt.",
+    "attachments": [],
+    "ts": "2026-08-13T15:48:42.616352Z"
+  },
+  {
+    "pair": 13,
+    "speaker": "user",
+    "text": "I have setup the perosnal 6 digit mumber in ausweis app 2 now what to do in thr id app it id ktonsyncing i gurss like i tried dthe 6 digit mumber an dit snot workign its still suwoing etor and the auwris app eljtine dlike if i alresy crated a 6 digit number then i cannot ise the 5 digit numebr anymore so how to fix th id app ?",
+    "attachments": [],
+    "ts": "2026-08-13T15:59:30.203030Z"
+  },
+  {
+    "pair": 13,
+    "speaker": "ai",
+    "text": "The 5-digit number is dead now — once you set your own 6-digit PIN, the old transport PIN stops working permanently. That part's correct on your end.\n\nThe IDnow error is more likely a **stale session issue**, not the PIN itself. Try this:\n\n1. Fully close both apps (swipe them away, not just back out)\n2. Open **AusweisApp2** alone first and test your new 6-digit PIN using its own \"Ausweisen\" / test function — confirm it actually works standalone\n3. If that works, reopen **IDnow** and start the verification **fresh** — don't resume/continue an old attempt, since it may be stuck referencing your pre-change session\n4. When IDnow gets to the ID-scan step, it should hand off to AusweisApp2's own PIN prompt (a separate overlay) — enter the 6-digit PIN there, not inside IDnow directly\n5. Hold the card flat against the phone the entire scan, no movement\n\nOne important thing: you get 3 attempts before the card locks again, needing the PUK. So test the PIN standalone in AusweisApp2 first (step 2) before touching IDnow again, so you're not burning attempts on a broken session.",
+    "attachments": [],
+    "ts": "2026-08-13T15:59:42.101121Z"
+  },
+  {
+    "pair": 14,
+    "speaker": "user",
+    "text": "is this a good schufa score?",
+    "attachments": [],
+    "ts": "2026-08-13T16:02:14.788150Z"
+  },
+  {
+    "pair": 14,
+    "speaker": "ai",
+    "text": "Yes — 742 out of 999 with a \"Gut\" (Good) rating is solid. That puts you comfortably above the threshold most landlords and WGs look for, so this Schufa should work fine for Maheshwaran or any other room application.",
+    "attachments": [],
+    "ts": "2026-08-13T16:02:16.403013Z"
+  },
+  {
+    "pair": 15,
+    "speaker": "user",
+    "text": "now for this one:\n\nJetzt bewerten\nUnterhaltung mit Maheshwaran Govender\nHallo,  das Zimmer mit dem eigenen Balkon klingt genau nach dem, was ich suche, und die Möbelübernahme passt gut, ich würde gerne alles übernehmen.  Kurz zu mir: Ich bin Jayon, 27, mache meinen Master in Digital Media an der Uni Bremen und arbeite Vollzeit bei BEGO. Mein erstes Jahr in Deutschland habe ich in einer WG gewohnt, das hat mir sehr geholfen anzukommen, danach war ich in Braunschweig nochmal in einer WG. Die letzten Monate war ich allein in einem Studio, und genau danach merke ich, dass mir das Zusammenleben mit anderen fehlt.  Für den Balkon habe ich schon Pläne: ein kleiner grüner Rückzugsort mit ein paar Pflanzen, und ein Platz für meine Morgenmeditation mit Kaffee und einem Buch.  Ich könnte ab September einziehen. Wie hoch ist die Warmmiete insgesamt? Am 15. oder 16.08. hätte ich Zeit für eine Besichtigung, falls das passt.  Viele Grüße, Jayon \nvor 1 Tag\nHi Jayon. Thank you for your interest in the apartment. The furniture cost 320/-.  It is all bought this year and in really good condition and is a fair price for them considering they are already moved and set up on the 2nd Floor. Would you be available to visit at 12:30 on Saturday?\nvor 1 Tag\nHi Maheshwaran. I can manage the furniture cost, and I can confirm it during the visit. Yes, I can come over on Saturday, August 15th 12:30 for the apartment viewing.\nAlso can you share the exact house address.\nvor 1 Tag\nPerfect! Osterstaße 43 :)\nvor 1 Tag\nHi Jayon. something I forgot to ask is if you would be able to provide Schufa and a German guarantor vouching for you.\nThis is non-negotiable for the landlord.\nvor 6 Stunden\nHi Maheshwaran,  I've applied for my Schufa, should have it in about a week and will send it over then.  On the German guarantor - as an expat I don't have one lined up right now. Let me look into my options and get back to you on that.\nvor 4 Stunden\nOkay. the landlord agency is a pain while bringing in people. So please let me know about this, if not I can already say that they will not select you.\n\n\nwhat do i need to say?\n\nlike for this what document should i get form here to submit there for this requiement??",
+    "attachments": [],
+    "ts": "2026-08-13T16:04:18.297681Z"
+  },
+  {
+    "pair": 15,
+    "speaker": "ai",
+    "text": "The landlord's now explicit: no answer means no room. Two things to sort:\n\n**1. The Schufa document**\n\nThe score page you screenshotted is just the free overview — not what landlords need. Go to **\"Score & Credit Rating\"** tab, look for **\"Bonitätsauskunft\" / \"Auskunft für Vermieter\"** — that's the actual downloadable/printable certificate (usually a PDF) landlords expect. It shows your score plus a formal statement of no negative entries, and it's the one you attach to the WG application, not a screenshot of the dashboard.\n\n**2. The guarantor answer**\n\nGiven the agency's ultimatum, staying vague again risks losing the room outright. You don't have to fully commit today, but you do need to show you're actively solving it — a guarantor service like Rentcaution is the fastest real option here (sign up takes minutes, certificate issued same day in most cases).\n\nSecond one also asks the agency to confirm they'll accept a guarantor service certificate — worth checking before you pay for one, since some German agencies only accept a personal Bürge and reject third-party guarantee companies outright.",
+    "attachments": [],
+    "ts": "2026-08-13T16:04:34.857585Z"
+  },
+  {
+    "pair": 16,
+    "speaker": "user",
+    "text": "what to selct here/",
+    "attachments": [],
+    "ts": "2026-08-13T16:05:13.908060Z"
+  },
+  {
+    "pair": 16,
+    "speaker": "ai",
+    "text": "None of these tabs contain the actual landlord certificate — they're just showing your score, your entries (inquiries, contracts, defaults), and personal data breakdown, all part of the free score view.\n\nWhat you actually need is a separate, paid product: the **SCHUFA-BonitätsAuskunft für Vermieter** (sometimes just called \"Bonitätsauskunft\" or \"SCHUFA-BonitätsCheck\"), which isn't accessed through these dashboard tabs at all — it's usually purchased separately at meineschufa.de/de/bonitaetsauskunft or as an add-on, and produces a signed PDF specifically formatted for landlords (with a QR code they can verify).\n\nCheck the **\"service\"** tab in the top nav, or look for something like \"Auskunft für Dritte\" / \"Vermieterbescheinigung\" — that's the one to buy and download, not anything currently visible on this screen.",
+    "attachments": [],
+    "ts": "2026-08-13T16:05:18.452161Z"
+  },
+  {
+    "pair": 17,
+    "speaker": "user",
+    "text": "should i pay this and get this 30 euros is it worth or should i get the bonify thing what do u say?",
+    "attachments": [],
+    "ts": "2026-08-13T16:07:29.017052Z"
+  },
+  {
+    "pair": 17,
+    "speaker": "ai",
+    "text": "Just pay the €29.95 directly on SCHUFA — here's why:\n\nBonify sounds free, but it's owned by SCHUFA itself and their **actual landlord-ready document** (Mieterauskunft mit SCHUFA-BonitätsCheck) costs **€29.99** too — basically the same price, same underlying SCHUFA data. What's free on Bonify is just a basic score dashboard, which is what you're already looking at on the SCHUFA site for free.\n\nSo the \"free\" framing is a bit misleading for your actual need. Since you're already on meineschufa.de and see your score there, just buy the **Bonitätsauskunft (€29.95)** directly — it's the standard, most widely recognized document by German landlords, arrives as a downloadable PDF with a verification code Maheshwaran's agency can check, and you're not creating an extra account elsewhere for the same result.",
+    "attachments": [],
+    "ts": "2026-08-13T16:07:41.582021Z"
+  },
+  {
+    "pair": 18,
+    "speaker": "user",
+    "text": "Is my virnsm eand nacnale correct i have entered i think tis wring?",
+    "attachments": [],
+    "ts": "2026-08-13T16:13:00.163055Z"
+  },
+  {
+    "pair": 18,
+    "speaker": "ai",
+    "text": "Yes, that's wrong — swapped fields.\n\nLooking at your residence permit: **Jayon** is your Vorname (first name), **Kuttiplackal Vinod** is your Nachname (surname). The form has them reversed.\n\nFix it to:\n- **Vorname(n):** Jayon\n- **Nachname(n):** Kuttiplackal Vinod\n\nEverything else (25 Mai 1999) matches your ID correctly.",
+    "attachments": [],
+    "ts": "2026-08-13T16:13:02.360186Z"
+  },
+  {
+    "pair": 19,
+    "speaker": "user",
+    "text": "give a fulld etialed anlayis aoif shcufa report in detial fulld etial without misisng anytign and make it clear and udnerstaood in rpecies way pelae",
+    "attachments": [],
+    "ts": "2026-08-13T16:24:51.431422Z"
+  },
+  {
+    "pair": 19,
+    "speaker": "ai",
+    "text": "Here's the full breakdown of your SCHUFA-BonitätsCheck document:\n\n**Document type & purpose**\nThis is the official SCHUFA-BonitätsCheck certificate — the standard document German landlords/agencies request to verify creditworthiness before signing a lease. It's issued directly by SCHUFA Holding AG (not a third party), so it carries full weight with Maheshwaran's agency.\n\n**Your details on the certificate**\n- Name: Jayon Kuttiplackal Vinod\n- Date of birth: 25.05.1999\n- Address: Humannstr. 51, 28239 Bremen\n- Issue date: 13. August 2026\n\n**The core result**\nThe key line: *\"Zum 13.08.2026 liegen uns ausschließlich positive Bonitätsinformationen vor\"* — as of the issue date, SCHUFA holds **only positive** credit information about you. No negative entries, no defaults, nothing flagged. This is the strongest possible outcome on this type of certificate — it doesn't show your numeric score (742/999) at all, just this clean positive/negative determination, which is actually what landlords care about most.\n\n**Verification code**\nBCX7-MYMW-UATX-6X — this is what makes the certificate tamper-proof. Maheshwaran or the agency can enter this code plus your birth date at meineSCHUFA.de/check to confirm the certificate is genuine and pull it up themselves. Valid for verification for **60 days** from the issue date (so until roughly mid-October 2026).\n\n**What's deliberately NOT on it**\nNotice it doesn't list your bank accounts, credit cards, phone contracts, or loan details — SCHUFA designed this specific certificate type to protect your privacy by showing landlords only the yes/no creditworthiness result, not your full financial history.\n\n**The upsell (ignore this)**\nThe letter also pushes a \"meineSCHUFA kompakt\" subscription (€4.95/month after a 30-day trial) via a voucher code. You don't need this — it's just SCHUFA's cross-sell, unrelated to what you need for the WG application.\n\n**Bottom line for your application**\nThis is exactly the document to send to Maheshwaran — it's the real deal, current (today's date), and verifiable. Pair it with your guarantor arrangement and you've addressed both requirements the agency flagged as non-negotiable.",
+    "attachments": [],
+    "ts": "2026-08-13T16:25:00.783116Z"
+  },
+  {
+    "pair": 20,
+    "speaker": "user",
+    "text": "okay now i need to know allt he possibilities of setting up a german gurantoru adm resach in detail what ar eth eoptions and lie how can i setup that for me that all such landlord agencies would accept and i can set that up in a proper way for thsio and all the cost asosciate dwith this what all will it cost me adiditonal give in alld etails pleas",
+    "attachments": [],
+    "ts": "2026-08-13T16:26:49.055958Z"
+  },
+  {
+    "pair": 20,
+    "speaker": "ai",
+    "text": "Good, let's map out all the real options — and I want to flag upfront: there are actually **two different things** agencies mean by \"guarantor,\" and Rentcaution only really covers one of them.\n\n## The two types of \"guarantee\" agencies ask for\n\n**1. Mietbürgschaft (personal guarantor)** — a person or institution promises to cover your rent and damages for the *entire* tenancy if you can't pay. This is what \"bring a German guarantor\" usually means literally.\n\n**2. Mietkautionsbürgschaft (deposit guarantee)** — a company covers just your security deposit (Kaution) instead of you paying it in cash upfront. This is what Rentcaution/Kautionsfrei/heysafe actually sell.\n\nSome agencies treat #2 as satisfying #1 (since it removes their financial risk); others insist on an actual personal Bürge and won't accept a deposit-insurance company. **You need to ask Maheshwaran's agency directly which one they mean** before paying for anything — this determines everything else.\n\n## Option A: Personal guarantor (a real person)\n\n- Someone (usually a German resident with steady income, ideally 2.5–3x the rent) signs a **Bürgschaftsvertrag**, becoming personally liable for unpaid rent/damages for the whole lease\n- **Cost: free**, but you need someone willing to take this on — family, a close friend, sometimes an employer\n- Worth asking: does **BEGO** offer any relocation/housing support for employees that includes this? Some German employers do, though it's not common\n- Hardest option for an expat without local ties, but the one agencies trust most\n\n## Option B: Institutional guarantee/deposit-insurance services\n\nThese are companies that legally stand in as your Bürge, usually for the **deposit only** (see caveat above). Main providers and 2026 pricing:\n\n| Provider | Cost | Notes |\n|---|---|---|\n| DepositDirect | ~4.2% of deposit/year | Cheapest, fully digital, works EU-wide |\n| heysafe | Mid-range | Fully digital, fast |\n| Kautionsfrei.de | 4.7–5.25% of deposit/year, min. ~€50/year | Market leader, includes free legal move-in check, backed by R+V Versicherung |\n| Deutsche Kautionskasse (DKK) | 5.0%/year + €50 setup fee (year 1), €10/year after | Established, bank-grade |\n| Kautel | 4.7%/year, min. €50/year | Requires 18+ month lease |\n\n**Example cost:** if your deposit is €1,000 (roughly 2–3x cold rent, standard in Germany), you'd pay around **€40–55 per year** instead of locking up €1,000 cash. If it's €1,500, expect ~€60–80/year.\n\n**Setup process (typically 10–15 minutes online):**\n1. Register on the provider's site with your ID and address\n2. They run their own credit check (often lighter than SCHUFA, sometimes just needs your SCHUFA-BonitätsCheck as proof)\n3. Enter the landlord's details and deposit amount\n4. Pay the first year's premium\n5. Receive a digital Bürgschaftsurkunde (guarantee certificate) — usually same-day, sometimes instant\n\n**Acceptance rate:** roughly 95% of landlords/agencies accept these per industry sources, but it's not universal — some explicitly refuse and want a bank-issued Bürgschaft or a personal guarantor instead.\n\n## Option C: Bank guarantee (Mietaval)\n\nYour own bank issues a formal Bürgschaft, blocking funds in your account as security instead of paying a cash deposit. Rarely offered to newcomers without an established banking relationship/credit history in Germany — likely not practical for you right now.\n\n## Option D: Negotiate around it entirely\n\n- Offer a **higher cash deposit** (e.g., 3 months instead of the legal max, if landlord agrees) — sometimes this alone gets a guarantor requirement waived\n- Offer to **prepay several months' rent upfront**\n- Ask if **proof of income/employment contract from BEGO** alone might satisfy them, since you do have stable income unlike a typical student\n\n## What I'd actually do here, given the timeline\n\n1. Message the agency (via Maheshwaran) asking specifically: \"Is a Bürgschaft from a company like Kautionsfrei or DepositDirect acceptable, or do you require a personal guarantor?\" — this single question saves you from paying for the wrong thing\n2. If they accept an institutional guarantee: go with **Kautionsfrei.de** — most recognized name, so agencies rarely push back on it, and cost is manageable\n3. If they insist on a personal guarantor only: you're likely stuck unless BEGO can help, or you'd need to have an honest conversation with Maheshwaran about whether the higher-deposit route is negotiable\n\nWant me to draft the message asking the agency which type they require?",
+    "attachments": [],
+    "ts": "2026-08-13T16:27:33.076503Z"
+  },
+  {
+    "pair": 21,
+    "speaker": "user",
+    "text": "what is this for:\nElternbürgschaft\nFür alle ohne regelmäßiges Einkommen\n\n* Ideal für Studierende und Auszubildende, bei denen Eltern oder Familienangehörige unterstützen und bürgen\n* Vollständige Bürgschaftserklärung inkl. Einkommensnachweis eines Bürgen\n* Sofort einsatzbereit für deine Wohnungsbewerbung\n\nJetzt startenEinmalig 19,90 € | kein Abo\n✓ Wiederverwendbar✓ 90 Tage gültig\nErstellt in 5 Minuten\nEinmalig 19,90€ | kein Abo\n90 Tage gültig | mehrfach verwendbar\nSofort per E-Mail als PDF\nWas ist in der Elternbürgschaft enthalten?\nEin 5-seitiges Dokument, das Vermieter wirklich überzeugt.\nIdentitätsprüfung\nVerifizierung per Personalausweis oder Reisepass. Sicher, vollständig digital, in ca. 2-3 Minuten.\nEinkommensnachweis\n3 Monate Gehaltsnachweis via Kontozugriff (BaFin-geprüft, PSD2-konform) oder Dokumenten-Upload.\nBürgschaftserklärung\nRechtssichere, digital unterzeichnete Bürgschaftserklärung, sofort einsatzbereit nach deutschem Recht.\nDruckfertiges PDF\n5-seitiges Dokument mit Deckblatt, allen Nachweisen und Bürgschaft. Sofort per E-Mail. Fälschungssicher durch QR-Code.\nSo funktioniert's\nIn 4 Schritten zur fertigen Elternbürgschaft\n01\nDirekt starten\nStudent oder Bürge meldet sich per E-Mail an und kann direkt starten.\n02\nEinmalig 19,90 € bezahlen\nSichere Zahlung per Kreditkarte, PayPal oder Klarna. Kein Abo, keine Folgekosten.\n03\nPrüfungen durchlaufen\nIdentität und Einkommen werden vollständig digital in einem Durchgang geprüft.\n04\nPDF herunterladen & einreichen\nDas fertige Dokument wird sofort per E-Mail gesendet und ist direkt für die Bewerbung bereit.\nJetzt starten\nFür wen ist die Elternbürgschaft?\nWähle deinen Einstieg. Der Ablauf ist für beide Rollen optimiert.\nFür Studenten / Auszubildende\nDu suchst eine WG oder Wohnung und brauchst jemanden, der für dich bürgt.\n\n* Anmelden und Bürgen einladen\n* Bürge ergänzt Identität und Einkommensnachweis\n* PDF wird automatisch erstellt und ist sofort einsatzbereit\n\nJetzt starten\nFür Bürgen / Eltern\nBeliebt\nErstelle hier in unter 10 Minuten eine vollständige, geprüfte Elternbürgschaft.\n\n* Identitätsprüfung (Personalausweis)\n* Einkommensnachweis\n* Bürgschaftserklärung (digital)\n\nJetzt starten19,90 € · einmalig\nWarum du uns vertrauen kannst\nStaatlich gefördert, technisch zertifiziert, datenschutzkonform.\nPSD2-zertifizierter Kontozugriff\nOpen Banking über finAPI. BaFin-reguliert, PSD2-konform. Bankdaten werden nie bei rentcard gespeichert.\nGefördert durch den Freistaat Bayern\nrentcard wird durch das Bayerische Staatsministerium für Wirtschaft, Landesentwicklung und Energie gefördert.\nDaten ausschließlich auf EU-Servern\nMitglied bei GPTI und der Allianz für Cyber-Sicherheit. DSGVO-konform by design.\nIn München gegründet\nGegründet mit dem Ziel, den deutschen Mietmarkt fairer und transparenter zu gestalten. Für Mieter und Vermieter gleichermaßen.\nDas sagen unsere Nutzer\n4.8\nKM\n\"Hat super einfach funktioniert. In 10 Minuten war alles erledigt und meine Tochter hatte ihre Unterlagen.\"\nKlaus M. · München\nSH\n\"Sehr professioneller Prozess. Die Identitätsprüfung war schnell und unkompliziert.\"\nSabine H. · Hamburg\nPK\n\"Endlich eine moderne Lösung für Bürgschaften. Viel besser als der bisherige Papierkram.\"\nPeter K. · Berlin\nMF\n\"Mein Sohn hat die Wohnung bekommen! Der Vermieter war von dem professionellen Dokument wirklich beeindruckt.\"\nMaria F. · Frankfurt\nHäufige Fragen\nAlles Wichtige rund um die Elternbürgschaft.\nJetzt starten\nWas ist die Elternbürgschaft?\n\nWer muss die Elternbürgschaft erstellen?\n\nWie lange dauert der Prozess?\n\nSind meine Daten sicher?\n\nWas kostet die Elternbürgschaft?\n\nKann ich das PDF mehrfach verwenden?\n\nJetzt Elternbürgschaft erstellen\nErstellt in 5 Minuten. Einmalig 19,90 € | Dein Kind freut sich.\nJetzt starten\n\n\n\nso should i tru with this optib b and also what is this is this usefull\n\nlike shoudl i rpvode my schufa an dalso this and or like ask i can provied. this gurantte is that suffcient and this is my schiufa\n\nso like o cam messaeg him todua sauign thay i have my shcufa reprot ready and also i reached about eh germany gurantor and came to know that i cna provied then say the german name burge sefive ic an provide that is that sufficuent? let me knwo if this works\n\nbit i want o see if that works also",
+    "attachments": [],
+    "ts": "2026-08-13T16:33:33.887951Z"
+  },
+  {
+    "pair": 21,
+    "speaker": "ai",
+    "text": "Important catch first: this \"Elternbürgschaft\" (rentcard) product is **not** an institutional guarantee like Rentcaution — it's a different thing entirely. It's a tool that turns a *real parent or family member's* guarantee into a professional, verified PDF. The company doesn't guarantee anything itself; it just packages your guarantor's ID + income proof + signature into a document landlords trust.\n\n**So the real question is: do you have a parent or family member who could actually be your guarantor?** If not, this product doesn't solve your problem — it just makes an existing guarantor look more professional on paper.\n\nTwo real issues if you're thinking of your parents in India:\n1. **Income proof** — the tool verifies income via German bank access (PSD2) or document upload. Your parents likely don't have a German bank account, so you'd need the document-upload route with Indian income documents translated/certified.\n2. **Enforceability** — German landlords often want a guarantor who is *legally reachable in Germany*, because suing a guarantor abroad for unpaid rent is expensive and slow. Many agencies will reject a foreign guarantor even with a perfect PDF, precisely because of this.\n\n**Don't message Maheshwaran yet claiming you've \"found a German guarantor service\"** — that's not accurate to what this product does, and if the agency later realizes the guarantor is your parent in India rather than someone in Germany, it could backfire and look like you misrepresented it.\n\nWhat I'd actually do:\n1. Ask Maheshwaran/the agency directly: *\"Would a guarantor based outside Germany be acceptable, or does it need to be someone resident here?\"* — this determines whether the Elternbürgschaft route is even viable\n2. In parallel, look into Option B properly (Kautionsfrei/DepositDirect) — since those are institutional and don't have the foreign-guarantor problem at all, they may be the safer bet regardless of what your parents could offer\n\nWant me to draft the message asking the agency that specific question before you commit €19.90 or €50+/year to either option?",
+    "attachments": [],
+    "ts": "2026-08-13T16:34:00.027282Z"
+  },
+  {
+    "pair": 22,
+    "speaker": "user",
+    "text": "like i cna have my parent in dubai who can privied that will that work for this is that possible to ask for that?",
+    "attachments": [],
+    "ts": "2026-08-13T16:34:24.734489Z"
+  },
+  {
+    "pair": 22,
+    "speaker": "ai",
+    "text": "Technically possible, but realistically weak for a German rental — here's why:\n\nA guarantor in Dubai runs into the same core problem as India: if you ever missed rent, the landlord would have to pursue a legal claim against someone outside German (and EU) jurisdiction. That's expensive, slow, and often not worth it for them — which is exactly why many German agencies restrict guarantors to people resident in Germany, regardless of income or documentation quality.\n\nThat said, it's not universally rejected — some smaller private landlords are more flexible than agencies. But you described this specific agency as calling Schufa + guarantor \"non-negotiable,\" which is agency language, and agencies tend to be the strictest about this exact rule since they're managing risk for someone else's property.\n\nWorth asking directly rather than assuming either way — costs you nothing and settles it before you spend money on anything:\n\nIf they say no (which I'd expect), that points you back to the institutional route (Kautionsfrei/DepositDirect) as the more reliable path, since those don't depend on your guarantor's location at all.",
+    "attachments": [],
+    "ts": "2026-08-13T16:34:32.688336Z"
+  },
+  {
+    "pair": 23,
+    "speaker": "user",
+    "text": "no i want to ask about the katuon freio and toehr serives which if that is possible for this\n\nalso like this rental studnets thign cna i t work for me?",
+    "attachments": [],
+    "ts": "2026-08-13T16:35:22.540330Z"
+  },
+  {
+    "pair": 23,
+    "speaker": "ai",
+    "text": "**Kautionsfrei and similar services** — worth asking, since as I mentioned these only cover the deposit (Kaution), not the general Mietbürgschaft the agency called non-negotiable. Some agencies accept it as sufficient, some don't. Good to check before paying.\n\nYou could combine this with the earlier question about a foreign guarantor into one message, so you're not sending Maheshwaran three separate pings.\n\n**On the \"rentcard\" (Elternbürgschaft) thing** — this only works if you actually have someone to plug into it. Since your only real option there is your parent in Dubai, it hits the same jurisdiction problem we just covered: the tool would produce a polished PDF, but the underlying guarantor still isn't Germany-based, which is likely what the agency actually cares about. So no, this probably doesn't solve it for you unless the agency confirms a foreign guarantor is fine — worth waiting on their answer to your question first before spending €19.90 on it.",
+    "attachments": [],
+    "ts": "2026-08-13T16:35:33.174772Z"
+  },
+  {
+    "pair": 24,
+    "speaker": "user",
+    "text": "I want you to do a more extensive research on what is the possibility and how can I negotiate. Right now I have the Schufa, and I want to let him know, okay, I have the, I wanted to know if currently providing this Bürgrending option and also possibly a thousand euro, currently I think the deposit is like, caution is like 730, instead of that, thousand euro deposit. And this credit, will that work? And also I have my Schufa score, so I also want to know about the possibility of also asking to him, like, how he was able to get that.\nalso wnt you to do a ddepr eacghe on all the poisbiltie sof this how ic an negoitiate on this",
+    "attachments": [],
+    "ts": "2026-08-13T18:08:12.225243Z"
+  },
+  {
+    "pair": 24,
+    "speaker": "ai",
+    "text": "Here's the full picture, including one legal point that meaningfully strengthens your position.\n\n## The legal reality (useful leverage, use gently)\n\nUnder **§551 BGB**, a landlord can demand a maximum of **3x the Nettokaltmiete** as security, and that cap covers *all* security combined, deposit and guarantee together. So an agency demanding a full deposit **plus** a Bürgschaft as a mandatory condition is on shaky legal ground.\n\nThe exception that matters: when a guarantee is voluntarily offered by the tenant (freiwillige Bürgschaft), for instance to improve the applicant's creditworthiness, the total security may exceed the 3-month limit. \n\n**Why this helps you:** it reframes the conversation. You're not \"failing to meet a requirement,\" you're voluntarily offering additional security. Landlords accept voluntary offers all day. Don't cite the law at them (that reads as adversarial and gets applications dropped), but let it shape how you frame your offer.\n\n## On your €1,000 deposit idea\n\nIf the Kaution is €730 and that's roughly one month's cold rent, the legal max would be around **€2,190**. So €1,000 is completely legal and no obstacle.\n\nHonest assessment though: **€730 → €1,000 is only +€270.** To an agency worried about rent default, that's not a compelling concession. If you can afford it, **offering the full 3 months (~€2,000-2,200) is dramatically more persuasive** and still entirely within the law. That's real money on the table that covers them for a genuine default scenario. A €270 bump mostly signals goodwill, not security.\n\nMiddle ground: offer 2 months' cold rent, and mention you could go to 3 if the agency prefers.\n\n## Your actual strongest card (you're underusing this)\n\nThe guarantor requirement exists because agencies assume applicants are **students with no income**. You are not that applicant:\n\n- **Full-time employed at BEGO**, with payslips and a work contract\n- **SCHUFA-BonitätsCheck showing exclusively positive information**, issued today, verifiable\n- Registered in Bremen, German bank account, valid residence permit\n- Prior rental history in Germany (two WGs) with no issues\n\nMost guarantor demands evaporate when the applicant can show a stable German employment contract. Lead with this, not with the guarantor problem. Attach:\n1. SCHUFA-BonitätsCheck (have)\n2. **Arbeitsvertrag or employer confirmation from BEGO**\n3. **Last 3 payslips**\n4. **Mietschuldenfreiheitsbescheinigung** from a previous landlord if you can get one, this is a formal \"no rent debts\" certificate and German agencies love it\n\n## Full option list, ranked by realism for you\n\n| Option | Cost | Viability for you |\n|---|---|---|\n| Income proof + higher deposit instead of guarantor | Free (+deposit cash) | **Best bet.** Your employment is the real answer to their concern |\n| Kautionsbürgschaft (Kautionsfrei, DepositDirect, heysafe) | ~4-5% of deposit/year, ~€40-90/yr | Viable, you have German residence + bank account, both required. But covers deposit only, may not satisfy a \"Bürge\" demand |\n| Bankbürgschaft (Mietaval) via your German bank | Usually ~1-2% of sum/year | Worth one phone call. Banks often decline newcomers, but you have salary flowing in, which helps |\n| Parent in Dubai via rentcard Elternbürgschaft | €19.90 | Weak. Jurisdiction problem stands regardless of document quality |\n| Prepay several months' rent | Free (cash flow) | Sometimes accepted, ask only if other routes fail |\n\n## Asking Maheshwaran how he did it\n\nYes, do this. He's likely a foreigner who cleared the exact same agency requirement, which means either he had a workaround, or the requirement is softer in practice than it sounds. This is possibly the highest-value question in the whole conversation and costs you nothing.\n\n## The message\n\nRather than three separate pings, one consolidated message:\n\nOne thing to prepare for: your residence permit runs to **08.01.2027**, which some agencies flag as a short runway for a lease. If it comes up, be ready to say you're extending it and that your studies run beyond that date. Better to have an answer ready than to be caught off guard at the viewing on Saturday.",
+    "attachments": [],
+    "ts": "2026-08-13T18:09:21.230264Z"
+  },
+  {
+    "pair": 25,
+    "speaker": "user",
+    "text": "no the rent is like 400 euros actualy\nA semi-furnished room with a huge private balcony in a 3-person shared apartment is available for long-term rent from September 2026 in Osterstraße, Neustadt.\n\nThe 3-person shared flat will be starting a new lease of life, as all three current occupants are moving out to different corners of the world between September and October 2026. We are advertising our rooms separately, so you will also get the opportunity to talk with your future housemates, who will be moving in around the same time as you.\n\n🛌🏼🪟🌄\nThis is the largest room in the house (23 m2), with your own balcony where you can relax with a drink, raise a little garden, or simply sit outside and enjoy life. The big windows make the room extra bright, and of course you have all the space you need to design the room however you want. Check out the inspiration plan :)\n\n🍲🛁🚲\nThe shared spaces are spacious as well, with a bright kitchen with its own second balcony, a bathroom with a huge bathtub, and a basement cellar for extra storage space.\n\n📋📅\nWhile I am super sad to leave this dream room, I am looking for someone who would enjoy it as much as I have. I am also selling the furniture and things I have bought for the room: couch bed, large work table and chair, wooden shelf, rocking chair, balcony table and chairs, and curtains. Taking over the furniture is a condition for taking over the room, so I am ideally looking for someone who would be happy to move into an already semi-furnished space and make it their own :)\n\n🧔🏼🧕🏼\nIf you are interested, please write to me with a little information about yourself, your experiences and expectations of living in a shared flat, and most importantly what your plans would be for the balcony\n\n😉🌿\nPlease also mention how early you can move in. Ideally, I am looking for someone who can move in during September. We look forward to hearing from you! 😊\n\nI will get back to you as soon as possible and viewing will be organised on 15.08 and 16.08. And if needed another round of viewings next week :)\n\n\nbut my bego work is actualy a contracv work done with team worker agency tehy put me in 3 month contriacr whihc will end in october end tha tis ht conteact so if i agve tht then what will be the use?\n\nso what cna i do?",
+    "attachments": [],
+    "ts": "2026-08-13T18:10:46.804507Z"
+  },
+  {
+    "pair": 25,
+    "speaker": "ai",
+    "text": "Good that you caught this now rather than after sending. Two corrections and a revised approach.\n\n## Correction 1: your €1,000 deposit idea likely breaks the cap\n\nI assumed €730 was one month's cold rent. It isn't. With **€400 Gesamtmiete**, the Nettokaltmiete is probably around €280-320, which puts the legal max (3x) at roughly **€840-960**. The €730 Kaution is already close to the ceiling.\n\nSo offering €1,000 could actually exceed what's legally allowed, and a professional agency would know that. Offering to top up to around €840-900 is the most you can realistically do, and honestly that small a bump isn't worth building your case around. **Drop the higher-deposit angle.** It's not your lever here.\n\n## Correction 2: don't send the work contract\n\nYou're right that the contract hurts you. A 3-month temp contract via a staffing agency, ending in October, tells the agency your income stops two months into the lease. That's worse than saying nothing.\n\nBut you don't have to lie, and you shouldn't. Here's the distinction:\n\n- **Payslips (Gehaltsabrechnungen der letzten 3 Monate)** are the standard German request and show real income received. Send these if asked.\n- **The Arbeitsvertrag** is a separate document. Don't volunteer it. If they specifically ask for it, don't hide the temp nature, just be upfront and pair it with something else that covers the gap.\n\nAlso worth asking Teamworker directly: **are extensions typical, and is yours likely?** Temp placements at companies like BEGO frequently roll over. If they say extension is probable, that's something honest you can mention.\n\n## What actually becomes your case now\n\nSince employment stability is off the table, your strongest positions shift to:\n\n**1. Proof of funds (Vermögensnachweis).** Bank statements showing savings that cover several months of rent. For a €400 room this is a low bar and it's a completely standard alternative to income proof. If you have, say, €3,000-4,000 in the account, that's a year of rent visibly covered.\n\n**2. Prepaying rent.** Offering 3-6 months upfront (€1,200-2,400) is legally clean, unlike the deposit top-up, and it directly answers their actual worry. This is your strongest concrete offer.\n\n**3. Student status.** You're a Master's student at Uni Bremen with a residence permit tied to your studies. That's a stable, verifiable reason you're staying in Bremen, which matters more to landlords than people assume.\n\n**4. Your SCHUFA.** Still solid. Only positive entries, verifiable, issued today.\n\n## One thing to know about Kautionsbürgschaft providers\n\nMost of them (Kautionsfrei, DepositDirect etc.) require **unbefristetes Arbeitsverhältnis** or at least stable income for approval. With a temp contract ending in October, you may get rejected in their credit check. Worth applying to test it, since rejection costs you nothing, but don't build your message around promising it.\n\n## Revised message\n\nGiven all this, here's what I'd send:\n\nOnly claim the savings line if it's actually true. If your balance doesn't cover a year of rent, say what it does cover, since they may ask to see statements.\n\nOne more thing for the viewing on Saturday: the listing says **Ablöse €350**, but Maheshwaran quoted you €320. Worth confirming which figure applies while you're there.",
+    "attachments": [],
+    "ts": "2026-08-13T18:11:37.201662Z"
+  },
+  {
+    "pair": 26,
+    "speaker": "user",
+    "text": "so in the mesage \ni want send\n\nHi Maheshwaran,\n\nI have my Schufa report ready and let me know when to send it over.\n\nRegarding the gurantor, I don't have a German-resident Bürge, But on some reasearch I found out there are three other options which I could provide:\n\n* Proof of savings covering well over a year\n* then the Kautionsburgschaft providers\n\n\nLet me know what would work?And if you don't mind me asking, how did you handle the guarantor requirement when you moved in? Might save some back and forth.",
+    "attachments": [],
+    "ts": "2026-08-13T18:15:03.905600Z"
+  },
+  {
+    "pair": 26,
+    "speaker": "ai",
+    "text": " ",
+    "attachments": [],
+    "ts": "2026-08-13T18:15:03.957579Z"
+  },
+  {
+    "pair": 27,
+    "speaker": "user",
+    "text": "so in the mesage \ni want send\n\nHi Maheshwaran,\n\nI have my Schufa report ready and let me know when to send it over.\n\nRegarding the gurantor, I don't have a German-resident Bürge, But on some reasearch I found out there are three other options which I could provide:\n\n* Proof of savings covering well over a year\n* then the Kautionsburgschaft providers\n*My Current Jobs Contract/ salary slips\n\n\nLet me know what would work?And if you don't mind me asking, how did you handle the guarantor requirement when you moved in? Might save some back and forth.",
+    "attachments": [],
+    "ts": "2026-08-13T18:15:35.435150Z"
+  },
+  {
+    "pair": 27,
+    "speaker": "ai",
+    "text": "One flag before you send: listing \"Job Contract\" invites them to ask for it, and that's the document that shows your income ends in October. Saying \"salary slips\" alone gives them the proof they actually want without pointing at the weak spot. Your call, but I'd drop the word \"contract.\"\n\nCleaned up, keeping your wording:\n\nBoth are ready to send. Second one is exactly your version, first drops the contract mention.",
+    "attachments": [],
+    "ts": "2026-08-13T18:15:48.827491Z"
+  }
+]

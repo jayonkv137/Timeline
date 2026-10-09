@@ -1,0 +1,26 @@
+# filled by importer
+id: c47_writing_long
+conv_id: claude_7519cf98-266c-49e1-a871-539e713b5af2
+title: "Boehringer Ingelheim Internship Cover Letter"
+source_file: "source.json"
+source_kind: claude_official
+provenance: owner
+pairs: 27
+length_band: long
+fidelity_grade: clean
+contains: [long_message]
+
+# Layer 1: Descriptive facts (verified)
+language: en
+task_type: writing
+domain: "cover letter drafting"
+notes: >
+  Boehringer Ingelheim Internship Cover Letter — promoted from official Claude archive for multi-chat benchmarking.
+
+# Layer 2: Judgement & predictive fields (HUMAN-LABELED ONLY — cleared to prevent circularity)
+prompt_style: null       # specified | vague | mixed (owner ground truth for E3)
+expected:
+  mode_hint: null        # centaur | copilot | autopilot
+  direction_hint: null   # user_heavy | balanced | ai_heavy
+  min_requirements: null
+  max_requirements: null

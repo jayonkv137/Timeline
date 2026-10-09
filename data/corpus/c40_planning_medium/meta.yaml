@@ -1,0 +1,26 @@
+# filled by importer
+id: c40_planning_medium
+conv_id: claude_2571bc83-722a-4638-8458-78cf36e56895
+title: "Room in shared apartment in Bremen"
+source_file: "source.json"
+source_kind: claude_official
+provenance: owner
+pairs: 10
+length_band: medium
+fidelity_grade: clean
+contains: [code_blocks]
+
+# Layer 1: Descriptive facts (verified)
+language: en
+task_type: planning
+domain: "shared flat inquiry"
+notes: >
+  Room in shared apartment in Bremen — promoted from official Claude archive for multi-chat benchmarking.
+
+# Layer 2: Judgement & predictive fields (HUMAN-LABELED ONLY — cleared to prevent circularity)
+prompt_style: null       # specified | vague | mixed (owner ground truth for E3)
+expected:
+  mode_hint: null        # centaur | copilot | autopilot
+  direction_hint: null   # user_heavy | balanced | ai_heavy
+  min_requirements: null
+  max_requirements: null

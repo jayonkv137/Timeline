@@ -1,0 +1,26 @@
+# filled by importer
+id: c54_planning_long
+conv_id: claude_faba7c62-899c-4c51-84bd-e461a121dd91
+title: "Confirming Phase 2 workflow context"
+source_file: "source.json"
+source_kind: claude_official
+provenance: owner
+pairs: 71
+length_band: long
+fidelity_grade: degraded
+contains: [code_blocks, long_message]
+
+# Layer 1: Descriptive facts (verified)
+language: en
+task_type: planning
+domain: "software development workflow planning"
+notes: >
+  Confirming Phase 2 workflow context — promoted from official Claude archive for multi-chat benchmarking.
+
+# Layer 2: Judgement & predictive fields (HUMAN-LABELED ONLY — cleared to prevent circularity)
+prompt_style: null       # specified | vague | mixed (owner ground truth for E3)
+expected:
+  mode_hint: null        # centaur | copilot | autopilot
+  direction_hint: null   # user_heavy | balanced | ai_heavy
+  min_requirements: null
+  max_requirements: null

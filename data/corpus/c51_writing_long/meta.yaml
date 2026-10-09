@@ -1,0 +1,26 @@
+# filled by importer
+id: c51_writing_long
+conv_id: claude_0efe01b6-7470-4769-995f-599dbc8ae077
+title: "Crafting a compelling application for AI content automation role"
+source_file: "source.json"
+source_kind: claude_official
+provenance: owner
+pairs: 134
+length_band: long
+fidelity_grade: degraded
+contains: [long_message]
+
+# Layer 1: Descriptive facts (verified)
+language: en
+task_type: writing
+domain: "AI master degree statement of purpose"
+notes: >
+  Crafting a compelling application for AI content automation role — promoted from official Claude archive for multi-chat benchmarking.
+
+# Layer 2: Judgement & predictive fields (HUMAN-LABELED ONLY — cleared to prevent circularity)
+prompt_style: null       # specified | vague | mixed (owner ground truth for E3)
+expected:
+  mode_hint: null        # centaur | copilot | autopilot
+  direction_hint: null   # user_heavy | balanced | ai_heavy
+  min_requirements: null
+  max_requirements: null

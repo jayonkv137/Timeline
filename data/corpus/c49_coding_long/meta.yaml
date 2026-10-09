@@ -1,0 +1,26 @@
+# filled by importer
+id: c49_coding_long
+conv_id: claude_8e7b589b-6ec5-4a72-a0bf-73430e450747
+title: "Project revival guide for new engineer"
+source_file: "source.json"
+source_kind: claude_official
+provenance: owner
+pairs: 26
+length_band: long
+fidelity_grade: degraded
+contains: [code_blocks, long_message]
+
+# Layer 1: Descriptive facts (verified)
+language: en
+task_type: coding
+domain: "engineering project handover"
+notes: >
+  Project revival guide for new engineer — promoted from official Claude archive for multi-chat benchmarking.
+
+# Layer 2: Judgement & predictive fields (HUMAN-LABELED ONLY — cleared to prevent circularity)
+prompt_style: null       # specified | vague | mixed (owner ground truth for E3)
+expected:
+  mode_hint: null        # centaur | copilot | autopilot
+  direction_hint: null   # user_heavy | balanced | ai_heavy
+  min_requirements: null
+  max_requirements: null

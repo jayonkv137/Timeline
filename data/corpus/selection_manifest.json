@@ -1,0 +1,188 @@
+{
+  "selected_at": "2026-09-24T11:31:02Z",
+  "import_spec_version": "1.1",
+  "selection_name": "10_medium_10_long_benchmark_selection",
+  "total_selected": 20,
+  "entries": [
+    {
+      "chat_id": "c37_learning_medium",
+      "conv_id": "claude_10d9c356-d170-441d-afcf-c954635e3fd3",
+      "pairs": 16,
+      "grade": "clean",
+      "task_type": "learning",
+      "length_band": "medium",
+      "title": "German A1 lesson: commuting with prepositions"
+    },
+    {
+      "chat_id": "c38_planning_medium",
+      "conv_id": "claude_e37cf126-3537-4bd9-9b95-93b703fd3cd9",
+      "pairs": 13,
+      "grade": "clean",
+      "task_type": "planning",
+      "length_band": "medium",
+      "title": "Room rental in Bremen's river district"
+    },
+    {
+      "chat_id": "c39_writing_medium",
+      "conv_id": "claude_edc5bc0a-4262-4fe5-88f9-db650a988ad6",
+      "pairs": 12,
+      "grade": "clean",
+      "task_type": "writing",
+      "length_band": "medium",
+      "title": "Bumble bio feedback and revision"
+    },
+    {
+      "chat_id": "c40_planning_medium",
+      "conv_id": "claude_2571bc83-722a-4638-8458-78cf36e56895",
+      "pairs": 10,
+      "grade": "clean",
+      "task_type": "planning",
+      "length_band": "medium",
+      "title": "Room in shared apartment in Bremen"
+    },
+    {
+      "chat_id": "c41_planning_medium",
+      "conv_id": "claude_aa1c8265-85e2-4087-ba4d-f290c8e5e2b9",
+      "pairs": 9,
+      "grade": "clean",
+      "task_type": "planning",
+      "length_band": "medium",
+      "title": "20-minute German learning session plan"
+    },
+    {
+      "chat_id": "c42_planning_medium",
+      "conv_id": "claude_bc585cbf-5fb9-4116-b867-d72a7be837da",
+      "pairs": 8,
+      "grade": "clean",
+      "task_type": "planning",
+      "length_band": "medium",
+      "title": "30-40 minute session planning"
+    },
+    {
+      "chat_id": "c43_learning_medium",
+      "conv_id": "claude_b8ec9e80-82b4-4d30-934d-24a6500cd68e",
+      "pairs": 7,
+      "grade": "clean",
+      "task_type": "learning",
+      "length_band": "medium",
+      "title": "Long session request"
+    },
+    {
+      "chat_id": "c44_writing_medium",
+      "conv_id": "claude_851e8cc8-3965-4b9c-8c89-daf9da35cf38",
+      "pairs": 7,
+      "grade": "clean",
+      "task_type": "writing",
+      "length_band": "medium",
+      "title": "Text correction and document formatting"
+    },
+    {
+      "chat_id": "c45_writing_medium",
+      "conv_id": "claude_68fe697c-f629-4264-980b-6a43986cbe6e",
+      "pairs": 6,
+      "grade": "clean",
+      "task_type": "writing",
+      "length_band": "medium",
+      "title": "Telefoninterview-Termin vereinbaren"
+    },
+    {
+      "chat_id": "c46_coding_medium",
+      "conv_id": "claude_beba7fc8-3364-46ac-8408-c7c417507b6d",
+      "pairs": 17,
+      "grade": "degraded",
+      "task_type": "coding",
+      "length_band": "medium",
+      "title": "Simple SVG for data processing flow"
+    },
+    {
+      "chat_id": "c47_writing_long",
+      "conv_id": "claude_7519cf98-266c-49e1-a871-539e713b5af2",
+      "pairs": 27,
+      "grade": "clean",
+      "task_type": "writing",
+      "length_band": "long",
+      "title": "Boehringer Ingelheim Internship Cover Letter"
+    },
+    {
+      "chat_id": "c48_learning_long",
+      "conv_id": "claude_8a2f0550-4588-4f06-b240-f90f6842dfa7",
+      "pairs": 21,
+      "grade": "clean",
+      "task_type": "learning",
+      "length_band": "long",
+      "title": "German A1 learning progress and vocabulary review"
+    },
+    {
+      "chat_id": "c49_coding_long",
+      "conv_id": "claude_8e7b589b-6ec5-4a72-a0bf-73430e450747",
+      "pairs": 26,
+      "grade": "degraded",
+      "task_type": "coding",
+      "length_band": "long",
+      "title": "Project revival guide for new engineer"
+    },
+    {
+      "chat_id": "c50_planning_long",
+      "conv_id": "claude_cc569aed-bf2e-4f8a-b3c6-bc391ed254ce",
+      "pairs": 27,
+      "grade": "degraded",
+      "task_type": "planning",
+      "length_band": "long",
+      "title": "Getting a Schufa report in Germany"
+    },
+    {
+      "chat_id": "c51_writing_long",
+      "conv_id": "claude_0efe01b6-7470-4769-995f-599dbc8ae077",
+      "pairs": 134,
+      "grade": "degraded",
+      "task_type": "writing",
+      "length_band": "long",
+      "title": "Crafting a compelling application for AI content automation role"
+    },
+    {
+      "chat_id": "c52_coding_long",
+      "conv_id": "claude_cd03ee08-04e9-4331-b788-f2cf348d8a57",
+      "pairs": 50,
+      "grade": "degraded",
+      "task_type": "coding",
+      "length_band": "long",
+      "title": "Timeline design specification and schema"
+    },
+    {
+      "chat_id": "c53_research_long",
+      "conv_id": "claude_2eef82f5-6d02-43d5-88d1-a8471a776752",
+      "pairs": 64,
+      "grade": "degraded",
+      "task_type": "research",
+      "length_band": "long",
+      "title": "Understanding Diehl Aviation's AI implementation strategy"
+    },
+    {
+      "chat_id": "c54_planning_long",
+      "conv_id": "claude_faba7c62-899c-4c51-84bd-e461a121dd91",
+      "pairs": 71,
+      "grade": "degraded",
+      "task_type": "planning",
+      "length_band": "long",
+      "title": "Confirming Phase 2 workflow context"
+    },
+    {
+      "chat_id": "c55_creative_long",
+      "conv_id": "claude_c9bf6c91-570b-4c77-99b2-8c13c00ffea8",
+      "pairs": 102,
+      "grade": "degraded",
+      "task_type": "creative",
+      "length_band": "long",
+      "title": "AI and creativity presentation task clarification"
+    },
+    {
+      "chat_id": "c56_coding_long",
+      "conv_id": "claude_bb740c1d-4eed-4dc6-9928-337b2d928dfc",
+      "pairs": 242,
+      "grade": "degraded",
+      "task_type": "coding",
+      "length_band": "long",
+      "title": "Reviewing chats and project contents"
+    }
+  ]
+}

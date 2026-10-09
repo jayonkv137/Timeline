@@ -1,0 +1,26 @@
+# filled by importer
+id: c46_coding_medium
+conv_id: claude_beba7fc8-3364-46ac-8408-c7c417507b6d
+title: "Simple SVG for data processing flow"
+source_file: "source.json"
+source_kind: claude_official
+provenance: owner
+pairs: 17
+length_band: medium
+fidelity_grade: degraded
+contains: []
+
+# Layer 1: Descriptive facts (verified)
+language: en
+task_type: coding
+domain: "SVG pipeline architecture diagram"
+notes: >
+  Simple SVG for data processing flow — promoted from official Claude archive for multi-chat benchmarking.
+
+# Layer 2: Judgement & predictive fields (HUMAN-LABELED ONLY — cleared to prevent circularity)
+prompt_style: null       # specified | vague | mixed (owner ground truth for E3)
+expected:
+  mode_hint: null        # centaur | copilot | autopilot
+  direction_hint: null   # user_heavy | balanced | ai_heavy
+  min_requirements: null
+  max_requirements: null

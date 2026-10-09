@@ -1,0 +1,26 @@
+# filled by importer
+id: c48_learning_long
+conv_id: claude_8a2f0550-4588-4f06-b240-f90f6842dfa7
+title: "German A1 learning progress and vocabulary review"
+source_file: "source.json"
+source_kind: claude_official
+provenance: owner
+pairs: 21
+length_band: long
+fidelity_grade: clean
+contains: [code_blocks, long_message]
+
+# Layer 1: Descriptive facts (verified)
+language: en
+task_type: learning
+domain: "German vocabulary consolidation"
+notes: >
+  German A1 learning progress and vocabulary review — promoted from official Claude archive for multi-chat benchmarking.
+
+# Layer 2: Judgement & predictive fields (HUMAN-LABELED ONLY — cleared to prevent circularity)
+prompt_style: null       # specified | vague | mixed (owner ground truth for E3)
+expected:
+  mode_hint: null        # centaur | copilot | autopilot
+  direction_hint: null   # user_heavy | balanced | ai_heavy
+  min_requirements: null
+  max_requirements: null

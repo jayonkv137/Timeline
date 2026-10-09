@@ -1,0 +1,26 @@
+# filled by importer
+id: c55_creative_long
+conv_id: claude_c9bf6c91-570b-4c77-99b2-8c13c00ffea8
+title: "AI and creativity presentation task clarification"
+source_file: "source.json"
+source_kind: claude_official
+provenance: owner
+pairs: 102
+length_band: long
+fidelity_grade: degraded
+contains: [long_message]
+
+# Layer 1: Descriptive facts (verified)
+language: en
+task_type: creative
+domain: "academic slide presentation design"
+notes: >
+  AI and creativity presentation task clarification — promoted from official Claude archive for multi-chat benchmarking.
+
+# Layer 2: Judgement & predictive fields (HUMAN-LABELED ONLY — cleared to prevent circularity)
+prompt_style: null       # specified | vague | mixed (owner ground truth for E3)
+expected:
+  mode_hint: null        # centaur | copilot | autopilot
+  direction_hint: null   # user_heavy | balanced | ai_heavy
+  min_requirements: null
+  max_requirements: null

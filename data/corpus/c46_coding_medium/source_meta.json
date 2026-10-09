@@ -1,0 +1,307 @@
+{
+  "chat_id": "c46_coding_medium",
+  "conv_id": "claude_beba7fc8-3364-46ac-8408-c7c417507b6d",
+  "source_kind": "claude_official",
+  "source_file": "source.json",
+  "source_title": "Simple SVG for data processing flow",
+  "imported_at": "2026-09-24T11:31:02Z",
+  "import_spec_version": "1.1",
+  "pairs": 17,
+  "turns": 34,
+  "assumed_utc": true,
+  "fidelity": {
+    "images_dropped": 1,
+    "attachments_dropped": 0,
+    "tool_narration_turns": 5,
+    "injected_turns": 0,
+    "empty_turns": 0,
+    "merged_turns": 0,
+    "dropped_trailing_user_turn": false,
+    "dropped_leading_ai_turn": false,
+    "grade": "degraded",
+    "image_ratio": 0.06
+  },
+  "turn_meta": [
+    {
+      "pair": 1,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 1,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 2,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 2,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 3,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 3,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 4,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Screenshot 2026-03-28 at 9.44.54 PM.png"
+      ]
+    },
+    {
+      "pair": 4,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 5,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 5,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 6,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 6,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 7,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 7,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 8,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 8,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 9,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 9,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 10,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 10,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 11,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 11,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 12,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 12,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 13,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Presentation from Jayon.pdf"
+      ]
+    },
+    {
+      "pair": 13,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 14,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 14,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 15,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 15,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 16,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 16,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 17,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 17,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking"
+      ],
+      "dropped_media": []
+    }
+  ]
+}

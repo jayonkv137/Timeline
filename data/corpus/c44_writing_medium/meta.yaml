@@ -1,0 +1,26 @@
+# filled by importer
+id: c44_writing_medium
+conv_id: claude_851e8cc8-3965-4b9c-8c89-daf9da35cf38
+title: "Text correction and document formatting"
+source_file: "source.json"
+source_kind: claude_official
+provenance: owner
+pairs: 7
+length_band: medium
+fidelity_grade: clean
+contains: []
+
+# Layer 1: Descriptive facts (verified)
+language: en
+task_type: writing
+domain: "document proofreading and formatting"
+notes: >
+  Text correction and document formatting — promoted from official Claude archive for multi-chat benchmarking.
+
+# Layer 2: Judgement & predictive fields (HUMAN-LABELED ONLY — cleared to prevent circularity)
+prompt_style: null       # specified | vague | mixed (owner ground truth for E3)
+expected:
+  mode_hint: null        # centaur | copilot | autopilot
+  direction_hint: null   # user_heavy | balanced | ai_heavy
+  min_requirements: null
+  max_requirements: null

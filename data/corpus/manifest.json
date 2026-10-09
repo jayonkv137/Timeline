@@ -1,16 +1,16 @@
 {
   "import_spec_version": "1.0",
   "generated_at": "2026-09-18T11:05:50Z",
-  "total_chats": 36,
-  "total_pairs": 909,
+  "total_chats": 56,
+  "total_pairs": 1778,
   "fidelity_totals": {
-    "images_dropped": 829,
+    "images_dropped": 1065,
     "injected_turns": 1,
-    "tool_narration_turns": 69,
+    "tool_narration_turns": 515,
     "empty_turns": 6,
     "grades": {
-      "clean": 10,
-      "degraded": 7,
+      "clean": 21,
+      "degraded": 16,
       "unusable": 19
     }
   },
@@ -483,6 +483,226 @@
       "tool_narration_turns": 1,
       "empty_turns": 0,
       "fidelity_grade": "degraded"
+    },
+    {
+      "id": "c37_learning_medium",
+      "source_file": "source.json",
+      "pairs": 16,
+      "images_dropped": 0,
+      "injected_turns": 0,
+      "tool_narration_turns": 1,
+      "empty_turns": 0,
+      "fidelity_grade": "clean",
+      "title": "German A1 lesson: commuting with prepositions"
+    },
+    {
+      "id": "c38_planning_medium",
+      "source_file": "source.json",
+      "pairs": 13,
+      "images_dropped": 0,
+      "injected_turns": 0,
+      "tool_narration_turns": 7,
+      "empty_turns": 0,
+      "fidelity_grade": "clean",
+      "title": "Room rental in Bremen's river district"
+    },
+    {
+      "id": "c39_writing_medium",
+      "source_file": "source.json",
+      "pairs": 12,
+      "images_dropped": 0,
+      "injected_turns": 0,
+      "tool_narration_turns": 0,
+      "empty_turns": 0,
+      "fidelity_grade": "clean",
+      "title": "Bumble bio feedback and revision"
+    },
+    {
+      "id": "c40_planning_medium",
+      "source_file": "source.json",
+      "pairs": 10,
+      "images_dropped": 0,
+      "injected_turns": 0,
+      "tool_narration_turns": 0,
+      "empty_turns": 0,
+      "fidelity_grade": "clean",
+      "title": "Room in shared apartment in Bremen"
+    },
+    {
+      "id": "c41_planning_medium",
+      "source_file": "source.json",
+      "pairs": 9,
+      "images_dropped": 0,
+      "injected_turns": 0,
+      "tool_narration_turns": 3,
+      "empty_turns": 0,
+      "fidelity_grade": "clean",
+      "title": "20-minute German learning session plan"
+    },
+    {
+      "id": "c42_planning_medium",
+      "source_file": "source.json",
+      "pairs": 8,
+      "images_dropped": 0,
+      "injected_turns": 0,
+      "tool_narration_turns": 1,
+      "empty_turns": 0,
+      "fidelity_grade": "clean",
+      "title": "30-40 minute session planning"
+    },
+    {
+      "id": "c43_learning_medium",
+      "source_file": "source.json",
+      "pairs": 7,
+      "images_dropped": 0,
+      "injected_turns": 0,
+      "tool_narration_turns": 2,
+      "empty_turns": 0,
+      "fidelity_grade": "clean",
+      "title": "Long session request"
+    },
+    {
+      "id": "c44_writing_medium",
+      "source_file": "source.json",
+      "pairs": 7,
+      "images_dropped": 0,
+      "injected_turns": 0,
+      "tool_narration_turns": 5,
+      "empty_turns": 0,
+      "fidelity_grade": "clean",
+      "title": "Text correction and document formatting"
+    },
+    {
+      "id": "c45_writing_medium",
+      "source_file": "source.json",
+      "pairs": 6,
+      "images_dropped": 0,
+      "injected_turns": 0,
+      "tool_narration_turns": 4,
+      "empty_turns": 0,
+      "fidelity_grade": "clean",
+      "title": "Telefoninterview-Termin vereinbaren"
+    },
+    {
+      "id": "c46_coding_medium",
+      "source_file": "source.json",
+      "pairs": 17,
+      "images_dropped": 1,
+      "injected_turns": 0,
+      "tool_narration_turns": 5,
+      "empty_turns": 0,
+      "fidelity_grade": "degraded",
+      "title": "Simple SVG for data processing flow"
+    },
+    {
+      "id": "c47_writing_long",
+      "source_file": "source.json",
+      "pairs": 27,
+      "images_dropped": 1,
+      "injected_turns": 0,
+      "tool_narration_turns": 21,
+      "empty_turns": 0,
+      "fidelity_grade": "clean",
+      "title": "Boehringer Ingelheim Internship Cover Letter"
+    },
+    {
+      "id": "c48_learning_long",
+      "source_file": "source.json",
+      "pairs": 21,
+      "images_dropped": 0,
+      "injected_turns": 0,
+      "tool_narration_turns": 1,
+      "empty_turns": 0,
+      "fidelity_grade": "clean",
+      "title": "German A1 learning progress and vocabulary review"
+    },
+    {
+      "id": "c49_coding_long",
+      "source_file": "source.json",
+      "pairs": 26,
+      "images_dropped": 4,
+      "injected_turns": 0,
+      "tool_narration_turns": 23,
+      "empty_turns": 0,
+      "fidelity_grade": "degraded",
+      "title": "Project revival guide for new engineer"
+    },
+    {
+      "id": "c50_planning_long",
+      "source_file": "source.json",
+      "pairs": 27,
+      "images_dropped": 13,
+      "injected_turns": 0,
+      "tool_narration_turns": 15,
+      "empty_turns": 0,
+      "fidelity_grade": "degraded",
+      "title": "Getting a Schufa report in Germany"
+    },
+    {
+      "id": "c51_writing_long",
+      "source_file": "source.json",
+      "pairs": 134,
+      "images_dropped": 45,
+      "injected_turns": 0,
+      "tool_narration_turns": 80,
+      "empty_turns": 0,
+      "fidelity_grade": "degraded",
+      "title": "Crafting a compelling application for AI content automation role"
+    },
+    {
+      "id": "c52_coding_long",
+      "source_file": "source.json",
+      "pairs": 50,
+      "images_dropped": 21,
+      "injected_turns": 0,
+      "tool_narration_turns": 28,
+      "empty_turns": 0,
+      "fidelity_grade": "degraded",
+      "title": "Timeline design specification and schema"
+    },
+    {
+      "id": "c53_research_long",
+      "source_file": "source.json",
+      "pairs": 64,
+      "images_dropped": 7,
+      "injected_turns": 0,
+      "tool_narration_turns": 51,
+      "empty_turns": 0,
+      "fidelity_grade": "degraded",
+      "title": "Understanding Diehl Aviation's AI implementation strategy"
+    },
+    {
+      "id": "c54_planning_long",
+      "source_file": "source.json",
+      "pairs": 71,
+      "images_dropped": 24,
+      "injected_turns": 0,
+      "tool_narration_turns": 48,
+      "empty_turns": 0,
+      "fidelity_grade": "degraded",
+      "title": "Confirming Phase 2 workflow context"
+    },
+    {
+      "id": "c55_creative_long",
+      "source_file": "source.json",
+      "pairs": 102,
+      "images_dropped": 38,
+      "injected_turns": 0,
+      "tool_narration_turns": 43,
+      "empty_turns": 0,
+      "fidelity_grade": "degraded",
+      "title": "AI and creativity presentation task clarification"
+    },
+    {
+      "id": "c56_coding_long",
+      "source_file": "source.json",
+      "pairs": 242,
+      "images_dropped": 82,
+      "injected_turns": 0,
+      "tool_narration_turns": 108,
+      "empty_turns": 0,
+      "fidelity_grade": "degraded",
+      "title": "Reviewing chats and project contents"
     }
   ]
 }

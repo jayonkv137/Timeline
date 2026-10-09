@@ -1,0 +1,473 @@
+{
+  "chat_id": "c50_planning_long",
+  "conv_id": "claude_cc569aed-bf2e-4f8a-b3c6-bc391ed254ce",
+  "source_kind": "claude_official",
+  "source_file": "source.json",
+  "source_title": "Getting a Schufa report in Germany",
+  "imported_at": "2026-09-24T11:31:02Z",
+  "import_spec_version": "1.1",
+  "pairs": 27,
+  "turns": 54,
+  "assumed_utc": true,
+  "fidelity": {
+    "images_dropped": 13,
+    "attachments_dropped": 0,
+    "tool_narration_turns": 15,
+    "injected_turns": 0,
+    "empty_turns": 0,
+    "merged_turns": 0,
+    "dropped_trailing_user_turn": false,
+    "dropped_leading_ai_turn": false,
+    "grade": "degraded",
+    "image_ratio": 0.48
+  },
+  "turn_meta": [
+    {
+      "pair": 1,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 1,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 2,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 2,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 3,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 3,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 4,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 4,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 5,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 5,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 6,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 6,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 7,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 7,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 8,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 8,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 9,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 9,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 10,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "photo.jpeg"
+      ]
+    },
+    {
+      "pair": 10,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 11,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "photo.jpeg",
+        "photo.jpeg",
+        "photo.jpeg",
+        "photo.jpeg"
+      ]
+    },
+    {
+      "pair": 11,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 12,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "IMG_5800.PNG"
+      ]
+    },
+    {
+      "pair": 12,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 13,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "IMG_5801.PNG"
+      ]
+    },
+    {
+      "pair": 13,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 14,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Screenshot 2026-08-13 at 6.01.47 PM.png"
+      ]
+    },
+    {
+      "pair": 14,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 15,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Screenshot 2026-08-13 at 6.03.28 PM.png"
+      ]
+    },
+    {
+      "pair": 15,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 16,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Screenshot 2026-08-13 at 6.04.52 PM.png"
+      ]
+    },
+    {
+      "pair": 16,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 17,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 17,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 18,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "photo.jpeg",
+        "photo.jpeg"
+      ]
+    },
+    {
+      "pair": 18,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 19,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "SCHUFA Credit Check Valid Until Oct 12 2026.pdf"
+      ]
+    },
+    {
+      "pair": 19,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 20,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 20,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "tool_narration",
+        "thinking"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 21,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 21,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 22,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 22,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 23,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 23,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 24,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 24,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 25,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": [
+        "Screenshot 2026-08-13 at 8.09.25 PM.png"
+      ]
+    },
+    {
+      "pair": 25,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    },
+    {
+      "pair": 26,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 26,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 27,
+      "speaker": "user",
+      "origin": "typed",
+      "flags": [],
+      "dropped_media": []
+    },
+    {
+      "pair": 27,
+      "speaker": "ai",
+      "origin": "model",
+      "flags": [
+        "thinking",
+        "tool_narration"
+      ],
+      "dropped_media": []
+    }
+  ]
+}
