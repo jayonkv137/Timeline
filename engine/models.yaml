@@ -8,6 +8,10 @@ models:
     input_cost_per_m: 0.075
     output_cost_per_m: 0.300
 
+  gemini-3.5-flash-lite:
+    input_cost_per_m: 0.0375
+    output_cost_per_m: 0.150
+
   gemini-3.1-flash-lite:
     input_cost_per_m: 0.0375
     output_cost_per_m: 0.150

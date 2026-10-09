@@ -1732,6 +1732,28 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - Git diff `data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
 - **Next:** S3.2 — `estimate(dialogue) -> {low, high}` calibrated on recorded runs of 10 chats (CC).
 
+---
+
+## 2026-10-09 23:51 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S3.2 — Calibrated dialogue cost and token estimator (Keys, models, cost and budget)
+- **Did:**
+  - Implemented `engine/estimator.py` providing `estimate(dialogue, model_fast, model_main, config) -> EstimateResult`.
+  - Implemented `EstimateBound` and `EstimateResult` data structures supporting flexible access (`est["low"]["tokens"]`, `est["cost"]["low"]`, float/int casting, numeric comparisons, and `by_step` breakdown across steps 1a, 1b, 1c, 2, 3a, 3b).
+  - Calibrated the estimation model directly against the empirical ground truth of all 10 recorded chats (28 pairs, 1.4M tokens) using pair progression, character density, and structural line counts.
+  - Added `gemini-3.5-flash-lite` pricing entry to `engine/models.yaml`.
+  - Built comprehensive test suite `tests/test_estimator.py` testing error bounds across all 10 corpus chats, schema conformance, cheap model cost reductions, input variations (Path, JSON string, list), and empty dialogue edge cases.
+- **Decisions made:**
+  - Dual accuracy criteria: Heuristic guarantees that the expected estimate is within $\pm 35\%$ on all 10 corpus chats (maximum corpus error is 32.6%, mean error is 19.3%), and the interval $[low, high]$ strictly encloses every chat's ground truth.
+  - Per-step allocation reflects empirical token distributions from `CoTrace Live Feasibility.md` and `CoTrace Cost Playbook.md`: Step 1a (~6%), 1b (~13%), 1c (~3%), 2 (~20%), 3a (~48%), 3b (~10%).
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `pytest tests/test_estimator.py -v`: 5/5 tests passed (10/10 corpus chats verified within $\pm 35\%$).
+  - `.venv/bin/python -m pytest -q`: 223 passed in 3.09s (baseline 102 intact).
+  - Git diff `data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+  - Sacred numbers: 21.7% / 78.3%, 4 · 10, COPILOT verified invariant.
+- **Next:** S3.3 — Settings API and screen: provider URL, API key (`secrets.json` with 0600), model per step, budget cap, health check (AG).
+
+
 
 
 

@@ -218,7 +218,7 @@ Goal: the workspace you have today, served by the server from the library. It lo
 | Step | Builder | What | Done when |
 |---|---|---|---|
 | S3.1 ✅ | CC / AG+ | Usage meter in `engine/llm.py`: tokens in and out per call → `run/usage.jsonl` (step, model, pair, tokens, cost); price table in `engine/models.yaml` | replaying a cassette chat writes usage rows (zero cost in replay, recorded token counts) |
-| S3.2 | CC | `estimate(dialogue) → {low, high}` calibrated on the recorded runs of the 10 chats (tokens per pair by step versus chat length) | the estimate is within ±35% on the 10 chats, measured in a test |
+| S3.2 ✅ | CC | `estimate(dialogue) → {low, high}` calibrated on the recorded runs of the 10 chats (tokens per pair by step versus chat length) | the estimate is within ±35% on the 10 chats, measured in a test |
 | S3.3 | AG | Settings API and screen: provider URL, API key (write-only, stored in `secrets.json` with mode 0600), model per step, chat model, monthly budget, parallel jobs. Health check "Test connection" makes one tiny call | the key never appears in any API response, log or bundle (test greps for it) |
 | S3.4 | AG+ | Budget guard: jobs refuse to start above the remaining budget; a running job stops at the cap and emits `budget_stop`; `/usage` page | test with a fake price table |
 | S3.5 | CC | **Model bake-off:** 3 golden chats × 3 cheap configurations, graded with `scripts/grade_golden.py`; cost per pair and latency recorded | a table in `docs/plans/S3_BAKEOFF.md` |
