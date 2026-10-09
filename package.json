@@ -10,7 +10,7 @@
   "private": true,
   "scripts": {
     "build:workspace": "npm --prefix web run build:workspace",
-    "e2e": "npm run build:workspace && node scripts/workspace-tests/smoke.cjs && node scripts/workspace-tests/refinement.cjs"
+    "e2e": "npm run build:workspace && node scripts/workspace-tests/run-e2e.cjs"
   },
   "repository": {
     "type": "git",

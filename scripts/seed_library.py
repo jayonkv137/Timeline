@@ -12,8 +12,10 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import shutil
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -148,6 +150,17 @@ def seed_library(
         atomic_write_json(meta_path, meta)
 
         seeded_ids.append(cid)
+
+    # Ensure descending modification timestamps so Library.list_chats()
+    # sorts in canonical reference order (PROCESSED_CHATS[0] is newest).
+    base_mtime = time.time()
+    for idx, cid in enumerate(PROCESSED_CHATS):
+        cdir = lib.chat_dir(cid)
+        if cdir.is_dir():
+            target_time = base_mtime - idx * 10
+            for item in [cdir, cdir / "workspace_bundle.json", cdir / "meta.json"]:
+                if item.exists():
+                    os.utime(item, (target_time, target_time))
 
     return seeded_ids
 

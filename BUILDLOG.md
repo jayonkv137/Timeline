@@ -1620,6 +1620,32 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
 - **Next:** S2.6 — Point `npm run e2e` at the server URL (`WORKSPACE_URL=http://localhost:8765`) (AG).
 
+---
+
+## 2026-10-09 20:42 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S2.6 — Point `npm run e2e` at the server URL (AG)
+- **Did:**
+  - `scripts/seed_library.py` — added descending modification timestamp assignment across seeded reference chats:
+    - Guarantees `Library.list_chats()` sorts in canonical reference order (`c05_research_medium` newest, `c04_writing_short` second, etc.).
+  - `scripts/workspace-tests/refinement.cjs` — updated line 2 to support `process.env.WORKSPACE_URL`, falling back to `file://...web/cotrace-workspace.html`.
+  - `scripts/workspace-tests/run-e2e.cjs` — created standalone E2E orchestrator:
+    - Auto-seeds the reference library if missing.
+    - Checks if backend is active at `WORKSPACE_URL` (default `http://127.0.0.1:8765`), starts FastAPI backend process if needed, and polls `/api/health` until ready.
+    - Executes `smoke.cjs` and `refinement.cjs` against `http://127.0.0.1:8765/`.
+    - Handles graceful termination and server cleanup on exit or error.
+  - `package.json` — updated `e2e` script to run `npm run build:workspace && node scripts/workspace-tests/run-e2e.cjs`.
+  - `docs/plans/STANDALONE_V1_PLAN.md` — marked S2.6 complete (✅).
+- **Decisions made:**
+  - Ensured `run-e2e.cjs` works seamlessly both when a server is already running (reusing it) and in standalone CI runs (auto-starting and auto-stopping the FastAPI server).
+  - Verified AG+ sacred fixture numbers: Δ_you=87.0, Δ_AI=314.0 (21.7% / 78.3%), 4 You · 10 AI, COPILOT; 0 diffs on frozen fixture.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `npm run e2e`: 2/2 suites passed (`smoke.cjs` and `refinement.cjs`) against `http://127.0.0.1:8765` with 0 assertion failures and 0 page/console errors.
+  - `.venv/bin/python -m pytest -q`: 211 passed in 2.33s (baseline 102 intact).
+  - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+- **Next:** S2.7 — `scripts/perf_report.py`: §6A performance metrics (first load, chat open, Brain fps, API latency) -> `docs/plans/reports/S2_perf.md` (AG).
+
+
 
 
 

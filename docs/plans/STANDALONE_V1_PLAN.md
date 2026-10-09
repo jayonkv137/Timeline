@@ -209,7 +209,7 @@ Goal: the workspace you have today, served by the server from the library. It lo
 | S2.3 ✅ | AG | `scripts/seed_library.py`: copy the 10 processed chats into the library and project their bundles. No LLM | library has 10 chats; `GET /chats` returns them |
 | S2.4 ✅ | AG | Frontend data layer `web/src/workspace/api.ts`: the store loads the list from `/api/chats` and each bundle when its tab opens, and keeps the event stream open. `?offline=1` uses the bundled sample. Add loading, empty and error states | the workspace looks the same as the prototype, with data from the server |
 | S2.5 ✅ | AG | Serve `web/dist-workspace` from FastAPI at `/`; `./cotrace start` (builds if stale, starts on 8765, opens the browser); `./cotrace dev` (Vite + server with a proxy) | one command → working app |
-| S2.6 | AG | Point `npm run e2e` at the server URL; all existing assertions pass | e2e green against the server |
+| S2.6 ✅ | AG | Point `npm run e2e` at the server URL; all existing assertions pass | e2e green against the server |
 | S2.7 | AG | `scripts/perf_report.py`: the §6A performance metrics for the app (first load, chat open, Brain fps, API latency) → `docs/plans/reports/S2_perf.md` | report generated and committed |
 | **S2.T** | You | **Owner test:** run `./cotrace start` yourself, open 5 chats, scrub, use the Brain, delete and restore one chat | log entry written |
 | **S2.G** | You | Screenshot check against `docs/workspace/*.png`: same screens, real data path | — |
