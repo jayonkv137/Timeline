@@ -37,3 +37,8 @@
 .brain-key{bottom:66px}.graph-tooltip{pointer-events:auto}
 
 .minimal-graph .active .photon-aura{animation:photonFlow 4s ease-in-out infinite}.minimal-graph .atom-mark{animation:arrive .4s ease-out}@keyframes photonFlow{50%{opacity:.65}}
+.status-dot.online,.local-dot.online,.model-dot.online{background:#10b981}
+.status-dot.offline,.local-dot.offline,.model-dot.offline{background:var(--p-color-neutral-dark-10)}
+.status-dot.syncing{background:#38bdf8;animation:breathe 1.5s ease-in-out infinite}
+.retry-btn{margin-right:var(--p-space-2);color:var(--color-text-secondary)}
+.retry-btn:hover{color:var(--color-text-primary)}

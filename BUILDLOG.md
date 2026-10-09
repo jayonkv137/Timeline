@@ -1557,6 +1557,38 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
 - **Next:** S2.4 — Frontend data layer `web/src/workspace/api.ts` (store loads from `/api/chats` and bundles on tab open) (AG).
 
+---
+
+## 2026-10-09 20:13 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S2.4 — Frontend data layer & live store integration (AG)
+- **Did:**
+  - `web/src/workspace/api.ts` — created API client layer:
+    - HTTP methods: `fetchChats`, `fetchBundle`, `updateChatMeta`, `trashChat`, `restoreChat`.
+    - SSE subscriber: `subscribeEvents` connecting to `/api/events` with automatic event dispatching.
+  - `web/src/workspace/types.ts` — added `ChatSummary` and `LoadingState` types.
+  - `web/src/workspace/store.ts` — refactored Zustand store:
+    - Asynchronously initializes and fetches chat list from `/api/chats`.
+    - Lazily fetches `workspace_bundle.json` for active chat and newly opened tabs via `loadBundle(id)`.
+    - Listens to `/api/events` for `chat_updated`, `chat_trashed`, `chat_restored`, `pair_ready`, and `chat_ready`.
+    - Added offline fallback logic: honors `?offline=1`, `file://` protocol, or server unavailability by seamlessly serving bundled `seed.chats`.
+  - `web/src/workspace/Workspace.tsx` — integrated loading, empty, and offline indicators:
+    - Status bar shows connected status dot (`offline` vs `online`).
+    - Chat list shows empty message when library has 0 chats, and loading indicator while fetching.
+    - Workspace empty state card shown if library is empty.
+  - `web/src/workspace/workspace.css` — added styles for `.status-dot.online`, `.status-dot.offline`, `.status-dot.syncing`, and `.retry-btn`.
+  - `docs/plans/STANDALONE_V1_PLAN.md` — marked S2.4 complete (✅).
+- **Decisions made:**
+  - Initialized store with `seed.chats` synchronously before running async refresh to preserve immediate initial render without flash, and gracefully fall back to offline sample data if the server is not reachable.
+  - Verified AG+ sacred fixture numbers: Δ_you=87.0, Δ_AI=314.0 (21.7% / 78.3%), 4 You · 10 AI, COPILOT; 0 diffs on frozen fixture.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `npm --prefix web run build:workspace`: built in 110ms with 0 errors.
+  - `npm run e2e`: 2/2 suites passed (smoke.cjs and refinement.cjs), 0 page/console errors.
+  - `.venv/bin/python -m pytest -q`: 207 passed in 1.58s (baseline 102 intact).
+  - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+- **Next:** S2.5 — Serve `web/dist-workspace` from FastAPI at `/`; `./cotrace start` and `./cotrace dev` (AG).
+
+
 
 
 

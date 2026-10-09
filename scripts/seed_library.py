@@ -28,17 +28,30 @@ from server.library import Library, atomic_write_json
 logger = logging.getLogger("seed_library")
 
 PROCESSED_CHATS: list[str] = [
-    "c03_coding_short",
-    "c04_writing_short",
     "c05_research_medium",
+    "c04_writing_short",
+    "c03_coding_short",
     "c07_research_short",
-    "c10_research_short",
-    "c16_research_short",
-    "c17_research_short",
     "c20_coding_short",
     "c27_creative_short",
     "c30_creative_short",
+    "c10_research_short",
+    "c16_research_short",
+    "c17_research_short",
 ]
+
+DISPLAY_TITLES: dict[str, str] = {
+    "c05_research_medium": "AI creativity · paper research",
+    "c04_writing_short": "Human–AI interaction design",
+    "c03_coding_short": "Interactive portfolio",
+    "c07_research_short": "Co-creation research",
+    "c20_coding_short": "Figma migration",
+    "c27_creative_short": "Jellyfish motion study",
+    "c30_creative_short": "Language-learning videos",
+    "c10_research_short": "Project contribution",
+    "c16_research_short": "Co-creative panel",
+    "c17_research_short": "Datafied Society",
+}
 
 
 def seed_library(
@@ -110,10 +123,15 @@ def seed_library(
         bundle = project_chat_directory(dest_dir, output_path=bundle_path)
 
         # Ensure meta.json exists and stays in sync with projected bundle
+        display_title = DISPLAY_TITLES.get(cid, bundle.get("title", cid))
+        if display_title != bundle.get("title"):
+            bundle["title"] = display_title
+            atomic_write_json(bundle_path, bundle)
+
         meta_path = dest_dir / "meta.json"
         meta: dict[str, Any] = {
             "id": cid,
-            "title": bundle.get("title", cid),
+            "title": display_title,
             "category": bundle.get("category", "General"),
             "totalPairs": bundle.get("totalPairs", 0),
             "source": bundle.get("source", {"platform": "archive"}),
