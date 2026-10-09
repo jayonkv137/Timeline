@@ -1753,6 +1753,29 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - Sacred numbers: 21.7% / 78.3%, 4 · 10, COPILOT verified invariant.
 - **Next:** S3.3 — Settings API and screen: provider URL, API key (`secrets.json` with 0600), model per step, budget cap, health check (AG).
 
+---
+
+## 2026-10-10 00:15 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S3.3 — Settings API and screen: provider URL, write-only mode 0600 secrets, models per step, budget cap, parallel jobs, and health check (Keys, models, cost and budget)
+- **Did:**
+  - Implemented `server/library.py` settings management: `DEFAULT_SETTINGS`, `get_effective_settings()`, `get_public_settings()`, `get_api_key()`, `save_settings_and_secrets(updates)`. Raw API key written strictly to `$COTRACE_HOME/secrets.json` with POSIX permissions mode `0o600`.
+  - Implemented `server/app.py` endpoints: `GET /settings` (returns public metadata and masked key preview), `PATCH /settings` (updates settings and secrets), and `POST /settings/test-connection` (performs health check without leaking credentials).
+  - Built comprehensive test suite `tests/test_settings.py` covering default settings, patching with write-only key, verifying `0600` file permissions on `secrets.json`, canary token grep across all API responses/bundles/logs confirming zero plaintext key leaks, and mock connection testing.
+  - Implemented `web/src/workspace/api.ts` typed methods: `fetchSettings()`, `updateSettings()`, `testConnection()`.
+  - Implemented `web/src/workspace/SettingsModal.tsx` modal dialog featuring provider URL input, write-only API key field with key status indicator, Fast/Main step model pickers, monthly budget input, parallel jobs slider, and live connection test button with feedback banner.
+  - Styled modal in `web/src/workspace/workspace.css` and wired settings trigger button into activity rail in `web/src/workspace/Workspace.tsx`.
+- **Decisions made:**
+  - Zero-leak guarantee: API key is stripped in all public settings payloads (`has_api_key: bool` and masked preview `...1234` only). Plaintext key exists strictly in `secrets.json` (chmod 0600).
+  - Exception sanitization: In `test-connection` health check, any HTTP or provider exception message has key tokens stripped before returning to client.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `pytest tests/test_settings.py -v`: 5/5 tests passed.
+  - `.venv/bin/python -m pytest -q`: 228 passed in 2.72s (baseline >= 102 intact).
+  - `npm run build` in `web/`: 0 errors, compiled cleanly in 186ms.
+  - Git diff `data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+  - Sacred numbers: 21.7% / 78.3%, 4 · 10, COPILOT invariant.
+- **Next:** S3.4 — Budget guard: jobs refuse to start above remaining budget, running job stops at cap and emits `budget_stop`, `/usage` page (AG+).
+
 
 
 

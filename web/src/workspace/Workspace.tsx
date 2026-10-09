@@ -1,10 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BrainCircuit, Check, Copy, GitBranch, Menu, MessageSquare, PanelLeftClose, PanelRightClose, PanelRightOpen, Plus, Search, X, Pin, RotateCcw } from 'lucide-react';
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BrainCircuit, Check, Copy, GitBranch, Menu, MessageSquare, PanelLeftClose, PanelRightClose, PanelRightOpen, Plus, Search, Settings, X, Pin, RotateCcw } from 'lucide-react';
 import { useWorkspace } from './store';
 import type { Chat, ChatView } from './types';
 import { LocalGraph } from './LocalGraph';
 import { Brain } from './Brain';
 import { applyChatUpdate } from './adapter';
+import { SettingsModal } from './SettingsModal';
 
 const blankView:ChatView={pair:1,scroll:0,follow:true,selected:null,draft:'',zoom:1,pan:{x:0,y:0}};
 
@@ -18,7 +19,7 @@ function RichText({text}:{text:string}){
 
 export function Workspace(){
  const {chats,tabs,active,views,open,close,patch,newChat,appendDraft,loading,error,isOffline,refresh}=useWorkspace();
- const [query,setQuery]=useState('');const [sidebar,setSidebar]=useState(true);const [rail,setRail]=useState(true);const [expanded,setExpanded]=useState(false);const [brainSelected,setBrainSelected]=useState<string|null>(null);const [brainFocus,setBrainFocus]=useState<string|null>(null);const [brainVisited,setBrainVisited]=useState(false);const [notice,setNotice]=useState('');const [copied,setCopied]=useState<string|null>(null);
+ const [query,setQuery]=useState('');const [sidebar,setSidebar]=useState(true);const [rail,setRail]=useState(true);const [expanded,setExpanded]=useState(false);const [brainSelected,setBrainSelected]=useState<string|null>(null);const [brainFocus,setBrainFocus]=useState<string|null>(null);const [brainVisited,setBrainVisited]=useState(false);const [notice,setNotice]=useState('');const [copied,setCopied]=useState<string|null>(null);const [settingsOpen,setSettingsOpen]=useState(false);
  const scroll=useRef<HTMLDivElement>(null);const lockUntil=useRef(0);const scrollRaf=useRef(0);const search=useRef<HTMLInputElement>(null);const [pending,setPending]=useState<Record<string,boolean>>({});
  const isBrain=active==='brain';const chat=chats.find(c=>c.id===active);const view=views[active]||blankView;const selectedChat=chats.find(c=>c.id===brainSelected);const selectedView=brainSelected?views[brainSelected]||blankView:blankView;
  const update=(v:Partial<ChatView>)=>patch(active,v);
@@ -162,6 +163,7 @@ export function Workspace(){
     <button className={'icon-button '+(!isBrain?'current':'')} aria-label="Show chats" onClick={()=>setSidebar(!sidebar)}><MessageSquare size={19}/></button>
     <button className={'icon-button '+(isBrain?'current':'')} aria-label="Brain overview" onClick={()=>open('brain')}><BrainCircuit size={20}/></button>
     <button className="icon-button" aria-label="Search conversations" onClick={()=>{setSidebar(true);setTimeout(()=>search.current?.focus(),0);}}><Search size={18}/></button>
+    <button className={'icon-button '+(settingsOpen?'current':'')} aria-label="Open settings" title="Settings" onClick={()=>setSettingsOpen(true)}><Settings size={18}/></button>
     <div className="rail-spacer"/>
     <span className="profile-mark">J</span>
   </nav>
@@ -328,5 +330,6 @@ export function Workspace(){
   </div>
 
   {notice&&<div className="toast" role="status">{notice}<button className="icon-button" aria-label="Dismiss notification" onClick={()=>setNotice('')}><X size={14}/></button></div>}
+  <SettingsModal isOpen={settingsOpen} onClose={()=>setSettingsOpen(false)}/>
  </div>;
 }

@@ -25,6 +25,17 @@ from typing import Any
 # Allowed chat ID characters: alphanumeric, hyphens, and underscores
 SAFE_ID_PATTERN = re.compile(r"^[A-Za-z0-9_-]+$")
 
+DEFAULT_SETTINGS: dict[str, Any] = {
+    "provider_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
+    "model_fast": "gemini-3.1-flash-lite",
+    "model_main": "gemini-3.5-flash",
+    "model_step2": "gemini-3.5-flash",
+    "model_step3": "gemini-3.5-flash",
+    "chat_model": "gemini-3.5-flash",
+    "monthly_budget": 20.0,
+    "parallel_jobs": 2,
+}
+
 
 def _validate_id(identifier: str, entity_name: str = "ID") -> str:
     """Validate identifier to prevent path traversal or malformed paths."""
@@ -385,6 +396,39 @@ class Library:
         except Exception:
             return {}
 
+    def get_effective_settings(self) -> dict[str, Any]:
+        """Return merged settings with default parameters."""
+        stored = self.get_settings()
+        res = dict(DEFAULT_SETTINGS)
+        res.update(stored)
+        return res
+
+    def get_api_key(self) -> str:
+        """Read API key from secrets.json or env var fallback. Internal use only."""
+        secrets = self.get_secrets()
+        key = secrets.get("llm_api_key", "")
+        if not key:
+            key = os.environ.get("LLM_API_KEY", "")
+        return key.strip() if isinstance(key, str) else ""
+
+    def get_public_settings(self) -> dict[str, Any]:
+        """Return public settings for API responses — NEVER exposes raw API key."""
+        settings = self.get_effective_settings()
+        key = self.get_api_key()
+        has_key = bool(key)
+        key_preview = ""
+        if has_key:
+            if len(key) > 8:
+                key_preview = f"...{key[-4:]}"
+            else:
+                key_preview = "***"
+
+        settings["has_api_key"] = has_key
+        settings["key_preview"] = key_preview
+        settings.pop("llm_api_key", None)
+        settings.pop("api_key", None)
+        return settings
+
     def update_settings(self, updates: dict[str, Any]) -> dict[str, Any]:
         """Merge and atomically persist settings.json."""
         self.ensure_layout()
@@ -392,6 +436,27 @@ class Library:
         current.update(updates)
         atomic_write_json(self.settings_path, current)
         return current
+
+    def save_settings_and_secrets(self, updates: dict[str, Any]) -> dict[str, Any]:
+        """Atomically persist public settings and write-only API key to mode 0600 secrets.json."""
+        self.ensure_layout()
+        clean_updates = dict(updates)
+
+        # Extract and isolate API key if present
+        raw_key = None
+        for k in ["api_key", "llm_api_key"]:
+            if k in clean_updates:
+                val = clean_updates.pop(k)
+                if val is not None and str(val).strip():
+                    raw_key = str(val).strip()
+
+        if raw_key is not None:
+            self.set_secret("llm_api_key", raw_key)
+
+        if clean_updates:
+            self.update_settings(clean_updates)
+
+        return self.get_public_settings()
 
     def get_secrets(self) -> dict[str, Any]:
         """Read secrets.json from library."""

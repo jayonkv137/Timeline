@@ -112,3 +112,79 @@ export function subscribeEvents(
     }
   };
 }
+
+export interface Settings {
+  provider_url: string;
+  model_fast: string;
+  model_main: string;
+  model_step2: string;
+  model_step3: string;
+  chat_model: string;
+  monthly_budget: number;
+  parallel_jobs: number;
+  has_api_key: boolean;
+  key_preview: string;
+}
+
+export interface SettingsPatch {
+  provider_url?: string;
+  model_fast?: string;
+  model_main?: string;
+  model_step2?: string;
+  model_step3?: string;
+  chat_model?: string;
+  monthly_budget?: number;
+  parallel_jobs?: number;
+  api_key?: string;
+}
+
+export interface ConnectionTestResult {
+  ok: boolean;
+  message?: string;
+  error?: string;
+  provider_url?: string;
+}
+
+export async function fetchSettings(): Promise<Settings> {
+  const res = await fetch(`${API_BASE}/settings`, {
+    headers: { Accept: 'application/json' },
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to fetch settings: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function updateSettings(patch: SettingsPatch): Promise<Settings> {
+  const res = await fetch(`${API_BASE}/settings`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify(patch),
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to update settings: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function testConnection(params?: {
+  provider_url?: string;
+  api_key?: string;
+}): Promise<ConnectionTestResult> {
+  const res = await fetch(`${API_BASE}/settings/test-connection`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify(params || {}),
+  });
+  if (!res.ok) {
+    throw new Error(`Connection test failed: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+}
+

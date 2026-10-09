@@ -21,6 +21,12 @@ import webbrowser
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent
+venv_dir = REPO_ROOT / ".venv"
+if venv_dir.is_dir() and Path(sys.prefix).resolve() != venv_dir.resolve():
+    venv_python = venv_dir / "bin" / "python"
+    if venv_python.is_file():
+        os.execv(str(venv_python), [str(venv_python), str(REPO_ROOT / "cotrace")] + sys.argv[1:])
+
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
