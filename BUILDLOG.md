@@ -1321,4 +1321,26 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `git diff data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
 - **Next:** S1.2 — `engine/projections/workspace.py` pure projection function (CC / AG+).
 
+---
+
+## 2026-10-09 19:05 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S1.2 — Pure workspace projection layer (AG+)
+- **Did:**
+  - `engine/projections/workspace.py` — authored pure, deterministic projection function `project_workspace` and `export_workspace_bundle` mapping `(dialogue, state, ledger, source_meta, meta)` to `workspace_bundle.json`.
+  - `tests/test_workspace_projection.py` — created tier1 test verifying byte-level determinism, Draft 2020-12 schema validation on c05 and fixture_pair1, concentric depth-ring coordinate geometry, artifact exporter, and AG+ sacred fixture numbers.
+  - `docs/plans/STANDALONE_V1_PLAN.md` — marked S1.2 complete (✅).
+- **Decisions made:**
+  - Replaced static 7-point coordinate table with pure depth-ring layout: root at `(0, 0)`, non-root at radius `160 * depth`, angles ordered by birth `(born, id)` with deterministic SHA-256 outcome ID phase jitter.
+  - Derived `title` and `category` dynamically from `source_meta`/`meta` with fallback to first user turn (42 chars) and `'Uncategorised'`, eliminating all hard-coded chat IDs and titles.
+  - Ensured snapshots, atoms, and nodes are reconstructed purely from state/ledger/dialogue artifacts.
+  - Verified AG+ sacred fixture numbers: Δ_you=87.0, Δ_AI=314.0 (21.7% / 78.3%), 4 You · 10 AI, COPILOT; 0 diffs on frozen fixture.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `.venv/bin/python -m pytest tests/test_workspace_projection.py -v`: 6 passed in 0.09s.
+  - `.venv/bin/python -m pytest -q`: 118 passed in 0.74s (up from 112; 0 dropped).
+  - `npm run e2e`: 2/2 suites passed with 0 page/console errors.
+  - `git diff data/chats/fixture_pair1/`: 0 diffs.
+- **Next:** S1.3 — Equivalence test across all 10 chats (CC / AG+).
+
+
 
