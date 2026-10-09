@@ -1,6 +1,6 @@
 # BRAIN_NEURON_SPEC: every chat is a neuron in one brain
 
-Status: **v0, in design.** Session 1 decided (9 Oct 2026); Session 2 variants are ready in the Brain Lab. This is the rulebook we are building rule by rule, the same way `design_pack/GRAPH_SYSTEM_SPEC.md` was built for the 2D graph. If the owner approves the neuron direction, it supersedes the cell territories in [`BRAIN_SYSTEM_SPEC.md`](BRAIN_SYSTEM_SPEC.md) (DDR-008).
+Status: **v0, in design.** Sessions 1 and 2 decided (9 Oct 2026). The neuron template (§7) is in the Brain Lab for review. This is the rulebook we are building rule by rule, the same way `design_pack/GRAPH_SYSTEM_SPEC.md` was built for the 2D graph. If the owner approves the neuron direction, it supersedes the cell territories in [`BRAIN_SYSTEM_SPEC.md`](BRAIN_SYSTEM_SPEC.md) (DDR-008).
 
 Lane: design track only. It touches `web/src/workspace/brain-*`, a dev-only Brain Lab page, `docs/design-system/` and tokens, and never `engine/`, `server/` or Track S files. The one shared file, `Brain.tsx`, is coordinated through BUILDLOG.
 
@@ -64,7 +64,7 @@ A rule that looks good but can't be read is rejected. Examples:
 |---|---|---|---|---|
 | 1 | Anatomy dictionary | Which neuron part means what? | see §3 | **decided** (§3.1) |
 | AD | **Art direction** (look-dev) | What should it look and feel like, brain and interface together? | — | after 1 |
-| 2 | 3D placement | How does a 3D neuron sit on the 3D cortex? | anchor per chat | **variants ready** (§6) |
+| 2 | 3D placement | How does a 3D neuron sit on the 3D cortex? | anchor per chat | **decided: B** (§6) · template in review (§7) |
 | 3 | Soma size | One universal scale across all chats | chat mass 25–1,137 (45×) | — |
 | 4 | Soma glow | How does a 25 / 75 share actually look? | human share 21–72% | — |
 | 5 | Soma texture | Work mode as texture, and is it effective? | mode per exchange; split (see §4 Q3) | — |
@@ -197,7 +197,60 @@ Budget: 45 fps or more on the desktop.
 
 **Claude's recommendation:** **B**, with footprint **soft glow** kept as a candidate for the far-zoom read (Session 13). C is only worth revisiting if the art direction goes "glass brain".
 
-**Owner decision needed:** pick A, B or C, and off, glow or cells.
+### 6.1 Session 2 decisions (owner, 9 Oct 2026)
+- **Placement B.** "b is good".
+- **Form:** the first B neuron "looks very distorted". The owner wants one uniform, proper 3D neuron form like `owner-ref-14` (smooth cell body flowing into tapered dendrites, fibrous texture, glowing points). → §7 template.
+- **Glow from the neuron itself, not the surface:** "can it come from … the parts of the neurons emitting this glow". The surface soft-glow footprint is dropped; self-emission replaces it (§7.4). The cell footprint stays available for the far-zoom read (Session 13).
+- **New references:** `owner-ref-14` (the neuron form and texture), `-15` (blue brain with glowing orange neurons and paths), `-16` (dark teal brain with one bright golden neuron).
+
+## 7. The neuron template (how every neuron is defined)
+
+**Rule:** every chat's neuron is built by the same construction from the same proportions. Data changes parameters only: size, number of branches, branch directions and lengths, glow colours. It never changes the construction. So every neuron looks like the same species, and two neurons differ only where their chats differ.
+
+### 7.1 Construction (in order)
+1. **Soma centre:** the chat's seed point on the cortex, raised 0.35 R along the normal (placement B: about two-thirds above the surface).
+2. **Dendrite paths:** one per outcome, from its parent (the soma or a parent outcome's end) to the outcome's place in the territory. Each path is a smooth curve through 7 control points that rest on the folds, lifted by the local branch radius. The bow (sideways bend) is ±0.14, with the side taken from a stable hash of the outcome id.
+3. **Body:** the soma sphere (radius R) **smoothly united** with a short cone along the first 2.1 R of every root trunk and of the axon (signed-distance union, blend 0.42 R; meshed with surface nets on a 38³ grid, normals from the distance gradient). The cell body therefore flows into its trunks with no seam and no random lumps.
+4. **Dendrites:** tapered tubes along the paths. Radius `r(s) = r_tip + (r_base − r_tip)·(1 − s)^1.6`.
+5. **Bouton** (the outcome end): a smooth bulb at each path end, stretched 1.3× along the dendrite.
+6. **Axon:** one per neuron, leaving the soma and diving into the brain (radius 0.3 R, tapering). Reserved for links to other chats (Session 12).
+
+### 7.2 Proportions (fixed; tokens to be minted when the rules close)
+
+| Part | Size | Data in it |
+|---|---|---|
+| Soma radius R | `SIZE.soma(chat mass)`, provisional | chat mass (Session 3) |
+| Trunk base radius | R × (0.20 + 0.16 × √(outcome mass ÷ largest outcome in the chat)); × 0.7 for nested branches | outcome mass |
+| Trunk flare at the soma | 1.7 × trunk base | — |
+| Tip radius | 0.55 × bouton radius (min 0.0022) | — |
+| Bouton radius | R × (0.10 + 0.12 × √(outcome mass ÷ largest outcome)) | outcome mass |
+| Axon | 0.3 R at the soma | — |
+
+### 7.3 Membrane (texture)
+- **Body colour:** neutral graphite-pearl (`component.brain.dendrite` × 0.4). It is never blue or amber: in our grammar colour means *who*, so the membrane stays neutral. We take `owner-ref-14`'s form, texture and rim light, not its blue body.
+- **Lighting:** key light from upper left plus a soft fill (view-space, so a neuron reads the same from every orbit angle).
+- **Texture:**
+  - dendrites carry fine fibre striations along their length, as in `owner-ref-14`
+  - the body carries fine grain
+  - texture contrast is stronger on dendrites, which are thin
+- **Rim:** a bright rim at grazing angles (glass-tissue look), lighter on thin dendrites so they don't burn white.
+
+### 7.4 Self-glow (the owner's rule: light comes from the neuron's parts)
+- **Soma** emits in the chat's glow colour. **Each dendrite and its bouton** emit in that outcome's glow colour. Where a trunk meets the soma, the colour blends from the soma's to the outcome's. So a neuron's light is the sum of its parts, and one neuron can be part blue and part amber.
+- **Emission** sits mostly at the rim (`0.12 + 1.25 × rim`), plus a **halo**: the same geometry pushed outward and lit only where it wraps behind the silhouette, so the light bleeds out of the shape and fades.
+- **Glow colour is provisional (Session 4):** white → party colour by how one-sided the share is (lean^0.6). Outcomes with no measured mass glow grey (missing, never 50/50).
+- **Sparks (Session 7 preview):** one point of light per requirement or question on that outcome, placed along its dendrite, coloured by who made it (answered = white, open questions dimmer). On the 10 chats that is 120 sparks.
+- **Brain surface:** dimmed in the Lab (art-direction preview) so emitted light can be judged, as in `owner-ref-15` and `-16`.
+
+### 7.5 Seen on real data (screenshots in `brain-neuron/session-2b/`)
+- `overview-self-glow.jpg`: the whole brain reads like `owner-ref-15`, with glowing neurons on a dark brain. Amber for the AI-led chats, blue for c10.
+- `template-c05-closeup.jpg`: star-shaped soma flowing into 5 tapered trunks with boutons.
+- `template-c20-nested.jpg`: the one nested outcome branches from a branch end.
+
+### 7.6 Still open
+- Real bloom (light bleeding into the dark around bright parts, as in every owner reference) needs a post-processing pass. It is the first art-direction item.
+- Small chats are tiny next to c05 (Session 3, size).
+- Texture by work mode (Session 5) will modulate §7.3; it never replaces the template.
 
 ## Sources
 - [Obsidian graph view help](https://obsidian.md/help/plugins/graph); [forum: text fade threshold should consider node size](https://forum.obsidian.md/t/graph-text-fade-threshold-consider-node-size/6737)

@@ -40,24 +40,23 @@ const graph = {
     const final = c.snapshots.at(-1)?.mass || {}, mass = Object.values(final);
     return {
       id: c.id, title: c.title, category: c.category, born: 1, anchor: anchor(c.category, i), since: c.dialogue[0]?.ts || '',
-      outcomes: c.nodes.map(o => ({ id: o.id, title: o.title, parent: o.parent, related: o.related, x: o.x, y: o.y, root: o.root, human: final[o.id]?.human || 0, ai: final[o.id]?.ai || 0 })),
+      outcomes: c.nodes.map(o => ({ id: o.id, title: o.title, parent: o.parent, related: o.related, x: o.x, y: o.y, root: o.root, human: final[o.id]?.human || 0, ai: final[o.id]?.ai || 0,
+        atoms: c.atoms.filter(a => a.nodeId === o.id).map(a => ({ kind: a.kind, origin: a.origin, resolver: a.resolver })) })),
       ledger: [{ pair: 1, human: mass.reduce((s, m) => s + m.human, 0), ai: mass.reduce((s, m) => s + m.ai, 0) }],
     };
   }),
 };
 
 type Option = { value: string; label: string; note: string };
-const PLACE: Option[] = [
-  { value: 'A', label: 'A · Drawn on the surface', note: 'Flat, like ink on the cortex. Sticks, but has no volume.' },
-  { value: 'B', label: 'B · Embedded in the cortex', note: 'Cell body half-sunk into the surface, branches as tubes resting on the folds, axon diving inside.' },
-  { value: 'C', label: 'C · Inside the glass', note: 'The whole neuron sits just under a more transparent surface.' },
+const GLOW: Option[] = [
+  { value: 'on', label: 'Self-glow', note: 'Each part emits its own light: the cell body for the chat, each branch and end for its outcome.' },
+  { value: 'off', label: 'Off', note: 'The bare membrane, to judge form and texture.' },
 ];
 const FOOT: Option[] = [
   { value: 'off', label: 'Off', note: 'Only the neuron.' },
-  { value: 'glow', label: 'Soft glow', note: 'A faint patch of light on the surface under each neuron (provisional colour).' },
-  { value: 'cells', label: 'Cells', note: 'Last round’s blue / amber cell patch under each neuron.' },
+  { value: 'cells', label: 'Cells', note: 'Last round’s blue / amber cell patch under each neuron (for the far-zoom read, Session 13).' },
 ];
-const state = { place: 'B', footprint: 'off', axon: true };
+const state = { place: 'B', glow: 'on', footprint: 'off', axon: true, sparks: true, dim: true };
 
 const root = document.getElementById('lab')!;
 root.innerHTML = `
@@ -65,26 +64,30 @@ root.innerHTML = `
   <iframe class="lab-frame" title="Neuron brain on 10 real chats"></iframe>
   <aside class="lab-panel" aria-label="Lab controls">
     <header>
-      <span class="lab-eyebrow">Brain Lab · Session 2</span>
-      <h1>Where does a neuron sit?</h1>
-      <p>Your 10 real chats as neurons. Switch placement, orbit, then click a chat and its outcome ends.</p>
+      <span class="lab-eyebrow">Brain Lab · Session 2b</span>
+      <h1>One neuron template</h1>
+      <p>Placement B (decided). Every chat is built from the same neuron form; only size, branches and glow come from its data. Orbit, then click a chat and its outcome ends.</p>
     </header>
-    <fieldset><legend>Placement</legend><div class="lab-options" data-key="place"></div></fieldset>
-    <fieldset><legend>Surface footprint <span class="lab-tag">question 3</span></legend><div class="lab-options" data-key="footprint"></div></fieldset>
-    <label class="lab-check"><input type="checkbox" data-key="axon" checked> Show where links to other chats will leave (no data yet)</label>
+    <fieldset><legend>Glow</legend><div class="lab-options" data-key="glow"></div></fieldset>
+    <fieldset><legend>Surface footprint</legend><div class="lab-options" data-key="footprint"></div></fieldset>
+    <label class="lab-check"><input type="checkbox" data-key="dim" checked> Dimmed brain surface, so the emitted light can be judged (art-direction preview)</label>
+    <label class="lab-check"><input type="checkbox" data-key="sparks" checked> Requirement sparks: one light per requirement or question, coloured by who made it (Session 7 preview)</label>
+    <label class="lab-check"><input type="checkbox" data-key="axon" checked> Axon: where links to other chats will leave (no data yet)</label>
     <section class="lab-evidence" aria-live="polite"><h2>Evidence</h2><p class="lab-empty">Click a neuron to see the engine numbers behind it.</p></section>
-    <p class="lab-note">Provisional, not decided yet: sizes (Session 3), glow and colour (Sessions 4–5), endings (Session 7).</p>
+    <p class="lab-note">Provisional, not decided yet: sizes (Session 3), glow colour (Session 4), texture by work mode (Session 5), endings (Session 7), the brain surface (art direction).</p>
   </aside>
 </div>`;
 const iframe = root.querySelector<HTMLIFrameElement>('.lab-frame')!;
-function renderOptions(key: 'place' | 'footprint', opts: Option[]) {
+function renderOptions(key: 'glow' | 'footprint', opts: Option[]) {
   const box = root.querySelector(`[data-key="${key}"]`)!;
   box.innerHTML = opts.map(o => `<button type="button" class="lab-option" aria-pressed="${state[key] === o.value}" data-value="${o.value}"><b>${o.label}</b><span>${o.note}</span></button>`).join('');
   box.querySelectorAll<HTMLButtonElement>('button').forEach(b => b.onclick = () => { state[key] = b.dataset.value!; renderOptions(key, opts); push(); });
 }
-function push() { iframe.contentWindow?.postMessage({ type: 'cotrace-lab-set', lab: { ...state } }, '*'); }
-renderOptions('place', PLACE); renderOptions('footprint', FOOT);
+function push() { iframe.contentWindow?.postMessage({ type: 'cotrace-lab-set', lab: { ...state, glow: state.glow === 'on' } }, '*'); }
+renderOptions('glow', GLOW); renderOptions('footprint', FOOT);
 root.querySelector<HTMLInputElement>('[data-key="axon"]')!.onchange = e => { state.axon = (e.target as HTMLInputElement).checked; push(); };
+root.querySelector<HTMLInputElement>('[data-key="dim"]')!.onchange = e => { state.dim = (e.target as HTMLInputElement).checked; push(); };
+root.querySelector<HTMLInputElement>('[data-key="sparks"]')!.onchange = e => { state.sparks = (e.target as HTMLInputElement).checked; push(); };
 
 const evidenceBox = root.querySelector('.lab-evidence')!;
 type Evidence = { kind: string; title: string; rows: [string, string | number, string][] };
