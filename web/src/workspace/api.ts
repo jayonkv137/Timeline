@@ -5,7 +5,10 @@
 
 import type { Chat, ChatSummary } from './types';
 
-export const API_BASE = '/api';
+export const API_BASE =
+  typeof window !== 'undefined' && window.location.protocol === 'file:'
+    ? 'http://127.0.0.1:8765/api'
+    : '/api';
 
 export async function fetchChats(): Promise<ChatSummary[]> {
   const res = await fetch(`${API_BASE}/chats`, {

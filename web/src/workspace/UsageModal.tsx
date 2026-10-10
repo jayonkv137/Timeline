@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AlertTriangle, BarChart3, CheckCircle2, Layers, Loader2, RefreshCw, X, Zap } from 'lucide-react';
+import { AlertTriangle, BarChart3, CheckCircle2, Layers, Loader2, RefreshCw, WifiOff, X, Zap } from 'lucide-react';
 import { fetchUsage, type UsageReport } from './api';
 
 interface UsageModalProps {
@@ -7,20 +7,34 @@ interface UsageModalProps {
   onClose: () => void;
 }
 
+const DEFAULT_REPORT: UsageReport = {
+  month: new Date().toISOString().slice(0, 7),
+  spent_this_month: 0.0,
+  monthly_budget: 20.0,
+  remaining_budget: 20.0,
+  by_chat: {},
+  by_step: {},
+  by_model: {},
+  recent_calls: [],
+  total_calls: 0,
+};
+
 export function UsageModal({ isOpen, onClose }: UsageModalProps) {
   const [report, setReport] = useState<UsageReport | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [isOfflineMode, setIsOfflineMode] = useState(false);
 
   function loadData() {
     setLoading(true);
-    setError(null);
     fetchUsage()
       .then((data) => {
         setReport(data);
+        setIsOfflineMode(false);
       })
       .catch((err) => {
-        setError(err.message || 'Failed to load usage data');
+        console.warn('COTRACE: Could not connect to live usage API, falling back to preview mode:', err);
+        setReport(DEFAULT_REPORT);
+        setIsOfflineMode(true);
       })
       .finally(() => {
         setLoading(false);
@@ -78,16 +92,22 @@ export function UsageModal({ isOpen, onClose }: UsageModalProps) {
             <Loader2 size={24} className="spin-icon" />
             <span>Calculating usage ledger…</span>
           </div>
-        ) : error ? (
-          <div className="usage-error-box">
-            <AlertTriangle size={18} />
-            <div>
-              <strong>Failed to load usage</strong>
-              <p>{error}</p>
-            </div>
-          </div>
         ) : report ? (
           <div className="usage-content">
+            {isOfflineMode && (
+              <div className="usage-offline-notice">
+                <WifiOff size={15} />
+                <div className="usage-offline-text">
+                  <strong>Offline Preview Mode</strong>
+                  <span>
+                    Backend server not connected. Showing default budget allowance ($20.00). Open <code>http://127.0.0.1:8765</code> while <code>./cotrace start</code> is running for live metered spend.
+                  </span>
+                </div>
+                <button className="usage-retry-btn" onClick={loadData} disabled={loading}>
+                  Retry
+                </button>
+              </div>
+            )}
             {/* Top Budget Progress Card */}
             <div className={`usage-budget-card ${isCapped ? 'capped' : isNearCap ? 'warning' : ''}`}>
               <div className="usage-card-top">
