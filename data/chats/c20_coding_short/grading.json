@@ -1,0 +1,74 @@
+{
+  "extracted_marks": {
+    "outcome 1||req 1": {
+      "status": "match",
+      "target": "Req_01",
+      "note": "Research and planning scope without premature execution"
+    },
+    "outcome 1||req 2": {
+      "status": "match",
+      "target": "Req_02",
+      "note": "Phase 9 structural designation"
+    },
+    "outcome 2||req 1": {
+      "status": "match",
+      "target": "Req_03",
+      "note": "Two-route migration strategy defined"
+    },
+    "outcome 2||req 2": {
+      "status": "match",
+      "target": "Req_04",
+      "note": "Tool research and tutorials identified"
+    },
+    "outcome 2||req 3": {
+      "status": "match",
+      "target": "Req_05",
+      "note": "WebGL limitation acknowledged"
+    },
+    "outcome 3||req 1": {
+      "status": "match",
+      "target": "Req_06",
+      "note": "Audit of emergent design system specified"
+    },
+    "outcome 3||req 2": {
+      "status": "match",
+      "target": "Req_07",
+      "note": "Baseline analysis of colors_and_type.css and specs"
+    },
+    "outcome 1||req 3": {
+      "status": "match",
+      "target": "Req_08",
+      "note": "Preamble gate waiting for start task"
+    },
+    "outcome 1||req 4": {
+      "status": "match",
+      "target": "Req_09",
+      "note": "Deliver complete brief upon confirmation"
+    },
+    "outcome 3||req 3": {
+      "status": "match",
+      "target": "Req_10",
+      "note": "Phased audit-first sequencing"
+    },
+    "outcome 3||req 4": {
+      "status": "match",
+      "target": "Req_11",
+      "note": "AntiGravity code-scan drift inventory"
+    },
+    "outcome 3||req 5": {
+      "status": "split",
+      "target": "Req_11",
+      "note": "Repository readiness check for AntiGravity"
+    },
+    "outcome 4||req 1": {
+      "status": "match",
+      "target": "Req_12",
+      "note": "Read-only constraint"
+    },
+    "outcome 4||req 2": {
+      "status": "match",
+      "target": "Req_13",
+      "note": "Single output report design-audit-raw.md"
+    }
+  }
+}

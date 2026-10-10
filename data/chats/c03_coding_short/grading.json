@@ -1,0 +1,49 @@
+{
+  "extracted_marks": {
+    "outcome 2||req 1": {
+      "status": "match",
+      "target": "Req_01",
+      "note": "Dev server and npm install verified"
+    },
+    "outcome 3||req 1": {
+      "status": "match",
+      "target": "Req_02",
+      "note": "Prior chat context pulled and maintained"
+    },
+    "outcome 3||req 2": {
+      "status": "match",
+      "target": "Req_03",
+      "note": "Rename to jayon-portfolio confirmed"
+    },
+    "outcome 4||req 1": {
+      "status": "match",
+      "target": "Req_04",
+      "note": "Three-move wiring plan articulated"
+    },
+    "outcome 4||req 2": {
+      "status": "match",
+      "target": "Req_05",
+      "note": "Asset bundle copied to handoff and assets directories"
+    },
+    "outcome 4||req 3": {
+      "status": "split",
+      "target": "Req_03",
+      "note": "Terminal rename command execution"
+    },
+    "outcome 4||req 4": {
+      "status": "match",
+      "target": "Req_06",
+      "note": "package.json name field updated"
+    },
+    "outcome 4||req 5": {
+      "status": "match",
+      "target": "Req_07",
+      "note": "Vite boilerplate deleted"
+    },
+    "outcome 4||req 6": {
+      "status": "match",
+      "target": "Req_08",
+      "note": "Baseline CSS and cyan token test verified"
+    }
+  }
+}

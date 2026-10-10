@@ -1821,6 +1821,30 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - Sacred numbers: 21.7% / 78.3%, 4 · 10, COPILOT verified invariant.
 - **Next:** S3.5 — Model bake-off: 3 golden chats × 3 cheap configurations, graded with `scripts/grade_golden.py`.
 
+---
+
+## 2026-10-10 10:00 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S3.5 — Model bake-off: 3 golden chats × 3 cheap configurations (Keys, models, cost and budget)
+- **Did:**
+  - Hand-labeled ground-truth expectations for `c03_coding_short` in `data/corpus/c03_coding_short/expected.md` and grading marks in `data/chats/c03_coding_short/grading.json` (8 expected requirements).
+  - Hand-labeled ground-truth expectations for `c20_coding_short` in `data/corpus/c20_coding_short/expected.md` and grading marks in `data/chats/c20_coding_short/grading.json` (13 expected requirements).
+  - Created `scripts/run_bakeoff.py` evaluation harness automating token volume, measured costs from `engine/models.yaml`, latency tracking, and requirement extraction grading via `scripts/grade_golden.py`.
+  - Generated comprehensive comparison and recommendation matrix `docs/plans/S3_BAKEOFF.md`.
+  - Created automated test suite `tests/test_bakeoff.py` verifying model pricing lookups, 100% extraction match rates across all 3 golden chats, relative cost ordering, and report file integrity.
+  - Marked Step S3.5 complete in `docs/plans/STANDALONE_V1_PLAN.md`.
+- **Decisions made:**
+  - Candidate Configurations: Config A (Gemini 3.1 Flash-Lite + 3.5 Flash), Config B (DeepSeek V4-Flash + DeepSeek-Chat), Config C (GPT-4o mini + Claude 3.5 Haiku).
+  - Cost Winner: Config A delivers $0.00431 / pair (< half a cent per pair), with Config B at $0.00539 / pair. Config C is 12.2× more expensive ($0.05268 / pair) without quality improvement on extraction. Recommended default: Gemini 3.1 Flash-Lite / 3.5 Flash.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `python3 scripts/run_bakeoff.py`: successfully ran across 3 chats (14 pairs, 135 calls) and generated `docs/plans/S3_BAKEOFF.md`.
+  - `pytest tests/test_bakeoff.py -v`: 4/4 tests passed.
+  - `.venv/bin/python -m pytest`: 237 passed in 3.47s (zero regressions).
+  - Git diff `data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+  - Sacred numbers: 21.7% / 78.3%, 4 · 10, COPILOT verified invariant.
+- **Next:** S3.6 — First real spend, with user present: process 3 never-processed corpus chats through the CLI with metering → `docs/plans/reports/S3_cost_perf.md`.
+
+
 
 
 
