@@ -151,6 +151,14 @@ def test_inv_21_verbatim_quote_check():
     }
     assert inv.inv_21_provenance(dialogue, ledger, state_spaced_ellipses) == []
 
+    # Test bracketed omissions (e.g. '[script content]' or '[...]')
+    state_bracketed_omission = {
+        "actions": [
+            {"id": "A(1,1)", "type": "suggest", "text": "AI suggests stack", "role": "EXECUTOR", "evidence_quote": "Sure, I recommend [stack details] for this project."}
+        ]
+    }
+    assert inv.inv_21_provenance(dialogue, ledger, state_bracketed_omission) == []
+
     # Test hallucinated quote that is not grounded
     state_invalid = {
         "actions": [

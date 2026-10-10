@@ -1,0 +1,81 @@
+{
+  "key": "addbb87bfb4dfce00788154482416edc21cad6b6d7bb42af045c39559ed64001",
+  "step": "2:pair15:outcome 7",
+  "model": "gemini-3.5-flash",
+  "prompt": "Step 2: Requirement Extraction\n\nYou are given ONE outcome and the actions bound to it. Extract **requirements**\n(binding success conditions) for this outcome only.\n\n=== OUTCOME ===\noutcome 7: Grammar instruction and roleplay exercise on prepositions and formal imperative\n=== ACTIONS FOR THIS OUTCOME ===\n[\n  {\n    \"turn id\": \"A(12,4)\",\n    \"action type\": \"Plan\",\n    \"action text\": \"AI proposes a plan for the current session based on the new grammar topics.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"So the grammar we need to teach today is clear: Formal Imperative (Sie-form) + Two-case Prepositions for Directions\"\n  },\n  {\n    \"turn id\": \"A(12,5)\",\n    \"action type\": \"Ask\",\n    \"action text\": \"AI asks the user if they have watched the video to initiate the lesson.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Hast du das Nicos Weg Video schon geschaut?\"\n  },\n  {\n    \"turn id\": \"U(13,1)\",\n    \"action type\": \"State\",\n    \"action text\": \"User signals readiness to begin the lesson.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"LOS GEHTS\"\n  },\n  {\n    \"turn id\": \"A(13,1)\",\n    \"action type\": \"Explain\",\n    \"action text\": \"AI explains the concept of the formal imperative in German.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"The imperative is how you give commands, requests, or directions.\"\n  },\n  {\n    \"turn id\": \"A(13,2)\",\n    \"action type\": \"Explain\",\n    \"action text\": \"AI explains the grammatical rule for forming the formal imperative.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"Conjugated verb → FIRST position, then Sie\"\n  },\n  {\n    \"turn id\": \"A(13,3)\",\n    \"action type\": \"Explain\",\n    \"action text\": \"AI explains the irregular imperative form of the verb 'sein'.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"Sein is irregular\"\n  },\n  {\n    \"turn id\": \"A(13,4)\",\n    \"action type\": \"Explain\",\n    \"action text\": \"AI explains how separable verbs function in the formal imperative.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"With separable verbs, the prefix still splits off to the end\"\n  },\n  {\n    \"turn id\": \"A(13,5)\",\n    \"action type\": \"Ask\",\n    \"action text\": \"AI asks if the user has any questions.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Hast du Fragen?\"\n  },\n  {\n    \"turn id\": \"A(14,1)\",\n    \"action type\": \"Explain\",\n    \"action text\": \"AI defines what a preposition is with examples.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"A preposition is a small word that tells you WHERE something is or WHERE something is going.\"\n  },\n  {\n    \"turn id\": \"A(14,2)\",\n    \"action type\": \"Explain\",\n    \"action text\": \"AI explains the difference between 'Wo' and 'Wohin'.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"Are you talking about a LOCATION (where something IS)? Or a DIRECTION (where something is GOING)?\"\n  },\n  {\n    \"turn id\": \"A(14,3)\",\n    \"action type\": \"Explain\",\n    \"action text\": \"AI explains the concept of Dativ and Akkusativ cases.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"In German, the article (der/die/das) changes its form depending on the role of the noun in the sentence.\"\n  },\n  {\n    \"turn id\": \"A(14,4)\",\n    \"action type\": \"Explain\",\n    \"action text\": \"AI explains two-case prepositions (Wechselpräpositionen).\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"Certain prepositions can take EITHER Akkusativ or Dativ — depending on Wo/Wohin.\"\n  },\n  {\n    \"turn id\": \"A(14,5)\",\n    \"action type\": \"Explain\",\n    \"action text\": \"AI explains fixed-case prepositions.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"Some prepositions ALWAYS take the same case — no switching.\"\n  },\n  {\n    \"turn id\": \"A(14,6)\",\n    \"action type\": \"Explain\",\n    \"action text\": \"AI explains the formal imperative and compares it to English.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"In German, it works similarly BUT you keep \\\"Sie\\\" and flip the order\"\n  },\n  {\n    \"turn id\": \"A(14,7)\",\n    \"action type\": \"Explain\",\n    \"action text\": \"AI explains separable verbs in the context of the imperative.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"Separable verbs are verbs that split into two parts in a sentence. The prefix jumps to the END.\"\n  },\n  {\n    \"turn id\": \"A(14,8)\",\n    \"action type\": \"Summarize\",\n    \"action text\": \"AI provides a summary of the key points covered.\",\n    \"role\": \"EXECUTOR\",\n    \"evidence quote\": \"Summary — What to remember\"\n  },\n  {\n    \"turn id\": \"U(15,1)\",\n    \"action type\": \"Describe\",\n    \"action text\": \"The user describes the difference between 'wo' and 'wohin'.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"WO IS ABOUTTHE LOCAITON ADN WHOHIN IS MOCVINGF TOWARS SOMEHTING\"\n  },\n  {\n    \"turn id\": \"U(15,2)\",\n    \"action type\": \"Explain\",\n    \"action text\": \"The user explains the imperative structure by comparing it to German question syntax.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"IMPERATIVE U CHANGE THE SIE TO SECOND PLACE LIKE IN GEMRAN WHEN U ASK A QUESTIO HAST DU SEIT SIMILAIR GEHEN SIE LINKS\"\n  },\n  {\n    \"turn id\": \"A(15,1)\",\n    \"action type\": \"Feedback\",\n    \"action text\": \"The AI confirms the user's correct understanding of 'wo' vs 'wohin'.\",\n    \"role\": \"OTHER\",\n    \"evidence quote\": \"PERFEKT! 🎉 You nailed both! 1. Wo vs Wohin — 100% richtig! Location vs movement. Exactly right!\"\n  },\n  {\n    \"turn id\": \"A(15,2)\",\n    \"action type\": \"Confirm\",\n    \"action text\": \"The AI confirms the user's correct comparison regarding the imperative structure.\",\n    \"role\": \"OTHER\",\n    \"evidence quote\": \"2. Imperative — really smart comparison! Yes, it's EXACTLY like a question structure in German — verb comes first.\"\n  },\n  {\n    \"turn id\": \"A(15,3)\",\n    \"action type\": \"Plan\",\n    \"action text\": \"The AI proposes a roleplay exercise to practice the learned concepts.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Now let's drill! I'll keep it fun — Bremen Roleplay 🗺️\"\n  },\n  {\n    \"turn id\": \"A(15,4)\",\n    \"action type\": \"Instruct\",\n    \"action text\": \"The AI instructs the user to act as a local and provide directions using the formal imperative.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Du bist ein Einwohner von Bremen (a local). Ich bin ein Tourist und frage dich nach dem Weg. Answer using the formal imperative\"\n  },\n  {\n    \"turn id\": \"A(15,5)\",\n    \"action type\": \"Request\",\n    \"action text\": \"The AI provides a specific prompt for the user to respond to.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Ich frage: \\\"Entschuldigung, wie komme ich zum Rathaus?\\\"\"\n  },\n  {\n    \"turn id\": \"A(15,6)\",\n    \"action type\": \"List\",\n    \"action text\": \"The AI lists the specific steps the user must include in their response.\",\n    \"role\": \"SHAPER\",\n    \"evidence quote\": \"Deine Aufgabe: Give me directions using these steps: 1. Go straight ahead 2. Cross the bridge 3. Walk along the street 4. City hall is on the left side\"\n  }\n]\n=== PRIOR REQUIREMENTS FOR THIS OUTCOME (if any; empty on first extraction) ===\n[]\n=== PRIOR OPEN SLOTS FOR THIS OUTCOME (if any; empty on first extraction) ===\n[]\n\n**REQUIREMENT** = An atomic, externally verifiable SUCCESS CONDITION for an outcome.\n- Binary testable (pass/fail). - Must be explicitly stated or adopted as binding in\nthe dialogue.\n\n**NOT a requirement:** content itself, advice, implementation methods, internal\nreasoning, example outputs, one-off decisions.\n\nExtract ONLY if ALL pass:\n1) NECESSITY --- framed as mandatory (must/need/required/cannot, numeric\nconstraints, explicit include/exclude)\n2) GROUNDING --- directly stated, no inference\n3) REPLACEABILITY --- cannot be swapped without violating success\n4) BINARY TESTABILITY --- reviewer can judge pass/fail\n\nIf an action raises a substantive idea, constraint, or decision point but FAILS\ngate (1) NECESSITY specifically because of hedge or uncertainty language — this\nincludes option-uncertainty (\"maybe\", \"could\", \"might\", \"may\", \"would possibly\",\n\"perhaps\", \"mix / pick later\"), epistemic hedges (\"I think\", \"it seems\", \"I\nbelieve\", \"it appears\" — used to qualify the CONTENT of the claim, not as a\nconversational filler elsewhere in the sentence), or approximation language\n(\"about\", \"some\", \"most\", \"somewhat\", \"probably\", \"likely\") — OR because the\naction commits to determining something later rather than specifying it now\n(\"I'll recommend based on your answer\", \"I'll decide after\", \"I'll verify before\ncommitting\") — do NOT discard it. Use the open_slot operation (see below) instead\nof create. This applies only to Necessity failures caused by hedging, uncertainty,\nor deferred content; failures of gates 2-4, content that is not substantive at all\n(small talk, pure acknowledgment, restating something already said), or content\nwhere a hedge word appears only as filler alongside an otherwise clearly mandatory\nstatement (e.g. \"I think this must include X\" — still a requirement, the hedge\nqualifies the speaker's tone, not the requirement's content), are still handled\nnormally (dropped or extracted as create, respectively).\n\nOperations:\n- **create**: New requirement. Check PRIOR REQUIREMENTS above for revise BEFORE\ncreate. - **revise**: Modify existing requirement (contradicts/tightens/\nrelaxes/replaces). Use EXACT existing req id (from PRIOR REQUIREMENTS) in related\nto (within this outcome). - **delete**: Explicitly cancels a previously binding\ncondition. - **open_slot**: A hedged, uncertain, or deferred-content idea that\nfails Necessity but is substantive enough to track — neither a binding requirement\nnor nothing. Check PRIOR OPEN SLOTS above for resolve BEFORE open_slot: if this\naction firmly answers/resolves a prior open slot, emit op=\"resolve\" instead,\nturning that slot into a new create with related to pointing at the resolved slot\nid. Assign origin: \"user\" if the hedge came from the user's action, \"AI\" if from\nthe AI's action. A slot that has appeared in PRIOR OPEN SLOTS for 3 or more\nconsecutive pairs without being resolved should be marked op=\"abandon\" — it is no\nlonger carried forward.\n\nEdge cases:\n- Advice itself is NOT a requirement. Only constraints ON the advice. - \"Try to /\nideally / could / maybe\" → not binding → not a requirement → check if substantive\nenough for open_slot (see above); if not even substantive, drop entirely with no op.\n\nReturn JSON only (bound outcome id must be \"outcome 7\"):\n{ \"requirement ops\": [ { \"op\": \"create\", \"req id\": \"req 1\", \"bound outcome id\":\n\"outcome 7\", \"fields\": { \"text\": \"<requirement text>\", \"type\":\n\"<constraint|preference|ranking|task|other>\" }, \"creation action ids\":\n[\"<action id>\"], \"contributing action ids\": [], \"implementation action ids\":\n[], \"related to\": [], \"explicit or implicit\": \"<explicit|implicit>\", \"rationale\":\n\"<why extracted>\" } ],\n\"open_slot ops\": [ { \"op\": \"open_slot\", \"slot id\": \"slot 1\", \"bound outcome id\":\n\"outcome 7\", \"fields\": { \"text\": \"<the hedged, uncertain, or deferred idea>\",\n\"type\": \"<constraint|preference|ranking|task|other>\" }, \"origin\": \"<user|AI>\",\n\"creation action ids\": [\"<action id>\"], \"contributing action ids\": [],\n\"related to\": [], \"explicit or implicit\": \"<explicit = directly posed as an open\nquestion/uncertainty; implicit = inferred ambiguity nobody named>\", \"rationale\":\n\"<why substantive but failed Necessity>\" } ] }\nUse action ids (e.g. \"U(3,1)\" or \"A(3,1)\") in creation action ids / contributing\naction ids / implementation action ids.\n\nCRITICAL: Respond with ONLY the JSON object. No additional text.",
+  "response": {
+    "requirement ops": [
+      {
+        "op": "create",
+        "req id": "req 1",
+        "bound outcome id": "outcome 7",
+        "fields": {
+          "text": "The grammar instruction must cover the Formal Imperative (Sie-form) and Two-case Prepositions for Directions.",
+          "type": "task"
+        },
+        "creation action ids": [
+          "A(12,4)"
+        ],
+        "contributing action ids": [],
+        "implementation action ids": [
+          "A(13,1)",
+          "A(13,2)",
+          "A(13,3)",
+          "A(13,4)",
+          "A(14,1)",
+          "A(14,2)",
+          "A(14,3)",
+          "A(14,4)",
+          "A(14,5)"
+        ],
+        "related to": [],
+        "explicit or implicit": "explicit",
+        "rationale": "Action A(12,4) sets a binding plan for the session to teach Formal Imperative and Two-case Prepositions for Directions."
+      },
+      {
+        "op": "create",
+        "req id": "req 2",
+        "bound outcome id": "outcome 7",
+        "fields": {
+          "text": "The user must act as a local from Bremen and provide directions to a tourist asking 'Entschuldigung, wie komme ich zum Rathaus?' using the formal imperative.",
+          "type": "task"
+        },
+        "creation action ids": [
+          "A(15,4)",
+          "A(15,5)"
+        ],
+        "contributing action ids": [
+          "A(15,3)"
+        ],
+        "implementation action ids": [],
+        "related to": [],
+        "explicit or implicit": "explicit",
+        "rationale": "AI explicitly assigns a binding roleplay task specifying the user's role, scenario, prompt, and requirement to use the formal imperative."
+      },
+      {
+        "op": "create",
+        "req id": "req 3",
+        "bound outcome id": "outcome 7",
+        "fields": {
+          "text": "The roleplay response directions must include four specific steps: 1. Go straight ahead, 2. Cross the bridge, 3. Walk along the street, and 4. City hall is on the left side.",
+          "type": "constraint"
+        },
+        "creation action ids": [
+          "A(15,6)"
+        ],
+        "contributing action ids": [],
+        "implementation action ids": [],
+        "related to": [],
+        "explicit or implicit": "explicit",
+        "rationale": "Action A(15,6) explicitly enumerates the mandatory steps/content requirements for the user's directions in the roleplay."
+      }
+    ],
+    "open_slot ops": []
+  },
+  "tokens": {
+    "prompt": 3184,
+    "completion": 690,
+    "total": 3874
+  },
+  "recorded_at": "2026-10-10T08:59:57.859361+00:00"
+}

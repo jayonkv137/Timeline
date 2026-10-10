@@ -1,0 +1,38 @@
+{
+  "key": "0614815fd6a0af8a62c2cfbf0e1d9e6cde7c84a5d381af7dda10d9df970fbeb9",
+  "step": "1c:pair2",
+  "model": "gemini-3.5-flash",
+  "prompt": "Step 1c: Intention Extraction\n\nYou are given a list of outcomes from a dialogue.\n\n=== OUTCOMES ===\n[\n  {\n    \"outcome id\": \"outcome 1\",\n    \"outcome\": \"Plan and assets for WG-Gesucht housing outreach\"\n  },\n  {\n    \"outcome id\": \"outcome 2\",\n    \"outcome\": \"Drafted application messages in German and English with rationale\"\n  },\n  {\n    \"outcome id\": \"outcome 3\",\n    \"outcome\": \"Advice and proposal for semi-automated application workflow and tracker\"\n  }\n]\n\n(1) Identify distinct **intentions** (high-level goals or purposes) that these\noutcomes serve. (2) Assign each outcome to exactly one intention.\n\nOutput JSON only:\n{ \"intentions\": [ {\"intention id\": \"I1\", \"intention\": \"short label\"},\n{\"intention id\": \"I2\", \"intention\": \"another label\"} ], \"outcome to intention\":\n[{\"outcome id\": \"outcome 1\", \"intention id\": \"I1\"}, ...] }\n- Every outcome id appears exactly once in outcome to intention. Use intention id\nfrom the intentions list.",
+  "response": {
+    "intentions": [
+      {
+        "intention id": "I1",
+        "intention": "Prepare WG-Gesucht outreach strategy and materials"
+      },
+      {
+        "intention id": "I2",
+        "intention": "Establish an application workflow and tracking system"
+      }
+    ],
+    "outcome to intention": [
+      {
+        "outcome id": "outcome 1",
+        "intention id": "I1"
+      },
+      {
+        "outcome id": "outcome 2",
+        "intention id": "I1"
+      },
+      {
+        "outcome id": "outcome 3",
+        "intention id": "I2"
+      }
+    ]
+  },
+  "tokens": {
+    "prompt": 262,
+    "completion": 172,
+    "total": 434
+  },
+  "recorded_at": "2026-10-10T08:28:26.880956+00:00"
+}

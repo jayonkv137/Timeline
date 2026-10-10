@@ -1,0 +1,546 @@
+{
+  "key": "f34487672a77f6a8e700f9d8bc6e808d723f11363a0f0ff8311f0519704ae376",
+  "step": "3a:pair8:outcome 6:req 3",
+  "model": "gemini-3.5-flash",
+  "prompt": "Step 3: Influence Labeling\n\nYou are analyzing how actions relate to a single requirement --- both actions BEFORE\nand AFTER it was established.\n\n=== OUTCOME CONTEXT ===\nOutcome: new vocabulary drill exercise for directions\n\n=== TARGET REQUIREMENT ===\nreq 3: The AI must conduct the vocabulary drill using a Scenario Builder format where the user plays a tourist asking for directions in Bremen and the AI plays a local filling in gaps.\n(Created at turn A(8,4))\nOrigin: directly created\n\n=== SECTION A: PRECEDING ACTIONS (before the requirement) ===\nThese are candidate utterances from BEFORE the requirement was established. Any\naction already listed under KNOWN SLOT ORIGIN above is excluded from this list.\n[0] U(1,1) | Describe | OTHER | User provides a session briefing containing current progress, due vocabulary, due grammar, and activity balance. | evidence: \"📊 SESSION BRIEFING... 📺 ACTIVITY BALANCE: No media logged yet\"\n[1] A(1,1) | Greet | OTHER | AI greets the user. | evidence: \"Hallo Jayon!\"\n[2] A(1,2) | Acknowledge | OTHER | AI acknowledges the user's streak and return. | evidence: \"🔥 Streak eingetötet — gut gemacht, dass du wieder dabei bist!\"\n[3] A(1,3) | Summarize | OTHER | AI summarizes the key metrics from the user's briefing. | evidence: \"Briefing gelesen. Ich sehe: 175 due Wörter (viel!), 107 due Grammatikthemen, und 0 Minuten diese Woche.\"\n[4] A(1,4) | Frame | SHAPER | AI frames the current situation as a need for action. | evidence: \"Zeit, das zu ändern.\"\n[5] A(1,5) | Ask | SHAPER | AI asks the user how much time they have available for the session. | evidence: \"Bevor wir anfangen — wie viel Zeit hast du heute?\"\n[6] U(2,1) | State | SHAPER | User states their available time for study. | evidence: \"30-45 min (deep study)\"\n[7] U(2,2) | State | SHAPER | User states their desired focus for the lesson. | evidence: \"Continue current lesson (Directions)\"\n[8] A(2,1) | Acknowledge | OTHER | AI acknowledges the user's time and topic constraints. | evidence: \"Perfekt! 30-45 Minuten und die Directions-Lektion\"\n[9] A(2,2) | Plan | SHAPER | AI outlines the lesson plan based on the user's constraints. | evidence: \"das ist genug für alles: Vokabel-Review, neue Wörter aus \"An der Ampel links\", Grammatik (Prepositions of place), und eine Bremen-Übung am Ende.\"\n[10] A(2,3) | Instruct | EXECUTOR | AI initiates the lesson. | evidence: \"Lass uns starten!\"\n[11] A(2,4) | Describe | EXECUTOR | AI describes the first step of the lesson. | evidence: \"Schnelles Review — ich teste 8 Wörter aus deiner Due-Liste.\"\n[12] A(2,5) | Explain | EXECUTOR | AI explains the rules of the Translation Tennis activity. | evidence: \"Ich mache es als Translation Tennis — ich gebe dir ein Wort, du gibst mir die Übersetzung.\"\n[13] A(2,6) | List | EXECUTOR | AI lists the vocabulary words for the first round of the exercise. | evidence: \"1. die Mutter → ? 2. die Nacht → ? 3. neugierig → ? 4. neun → ? 5. nicht mehr → ?\"\n[14] A(2,7) | Invite | EXECUTOR | AI invites the user to begin the exercise. | evidence: \"Los geht's! 🎾\"\n[15] U(3,1) | State | EXECUTOR | User provides the translation for 'Mother'. | evidence: \"Mother\"\n[16] U(3,2) | State | EXECUTOR | User provides the translation for 'Night'. | evidence: \"Night\"\n[17] U(3,3) | State | EXECUTOR | User states they do not know the translation for the third item. | evidence: \"ich weiß nicht\"\n[18] U(3,4) | State | EXECUTOR | User provides the translation for '9'. | evidence: \"9\"\n[19] U(3,5) | State | EXECUTOR | User provides the translation for 'not anymore'. | evidence: \"not anymore\"\n[20] A(3,1) | Feedback | OTHER | AI provides positive reinforcement for the user's performance. | evidence: \"Fast perfekt! 🎉\"\n[21] A(3,2) | Confirm | EXECUTOR | AI confirms the correct translations for items 1, 2, 4, and 5. | evidence: \"✅ **Mutter** = mother\n2. ✅ **Nacht** = night\n4. ✅ **neun** = nine\n5. ✅ **nicht mehr** = no longer / not anymore\"\n[22] A(3,3) | Explain | EXECUTOR | AI explains the correct translation for the item the user missed. | evidence: \"neugierig = curious — denk an \"Neugier\" (curiosity) + \"-ig\" macht es zum Adjektiv.\"\n[23] A(3,4) | Evaluate | OTHER | AI summarizes the user's score. | evidence: \"4/5 beim ersten Versuch — gut gemacht!\"\n[24] A(3,5) | Instruct | SHAPER | AI initiates the next round of the exercise. | evidence: \"Runde 2 — Englisch → Deutsch:\"\n[25] A(3,6) | Request | SHAPER | AI asks the user to translate three new words. | evidence: \"6. morning → ?\n7. name → ?\n8. nature → ?\"\n[26] A(3,7) | Constrain | SHAPER | AI reminds the user to include articles in their translations. | evidence: \"(Artikel nicht vergessen! 🎯)\"\n[27] U(4,1) | State | OTHER | User provides a noun with an article. | evidence: \"die Morgen\"\n[28] U(4,2) | State | OTHER | User provides a noun with an article. | evidence: \"das Name\"\n[29] U(4,3) | State | OTHER | User provides a noun with an article. | evidence: \"der natur\"\n[30] A(4,1) | Feedback | EXECUTOR | AI provides encouraging feedback on the user's attempts. | evidence: \"Gute Versuche! Aber alle drei haben einen kleinen Artikel-Fehler — das ist super normal am Anfang.\"\n[31] A(4,2) | Clarify | EXECUTOR | AI corrects the user's noun-article errors. | evidence: \"1. ❌ die Morgen → ✅ der Morgen — Morgen ist maskulin\n2. ❌ das Name → ✅ der Name — auch maskulin!\n3. ❌ der Natur → ✅ die Natur — feminin (und groß geschrieben: Natur)\"\n[32] A(4,3) | Explain | EXECUTOR | AI provides mnemonics to help remember the correct articles. | evidence: \"Kleine Eselsbrücken (mnemonics):\"\n[33] A(4,4) | Recommend | SHAPER | AI recommends a specific grammar rule for feminine nouns. | evidence: \"Die -ur Regel ist Gold wert — merkt dir die!\"\n[34] A(4,5) | Describe | SHAPER | AI introduces the topic of the next lesson. | evidence: \"Diese Lektion geht um Wegbeschreibungen (giving directions).\"\n[35] A(4,6) | Ask | SHAPER | AI asks if the user has watched the required video to plan the next step. | evidence: \"Hast du das Nicos Weg Video für diese Lektion schon gesehen? Ja oder nein — dann plane ich entsprechend.\"\n[36] U(5,1) | Ask | SHAPER | User asks if the AI is following the language ratio constraint set in the system prompt. | evidence: \"ARE U FOLLWOING THAT?\"\n[37] A(5,1) | Acknowledge | OTHER | AI acknowledges the user's point regarding the language ratio. | evidence: \"Du hast völlig recht!\"\n[38] A(5,2) | Apologize | OTHER | AI apologizes for using too much English. | evidence: \"Entschuldigung — ich habe zu viel Englisch benutzt.\"\n[39] A(5,3) | Confirm | EXECUTOR | AI confirms it will adhere to the 60% German and 40% English ratio. | evidence: \"Ab jetzt: ~60% Deutsch, 40% Englisch.\"\n[40] A(5,4) | Implement | EXECUTOR | AI states it is adjusting its behavior immediately. | evidence: \"Ich passe das sofort an!\"\n[41] A(5,5) | Ask | SHAPER | AI asks if the user has watched the specific video. | evidence: \"hast du das Nicos Weg Video für \"An der Ampel links\" schon gesehen?\"\n[42] A(5,6) | Plan | SHAPER | AI proposes a plan for the lesson based on the user's response. | evidence: \"Ja → wir machen direkt Vokabeln + Grammatik\n\nNein → ich gebe dir erst die wichtigsten Wörter, dann machst du eine kurze Pause für das Video, dann kommen wir zurück für die Grammatik-Übungen\"\n[43] U(6,1) | State | SHAPER | User provides a phrase for the lesson. | evidence: \"An der Ampel links\"\n[44] A(6,1) | Feedback | OTHER | AI praises the user for having the vocabulary ready. | evidence: \"Ausgezeichnet — du hast das Vokabular schon dabei!\"\n[45] A(6,2) | Plan | SHAPER | AI outlines the lesson plan including vocabulary, grammar, and an exercise. | evidence: \"Lass uns die wichtigsten Wörter einprägen, dann kommen Grammatik und eine Bremen-Übung.\"\n[46] A(6,3) | Describe | EXECUTOR | AI categorizes and lists the vocabulary words. | evidence: \"Ich gruppiere die wichtigsten Wörter thematisch:\"\n[47] A(6,4) | Explain | EXECUTOR | AI explains the usage of separable verbs. | evidence: \"Trennbare Verben (separable verbs) — zwei aus dieser Lektion\"\n[48] A(6,5) | Explain | EXECUTOR | AI explains the grammatical usage of 'an/an der'. | evidence: \"An/An der — super wichtig für Wegbeschreibungen\"\n[49] A(6,6) | Describe | EXECUTOR | AI describes a walking route through Bremen. | evidence: \"Ich beschreibe einen Weg durch Bremen.\"\n[50] A(6,7) | Ask | SHAPER | AI asks the user to identify the locations seen on the route. | evidence: \"Welche Gebäude/Orte hast du auf dem Weg gesehen? Nenn sie auf Deutsch!\"\n[51] U(7,1) | Constrain | SHAPER | User instructs the AI to follow a 60% German and 40% English language ratio. | evidence: \"REMBER TO FOLLOW 60% OF THE CONVO IS IN GERMAN AND 40% IS IN ENGLISH\"\n[52] U(7,2) | Provide | SHAPER | User provides a list of vocabulary words for the lesson. | evidence: \"THIS IS THE LESSONS VOCABS\"\n[53] A(7,1) | Accept | EXECUTOR | AI accepts the constraint regarding the language ratio. | evidence: \"Du hast recht — ich werde die 60/40 Regel jetzt richtig einhalten.\"\n[54] A(7,2) | Apologize | OTHER | AI apologizes for not following the language rule previously. | evidence: \"Entschuldigung dafür!\"\n[55] A(7,3) | Plan | SHAPER | AI proposes a sequence for the lesson: vocabulary, video, then grammar and exercises. | evidence: \"wir machen es so: ich lehre dir erst das Vokabular, dann schaust du das Video, dann machen wir Grammatik und Übungen.\"\n[56] A(7,4) | Describe | EXECUTOR | AI organizes and presents the provided vocabulary in categorized tables. | evidence: \"I'll group them by theme so they stick better.\"\n[57] A(7,5) | Recommend | EXECUTOR | AI highlights the most important vocabulary words for giving directions. | evidence: \"The most important ones for giving directions are: geradeaus, die Ampel, die Kreuzung, die Ecke, abbiegen, entlanggehen, überqueren, und vorbeigehen.\"\n[58] A(7,6) | Instruct | EXECUTOR | AI instructs the user to watch the video. | evidence: \"Jetzt — schau das Nicos Weg Video für \"An der Ampel links\"!\"\n[59] A(7,7) | Ask | EXECUTOR | AI asks the user to summarize the video content upon return. | evidence: \"Komm zurück wenn du fertig bist, und sag mir: Was war die Geschichte im Video? Wer hat Hilfe gebraucht, und wohin wollte die Person gehen?\"\n[60] U(8,1) | Confirm | SHAPER | User confirms the previously agreed-upon plan to perform a vocabulary drill. | evidence: \"WE WOULD ALSO DO A VOCAB DRILL OF THESE CURRENT NEW VOCABS TO SOLIDIFY THEM BEFORE STARTING THE DW NICO WEG LESSONS RIGHT THTA WAS THE PLAN REALLY RIGHT?\"\n[61] A(8,1) | Confirm | OTHER | AI confirms the user's understanding of the lesson plan. | evidence: \"You're absolutely right!\"\n[62] A(8,2) | Apologize | OTHER | AI apologizes for skipping the vocabulary drill step. | evidence: \"Sorry — I skipped ahead too fast.\"\n[63] A(8,3) | Describe | SHAPER | AI outlines the correct sequence of the lesson plan. | evidence: \"The correct flow is: 1. ✅ Teach new vocabulary (done!) 2. ➡️ Drill the new vocabulary (we are here) 3. Then watch Nicos Weg 4. Then grammar + exercises\"\n\n=== SECTION B: SUBSEQUENT ACTIONS (after the requirement, same outcome) ===\nThese actions occurred AFTER the requirement was created, within the same outcome.\n[0] A(8,5) | Instruct | EXECUTOR | AI provides the vocabulary drill exercises for the user to complete. | evidence: \"Complete each sentence with the right word from the lesson. Die Wörter auf Englisch sind Hinweise (hints). 1. Geh __________ (straight ahead) bis zur Ampel. 2. Dann bieg links in die __________ (intersection) ab. 3. Die Kirche ist auf der __________ (left side). 4. Du musst die __________ (bridge) überqueren. 5. Das Rathaus ist nicht weit — es ist sehr __________ (nearby). 6. Geh die Straße __________ (along) bis zum Ende. 7. Die Bushaltestelle? Das ist die __________ (stop) dort drüben!\"\n[1] A(8,6) | Invite | EXECUTOR | AI encourages the user to attempt the exercise. | evidence: \"Versuch mal alle sieben! 💪 Kein Stress wenn du nicht sicher bist — rate einfach!\"\n\n======================== TASK ========================\nFor EVERY entry in every section given above, label the relationship to the\nrequirement.\n\n**relationship type:**\n- **DIRECT CONNECTION**: Action explicitly operates on the requirement --- creates,\ntightens, relaxes, replaces, deletes, requests, evaluates, or fulfills it. The\nrequirement is the OBJECT of the action. - **IMPLICIT CONNECTION**: Action\nprovides context that influences, motivates, or triggers the requirement. Not\ndirectly about the requirement itself. - **IMPLEMENTS**: (Section B only) Action\ndirectly executes, fulfills, or produces output satisfying this requirement. -\n**REVISES**: (Section B only) Action modifies, tightens, relaxes, or replaces the\nrequirement after it was established. - **CONTRIBUTES**: Action provides partial\nwork, context, or progress toward this requirement. - **NO CONNECTION**: No\nmeaningful relationship.\n\n**relationship score** (required for DIRECT/IMPLICIT/IMPLEMENTS/REVISES/CONTRIBUTES):\n- 1--3 for IMPLICIT CONNECTION or CONTRIBUTES:\n  - 3 = Necessary: without this action, the requirement would likely not be\n    established in its current form.\n  - 2 = Supportive: meaningfully supports the requirement's establishment, but it\n    could still be established without it.\n  - 1 = Weak: minor or background connection; the requirement would likely still\n    be established in a similar form without it.\n- 4--5 for DIRECT CONNECTION, IMPLEMENTS, or REVISES (4=explicit, 5=state\n  mutation / full fulfillment)\n- null for NO CONNECTION\n\n**explanation**: write as \"<subtype>: <one-sentence justification>\". Use the\nfollowing taxonomy as guidance, not as a closed set. The explanation should\nreflect the actual actions and content of the conversation rather than merely\nrepeat the descriptions below.\n\nUNDERSPECIFIED INTENT / PREFERENCE\nGoal-Concretization | a prior broad goal later leads to a more concrete requirement\nPreference-Explication | a prior implicit preference is later expressed as an\nexplicit requirement\nARTIFACT-TRIGGERED ELABORATION\nArtifact-Triggered-Refinement | a prior artifact later prompts a refinement or\nmissing requirement\nContext-Grounded-Requirement | prior context, code, data, or situational\ninformation later grounds a new requirement\nPlan-Driven-Proceduralization | a prior plan or workflow later leads to a\nprocedural or next-step requirement\nPROBLEM-TRIGGERED REVISION\nProblem-Triggered-Correction | a prior failure, mismatch, or reported issue later\nleads to a corrective requirement\nComplexity-Triggered-Simplification | prior complexity, burden, or ambiguity later\nleads to a simpler or narrower requirement\nINTERACTIONAL STEERING\nOption-Selection | prior alternatives are later resolved by selecting one option\nRecommendation-Driven-Strategy | a prior request for guidance later leads to a\nstrategy, priority, or decision requirement\nExtension-Driven-Next-Step | a prior invitation to continue later leads to a\nconcrete next-step requirement\nImplementation-Triggered-Setup | a prior implementation request later leads to\nadded setup, execution, or usage requirements\nTEMPORAL AND DIAGNOSTIC DYNAMICS\nIncremental-Accumulation | prior preferences, constraints, or decisions accumulate\nacross turns and later shape the requirement\nHypothesis-And-Diagnosis | a prior causal hypothesis later leads to validation,\ntesting, or diagnostic requirements\n\n**contribution role**: SHAPER | EXECUTOR | OTHER. Each listed action already\nshows a role. If your judgment disagrees with the role shown, note it in\nexplanation rather than silently changing it.\n\nDefault to NO CONNECTION unless clear semantic evidence.\n\n======================== OUTPUT FORMAT ========================\nReturn JSON only:\n{ \"slot origin labels\": [ { \"index\": 0, \"action id\": \"<e.g. A(1,34)>\",\n\"relationship type\": \"IMPLICIT CONNECTION\", \"relationship score\": 3,\n\"explanation\": \"...\", \"contribution role\": \"AI\" } ],\n\"preceding labels\": [ { \"index\": 0, \"action id\": \"<e.g. 4-1>\",\n\"relationship type\": \"DIRECT CONNECTION\", \"relationship score\": 5, \"explanation\":\n\"...\", \"contribution role\": \"SHAPER\" } ],\n\"subsequent labels\": [ { \"index\": 0, \"action id\": \"<e.g. 8-1>\",\n\"relationship type\": \"IMPLEMENTS\", \"relationship score\": 5, \"explanation\":\n\"...\", \"contribution role\": \"EXECUTOR\" } ] }\nInclude \"slot origin labels\" only if a KNOWN SLOT ORIGIN section was given\nabove. Include one entry for EVERY index in every section present.\nProvide ONLY the JSON object. No additional text.",
+  "response": {
+    "preceding labels": [
+      {
+        "index": 0,
+        "action id": "U(1,1)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: General session briefing with background metrics that do not influence the specific scenario format.",
+        "contribution role": "OTHER"
+      },
+      {
+        "index": 1,
+        "action id": "A(1,1)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Standard conversational greeting.",
+        "contribution role": "OTHER"
+      },
+      {
+        "index": 2,
+        "action id": "A(1,2)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Social acknowledgment of streak.",
+        "contribution role": "OTHER"
+      },
+      {
+        "index": 3,
+        "action id": "A(1,3)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Summary of metrics that does not touch upon scenario framing.",
+        "contribution role": "OTHER"
+      },
+      {
+        "index": 4,
+        "action id": "A(1,4)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Motivational transition phrase.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 5,
+        "action id": "A(1,5)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Question about available time.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 6,
+        "action id": "U(2,1)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Statement of available study time.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 7,
+        "action id": "U(2,2)",
+        "relationship type": "IMPLICIT CONNECTION",
+        "relationship score": 1,
+        "explanation": "Goal-Concretization: Establishes the 'Directions' topic which later grounds the tourist/local scenario format.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 8,
+        "action id": "A(2,1)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Acknowledgment of time and topic.",
+        "contribution role": "OTHER"
+      },
+      {
+        "index": 9,
+        "action id": "A(2,2)",
+        "relationship type": "IMPLICIT CONNECTION",
+        "relationship score": 2,
+        "explanation": "Plan-Driven-Proceduralization: Mentions a 'Bremen-Übung' for the first time, setting up the geographic location context for the requirement.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 10,
+        "action id": "A(2,3)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Lesson initiation utterance.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 11,
+        "action id": "A(2,4)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Description of a different initial review step.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 12,
+        "action id": "A(2,5)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Explanation of Translation Tennis rules for initial review.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 13,
+        "action id": "A(2,6)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Unrelated translation list.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 14,
+        "action id": "A(2,7)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Encouragement to start translation.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 15,
+        "action id": "U(3,1)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: User translation answer.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 16,
+        "action id": "U(3,2)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: User translation answer.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 17,
+        "action id": "U(3,3)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: User translation answer.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 18,
+        "action id": "U(3,4)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: User translation answer.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 19,
+        "action id": "U(3,5)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: User translation answer.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 20,
+        "action id": "A(3,1)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Feedback on initial translation.",
+        "contribution role": "OTHER"
+      },
+      {
+        "index": 21,
+        "action id": "A(3,2)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Answer confirmations.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 22,
+        "action id": "A(3,3)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Translation explanation.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 23,
+        "action id": "A(3,4)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Score evaluation.",
+        "contribution role": "OTHER"
+      },
+      {
+        "index": 24,
+        "action id": "A(3,5)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Transition to round 2.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 25,
+        "action id": "A(3,6)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Request for round 2 translations.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 26,
+        "action id": "A(3,7)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Grammar reminder.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 27,
+        "action id": "U(4,1)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: User answer.",
+        "contribution role": "OTHER"
+      },
+      {
+        "index": 28,
+        "action id": "U(4,2)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: User answer.",
+        "contribution role": "OTHER"
+      },
+      {
+        "index": 29,
+        "action id": "U(4,3)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: User answer.",
+        "contribution role": "OTHER"
+      },
+      {
+        "index": 30,
+        "action id": "A(4,1)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Feedback on user answers.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 31,
+        "action id": "A(4,2)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Corrections for user answers.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 32,
+        "action id": "A(4,3)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Mnemonic explanation.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 33,
+        "action id": "A(4,4)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Recommendation for grammar rule.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 34,
+        "action id": "A(4,5)",
+        "relationship type": "IMPLICIT CONNECTION",
+        "relationship score": 1,
+        "explanation": "Goal-Concretization: Re-introduces giving directions topic.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 35,
+        "action id": "A(4,6)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Question about Nicos Weg video.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 36,
+        "action id": "U(5,1)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Query about language ratio constraint.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 37,
+        "action id": "A(5,1)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Acknowledgment of language ratio feedback.",
+        "contribution role": "OTHER"
+      },
+      {
+        "index": 38,
+        "action id": "A(5,2)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Apology regarding language ratio.",
+        "contribution role": "OTHER"
+      },
+      {
+        "index": 39,
+        "action id": "A(5,3)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Confirmation of language ratio.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 40,
+        "action id": "A(5,4)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Implementation statement for language ratio.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 41,
+        "action id": "A(5,5)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Repeated question about video.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 42,
+        "action id": "A(5,6)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Conditional lesson planning.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 43,
+        "action id": "U(6,1)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Provision of lesson title phrase.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 44,
+        "action id": "A(6,1)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Praise for having vocabulary.",
+        "contribution role": "OTHER"
+      },
+      {
+        "index": 45,
+        "action id": "A(6,2)",
+        "relationship type": "IMPLICIT CONNECTION",
+        "relationship score": 2,
+        "explanation": "Plan-Driven-Proceduralization: Re-confirms the Bremen exercise component of the plan.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 46,
+        "action id": "A(6,3)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Presentation of vocabulary list.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 47,
+        "action id": "A(6,4)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Explanation of separable verbs.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 48,
+        "action id": "A(6,5)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Explanation of prepositions for directions.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 49,
+        "action id": "A(6,6)",
+        "relationship type": "IMPLICIT CONNECTION",
+        "relationship score": 2,
+        "explanation": "Context-Grounded-Requirement: Introduces a walking route through Bremen context, anticipating the Bremen scenario setting.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 50,
+        "action id": "A(6,7)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Identification exercise question.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 51,
+        "action id": "U(7,1)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Language ratio instruction.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 52,
+        "action id": "U(7,2)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Input of vocabulary words.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 53,
+        "action id": "A(7,1)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Acceptance of language ratio constraint.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 54,
+        "action id": "A(7,2)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Apology regarding language ratio.",
+        "contribution role": "OTHER"
+      },
+      {
+        "index": 55,
+        "action id": "A(7,3)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: High-level lesson plan proposal.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 56,
+        "action id": "A(7,4)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Categorization of vocabulary.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 57,
+        "action id": "A(7,5)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Highlighting key direction vocabulary.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 58,
+        "action id": "A(7,6)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Instruction to watch video.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 59,
+        "action id": "A(7,7)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Question about video narrative.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 60,
+        "action id": "U(8,1)",
+        "relationship type": "IMPLICIT CONNECTION",
+        "relationship score": 3,
+        "explanation": "Extension-Driven-Next-Step: User requests the vocabulary drill step, which directly triggers the AI to establish the specific exercise requirement.",
+        "contribution role": "SHAPER"
+      },
+      {
+        "index": 61,
+        "action id": "A(8,1)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Agreement with user's observation.",
+        "contribution role": "OTHER"
+      },
+      {
+        "index": 62,
+        "action id": "A(8,2)",
+        "relationship type": "NO CONNECTION",
+        "relationship score": null,
+        "explanation": "No-Connection: Apology for skipping step.",
+        "contribution role": "OTHER"
+      },
+      {
+        "index": 63,
+        "action id": "A(8,3)",
+        "relationship type": "IMPLICIT CONNECTION",
+        "relationship score": 2,
+        "explanation": "Plan-Driven-Proceduralization: Outlines the sequence leading directly into establishing the vocabulary drill exercise.",
+        "contribution role": "SHAPER"
+      }
+    ],
+    "subsequent labels": [
+      {
+        "index": 0,
+        "action id": "A(8,5)",
+        "relationship type": "IMPLEMENTS",
+        "relationship score": 4,
+        "explanation": "Executes the drill exercise portion of the vocabulary drill, though using sentence completion rather than the detailed scenario builder format.",
+        "contribution role": "EXECUTOR"
+      },
+      {
+        "index": 1,
+        "action id": "A(8,6)",
+        "relationship type": "IMPLEMENTS",
+        "relationship score": 4,
+        "explanation": "Invites the user to attempt the drill exercise that was just provided.",
+        "contribution role": "EXECUTOR"
+      }
+    ]
+  },
+  "tokens": {
+    "prompt": 4517,
+    "completion": 4852,
+    "total": 9369
+  },
+  "recorded_at": "2026-10-10T08:48:26.016649+00:00"
+}

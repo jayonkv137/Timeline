@@ -27,6 +27,7 @@ def main():
     parser.add_argument("--out-dir", type=str, default=None, help="Output folder")
     parser.add_argument("--mode", type=str, default="record", choices=["record", "replay", "off"], help="LLM cache mode")
     parser.add_argument("--clear", action="store_true", help="Clear existing artifacts before running")
+    parser.add_argument("--budget-cap", type=float, default=1.0, help="Budget cap in USD (default: $1.00)")
 
     args = parser.parse_args()
 
@@ -44,16 +45,21 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
 
     config = load_config()
+    from engine.budget import BudgetGuard
+    budget_guard = BudgetGuard(cap=args.budget_cap, chat_id=chat_id)
+
     inner = None
     if args.mode in ("record", "off"):
-        inner = LLMClient(config, out_dir=out_dir)
+        inner = LLMClient(config, out_dir=out_dir, budget_guard=budget_guard)
 
     client = CachingLLMClient(inner_client=inner, mode=args.mode, out_dir=out_dir)
+    client.set_budget_guard(budget_guard)
 
     print(f"Starting pipeline extraction for chat: {chat_id}")
-    print(f"  Dialogue: {dialogue_path}")
-    print(f"  Out dir:  {out_dir}")
-    print(f"  Mode:     {args.mode}")
+    print(f"  Dialogue:   {dialogue_path}")
+    print(f"  Out dir:    {out_dir}")
+    print(f"  Mode:       {args.mode}")
+    print(f"  Budget Cap: ${args.budget_cap:.2f}")
 
     try:
         report = run_chat(
@@ -63,7 +69,11 @@ def main():
             dialogue=dialogue_path,
             out_dir=out_dir,
             clear_existing=args.clear,
+            budget_guard=budget_guard,
         )
+        usage_sum = getattr(client, "usage_meter", None)
+        meter_summary = usage_sum.summary() if usage_sum else {}
+
         print("\n=== RUN COMPLETE ===")
         print(f"Pairs processed: {report.get('pairs_processed')}")
         print(f"Wall times:      {report.get('wall_time_per_pair')}")
@@ -71,6 +81,7 @@ def main():
         print(f"Tokens:          {report.get('tokens_per_pair')}")
         print(f"Requirements:    {report.get('requirements_created')}")
         print(f"Slots:           {report.get('slots')}")
+        print(f"Total Cost:      ${meter_summary.get('cost', 0.0):.6f}")
         print(f"Checks passed:   {len(report.get('checks', {}).get('passed', []))}")
         print(f"Checks failed:   {report.get('checks', {}).get('failed', [])}")
         return 0

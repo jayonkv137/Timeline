@@ -1,0 +1,149 @@
+[
+  {
+    "t": 1,
+    "delta_you": 0.0,
+    "delta_ai": 0.0,
+    "c_you": 0.0,
+    "c_ai": 0.0
+  },
+  {
+    "t": 2,
+    "delta_you": 19.0,
+    "delta_ai": 58.0,
+    "c_you": 19.0,
+    "c_ai": 58.0
+  },
+  {
+    "t": 3,
+    "delta_you": 37.0,
+    "delta_ai": 58.0,
+    "c_you": 56.0,
+    "c_ai": 116.0
+  },
+  {
+    "t": 4,
+    "delta_you": 45.0,
+    "delta_ai": 20.0,
+    "c_you": 101.0,
+    "c_ai": 136.0
+  },
+  {
+    "t": 5,
+    "delta_you": 5.0,
+    "delta_ai": 40.0,
+    "c_you": 106.0,
+    "c_ai": 176.0
+  },
+  {
+    "t": 6,
+    "delta_you": 5.0,
+    "delta_ai": 68.0,
+    "c_you": 111.0,
+    "c_ai": 244.0
+  },
+  {
+    "t": 7,
+    "delta_you": 28.0,
+    "delta_ai": 128.0,
+    "c_you": 139.0,
+    "c_ai": 372.0
+  },
+  {
+    "t": 8,
+    "delta_you": 20.0,
+    "delta_ai": 59.0,
+    "c_you": 159.0,
+    "c_ai": 431.0
+  },
+  {
+    "t": 9,
+    "delta_you": 69.0,
+    "delta_ai": 125.0,
+    "c_you": 228.0,
+    "c_ai": 556.0
+  },
+  {
+    "t": 10,
+    "delta_you": 17.0,
+    "delta_ai": 72.0,
+    "c_you": 245.0,
+    "c_ai": 628.0
+  },
+  {
+    "t": 11,
+    "delta_you": 56.0,
+    "delta_ai": 147.0,
+    "c_you": 301.0,
+    "c_ai": 775.0
+  },
+  {
+    "t": 12,
+    "delta_you": 28.0,
+    "delta_ai": 55.0,
+    "c_you": 329.0,
+    "c_ai": 830.0
+  },
+  {
+    "t": 13,
+    "delta_you": 2.0,
+    "delta_ai": 10.0,
+    "c_you": 331.0,
+    "c_ai": 840.0
+  },
+  {
+    "t": 14,
+    "delta_you": 48.0,
+    "delta_ai": 110.0,
+    "c_you": 379.0,
+    "c_ai": 950.0
+  },
+  {
+    "t": 15,
+    "delta_you": 27.0,
+    "delta_ai": 137.0,
+    "c_you": 406.0,
+    "c_ai": 1087.0
+  },
+  {
+    "t": 16,
+    "delta_you": 19.0,
+    "delta_ai": 87.0,
+    "c_you": 425.0,
+    "c_ai": 1174.0
+  },
+  {
+    "t": 17,
+    "delta_you": 32.0,
+    "delta_ai": 52.0,
+    "c_you": 457.0,
+    "c_ai": 1226.0
+  },
+  {
+    "t": 18,
+    "delta_you": 28.0,
+    "delta_ai": 119.0,
+    "c_you": 485.0,
+    "c_ai": 1345.0
+  },
+  {
+    "t": 19,
+    "delta_you": 71.0,
+    "delta_ai": 137.0,
+    "c_you": 556.0,
+    "c_ai": 1482.0
+  },
+  {
+    "t": 20,
+    "delta_you": 62.0,
+    "delta_ai": 73.0,
+    "c_you": 618.0,
+    "c_ai": 1555.0
+  },
+  {
+    "t": 21,
+    "delta_you": 8.0,
+    "delta_ai": 41.0,
+    "c_you": 626.0,
+    "c_ai": 1596.0
+  }
+]

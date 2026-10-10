@@ -1,0 +1,44 @@
+[
+  {
+    "t": 1,
+    "delta_you": 17.0,
+    "delta_ai": 12.0,
+    "c_you": 17.0,
+    "c_ai": 12.0
+  },
+  {
+    "t": 2,
+    "delta_you": 20.0,
+    "delta_ai": 3.0,
+    "c_you": 37.0,
+    "c_ai": 15.0
+  },
+  {
+    "t": 3,
+    "delta_you": 38.0,
+    "delta_ai": 15.0,
+    "c_you": 75.0,
+    "c_ai": 30.0
+  },
+  {
+    "t": 4,
+    "delta_you": 20.0,
+    "delta_ai": 41.0,
+    "c_you": 95.0,
+    "c_ai": 71.0
+  },
+  {
+    "t": 5,
+    "delta_you": 7.0,
+    "delta_ai": 10.0,
+    "c_you": 102.0,
+    "c_ai": 81.0
+  },
+  {
+    "t": 6,
+    "delta_you": 15.0,
+    "delta_ai": 41.0,
+    "c_you": 117.0,
+    "c_ai": 122.0
+  }
+]

@@ -1,0 +1,618 @@
+{
+  "pairs": [
+    {
+      "pair": 1,
+      "direction": {
+        "you_pct": 58.6,
+        "ai_pct": 41.4
+      },
+      "decisions": {
+        "you_count": 1,
+        "ai_count": 1,
+        "latest_ai_example": "The AI must request the user's preference for the appointment call time"
+      },
+      "timeline": {
+        "pair": 1,
+        "delta_you": 17.0,
+        "delta_ai": 12.0,
+        "summary": "adding The AI must request",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 1",
+              "label": "R1",
+              "op": "create",
+              "delta_you": 10.0,
+              "delta_ai": 4.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 1",
+              "label": "R2",
+              "op": "create",
+              "delta_you": 7.0,
+              "delta_ai": 8.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "abandoned",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "plan for appointment call setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "plan for appointment call setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "draft for follow-up response",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on calling timing and etiquette",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "German phone conversation script",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "CENTAUR",
+        "signals": {
+          "w_you": 1,
+          "w_ai": 1,
+          "h_you": 7.0,
+          "h_ai": 7.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 100.0,
+          "copilot_pct": 0.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "direction": {
+        "you_pct": 71.2,
+        "ai_pct": 28.8
+      },
+      "decisions": {
+        "you_count": 1,
+        "ai_count": 2,
+        "latest_ai_example": "The user prefers the call to take place in the morning on either Monday or Tuesday from 9 AM"
+      },
+      "timeline": {
+        "pair": 2,
+        "delta_you": 20.0,
+        "delta_ai": 3.0,
+        "summary": "adding The user prefers the",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 1",
+              "label": "R2",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 0.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 1_rev",
+              "label": "R3",
+              "op": "create",
+              "delta_you": 20.0,
+              "delta_ai": 3.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "plan for appointment call setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "plan for appointment call setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "draft for follow-up response",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on calling timing and etiquette",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "German phone conversation script",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 1,
+          "h_you": 20.0,
+          "h_ai": 3.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 50.0,
+          "copilot_pct": 50.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 3,
+      "direction": {
+        "you_pct": 71.4,
+        "ai_pct": 28.6
+      },
+      "decisions": {
+        "you_count": 2,
+        "ai_count": 3,
+        "latest_ai_example": "The AI must suggest sending a follow-up nudge asking for a confirmed call time based on the user's availability"
+      },
+      "timeline": {
+        "pair": 3,
+        "delta_you": 38.0,
+        "delta_ai": 15.0,
+        "summary": "adding The AI must suggest",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 1_rev",
+              "label": "R3",
+              "op": "revise",
+              "delta_you": 7.0,
+              "delta_ai": 4.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 2",
+              "label": "R4",
+              "op": "create",
+              "delta_you": 17.0,
+              "delta_ai": 11.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 1",
+              "label": "R5",
+              "op": "create",
+              "delta_you": 14.0,
+              "delta_ai": 0.0,
+              "chip": "blue"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "plan for appointment call setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "plan for appointment call setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "draft for follow-up response",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on calling timing and etiquette",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "German phone conversation script",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "CENTAUR",
+        "signals": {
+          "w_you": 1,
+          "w_ai": 1,
+          "h_you": 33.0,
+          "h_ai": 10.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 66.7,
+          "copilot_pct": 33.3,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 4,
+      "direction": {
+        "you_pct": 57.2,
+        "ai_pct": 42.8
+      },
+      "decisions": {
+        "you_count": 3,
+        "ai_count": 4,
+        "latest_ai_example": "The response must provide a sample German introduction script for the phone call"
+      },
+      "timeline": {
+        "pair": 4,
+        "delta_you": 20.0,
+        "delta_ai": 41.0,
+        "summary": "adding The response must advise",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 2",
+              "label": "R6",
+              "op": "create",
+              "delta_you": 17.0,
+              "delta_ai": 29.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 3",
+              "label": "R7",
+              "op": "create",
+              "delta_you": 3.0,
+              "delta_ai": 12.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "abandoned",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "plan for appointment call setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "plan for appointment call setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "draft for follow-up response",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on calling timing and etiquette",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "German phone conversation script",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 1,
+          "w_ai": 1,
+          "h_you": 10.0,
+          "h_ai": 36.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 50.0,
+          "copilot_pct": 50.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 5,
+      "direction": {
+        "you_pct": 55.7,
+        "ai_pct": 44.3
+      },
+      "decisions": {
+        "you_count": 4,
+        "ai_count": 4,
+        "latest_ai_example": "The response must provide a sample German introduction script for the phone call"
+      },
+      "timeline": {
+        "pair": 5,
+        "delta_you": 7.0,
+        "delta_ai": 10.0,
+        "summary": "adding Provide a full German",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 1",
+              "label": "R8",
+              "op": "create",
+              "delta_you": 7.0,
+              "delta_ai": 10.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "plan for appointment call setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "plan for appointment call setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "draft for follow-up response",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on calling timing and etiquette",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "German phone conversation script",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 1,
+          "w_ai": 0,
+          "h_you": 2.0,
+          "h_ai": 10.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 40.0,
+          "copilot_pct": 60.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 6,
+      "direction": {
+        "you_pct": 49.0,
+        "ai_pct": 51.0
+      },
+      "decisions": {
+        "you_count": 5,
+        "ai_count": 4,
+        "latest_ai_example": "The response must provide a sample German introduction script for the phone call"
+      },
+      "timeline": {
+        "pair": 6,
+        "delta_you": 15.0,
+        "delta_ai": 41.0,
+        "summary": "adding Provide a German phone",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 1",
+              "label": "R8",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 0.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 1_rev",
+              "label": "R9",
+              "op": "create",
+              "delta_you": 15.0,
+              "delta_ai": 41.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "plan for appointment call setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "plan for appointment call setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "draft for follow-up response",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on calling timing and etiquette",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "German phone conversation script",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 1,
+          "w_ai": 0,
+          "h_you": 15.0,
+          "h_ai": 41.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 33.3,
+          "copilot_pct": 66.7,
+          "autopilot_pct": 0.0
+        }
+      }
+    }
+  ]
+}

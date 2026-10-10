@@ -1,0 +1,34 @@
+{
+  "key": "eeeaa8223c954574be3d4ddcfeee3815253ca19dd603e53e6c37417233037b84",
+  "step": "1c:pair2",
+  "model": "gemini-3.5-flash",
+  "prompt": "Step 1c: Intention Extraction\n\nYou are given a list of outcomes from a dialogue.\n\n=== OUTCOMES ===\n[\n  {\n    \"outcome id\": \"outcome 1\",\n    \"outcome\": \"German language learning session\"\n  },\n  {\n    \"outcome id\": \"outcome 2\",\n    \"outcome\": \"Lesson plan for German session\"\n  },\n  {\n    \"outcome id\": \"outcome 3\",\n    \"outcome\": \"Vocabulary review activity\"\n  }\n]\n\n(1) Identify distinct **intentions** (high-level goals or purposes) that these\noutcomes serve. (2) Assign each outcome to exactly one intention.\n\nOutput JSON only:\n{ \"intentions\": [ {\"intention id\": \"I1\", \"intention\": \"short label\"},\n{\"intention id\": \"I2\", \"intention\": \"another label\"} ], \"outcome to intention\":\n[{\"outcome id\": \"outcome 1\", \"intention id\": \"I1\"}, ...] }\n- Every outcome id appears exactly once in outcome to intention. Use intention id\nfrom the intentions list.",
+  "response": {
+    "intentions": [
+      {
+        "intention id": "I1",
+        "intention": "Facilitating a German language learning session"
+      }
+    ],
+    "outcome to intention": [
+      {
+        "outcome id": "outcome 1",
+        "intention id": "I1"
+      },
+      {
+        "outcome id": "outcome 2",
+        "intention id": "I1"
+      },
+      {
+        "outcome id": "outcome 3",
+        "intention id": "I1"
+      }
+    ]
+  },
+  "tokens": {
+    "prompt": 243,
+    "completion": 141,
+    "total": 384
+  },
+  "recorded_at": "2026-10-10T08:40:18.827846+00:00"
+}

@@ -1,0 +1,1633 @@
+{
+  "pairs": [
+    {
+      "pair": 1,
+      "direction": {
+        "you_pct": 53.8,
+        "ai_pct": 46.2
+      },
+      "decisions": {
+        "you_count": 1,
+        "ai_count": 2,
+        "latest_ai_example": "Draft an English version of the message based on the provided apartment and roommate details"
+      },
+      "timeline": {
+        "pair": 1,
+        "delta_you": 14.0,
+        "delta_ai": 12.0,
+        "summary": "adding Draft an English version",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 1",
+              "label": "R1",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 0.0,
+              "chip": "blue"
+            },
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 1",
+              "label": "R2",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 5.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 2",
+              "label": "R3",
+              "op": "create",
+              "delta_you": 4.0,
+              "delta_ai": 7.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "drafts and rationale for housing application messages",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on platform risks and full automation constraints",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "setup and rules configuration for a mobile semi-automated drafting pipeline and application tracker",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "research and strategic advice on out-of-the-box housing automation and multi-channel search options",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 1,
+          "w_ai": 2,
+          "h_you": 9.0,
+          "h_ai": 2.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "direction": {
+        "you_pct": 53.8,
+        "ai_pct": 46.2
+      },
+      "decisions": {
+        "you_count": 1,
+        "ai_count": 2,
+        "latest_ai_example": "Draft an English version of the message based on the provided apartment and roommate details"
+      },
+      "timeline": {
+        "pair": 2,
+        "delta_you": 0.0,
+        "delta_ai": 0.0,
+        "summary": "parking 3 questions",
+        "drawer": {
+          "requirements": [],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "user",
+              "status": "abandoned",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 2",
+              "origin": "user",
+              "status": "abandoned",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 3",
+              "origin": "AI",
+              "status": "abandoned",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "drafts and rationale for housing application messages",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on platform risks and full automation constraints",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "setup and rules configuration for a mobile semi-automated drafting pipeline and application tracker",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "research and strategic advice on out-of-the-box housing automation and multi-channel search options",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "QUIET",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 0,
+          "h_you": 0.0,
+          "h_ai": 0.0,
+          "substantive_user": false
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 3,
+      "direction": {
+        "you_pct": 53.8,
+        "ai_pct": 46.2
+      },
+      "decisions": {
+        "you_count": 1,
+        "ai_count": 2,
+        "latest_ai_example": "Draft an English version of the message based on the provided apartment and roommate details"
+      },
+      "timeline": {
+        "pair": 3,
+        "delta_you": 0.0,
+        "delta_ai": 0.0,
+        "summary": "execution only",
+        "drawer": {
+          "requirements": [],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "drafts and rationale for housing application messages",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on platform risks and full automation constraints",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "setup and rules configuration for a mobile semi-automated drafting pipeline and application tracker",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "research and strategic advice on out-of-the-box housing automation and multi-channel search options",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "QUIET",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 0,
+          "h_you": 0.0,
+          "h_ai": 0.0,
+          "substantive_user": false
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 4,
+      "direction": {
+        "you_pct": 53.8,
+        "ai_pct": 46.2
+      },
+      "decisions": {
+        "you_count": 1,
+        "ai_count": 2,
+        "latest_ai_example": "Draft an English version of the message based on the provided apartment and roommate details"
+      },
+      "timeline": {
+        "pair": 4,
+        "delta_you": 0.0,
+        "delta_ai": 0.0,
+        "summary": "raising an open question",
+        "drawer": {
+          "requirements": [],
+          "slots": [
+            {
+              "slot_id": "slot 4",
+              "origin": "user",
+              "status": "abandoned",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "drafts and rationale for housing application messages",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on platform risks and full automation constraints",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "setup and rules configuration for a mobile semi-automated drafting pipeline and application tracker",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "research and strategic advice on out-of-the-box housing automation and multi-channel search options",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "QUIET",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 0,
+          "h_you": 0.0,
+          "h_ai": 0.0,
+          "substantive_user": false
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 5,
+      "direction": {
+        "you_pct": 53.8,
+        "ai_pct": 46.2
+      },
+      "decisions": {
+        "you_count": 1,
+        "ai_count": 2,
+        "latest_ai_example": "Draft an English version of the message based on the provided apartment and roommate details"
+      },
+      "timeline": {
+        "pair": 5,
+        "delta_you": 0.0,
+        "delta_ai": 0.0,
+        "summary": "parking 5 questions",
+        "drawer": {
+          "requirements": [],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "resolved",
+              "resolved_into": "req_slot 1"
+            },
+            {
+              "slot_id": "slot 2",
+              "origin": "user",
+              "status": "resolved",
+              "resolved_into": "req_slot 2"
+            },
+            {
+              "slot_id": "slot 1",
+              "origin": "user",
+              "status": "abandoned",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 2",
+              "origin": "user",
+              "status": "abandoned",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 3",
+              "origin": "AI",
+              "status": "abandoned",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "drafts and rationale for housing application messages",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on platform risks and full automation constraints",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "setup and rules configuration for a mobile semi-automated drafting pipeline and application tracker",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "research and strategic advice on out-of-the-box housing automation and multi-channel search options",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "QUIET",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 0,
+          "h_you": 0.0,
+          "h_ai": 0.0,
+          "substantive_user": false
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 6,
+      "direction": {
+        "you_pct": 56.7,
+        "ai_pct": 43.3
+      },
+      "decisions": {
+        "you_count": 3,
+        "ai_count": 5,
+        "latest_ai_example": "The configuration file must be completed by filling in Section 0 first before being uploaded and pasted into project instructions"
+      },
+      "timeline": {
+        "pair": 6,
+        "delta_you": 172.0,
+        "delta_ai": 130.0,
+        "summary": "adding Provide instructions for a",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 1",
+              "label": "R4",
+              "op": "create",
+              "delta_you": 25.0,
+              "delta_ai": 29.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 1",
+              "label": "R5",
+              "op": "create",
+              "delta_you": 43.0,
+              "delta_ai": 25.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req_slot 1",
+              "label": "R6",
+              "op": "create",
+              "delta_you": 24.0,
+              "delta_ai": 48.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req_slot 2",
+              "label": "R7",
+              "op": "create",
+              "delta_you": 71.0,
+              "delta_ai": 22.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 1",
+              "label": "R8",
+              "op": "create",
+              "delta_you": 9.0,
+              "delta_ai": 6.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "resolved",
+              "resolved_into": "req_slot 1"
+            },
+            {
+              "slot_id": "slot 2",
+              "origin": "user",
+              "status": "resolved",
+              "resolved_into": "req_slot 2"
+            },
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "abandoned",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "drafts and rationale for housing application messages",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on platform risks and full automation constraints",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "setup and rules configuration for a mobile semi-automated drafting pipeline and application tracker",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "research and strategic advice on out-of-the-box housing automation and multi-channel search options",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 2,
+          "w_ai": 3,
+          "h_you": 142.0,
+          "h_ai": 90.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 7,
+      "direction": {
+        "you_pct": 54.2,
+        "ai_pct": 45.8
+      },
+      "decisions": {
+        "you_count": 5,
+        "ai_count": 5,
+        "latest_ai_example": "The configuration file must be completed by filling in Section 0 first before being uploaded and pasted into project instructions"
+      },
+      "timeline": {
+        "pair": 7,
+        "delta_you": 27.0,
+        "delta_ai": 38.0,
+        "summary": "adding The user profile must",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 2",
+              "label": "R9",
+              "op": "create",
+              "delta_you": 20.0,
+              "delta_ai": 19.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 3",
+              "label": "R10",
+              "op": "create",
+              "delta_you": 7.0,
+              "delta_ai": 19.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 2",
+              "origin": "AI",
+              "status": "resolved",
+              "resolved_into": "req_slot 2"
+            },
+            {
+              "slot_id": "slot 4",
+              "origin": "user",
+              "status": "abandoned",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "drafts and rationale for housing application messages",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on platform risks and full automation constraints",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "setup and rules configuration for a mobile semi-automated drafting pipeline and application tracker",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "research and strategic advice on out-of-the-box housing automation and multi-channel search options",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 2,
+          "w_ai": 0,
+          "h_you": 2.0,
+          "h_ai": 38.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 8,
+      "direction": {
+        "you_pct": 44.3,
+        "ai_pct": 55.7
+      },
+      "decisions": {
+        "you_count": 8,
+        "ai_count": 5,
+        "latest_ai_example": "The configuration file must be completed by filling in Section 0 first before being uploaded and pasted into project instructions"
+      },
+      "timeline": {
+        "pair": 8,
+        "delta_you": 23.0,
+        "delta_ai": 117.0,
+        "summary": "adding The budget maximum was",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 3",
+              "label": "R10",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 0.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 3_rev",
+              "label": "R11",
+              "op": "create",
+              "delta_you": 8.0,
+              "delta_ai": 28.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 4",
+              "label": "R12",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 32.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req_slot 2",
+              "label": "R13",
+              "op": "create",
+              "delta_you": 10.0,
+              "delta_ai": 57.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 2",
+              "origin": "AI",
+              "status": "resolved",
+              "resolved_into": "req_slot 2"
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "drafts and rationale for housing application messages",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on platform risks and full automation constraints",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "setup and rules configuration for a mobile semi-automated drafting pipeline and application tracker",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "research and strategic advice on out-of-the-box housing automation and multi-channel search options",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 3,
+          "w_ai": 0,
+          "h_you": 8.0,
+          "h_ai": 112.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 9,
+      "direction": {
+        "you_pct": 40.4,
+        "ai_pct": 59.6
+      },
+      "decisions": {
+        "you_count": 10,
+        "ai_count": 7,
+        "latest_ai_example": "Provide instructions to configure WG-Gesucht notification settings (enable sound notifications) and saved searches on mobile"
+      },
+      "timeline": {
+        "pair": 9,
+        "delta_you": 58.0,
+        "delta_ai": 136.0,
+        "summary": "revising Provide instructions for a",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 1",
+              "label": "R5",
+              "op": "revise",
+              "delta_you": 4.0,
+              "delta_ai": 36.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req_slot 1",
+              "label": "R6",
+              "op": "revise",
+              "delta_you": 4.0,
+              "delta_ai": 37.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req_slot 2",
+              "label": "R7",
+              "op": "revise",
+              "delta_you": 4.0,
+              "delta_ai": 13.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 2",
+              "label": "R9",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 0.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 2",
+              "label": "R14",
+              "op": "create",
+              "delta_you": 11.0,
+              "delta_ai": 17.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 3",
+              "label": "R15",
+              "op": "create",
+              "delta_you": 3.0,
+              "delta_ai": 9.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 4",
+              "label": "R16",
+              "op": "create",
+              "delta_you": 12.0,
+              "delta_ai": 10.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 2_rev",
+              "label": "R17",
+              "op": "create",
+              "delta_you": 20.0,
+              "delta_ai": 14.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "abandoned",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "drafts and rationale for housing application messages",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on platform risks and full automation constraints",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "setup and rules configuration for a mobile semi-automated drafting pipeline and application tracker",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "research and strategic advice on out-of-the-box housing automation and multi-channel search options",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 2,
+          "w_ai": 2,
+          "h_you": 53.0,
+          "h_ai": 121.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 10,
+      "direction": {
+        "you_pct": 40.4,
+        "ai_pct": 59.6
+      },
+      "decisions": {
+        "you_count": 13,
+        "ai_count": 8,
+        "latest_ai_example": "The system must not automatically fetch or scrape listings from WG-Gesucht"
+      },
+      "timeline": {
+        "pair": 10,
+        "delta_you": 34.0,
+        "delta_ai": 50.0,
+        "summary": "adding The system must not",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 1",
+              "label": "R4",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 4.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 2",
+              "label": "R18",
+              "op": "create",
+              "delta_you": 8.0,
+              "delta_ai": 25.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 5",
+              "label": "R19",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 5.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 6",
+              "label": "R20",
+              "op": "create",
+              "delta_you": 12.0,
+              "delta_ai": 9.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 7",
+              "label": "R21",
+              "op": "create",
+              "delta_you": 9.0,
+              "delta_ai": 7.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "drafts and rationale for housing application messages",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on platform risks and full automation constraints",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "setup and rules configuration for a mobile semi-automated drafting pipeline and application tracker",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "research and strategic advice on out-of-the-box housing automation and multi-channel search options",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 3,
+          "w_ai": 1,
+          "h_you": 19.0,
+          "h_ai": 45.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 11,
+      "direction": {
+        "you_pct": 40.7,
+        "ai_pct": 59.3
+      },
+      "decisions": {
+        "you_count": 13,
+        "ai_count": 8,
+        "latest_ai_example": "The system must not automatically fetch or scrape listings from WG-Gesucht"
+      },
+      "timeline": {
+        "pair": 11,
+        "delta_you": 4.0,
+        "delta_ai": 0.0,
+        "summary": "revising The system must not",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 2",
+              "label": "R18",
+              "op": "revise",
+              "delta_you": 4.0,
+              "delta_ai": 0.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "drafts and rationale for housing application messages",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on platform risks and full automation constraints",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "setup and rules configuration for a mobile semi-automated drafting pipeline and application tracker",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "research and strategic advice on out-of-the-box housing automation and multi-channel search options",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "CENTAUR",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 0,
+          "h_you": 4.0,
+          "h_ai": 0.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 14.3,
+          "copilot_pct": 85.7,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 12,
+      "direction": {
+        "you_pct": 38.8,
+        "ai_pct": 61.2
+      },
+      "decisions": {
+        "you_count": 13,
+        "ai_count": 11,
+        "latest_ai_example": "Include instructions and rules for batch mode screenshot submission processing multiple listings at once"
+      },
+      "timeline": {
+        "pair": 12,
+        "delta_you": 67.0,
+        "delta_ai": 147.0,
+        "summary": "adding Provide system prompt and",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 1",
+              "label": "R5",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 17.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req_slot 1",
+              "label": "R6",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 17.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req_slot 2",
+              "label": "R7",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 15.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 4",
+              "label": "R16",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 2.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 2",
+              "label": "R18",
+              "op": "revise",
+              "delta_you": 8.0,
+              "delta_ai": 14.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 5",
+              "label": "R22",
+              "op": "create",
+              "delta_you": 21.0,
+              "delta_ai": 15.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 6",
+              "label": "R23",
+              "op": "create",
+              "delta_you": 29.0,
+              "delta_ai": 56.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 7",
+              "label": "R24",
+              "op": "create",
+              "delta_you": 9.0,
+              "delta_ai": 11.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "drafts and rationale for housing application messages",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on platform risks and full automation constraints",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "setup and rules configuration for a mobile semi-automated drafting pipeline and application tracker",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "research and strategic advice on out-of-the-box housing automation and multi-channel search options",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 3,
+          "h_you": 67.0,
+          "h_ai": 127.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 12.5,
+          "copilot_pct": 87.5,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 13,
+      "direction": {
+        "you_pct": 37.3,
+        "ai_pct": 62.7
+      },
+      "decisions": {
+        "you_count": 14,
+        "ai_count": 11,
+        "latest_ai_example": "Include instructions and rules for batch mode screenshot submission processing multiple listings at once"
+      },
+      "timeline": {
+        "pair": 13,
+        "delta_you": 30.0,
+        "delta_ai": 91.0,
+        "summary": "adding The research and strategic",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 1",
+              "label": "R4",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 5.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 2",
+              "label": "R18",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 5.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 6",
+              "label": "R20",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 3.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 8",
+              "label": "R25",
+              "op": "create",
+              "delta_you": 30.0,
+              "delta_ai": 78.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "housing application assistance and workflow setup",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "drafts and rationale for housing application messages",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "advice on platform risks and full automation constraints",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "setup and rules configuration for a mobile semi-automated drafting pipeline and application tracker",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "research and strategic advice on out-of-the-box housing automation and multi-channel search options",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 1,
+          "w_ai": 0,
+          "h_you": 25.0,
+          "h_ai": 91.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 11.1,
+          "copilot_pct": 88.9,
+          "autopilot_pct": 0.0
+        }
+      }
+    }
+  ]
+}

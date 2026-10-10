@@ -1,0 +1,3055 @@
+{
+  "pairs": [
+    {
+      "pair": 1,
+      "direction": {
+        "you_pct": 0.0,
+        "ai_pct": 0.0
+      },
+      "decisions": {
+        "you_count": 0,
+        "ai_count": 0,
+        "latest_ai_example": null
+      },
+      "timeline": {
+        "pair": 1,
+        "delta_you": 0.0,
+        "delta_ai": 0.0,
+        "summary": "raising an open question",
+        "drawer": {
+          "requirements": [],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "abandoned",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "QUIET",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 0,
+          "h_you": 0.0,
+          "h_ai": 0.0,
+          "substantive_user": false
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 0.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "direction": {
+        "you_pct": 24.7,
+        "ai_pct": 75.3
+      },
+      "decisions": {
+        "you_count": 2,
+        "ai_count": 2,
+        "latest_ai_example": "The activity must be conducted as 'Translation Tennis', where the AI provides a vocabulary word and the user provides the translation"
+      },
+      "timeline": {
+        "pair": 2,
+        "delta_you": 19.0,
+        "delta_ai": 58.0,
+        "summary": "adding The AI must review",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 1",
+              "label": "R1",
+              "op": "create",
+              "delta_you": 7.0,
+              "delta_ai": 14.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 2",
+              "label": "R2",
+              "op": "create",
+              "delta_you": 8.0,
+              "delta_ai": 9.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 1",
+              "label": "R3",
+              "op": "create",
+              "delta_you": 4.0,
+              "delta_ai": 17.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 2",
+              "label": "R4",
+              "op": "create",
+              "delta_you": 0.0,
+              "delta_ai": 18.0,
+              "chip": "orange"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 2,
+          "w_ai": 2,
+          "h_you": 9.0,
+          "h_ai": 48.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 3,
+      "direction": {
+        "you_pct": 32.6,
+        "ai_pct": 67.4
+      },
+      "decisions": {
+        "you_count": 2,
+        "ai_count": 4,
+        "latest_ai_example": "Translations in the English-to-German round must include articles"
+      },
+      "timeline": {
+        "pair": 3,
+        "delta_you": 37.0,
+        "delta_ai": 58.0,
+        "summary": "revising The activity must be",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 1",
+              "label": "R3",
+              "op": "revise",
+              "delta_you": 10.0,
+              "delta_ai": 10.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 2",
+              "label": "R4",
+              "op": "revise",
+              "delta_you": 25.0,
+              "delta_ai": 17.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 3",
+              "label": "R5",
+              "op": "create",
+              "delta_you": 2.0,
+              "delta_ai": 17.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 4",
+              "label": "R6",
+              "op": "create",
+              "delta_you": 0.0,
+              "delta_ai": 14.0,
+              "chip": "orange"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 2,
+          "h_you": 37.0,
+          "h_ai": 43.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 4,
+      "direction": {
+        "you_pct": 42.6,
+        "ai_pct": 57.4
+      },
+      "decisions": {
+        "you_count": 2,
+        "ai_count": 5,
+        "latest_ai_example": "The next lesson must cover the topic of giving directions (Wegbeschreibungen)"
+      },
+      "timeline": {
+        "pair": 4,
+        "delta_you": 45.0,
+        "delta_ai": 20.0,
+        "summary": "revising Translations in the English-to-German",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 2",
+              "label": "R4",
+              "op": "revise",
+              "delta_you": 12.0,
+              "delta_ai": 0.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 3",
+              "label": "R5",
+              "op": "revise",
+              "delta_you": 15.0,
+              "delta_ai": 0.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 4",
+              "label": "R6",
+              "op": "revise",
+              "delta_you": 15.0,
+              "delta_ai": 8.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 1",
+              "label": "R7",
+              "op": "create",
+              "delta_you": 3.0,
+              "delta_ai": 12.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "abandoned",
+              "resolved_into": null
+            },
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "abandoned",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 1,
+          "h_you": 45.0,
+          "h_ai": 15.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 5,
+      "direction": {
+        "you_pct": 37.6,
+        "ai_pct": 62.4
+      },
+      "decisions": {
+        "you_count": 3,
+        "ai_count": 5,
+        "latest_ai_example": "The next lesson must cover the topic of giving directions (Wegbeschreibungen)"
+      },
+      "timeline": {
+        "pair": 5,
+        "delta_you": 5.0,
+        "delta_ai": 40.0,
+        "summary": "adding The AI responses must",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 2",
+              "label": "R2",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 9.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 1",
+              "label": "R8",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 31.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "resolved",
+              "resolved_into": "req_slot 1"
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 1,
+          "w_ai": 0,
+          "h_you": 0.0,
+          "h_ai": 40.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 6,
+      "direction": {
+        "you_pct": 31.3,
+        "ai_pct": 68.7
+      },
+      "decisions": {
+        "you_count": 3,
+        "ai_count": 6,
+        "latest_ai_example": "The directions lesson must cover vocabulary, grammar (separable verbs and 'an/an der'), and a Bremen-based route exercise"
+      },
+      "timeline": {
+        "pair": 6,
+        "delta_you": 5.0,
+        "delta_ai": 68.0,
+        "summary": "adding The directions lesson must",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 1",
+              "label": "R8",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 32.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 2",
+              "label": "R9",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 36.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 1,
+          "h_you": 5.0,
+          "h_ai": 63.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 7,
+      "direction": {
+        "you_pct": 27.2,
+        "ai_pct": 72.8
+      },
+      "decisions": {
+        "you_count": 4,
+        "ai_count": 11,
+        "latest_ai_example": "The user must provide a summary upon return explaining the story of the video, who needed help, and where that person wanted to go"
+      },
+      "timeline": {
+        "pair": 7,
+        "delta_you": 28.0,
+        "delta_ai": 128.0,
+        "summary": "adding Whether the lesson proceeds",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 1",
+              "label": "R8",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 8.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 2",
+              "label": "R9",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 0.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req 3",
+              "label": "R10",
+              "op": "create",
+              "delta_you": 3.0,
+              "delta_ai": 15.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 2",
+              "req_id": "req_slot 1",
+              "label": "R11",
+              "op": "create",
+              "delta_you": 2.0,
+              "delta_ai": 33.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 2",
+              "label": "R12",
+              "op": "create",
+              "delta_you": 8.0,
+              "delta_ai": 12.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 2_rev",
+              "label": "R13",
+              "op": "create",
+              "delta_you": 8.0,
+              "delta_ai": 16.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 1",
+              "label": "R14",
+              "op": "create",
+              "delta_you": 7.0,
+              "delta_ai": 27.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 2",
+              "label": "R15",
+              "op": "create",
+              "delta_you": 0.0,
+              "delta_ai": 17.0,
+              "chip": "orange"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "resolved",
+              "resolved_into": "req_slot 1"
+            },
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "abandoned",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 1,
+          "w_ai": 5,
+          "h_you": 23.0,
+          "h_ai": 103.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 8,
+      "direction": {
+        "you_pct": 26.9,
+        "ai_pct": 73.1
+      },
+      "decisions": {
+        "you_count": 4,
+        "ai_count": 14,
+        "latest_ai_example": "The user must complete seven German fill-in-the-blank vocabulary drill sentences using English words as hints"
+      },
+      "timeline": {
+        "pair": 8,
+        "delta_you": 20.0,
+        "delta_ai": 59.0,
+        "summary": "adding The AI must conduct",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 1",
+              "label": "R3",
+              "op": "revise",
+              "delta_you": 2.0,
+              "delta_ai": 3.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 2",
+              "label": "R4",
+              "op": "revise",
+              "delta_you": 2.0,
+              "delta_ai": 2.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 5",
+              "label": "R16",
+              "op": "create",
+              "delta_you": 6.0,
+              "delta_ai": 18.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 3",
+              "label": "R17",
+              "op": "create",
+              "delta_you": 4.0,
+              "delta_ai": 22.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 4",
+              "label": "R18",
+              "op": "create",
+              "delta_you": 6.0,
+              "delta_ai": 14.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 3,
+          "h_you": 20.0,
+          "h_ai": 44.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 9,
+      "direction": {
+        "you_pct": 29.1,
+        "ai_pct": 70.9
+      },
+      "decisions": {
+        "you_count": 4,
+        "ai_count": 17,
+        "latest_ai_example": "The exercise must involve describing a walking route through Bremen in German and having the user identify/describe the end point and"
+      },
+      "timeline": {
+        "pair": 9,
+        "delta_you": 69.0,
+        "delta_ai": 125.0,
+        "summary": "adding The key vocabulary for",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 1",
+              "label": "R3",
+              "op": "revise",
+              "delta_you": 12.0,
+              "delta_ai": 13.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 4",
+              "label": "R6",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 8.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 1",
+              "label": "R7",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 15.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 2",
+              "label": "R12",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 8.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 5",
+              "label": "R16",
+              "op": "revise",
+              "delta_you": 24.0,
+              "delta_ai": 12.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 6",
+              "label": "R19",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 32.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 7",
+              "label": "R20",
+              "op": "create",
+              "delta_you": 26.0,
+              "delta_ai": 19.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 3",
+              "label": "R21",
+              "op": "create",
+              "delta_you": 2.0,
+              "delta_ai": 18.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 3,
+          "h_you": 69.0,
+          "h_ai": 100.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 10,
+      "direction": {
+        "you_pct": 28.1,
+        "ai_pct": 71.9
+      },
+      "decisions": {
+        "you_count": 4,
+        "ai_count": 18,
+        "latest_ai_example": "The AI must conduct a rapid vocabulary drill where it provides German words (e.g., die Fußgängerzone, vorbeigehen, überqueren, dorthin"
+      },
+      "timeline": {
+        "pair": 10,
+        "delta_you": 17.0,
+        "delta_ai": 72.0,
+        "summary": "adding The AI must conduct",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 1",
+              "label": "R7",
+              "op": "revise",
+              "delta_you": 4.0,
+              "delta_ai": 18.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 2",
+              "label": "R12",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 28.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 3",
+              "label": "R21",
+              "op": "revise",
+              "delta_you": 5.0,
+              "delta_ai": 0.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 4",
+              "label": "R22",
+              "op": "create",
+              "delta_you": 8.0,
+              "delta_ai": 26.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 1,
+          "h_you": 17.0,
+          "h_ai": 57.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 11,
+      "direction": {
+        "you_pct": 28.0,
+        "ai_pct": 72.0
+      },
+      "decisions": {
+        "you_count": 4,
+        "ai_count": 20,
+        "latest_ai_example": "The user must pay attention to specific details/questions while watching the video and report back to the AI after finishing"
+      },
+      "timeline": {
+        "pair": 11,
+        "delta_you": 56.0,
+        "delta_ai": 147.0,
+        "summary": "revising The AI must conduct",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 1",
+              "label": "R7",
+              "op": "revise",
+              "delta_you": 25.0,
+              "delta_ai": 27.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 2",
+              "label": "R12",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 24.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 5",
+              "label": "R16",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 12.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 4",
+              "req_id": "req 4",
+              "label": "R22",
+              "op": "revise",
+              "delta_you": 25.0,
+              "delta_ai": 29.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 8",
+              "label": "R23",
+              "op": "create",
+              "delta_you": 3.0,
+              "delta_ai": 27.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 3",
+              "req_id": "req 9",
+              "label": "R24",
+              "op": "create",
+              "delta_you": 3.0,
+              "delta_ai": 28.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 2,
+          "h_you": 56.0,
+          "h_ai": 132.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 12,
+      "direction": {
+        "you_pct": 28.4,
+        "ai_pct": 71.6
+      },
+      "decisions": {
+        "you_count": 6,
+        "ai_count": 21,
+        "latest_ai_example": "The lesson must require watching the Nicos Weg video before proceeding past the vocabulary drill"
+      },
+      "timeline": {
+        "pair": 12,
+        "delta_you": 28.0,
+        "delta_ai": 55.0,
+        "summary": "adding The AI must incorporate",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 1",
+              "label": "R8",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 4.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 3",
+              "label": "R25",
+              "op": "create",
+              "delta_you": 3.0,
+              "delta_ai": 19.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 5",
+              "label": "R26",
+              "op": "create",
+              "delta_you": 13.0,
+              "delta_ai": 14.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 6",
+              "label": "R27",
+              "op": "create",
+              "delta_you": 12.0,
+              "delta_ai": 18.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 2,
+          "w_ai": 1,
+          "h_you": 18.0,
+          "h_ai": 50.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 13,
+      "direction": {
+        "you_pct": 28.3,
+        "ai_pct": 71.7
+      },
+      "decisions": {
+        "you_count": 6,
+        "ai_count": 22,
+        "latest_ai_example": "The user must confirm readiness to start exercises by saying \"Alles klar!\""
+      },
+      "timeline": {
+        "pair": 13,
+        "delta_you": 2.0,
+        "delta_ai": 10.0,
+        "summary": "adding The user must confirm",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 4",
+              "label": "R18",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 2.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 7",
+              "label": "R28",
+              "op": "create",
+              "delta_you": 2.0,
+              "delta_ai": 8.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 1,
+          "h_you": 2.0,
+          "h_ai": 5.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 14,
+      "direction": {
+        "you_pct": 28.5,
+        "ai_pct": 71.5
+      },
+      "decisions": {
+        "you_count": 7,
+        "ai_count": 23,
+        "latest_ai_example": "The user must explain the key grammar concepts in their own words before proceeding to exercises"
+      },
+      "timeline": {
+        "pair": 14,
+        "delta_you": 48.0,
+        "delta_ai": 110.0,
+        "summary": "adding The AI must provide",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 8",
+              "label": "R29",
+              "op": "create",
+              "delta_you": 30.0,
+              "delta_ai": 57.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 9",
+              "label": "R30",
+              "op": "create",
+              "delta_you": 18.0,
+              "delta_ai": 53.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 1,
+          "w_ai": 1,
+          "h_you": 28.0,
+          "h_ai": 105.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 15,
+      "direction": {
+        "you_pct": 27.2,
+        "ai_pct": 72.8
+      },
+      "decisions": {
+        "you_count": 7,
+        "ai_count": 26,
+        "latest_ai_example": "The roleplay response directions must include four specific steps: 1. Go straight ahead, 2. Cross the bridge, 3. Walk along the street"
+      },
+      "timeline": {
+        "pair": 15,
+        "delta_you": 27.0,
+        "delta_ai": 137.0,
+        "summary": "adding The grammar instruction must",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 7",
+              "req_id": "req 1",
+              "label": "R31",
+              "op": "create",
+              "delta_you": 15.0,
+              "delta_ai": 87.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 7",
+              "req_id": "req 2",
+              "label": "R32",
+              "op": "create",
+              "delta_you": 8.0,
+              "delta_ai": 33.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 7",
+              "req_id": "req 3",
+              "label": "R33",
+              "op": "create",
+              "delta_you": 4.0,
+              "delta_ai": 17.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 3,
+          "h_you": 27.0,
+          "h_ai": 117.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 16,
+      "direction": {
+        "you_pct": 26.6,
+        "ai_pct": 73.4
+      },
+      "decisions": {
+        "you_count": 7,
+        "ai_count": 27,
+        "latest_ai_example": "The user must direct the AI to the bus stop using specified steps (including 'durch' + Akkusativ) in response to the roleplay prompt"
+      },
+      "timeline": {
+        "pair": 16,
+        "delta_you": 19.0,
+        "delta_ai": 87.0,
+        "summary": "adding The user must direct",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 3",
+              "label": "R17",
+              "op": "revise",
+              "delta_you": 5.0,
+              "delta_ai": 25.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 6",
+              "label": "R27",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 9.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 8",
+              "label": "R29",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 8.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 10",
+              "label": "R34",
+              "op": "create",
+              "delta_you": 14.0,
+              "delta_ai": 45.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 1,
+          "h_you": 19.0,
+          "h_ai": 82.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 17,
+      "direction": {
+        "you_pct": 27.2,
+        "ai_pct": 72.8
+      },
+      "decisions": {
+        "you_count": 7,
+        "ai_count": 28,
+        "latest_ai_example": "The directions roleplay exercises must require the user to translate and provide step-by-step directions in German for specified routes in"
+      },
+      "timeline": {
+        "pair": 17,
+        "delta_you": 32.0,
+        "delta_ai": 52.0,
+        "summary": "adding The directions roleplay exercises",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 1",
+              "label": "R8",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 24.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 4",
+              "label": "R35",
+              "op": "create",
+              "delta_you": 32.0,
+              "delta_ai": 28.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 1,
+          "h_you": 32.0,
+          "h_ai": 32.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 18,
+      "direction": {
+        "you_pct": 26.5,
+        "ai_pct": 73.5
+      },
+      "decisions": {
+        "you_count": 7,
+        "ai_count": 30,
+        "latest_ai_example": "The user must write 4-5 imperative sentences giving directions from a landmark in Bremen as weekly homework"
+      },
+      "timeline": {
+        "pair": 18,
+        "delta_you": 28.0,
+        "delta_ai": 119.0,
+        "summary": "adding The user must write",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 7",
+              "req_id": "req 1",
+              "label": "R31",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 28.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 7",
+              "req_id": "req 2",
+              "label": "R32",
+              "op": "revise",
+              "delta_you": 5.0,
+              "delta_ai": 24.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 1",
+              "label": "R36",
+              "op": "create",
+              "delta_you": 3.0,
+              "delta_ai": 25.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 7",
+              "req_id": "req 4",
+              "label": "R37",
+              "op": "create",
+              "delta_you": 20.0,
+              "delta_ai": 42.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 2",
+              "origin": "AI",
+              "status": "resolved",
+              "resolved_into": "req_slot 2"
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 2,
+          "h_you": 28.0,
+          "h_ai": 104.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 19,
+      "direction": {
+        "you_pct": 27.3,
+        "ai_pct": 72.7
+      },
+      "decisions": {
+        "you_count": 8,
+        "ai_count": 33,
+        "latest_ai_example": "The user must choose which level to start with (e.g., Level 1 or Level 3) for the advanced Bremen direction drills"
+      },
+      "timeline": {
+        "pair": 19,
+        "delta_you": 71.0,
+        "delta_ai": 137.0,
+        "summary": "adding The AI must provide",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 6",
+              "label": "R27",
+              "op": "revise",
+              "delta_you": 4.0,
+              "delta_ai": 5.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 10",
+              "label": "R34",
+              "op": "revise",
+              "delta_you": 10.0,
+              "delta_ai": 12.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 11",
+              "label": "R38",
+              "op": "create",
+              "delta_you": 22.0,
+              "delta_ai": 34.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 12",
+              "label": "R39",
+              "op": "create",
+              "delta_you": 17.0,
+              "delta_ai": 42.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 13",
+              "label": "R40",
+              "op": "create",
+              "delta_you": 14.0,
+              "delta_ai": 32.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 6",
+              "req_id": "req 14",
+              "label": "R41",
+              "op": "create",
+              "delta_you": 4.0,
+              "delta_ai": 12.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 1",
+              "origin": "AI",
+              "status": "open",
+              "resolved_into": null
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 1,
+          "w_ai": 3,
+          "h_you": 66.0,
+          "h_ai": 112.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 20,
+      "direction": {
+        "you_pct": 28.4,
+        "ai_pct": 71.6
+      },
+      "decisions": {
+        "you_count": 8,
+        "ai_count": 37,
+        "latest_ai_example": "The directions roleplay exercises must require the user to translate and provide step-by-step directions in German for specified routes in"
+      },
+      "timeline": {
+        "pair": 20,
+        "delta_you": 62.0,
+        "delta_ai": 73.0,
+        "summary": "adding The directions roleplay exercises",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 1",
+              "label": "R8",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 16.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 4",
+              "label": "R35",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 0.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 2",
+              "label": "R42",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 12.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 3",
+              "label": "R43",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 10.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req_slot 2",
+              "label": "R44",
+              "op": "create",
+              "delta_you": 5.0,
+              "delta_ai": 13.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 4_rev",
+              "label": "R45",
+              "op": "create",
+              "delta_you": 47.0,
+              "delta_ai": 22.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": [
+            {
+              "slot_id": "slot 2",
+              "origin": "AI",
+              "status": "resolved",
+              "resolved_into": "req_slot 2"
+            }
+          ]
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 4,
+          "h_you": 62.0,
+          "h_ai": 58.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    },
+    {
+      "pair": 21,
+      "direction": {
+        "you_pct": 28.2,
+        "ai_pct": 71.8
+      },
+      "decisions": {
+        "you_count": 8,
+        "ai_count": 38,
+        "latest_ai_example": "The session summary data must be provided in JSON format enclosed in a code block and instructed to be pasted into the Deutsch Tracker"
+      },
+      "timeline": {
+        "pair": 21,
+        "delta_you": 8.0,
+        "delta_ai": 41.0,
+        "summary": "adding The session summary data",
+        "drawer": {
+          "requirements": [
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 1",
+              "label": "R8",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 5.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 3",
+              "label": "R25",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 5.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 1",
+              "req_id": "req 3",
+              "label": "R43",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 5.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 4_rev",
+              "label": "R45",
+              "op": "revise",
+              "delta_you": 0.0,
+              "delta_ai": 5.0,
+              "chip": "grey"
+            },
+            {
+              "outcome_id": "outcome 5",
+              "req_id": "req 5",
+              "label": "R46",
+              "op": "create",
+              "delta_you": 8.0,
+              "delta_ai": 21.0,
+              "chip": "grey"
+            }
+          ],
+          "slots": []
+        }
+      },
+      "goal": {
+        "default_view": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "is_current": true
+          }
+        ],
+        "full_tree": [
+          {
+            "outcome_id": "outcome 1",
+            "text": "German language learning session on vocabulary, directions, and grammar",
+            "depth": 0,
+            "parent": null,
+            "children": [
+              "outcome 2",
+              "outcome 3",
+              "outcome 4",
+              "outcome 5",
+              "outcome 6",
+              "outcome 7"
+            ]
+          },
+          {
+            "outcome_id": "outcome 2",
+            "text": "Vocabulary review and drill exercises",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 3",
+            "text": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 4",
+            "text": "Interactive directions roleplay and multi-level practice drills",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 5",
+            "text": "Session data summary for tracking progress",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 6",
+            "text": "Adherence to the 60% German / 40% English language ratio constraint",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          },
+          {
+            "outcome_id": "outcome 7",
+            "text": "Integration of user-provided tips and vocabulary into the exercise bank",
+            "depth": 1,
+            "parent": "outcome 1",
+            "children": []
+          }
+        ]
+      },
+      "how": {
+        "mode": "COPILOT",
+        "signals": {
+          "w_you": 0,
+          "w_ai": 1,
+          "h_you": 3.0,
+          "h_ai": 26.0,
+          "substantive_user": true
+        },
+        "split": {
+          "centaur_pct": 0.0,
+          "copilot_pct": 100.0,
+          "autopilot_pct": 0.0
+        }
+      }
+    }
+  ]
+}

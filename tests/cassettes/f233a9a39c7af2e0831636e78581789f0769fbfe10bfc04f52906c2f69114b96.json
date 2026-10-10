@@ -1,0 +1,58 @@
+{
+  "key": "f233a9a39c7af2e0831636e78581789f0769fbfe10bfc04f52906c2f69114b96",
+  "step": "1c:pair10",
+  "model": "gemini-3.5-flash",
+  "prompt": "Step 1c: Intention Extraction\n\nYou are given a list of outcomes from a dialogue.\n\n=== OUTCOMES ===\n[\n  {\n    \"outcome id\": \"outcome 1\",\n    \"outcome\": \"German language learning session on Directions and Vocabulary\"\n  },\n  {\n    \"outcome id\": \"outcome 2\",\n    \"outcome\": \"Due vocabulary review exercise (Translation Tennis)\"\n  },\n  {\n    \"outcome id\": \"outcome 3\",\n    \"outcome\": \"Language ratio and session plan alignment\"\n  },\n  {\n    \"outcome id\": \"outcome 4\",\n    \"outcome\": \"Directions vocabulary instruction and practice drills\"\n  },\n  {\n    \"outcome id\": \"outcome 5\",\n    \"outcome\": \"Nicos Weg video assignment and discussion\"\n  },\n  {\n    \"outcome id\": \"outcome 6\",\n    \"outcome\": \"new vocabulary drill exercise for directions\"\n  }\n]\n\n(1) Identify distinct **intentions** (high-level goals or purposes) that these\noutcomes serve. (2) Assign each outcome to exactly one intention.\n\nOutput JSON only:\n{ \"intentions\": [ {\"intention id\": \"I1\", \"intention\": \"short label\"},\n{\"intention id\": \"I2\", \"intention\": \"another label\"} ], \"outcome to intention\":\n[{\"outcome id\": \"outcome 1\", \"intention id\": \"I1\"}, ...] }\n- Every outcome id appears exactly once in outcome to intention. Use intention id\nfrom the intentions list.",
+  "response": {
+    "intentions": [
+      {
+        "intention id": "I1",
+        "intention": "Session Planning and Coordination"
+      },
+      {
+        "intention id": "I2",
+        "intention": "Vocabulary Review and Practice Exercises"
+      },
+      {
+        "intention id": "I3",
+        "intention": "Directions Instruction and Drills"
+      },
+      {
+        "intention id": "I4",
+        "intention": "Multimedia Homework and Discussion"
+      }
+    ],
+    "outcome to intention": [
+      {
+        "outcome id": "outcome 1",
+        "intention id": "I1"
+      },
+      {
+        "outcome id": "outcome 2",
+        "intention id": "I2"
+      },
+      {
+        "outcome id": "outcome 3",
+        "intention id": "I1"
+      },
+      {
+        "outcome id": "outcome 4",
+        "intention id": "I3"
+      },
+      {
+        "outcome id": "outcome 5",
+        "intention id": "I4"
+      },
+      {
+        "outcome id": "outcome 6",
+        "intention id": "I3"
+      }
+    ]
+  },
+  "tokens": {
+    "prompt": 343,
+    "completion": 301,
+    "total": 644
+  },
+  "recorded_at": "2026-10-10T08:50:43.693002+00:00"
+}

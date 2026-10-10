@@ -1,0 +1,42 @@
+{
+  "key": "866997e29db50e883411d017fffd7269b7d8a01791976a90ba8b294f3d454df5",
+  "step": "1c:pair4",
+  "model": "gemini-3.5-flash",
+  "prompt": "Step 1c: Intention Extraction\n\nYou are given a list of outcomes from a dialogue.\n\n=== OUTCOMES ===\n[\n  {\n    \"outcome id\": \"outcome 1\",\n    \"outcome\": \"Follow-up response and communication strategy for appointment confirmation\"\n  },\n  {\n    \"outcome id\": \"outcome 2\",\n    \"outcome\": \"Draft follow-up email response in German\"\n  },\n  {\n    \"outcome id\": \"outcome 3\",\n    \"outcome\": \"Advice and script for phone call follow-up\"\n  }\n]\n\n(1) Identify distinct **intentions** (high-level goals or purposes) that these\noutcomes serve. (2) Assign each outcome to exactly one intention.\n\nOutput JSON only:\n{ \"intentions\": [ {\"intention id\": \"I1\", \"intention\": \"short label\"},\n{\"intention id\": \"I2\", \"intention\": \"another label\"} ], \"outcome to intention\":\n[{\"outcome id\": \"outcome 1\", \"intention id\": \"I1\"}, ...] }\n- Every outcome id appears exactly once in outcome to intention. Use intention id\nfrom the intentions list.",
+  "response": {
+    "intentions": [
+      {
+        "intention id": "I1",
+        "intention": "Email draft generation"
+      },
+      {
+        "intention id": "I2",
+        "intention": "Phone follow-up guidance"
+      },
+      {
+        "intention id": "I3",
+        "intention": "Appointment confirmation strategy"
+      }
+    ],
+    "outcome to intention": [
+      {
+        "outcome id": "outcome 1",
+        "intention id": "I3"
+      },
+      {
+        "outcome id": "outcome 2",
+        "intention id": "I1"
+      },
+      {
+        "outcome id": "outcome 3",
+        "intention id": "I2"
+      }
+    ]
+  },
+  "tokens": {
+    "prompt": 258,
+    "completion": 190,
+    "total": 448
+  },
+  "recorded_at": "2026-10-10T08:22:41.496116+00:00"
+}

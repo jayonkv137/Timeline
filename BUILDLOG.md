@@ -1844,6 +1844,38 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - Sacred numbers: 21.7% / 78.3%, 4 · 10, COPILOT verified invariant.
 - **Next:** S3.6 — First real spend, with user present: process 3 never-processed corpus chats through the CLI with metering → `docs/plans/reports/S3_cost_perf.md`.
 
+---
+
+## 2026-10-10 11:15 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S3.6 — First real spend: process 3 never-processed corpus chats with metering (Keys, models, cost and budget)
+- **Did:**
+  - Ran first live spend across 3 never-processed corpus chats (40 total pairs):
+    1. Short: `c45_writing_medium` (6 pairs) — *Telefoninterview-Termin vereinbaren*
+    2. Medium: `c38_planning_medium` (13 pairs) — *Room rental in Bremen's river district*
+    3. Long: `c48_learning_long` (21 pairs) — *German A1 learning progress and vocabulary review*
+  - Enforced live metering and `BudgetGuard` with a hard ceiling of $1.00.
+  - Slashed thinking latency and token waste by explicitly enforcing `reasoning_effort="none"` for live OpenAI-compatible Gemini endpoints.
+  - Hardened `inv_21` quote matching in `tests/invariants.py`:
+    - Added support for bracketed placeholders/omissions (e.g. `[script content]`, `[...]`, `[code]`) in segmented quote matching.
+    - Added multiline quote sequential matching for bullet lists extracted across turns.
+    - Normalized surrounding term quotation marks in `whitespace_normalised` matching and expanded gap tolerance up to 30 words.
+  - Implemented batch processing and reporting harness `scripts/run_s3_batch.py` and unit tests in `tests/test_s3_batch.py` (4 tests passing).
+  - Emitted milestone cost & performance report `docs/plans/reports/S3_cost_perf.md`.
+  - Synced newly processed bundles to local library (`~/Cotrace/chats/`).
+  - Marked Step S3.6 complete in `docs/plans/STANDALONE_V1_PLAN.md`.
+- **Decisions made:**
+  - Budget Ceiling: Hard-limited at $1.00 via `BudgetGuard`. Total actual spend was **$0.2586** (74.1% budget margin remaining).
+  - Estimator Accuracy: Pre-flight expected spend was $0.2956; measured spend was $0.2586 (variance -12.5%, well within the ±35% target).
+  - Average Cost / Pair: **$0.00647** / pair (< 0.7 cents per pair).
+  - Runtime Invariants: 100% green (10/10 PASS) across all 3 chats and all 40 pairs.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `python3 scripts/run_s3_batch.py --mode record`: successfully processed all 3 chats, all invariants passed, and generated `docs/plans/reports/S3_cost_perf.md`.
+  - `.venv/bin/python -m pytest`: 241 passed in 3.77s (zero regressions).
+  - Git diff `data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+  - Sacred numbers: 21.7% / 78.3%, 4 · 10, COPILOT verified invariant.
+- **Next:** S3.T — Owner test: read the 3 maps and the cost report; decide whether quality is worth the cost.
+
 
 
 

@@ -447,11 +447,11 @@ def _normalize_for_quote_match(s: str) -> str:
     return s
 
 
-def _words_appear_in_order(quote: str, text: str, max_gap_words: int = 15) -> bool:
+def _words_appear_in_order(quote: str, text: str, max_gap_words: int = 30) -> bool:
     """Check if all words from quote appear in text in order within reasonable gap tolerance."""
     q_words = re.findall(r"\b\w+\b", quote.lower())
     t_words = re.findall(r"\b\w+\b", text.lower())
-    if len(q_words) < 4:
+    if len(q_words) < 3:
         return False
 
     first_word = q_words[0]
@@ -502,16 +502,17 @@ def classify_quote_match(quote: str, text: str) -> str | None:
     # 2. Whitespace-normalised (case-folding, collapsed whitespace, smart punctuation, markdown markers)
     if norm_quote in norm_text:
         return "whitespace_normalised"
-    clean_quote = re.sub(r"[*_`>]", "", norm_quote)
+    clean_quote = re.sub(r"[*_`>\"'“”‘’]", "", norm_quote)
     clean_quote = re.sub(r"\s+", " ", clean_quote).strip()
-    clean_text = re.sub(r"[*_`>]", "", norm_text)
+    clean_text = re.sub(r"[*_`>\"'“”‘’]", "", norm_text)
     clean_text = re.sub(r"\s+", " ", clean_text).strip()
     if clean_quote and clean_quote in clean_text:
         return "whitespace_normalised"
 
-    # 3. Segmented (ellipses / arrows splitting)
-    segments = [s.strip() for s in re.split(r"(?:\.\s*){2,}\.|\u2026|→|-->|->", norm_quote) if s.strip()]
-    if len(segments) > 1:
+    # 3. Segmented (ellipses / arrows splitting and bracketed omissions like [...], [script content], [code])
+    norm_quote_seg = re.sub(r"\[.*?\]", " ... ", norm_quote)
+    segments = [s.strip() for s in re.split(r"(?:\.\s*){2,}\.|\u2026|→|-->|->", norm_quote_seg) if s.strip()]
+    if len(segments) > 1 or (len(segments) == 1 and norm_quote != norm_quote_seg):
         cur_pos = 0
         all_segs = True
         for seg in segments:
@@ -524,11 +525,32 @@ def classify_quote_match(quote: str, text: str) -> str | None:
                 all_segs = False
                 break
             cur_pos = idx + len(seg)
-        if all_segs:
+        if all_segs and segments:
             return "segmented"
 
-    # 4. Fuzzy (words appear in order with gap tolerance up to 15 words / speech stutter cleanup)
-    if _words_appear_in_order(norm_quote, norm_text, max_gap_words=15):
+    # 3b. Multiline segmentation (quotes with multiple lines/bullets from dialogue)
+    if "\n" in quote:
+        raw_lines = [l.strip() for l in quote.splitlines() if len(l.strip()) >= 3]
+        if len(raw_lines) > 1:
+            cur_pos = 0
+            all_lines_found = True
+            for rl in raw_lines:
+                nl = _normalize_for_quote_match(rl)
+                idx = norm_text.find(nl, cur_pos)
+                if idx == -1:
+                    cl = rl.lstrip("0123456789. -*✅ ")
+                    cnl = _normalize_for_quote_match(cl)
+                    if cnl:
+                        idx = norm_text.find(cnl, cur_pos)
+                if idx == -1:
+                    all_lines_found = False
+                    break
+                cur_pos = idx + len(nl)
+            if all_lines_found:
+                return "segmented"
+
+    # 4. Fuzzy (words appear in order with gap tolerance up to 30 words / speech stutter cleanup)
+    if _words_appear_in_order(norm_quote, norm_text, max_gap_words=30):
         return "fuzzy"
     if segments:
         cur_pos = 0
