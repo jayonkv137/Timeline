@@ -1,0 +1,37 @@
+/* Evidence inspection (docs/EVIDENCE_SPEC.md §5.1). Tokens only. Highlight tint = who said those words. */
+::highlight(evidence-human) { background-color: color-mix(in srgb, var(--color-party-human-solid) 34%, transparent); color: var(--color-text-primary); }
+::highlight(evidence-ai) { background-color: color-mix(in srgb, var(--color-party-ai-solid) 32%, transparent); color: var(--color-text-primary); }
+
+/* The containing message: a faint outline, never a side stripe. */
+.message.evidence-message { outline: 1px solid var(--color-border-strong); outline-offset: var(--p-space-2); border-radius: var(--p-radius-md); }
+@media (prefers-reduced-motion: no-preference) {
+  .message.evidence-arrive { animation: evidence-arrive 900ms ease-out; }
+  @keyframes evidence-arrive { 0% { outline-color: var(--color-text-primary); outline-offset: var(--p-space-3); } 100% { outline-color: var(--color-border-strong); outline-offset: var(--p-space-2); } }
+}
+
+/* Fallback when the CSS Custom Highlight API is unavailable. */
+.conversation-document { position: relative; }
+.evidence-overlay-layer { position: absolute; inset: 0; pointer-events: none; }
+.evidence-overlay { position: absolute; border-radius: 2px; mix-blend-mode: screen; }
+.evidence-overlay.human { background: color-mix(in srgb, var(--color-party-human-solid) 34%, transparent); }
+.evidence-overlay.ai { background: color-mix(in srgb, var(--color-party-ai-solid) 32%, transparent); }
+
+/* The temporary strip above the composer. */
+.evidence-strip { display: flex; align-items: center; justify-content: space-between; gap: var(--p-space-3); flex-wrap: wrap; margin-bottom: var(--p-space-2); padding: var(--p-space-1-5) var(--p-space-2) var(--p-space-1-5) var(--p-space-3); border: 1px solid var(--color-border-default); border-radius: var(--p-radius-md); background: var(--color-surface-raised); font-size: var(--type-caption-size); color: var(--color-text-secondary); }
+.evidence-what { display: flex; align-items: center; gap: var(--p-space-2); flex-wrap: wrap; min-width: 0; }
+.evidence-chip { font-weight: var(--p-font-weight-medium); padding: 1px var(--p-space-1-5); border-radius: var(--p-radius-sm); color: var(--color-text-primary); background: var(--color-surface-hover); }
+.evidence-chip.human { background: var(--color-party-human-soft); color: var(--color-party-human-text); }
+.evidence-chip.ai { background: var(--color-party-ai-soft); color: var(--color-party-ai-text); }
+.evidence-pair { color: var(--color-text-muted); }
+.evidence-state { color: var(--color-text-primary); }
+.evidence-extra { color: var(--color-text-muted); }
+.evidence-actions { display: flex; align-items: center; gap: var(--p-space-1); }
+.evidence-count { font-variant-numeric: tabular-nums; color: var(--color-text-muted); min-width: 3.5em; text-align: center; }
+.evidence-strip .text-button { display: inline-flex; align-items: center; gap: var(--p-space-1); padding: var(--p-space-1) var(--p-space-2); border-radius: var(--p-radius-sm); color: var(--color-text-primary); }
+.evidence-strip .text-button:hover { background: var(--color-surface-hover); }
+
+/* Keyboard path to requirements and questions (EVIDENCE_SPEC §5.4): hidden until a keyboard user tabs into it. */
+.og-atom-list { position: absolute; left: var(--p-space-2); bottom: 64px; z-index: 6; max-height: 40%; overflow: auto; display: flex; flex-direction: column; gap: 2px; padding: var(--p-space-1-5); border-radius: var(--p-radius-md); background: var(--color-surface-overlay); border: 1px solid var(--color-border-default); }
+.og-atom-list:not(:focus-within) { clip-path: inset(50%); width: 1px; height: 1px; overflow: hidden; padding: 0; border: 0; }
+.og-atom-list button { text-align: left; font-size: var(--type-caption-size); color: var(--color-text-secondary); padding: var(--p-space-1) var(--p-space-1-5); border-radius: var(--p-radius-sm); max-width: 280px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.og-atom-list button:hover, .og-atom-list button:focus-visible, .og-atom-list button[aria-pressed="true"] { background: var(--color-surface-hover); color: var(--color-text-primary); }

@@ -7,6 +7,7 @@ import { Brain } from './Brain';
 import { applyChatUpdate } from './adapter';
 import { SettingsModal } from './SettingsModal';
 import { UsageModal } from './UsageModal';
+import { useEvidence, EvidenceStrip } from './useEvidence';
 
 const blankView:ChatView={pair:1,scroll:0,follow:true,selected:null,draft:'',zoom:1,pan:{x:0,y:0}};
 
@@ -24,6 +25,7 @@ export function Workspace(){
  const scroll=useRef<HTMLDivElement>(null);const lockUntil=useRef(0);const scrollRaf=useRef(0);const search=useRef<HTMLInputElement>(null);const [pending,setPending]=useState<Record<string,boolean>>({});
  const isBrain=active==='brain';const chat=chats.find(c=>c.id===active);const view=views[active]||blankView;const selectedChat=chats.find(c=>c.id===brainSelected);const selectedView=brainSelected?views[brainSelected]||blankView:blankView;
  const update=(v:Partial<ChatView>)=>patch(active,v);
+ const ev=useEvidence({chat,viewPair:view.pair,scroll,lockUntil}); // EVIDENCE_SPEC: click a node → exact words in the chat
 
  function jump(pair:number,speaker?:string,keepGraph?:boolean){
    if(!chat)return;
@@ -167,7 +169,12 @@ export function Workspace(){
        open(c.id);
        setTimeout(()=>setExpanded(true),20);
      } else setExpanded(!expanded);
-   }} locate={()=>locate(c.id)} inspect={global}/>;
+   }} locate={()=>locate(c.id)} inspect={global} activeAtom={ev.inspect?.chatId===c.id?ev.inspect.atomId:null} onAtom={id=>{
+     const a=c.atoms.find(x=>x.id===id);
+     if(global){open(c.id);setTimeout(()=>ev.open(c.id,id,a,v.pair),150);}
+     else if(expanded){setExpanded(false);setTimeout(()=>ev.open(c.id,id,a,v.pair),40);}
+     else ev.open(c.id,id,a,v.pair);
+   }}/>;
  }
 
  return <div className={`cotrace-workspace ${sidebar?'':'sidebar-closed'} ${rail?'':'rail-closed'} ${isBrain?'brain-active':''}`}>
@@ -242,7 +249,7 @@ export function Workspace(){
      </div>
 
      {!isBrain&&chat&&<div className="conversation-pane">
-      <div className="conversation-scroll" ref={scroll} onScroll={onScroll} onWheel={()=>{lockUntil.current=0}} onTouchStart={()=>{lockUntil.current=0}} onMouseDown={()=>{lockUntil.current=0}} onKeyDown={()=>{lockUntil.current=0}}>
+      <div className="conversation-scroll" ref={scroll} onScroll={onScroll} onWheel={()=>{if(!ev.inspect)lockUntil.current=0}} onTouchStart={()=>{if(!ev.inspect)lockUntil.current=0}} onMouseDown={()=>{if(!ev.inspect)lockUntil.current=0}} onKeyDown={()=>{if(!ev.inspect)lockUntil.current=0}}>
        <div className="conversation-document">
         {chat.dialogue.length===0?<div className="new-conversation-empty">
           <div className="empty-logo"><GitBranch size={28}/></div>
@@ -272,7 +279,8 @@ export function Workspace(){
        </div>
       </div>
       <div className="composer-dock">
-        {chat.totalPairs>0&&view.pair<chat.totalPairs&&<button className="back-latest" onClick={()=>jump(chat.totalPairs)}>Back to latest<ArrowDown size={13}/></button>}
+        {ev.inspect&&ev.atom&&<EvidenceStrip atom={ev.atom} evidence={ev.evidence} index={ev.inspect.index} resolution={ev.resolution} onStep={ev.step} onBack={ev.back} onClose={ev.close}/>}
+        {!ev.inspect&&chat.totalPairs>0&&view.pair<chat.totalPairs&&<button className="back-latest" onClick={()=>jump(chat.totalPairs)}>Back to latest<ArrowDown size={13}/></button>}
         <div className="composer">
           <textarea aria-label="Message" placeholder={pending[chat.id]?'Waiting for backend connection…':'Continue the conversation…'} value={view.draft} disabled={pending[chat.id]} rows={2} onChange={e=>update({draft:e.target.value})} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}}/>
           <div className="composer-bottom">

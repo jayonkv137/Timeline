@@ -12,13 +12,14 @@ import { tokens } from '../design-system/tokens/tokens';
  * playground is intentionally omitted.
  */
 
-interface Props { chat:Chat; view:ChatView; expanded?:boolean; patch:(v:Partial<ChatView>)=>void; jump:(pair:number,speaker?:string,keepGraph?:boolean)=>void; expand:()=>void; locate:()=>void; inspect?:boolean }
+interface Props { chat:Chat; view:ChatView; expanded?:boolean; patch:(v:Partial<ChatView>)=>void; jump:(pair:number,speaker?:string,keepGraph?:boolean)=>void; expand:()=>void; locate:()=>void; inspect?:boolean; onAtom?:(atomId:string)=>void; activeAtom?:string|null }
 
 // Colours and geometry come from the design system (web/src/design-system/tokens). Canvas code reads
 // resolved values from tokens.ts; stylesheets use the CSS variables.
 const G = tokens.component.graph;
 const USER = tokens.semantic.color.party.human.solid;
 const AI = tokens.semantic.color.party.ai.solid;
+const UNLINKED = tokens.semantic.color.text.muted; // no source action: shown as missing, never as a party
 const BG = G.stage;
 const WHITE = tokens.primitive.color.white;
 const BLACK = tokens.primitive.color.black;
@@ -75,7 +76,8 @@ function buildFrame(chat:Chat, pair:number, spread:number){
     const satellites:Sat[] = n.root ? [] : ordered.map(atom => ({
       atom,
       group:owner(atom),
-      color:atom.kind === 'resolved' ? (atom.resolver === 'human' ? USER : AI) : (atom.origin === 'human' ? USER : AI),
+      // An item whose source the engine never linked is grey, never painted as anyone's (EVIDENCE_SPEC T3).
+      color:(() => { const w = atom.kind === 'resolved' ? atom.resolver : atom.origin; return w === 'human' ? USER : w === 'ai' ? AI : UNLINKED; })(),
       isHollowRing:atom.kind === 'question',
       isResolvedSlot:atom.kind === 'resolved',
     }));
@@ -126,12 +128,15 @@ function badgeFor(chat:Chat, pair:number){
 
 function tipHeader(s:Sat){
   const a = s.atom;
+  if ((a.kind === 'resolved' ? a.resolver : a.origin) == null) return { title:'Source not linked', color:UNLINKED };
   if (a.kind === 'resolved') return { title:a.resolver === 'human' ? 'Human-Resolved' : 'AI-Resolved', color:a.resolver === 'human' ? USER : AI };
   if (a.kind === 'question') return { title:a.origin === 'human' ? 'Human Open Question' : 'AI Open Question', color:a.origin === 'human' ? USER : AI };
   return { title:a.origin === 'human' ? 'User Requirement' : 'AI Requirement', color:a.origin === 'human' ? USER : AI };
 }
 
-export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect }:Props){
+export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect, onAtom, activeAtom }:Props){
+  const activeAtomRef = useRef<string|null|undefined>(activeAtom);
+  activeAtomRef.current = activeAtom; // the requirement whose evidence is shown (EVIDENCE_SPEC §5.1): white ring, never a party colour
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sim = useRef<{ nodes:SimNode[]; links:SimLink[] }>({ nodes:[], links:[] });
@@ -418,6 +423,10 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect 
             } else {
               ctx!.fillStyle = sat.color; ctx!.beginPath(); ctx!.arc(sx, sy, BEAD.core * k, 0, Math.PI * 2); ctx!.fill();
             }
+            if (activeAtomRef.current && sat.atom.id === activeAtomRef.current) {
+              ctx!.globalAlpha = 1; ctx!.strokeStyle = WHITE; ctx!.lineWidth = 1.5 * px;
+              ctx!.beginPath(); ctx!.arc(sx, sy, (BEAD.resolvedOuter + 3.5) * k, 0, Math.PI * 2); ctx!.stroke();
+            }
             ctx!.globalAlpha = 1;
           });
           if (ri === rows.length - 1 && hiddenCount > 0) {
@@ -533,6 +542,17 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect 
     const s = transform().s;
     return sim.current.nodes.find(n => Math.hypot(n.x - x, n.y - y) <= n.radius + 8 / s) || null;
   }
+  // Dev-only probe so the browser tests can click real beads (EVIDENCE_SPEC §8); never shipped in builds.
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+    (window as any).__cotraceBeads = () => {
+      const rect = canvasRef.current?.getBoundingClientRect(); if (!rect) return [];
+      const t = transform();
+      return sim.current.nodes.flatMap(n => n.satellites.filter(s => !s.hidden && s.currentX !== undefined).map(s => ({
+        id:s.atom.id, kind:s.atom.kind, x:rect.left + t.cx + cam.current.panX + (s.currentX! - t.bx) * t.s, y:rect.top + t.cy + cam.current.panY + (s.currentY! - t.by) * t.s })));
+    };
+  });
+
   function satAt(x:number, y:number){
     for (const n of sim.current.nodes) for (const s of n.satellites) {
       if (!s.hidden && s.currentX !== undefined && s.currentY !== undefined && Math.hypot(s.currentX - x, s.currentY - y) <= Math.max((s.currentR || 0), 12 / transform().s)) return s;
@@ -596,7 +616,8 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect 
     if (s) {
       const a = s.atom;
       patch({ selected:a.nodeId });
-      if (!inspect) jump(a.sourcePair, a.sourceSpeaker, true); // plan B: chat moves, graph stays on this pair
+      if (onAtom) onAtom(a.id); // evidence inspection: exact words in the chat, graph stays on this pair
+      else if (!inspect) jump(a.sourcePair, a.sourceSpeaker ?? undefined, true); // plan B: chat moves, graph stays on this pair
       setToast({ kind:s.color === USER ? 'user' : 'ai', text:a.text, key:Date.now() });
       return;
     }
@@ -630,6 +651,13 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect 
     <div className="graph-stage og-stage" ref={stageRef} onMouseLeave={() => { setTip(null); hoverSat.current = null; }}>
       <canvas ref={canvasRef} className="og-canvas" style={{ cursor }} aria-label={total ? `Outcome graph at pair ${pair} of ${total}` : 'Outcome graph'}
         onMouseDown={onMouseDown} onMouseMove={onHover} onClick={onClick} />
+      {onAtom && total > 0 && <div className="og-atom-list" role="group" aria-label={`Requirements and questions at pair ${pair}`}>
+        {chat.atoms.filter(a => a.born <= pair && a.end > pair).map(a => {
+          const w = a.kind === 'resolved' ? a.resolver : a.origin;
+          const kind = a.kind === 'question' ? `${w === 'human' ? 'Your' : 'AI'} question` : a.kind === 'resolved' ? `Answered ${w === 'human' ? 'by you' : 'by AI'}` : `${w === 'human' ? 'Your' : w === 'ai' ? 'AI' : 'Unlinked'} requirement`;
+          return <button key={a.id} type="button" aria-pressed={activeAtom === a.id} onClick={() => { patch({ selected:a.nodeId }); onAtom(a.id); }}>{kind}: {a.text}</button>;
+        })}
+      </div>}
       {!total && <div className="graph-empty"><p>Your graph will appear after the first analyzed exchange.</p></div>}
 
       <div className="og-corner-tools">
@@ -644,7 +672,7 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect 
         const isUser = a.kind === 'resolved' ? a.resolver === 'human' : a.origin === 'human';
         return <div className="og-tooltip" role="tooltip" style={{ left, top:Math.max(8, Math.min(tip.y + 10, size.h - 200)), maxWidth:maxW, borderColor:rgbaOf(isUser ? USER : AI, 0.4) }}>
           {a.kind === 'resolved' ? <>
-            <div className="og-tip-row"><div className="og-tip-head" style={{ color:head.color }}>{head.title}</div><span className="og-tip-pill">From AI Question</span></div>
+            <div className="og-tip-row"><div className="og-tip-head" style={{ color:head.color }}>{head.title}</div><span className="og-tip-pill">{a.origin === 'human' ? 'From your question' : a.origin === 'ai' ? 'From AI question' : 'Question source not linked'}</span></div>
             {a.question && <div className="og-tip-question"><span>Question:</span> {a.question}</div>}
             {(a.quote || a.choices.length > 0) && <div className="og-tip-options">
               {a.quote && <div className="og-tip-chose" style={{ color:head.color }}>✓ {a.resolver === 'human' ? 'User Chose' : 'AI Chose'}: {a.quote}</div>}

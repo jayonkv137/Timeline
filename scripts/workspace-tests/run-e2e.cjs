@@ -8,7 +8,7 @@
  * Automatically:
  * 1. Checks if a server is already healthy on WORKSPACE_URL (default http://127.0.0.1:8765).
  * 2. If not running, ensures library reference chats are seeded and spins up the server.
- * 3. Runs smoke.cjs and refinement.cjs with WORKSPACE_URL set.
+ * 3. Runs smoke.cjs, refinement.cjs and evidence.cjs with WORKSPACE_URL set.
  * 4. Gracefully stops the spawned server on completion or error.
  */
 
@@ -137,6 +137,13 @@ async function main() {
 
     console.log('\n--> Running Suite 2: refinement.cjs...');
     execFileSync(process.execPath, [path.join(__dirname, 'refinement.cjs')], {
+      cwd: REPO_ROOT,
+      env: testEnv,
+      stdio: 'inherit',
+    });
+
+    console.log('\n--> Running Suite 3: evidence.cjs (EVIDENCE_SPEC)...');
+    execFileSync(process.execPath, [path.join(__dirname, 'evidence.cjs')], {
       cwd: REPO_ROOT,
       env: testEnv,
       stdio: 'inherit',

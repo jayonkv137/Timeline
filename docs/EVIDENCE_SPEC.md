@@ -1,6 +1,17 @@
 # EVIDENCE_SPEC: click a node, see exactly what was said, by whom, where
 
-Status: **v1.0 proposed (10 Oct 2026)**. Owner decision pending (§11). Build plan: Track S phase **SE** (`docs/plans/STANDALONE_V1_PLAN.md`), between S3 and S4.
+Status: **v1.0 implemented (10 Oct 2026)**, built on branch `s/evidence-linking` while Gemini ran S4. Build plan: Track S phase **SE** (`docs/plans/STANDALONE_V1_PLAN.md`).
+
+**As built:**
+- Engine: `engine/evidence.py`; `engine/projections/workspace.py` (truth fixes T1–T4; T5 = `evidence[]`); schema `$defs/evidence`.
+- Audit: `scripts/evidence_audit.py` → `docs/plans/reports/SE_evidence_audit.md`.
+- Tests: `tests/test_evidence.py` (21 tier1 tests, W7 on all 13 chats).
+- UI: `web/src/workspace/evidence.ts`, `useEvidence.tsx`, `evidence.css`; LocalGraph `onAtom` / `activeAtom` plus a keyboard-reachable requirement list.
+- E2E: `scripts/workspace-tests/evidence.cjs`, suite 3 of `npm run e2e`.
+
+**Measured anchoring (final rules: exact → normalised → wrapping quote marks stripped → "…"-joined passages, any order):** 479 exact (11 repeated phrases, placed by reading order) · 106 normalised · 45 multi-part · **9 not in their message** = **630 / 639 (98.6%)** on exact words.
+
+**Not yet built:** the Brain entry point (the Brain shows no requirement beads yet); the "wording changed" check (`textHash` is stored, but the browser does not compare it yet); the reverse selection ("show linked requirements").
 Measured on the 13 processed chats with `scripts/evidence_audit.py`. Every number below is reproducible.
 
 ## Owner's words

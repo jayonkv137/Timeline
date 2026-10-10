@@ -226,17 +226,17 @@ Goal: the workspace you have today, served by the server from the library. It lo
 | **S3.T** ✅ | You | **Owner test:** read the 3 maps (S1.7 reports) and the cost report; decide whether quality is worth the cost | log entry written |
 | **S3.G** ✅ | You | Pick the default models and the budget. Enter your key in Settings yourself | — |
 
-### SE · Evidence linking: click a node, see the exact words (about 1 week, zero LLM cost; inserted 10 Oct 2026, pending owner approval)
+### SE · Evidence linking: click a node, see the exact words (about 1 week, zero LLM cost; inserted 10 Oct 2026; SE.1–SE.5 built by Claude Code in parallel with S4, SE.6 partial: keyboard path and expanded graph done, Brain entry pending)
 Full spec: [`docs/EVIDENCE_SPEC.md`](../EVIDENCE_SPEC.md). Goal: clicking any requirement or question highlights the exact supporting words in the right speaker's message (98.6% of the 639 engine quotes anchor exactly; the rest show an honest state), steps through every source, and returns you to where you were reading. Before S4, because uploads bring many new chats and evidence must be truthful first.
 
 | Step | Builder | What | Done when |
 |---|---|---|---|
-| SE.1 | CC | Evidence builder in `engine/projections/workspace.py`: all creating actions, revisions, carried-out, asked, answered (from `resolved_into`); no invented fallback speakers; `workspace_bundle` 1.1 (additive `evidence[]`) | tier1 tests for spec §2 T1–T5 green |
-| SE.2 | CC | Python anchor resolver (spec §4), invariant W7, `scripts/evidence_audit.py` report, `tests/evidence_vectors.json` | report reproduces the spec §4 percentages on the 13 chats |
-| SE.3 | AG+ | TypeScript resolver on rendered text + CSS Custom Highlight API + fallback | passes every vector (parity test) |
-| SE.4 | AG | Inspection state, evidence strip, Back to reading, Escape; inspecting never changes the viewed exchange | e2e: click → highlight → back restores scroll and exchange |
-| SE.5 | AG | Question pairs (asked → answered), multi-source stepping, relation chips, every honest state (spec §5.5) | e2e per state on real chats (spec §10) |
-| SE.6 | AG | Expanded-graph and Brain entry points, keyboard path, reduced motion | e2e + keyboard walkthrough |
+| SE.1 ✅ | CC | Evidence builder in `engine/projections/workspace.py`: all creating actions, revisions, carried-out, asked, answered (from `resolved_into`); no invented fallback speakers; `workspace_bundle` 1.1 (additive `evidence[]`) | tier1 tests for spec §2 T1–T5 green |
+| SE.2 ✅ | CC | Python anchor resolver (spec §4), invariant W7, `scripts/evidence_audit.py` report, `tests/evidence_vectors.json` | report reproduces the spec §4 percentages on the 13 chats |
+| SE.3 ✅ | CC | TypeScript resolver on rendered text + CSS Custom Highlight API + fallback | passes every vector (parity test) |
+| SE.4 ✅ | CC | Inspection state, evidence strip, Back to reading, Escape; inspecting never changes the viewed exchange | e2e: click → highlight → back restores scroll and exchange |
+| SE.5 ✅ | CC | Question pairs (asked → answered), multi-source stepping, relation chips, every honest state (spec §5.5) | e2e per state on real chats (spec §10) |
+| SE.6 ◐ | CC | Expanded-graph and Brain entry points, keyboard path, reduced motion | e2e + keyboard walkthrough |
 | **SE.T** | You | Owner test: 10 nodes you remember, including a revised requirement, an answered question, a dropped question and an "unavailable" one | log entry |
 | **SE.G** | You | Approve the evidence contract (workspace_bundle 1.1) and close SE | — |
 

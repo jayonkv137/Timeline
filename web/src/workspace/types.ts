@@ -1,7 +1,12 @@
 export type Contributor = 'human' | 'ai';
 export interface Turn { pair: number; speaker: 'user' | 'ai'; text: string; attachments: string[]; ts: string }
-export interface Outcome { id:string; title:string; parent:string|null; related:string[]; born:number; x:number; y:number; root:boolean; sourcePair:number; sourceSpeaker:Contributor }
-export interface Atom { id:string; nodeId:string; kind:'requirement'|'question'|'resolved'; text:string; question:string|null; origin:Contributor; resolver:Contributor|null; born:number; end:number; sourcePair:number; sourceSpeaker:Contributor; quote:string; choices:string[] }
+export interface Outcome { id:string; title:string; parent:string|null; related:string[]; born:number; x:number; y:number; root:boolean; sourcePair:number; sourceSpeaker:Contributor; evidence?:Evidence[] }
+// Evidence (docs/EVIDENCE_SPEC.md §3): every source of an item, anchored to exact words with W3C TextQuote/TextPosition selectors.
+export type EvidenceRole = 'introduced' | 'revised' | 'carried-out' | 'asked' | 'answered';
+export type EvidenceMatch = 'exact' | 'normalized' | 'multipart' | 'message' | 'missing';
+export interface EvidenceFragment { exact:string; prefix:string; suffix:string; start:number; end:number }
+export interface Evidence { id:string; role:EvidenceRole; actionId:string|null; pair:number|null; speaker:Contributor|null; messageId?:string|null; textHash?:string|null; match:EvidenceMatch; fragments:EvidenceFragment[]; occurrences?:number; note?:string|null }
+export interface Atom { id:string; nodeId:string; kind:'requirement'|'question'|'resolved'; text:string; question:string|null; origin:Contributor|null; resolver:Contributor|null; born:number; end:number; sourcePair:number; sourceSpeaker:Contributor|null; quote:string; choices:string[]; evidence?:Evidence[]; state?:'open'|'answered'|'dropped'; answeredAt?:number|null; droppedAt?:number|null }
 export interface Mass { human:number; ai:number; delta:number }
 export interface Snapshot { pair:number; mass:Record<string,Mass>; terminal:string }
 export interface Chat { id:string; title:string; rootTitle:string; category:string; totalPairs:number; dialogue:Turn[]; nodes:Outcome[]; atoms:Atom[]; snapshots:Snapshot[]; summary:string; status?:string; source?:any }
