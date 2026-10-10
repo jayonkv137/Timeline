@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from engine.artifacts import write_json_artifact
+from engine.evidence import EvidenceIndex, question_evidence, requirement_evidence
 
 
 def _pair_of(action_or_turn_id: str | None) -> int:
@@ -108,6 +109,8 @@ def project_workspace(
     operations_log = state.operations_log if hasattr(state, "operations_log") else state.get("operations_log", [])
     actions_list = state.actions if hasattr(state, "actions") else state.get("actions", [])
     actions_by_id = {x["id"]: x for x in actions_list if isinstance(x, dict) and "id" in x}
+    # Evidence: every action quote anchored to an exact place in its message (docs/EVIDENCE_SPEC.md).
+    ev = EvidenceIndex(chat_id or str(source_meta.get("chat_id") or "chat"), dialogue, actions_list)
 
     # 2. Total pairs count
     total_pairs = max((t.get("pair", 1) for t in dialogue), default=0)
@@ -143,6 +146,7 @@ def project_workspace(
             "root": is_root,
             "sourcePair": born,
             "sourceSpeaker": source_speaker,
+            "evidence": ev.items("introduced", [o["turn_id"]]) if o.get("turn_id") else [],
         })
 
     layout_coords = compute_outcome_layout(preliminary_nodes, root_id)
@@ -160,75 +164,79 @@ def project_workspace(
             "root": n["root"],
             "sourcePair": n["sourcePair"],
             "sourceSpeaker": n["sourceSpeaker"],
+            "evidence": n["evidence"],
         })
 
-    # 5. Build Atoms (requirements + slots)
+    # 5. Build Atoms (requirements + slots) with their evidence.
+    # Truth rules (EVIDENCE_SPEC §2): every creating action is kept (T1), revisions are evidence (T2), no speaker is
+    # invented when an action is missing (T3), and a requirement answers a question only when the engine says so
+    # (slot.resolved_into + the resolve op), never by guessing from related_to (T4).
+    def _op_pair(outcome_id: Any, target_id: Any, target_type: str, ops: tuple[str, ...]) -> int | None:
+        found = [x["pair"] for x in operations_log
+                 if x.get("outcome_id") == outcome_id and x.get("target_id") == target_id
+                 and x.get("target_type") == target_type and x.get("op") in ops and "pair" in x]
+        return min(found) if found else None
+
+    answered_by: dict[tuple[Any, Any], dict[str, Any]] = {}
+    for s_ in slots:
+        if s_.get("status") == "resolved" and s_.get("resolved_into"):
+            answered_by[(s_.get("outcome_id"), s_.get("resolved_into"))] = s_
+    req_by_key = {(r.get("outcome_id"), r.get("req_id")): r for r in requirements}
+
     atoms: list[dict[str, Any]] = []
     for r in requirements:
-        creation_ids = r.get("creation_action_ids") or ["U(1,1)"]
-        origin_aid = creation_ids[0]
-        born = r.get("created_at_pair", _pair_of(origin_aid))
-
-        # Check for resolving ancestor slot
-        ancestors = [
-            s for s in slots
-            if s.get("outcome_id") == r.get("outcome_id") and s.get("slot_id") in r.get("related_to", [])
-        ]
-        slot = ancestors[0] if ancestors else None
-        slot_creation_aid = (slot.get("creation_action_ids") or ["A(1,1)"])[0] if slot else origin_aid
-
-        deleted_candidates = [
-            x["pair"] for x in operations_log
-            if x.get("outcome_id") == r.get("outcome_id")
-            and x.get("target_id") == r.get("req_id")
-            and x.get("target_type") == "requirement"
-            and x.get("op") == "delete"
-            and "pair" in x
-        ]
-        end_pair = min(deleted_candidates) if deleted_candidates else (total_pairs + 1)
-
+        creation_ids = [a for a in (r.get("creation_action_ids") or []) if a]
+        origin_aid = creation_ids[0] if creation_ids else None
+        born = r.get("created_at_pair") or (_pair_of(origin_aid) if origin_aid else 1)
+        slot = answered_by.get((r.get("outcome_id"), r.get("req_id")))
+        slot_aid = ((slot.get("creation_action_ids") or [None])[0]) if slot else None
+        deleted = _op_pair(r.get("outcome_id"), r.get("req_id"), "requirement", ("delete",))
+        evidence = requirement_evidence(ev, r, slot)
+        primary = next((e for e in evidence if e["role"] in ("introduced", "answered") and e["actionId"]), None)
+        maker = _speaker_party(origin_aid) if origin_aid else None
         atoms.append({
             "id": f"{r['outcome_id']}:{r['req_id']}",
             "nodeId": r["outcome_id"],
             "kind": "resolved" if slot else "requirement",
             "text": r.get("text", ""),
             "question": slot.get("text") if slot else None,
-            "origin": _speaker_party(slot_creation_aid),
-            "resolver": _speaker_party(origin_aid),
+            "origin": (_speaker_party(slot_aid) if slot_aid else None) if slot else maker,
+            "resolver": maker,
             "born": born,
-            "end": end_pair,
-            "sourcePair": _pair_of(origin_aid),
-            "sourceSpeaker": _speaker_party(origin_aid),
-            "quote": actions_by_id.get(origin_aid, {}).get("evidence_quote", ""),
+            "end": deleted if deleted else (total_pairs + 1),
+            "sourcePair": primary["pair"] if primary else born,
+            "sourceSpeaker": primary["speaker"] if primary else maker,
+            "quote": actions_by_id.get(origin_aid, {}).get("evidence_quote", "") if origin_aid else "",
             "choices": list(slot.get("choices", [])) if slot else [],
+            "evidence": evidence,
         })
 
-    for s in slots:
-        aid = (s.get("creation_action_ids") or ["A(1,1)"])[0]
-        end_candidates = [
-            x["pair"] for x in operations_log
-            if x.get("outcome_id") == s.get("outcome_id")
-            and x.get("target_id") == s.get("slot_id")
-            and x.get("target_type") == "slot"
-            and x.get("op") in ("resolve", "abandon")
-            and "pair" in x
-        ]
-        end_pair = min(end_candidates) if end_candidates else (total_pairs + 1)
-
+    for s_ in slots:
+        creation_ids = [a for a in (s_.get("creation_action_ids") or []) if a]
+        aid = creation_ids[0] if creation_ids else None
+        resolved_at = _op_pair(s_.get("outcome_id"), s_.get("slot_id"), "slot", ("resolve",))
+        dropped_at = _op_pair(s_.get("outcome_id"), s_.get("slot_id"), "slot", ("abandon",))
+        ends = [p for p in (resolved_at, dropped_at) if p]
+        answer = req_by_key.get((s_.get("outcome_id"), s_.get("resolved_into"))) if s_.get("status") == "resolved" else None
+        state_ = "answered" if s_.get("status") == "resolved" else ("dropped" if s_.get("status") == "abandoned" else "open")
         atoms.append({
-            "id": f"{s['outcome_id']}:{s['slot_id']}",
-            "nodeId": s["outcome_id"],
+            "id": f"{s_['outcome_id']}:{s_['slot_id']}",
+            "nodeId": s_["outcome_id"],
             "kind": "question",
-            "text": s.get("text", ""),
+            "text": s_.get("text", ""),
             "question": None,
-            "origin": _speaker_party(aid),
+            "origin": _speaker_party(aid) if aid else None,
             "resolver": None,
-            "born": _pair_of(aid),
-            "end": end_pair,
-            "sourcePair": _pair_of(aid),
-            "sourceSpeaker": _speaker_party(aid),
-            "quote": actions_by_id.get(aid, {}).get("evidence_quote", ""),
-            "choices": list(s.get("choices", [])),
+            "born": _pair_of(aid) if aid else 1,
+            "end": min(ends) if ends else (total_pairs + 1),
+            "sourcePair": _pair_of(aid) if aid else 1,
+            "sourceSpeaker": _speaker_party(aid) if aid else None,
+            "quote": actions_by_id.get(aid, {}).get("evidence_quote", "") if aid else "",
+            "choices": list(s_.get("choices", [])),
+            "evidence": question_evidence(ev, s_, answer),
+            "state": state_,
+            "answeredAt": resolved_at if state_ == "answered" else None,
+            "droppedAt": dropped_at if state_ == "dropped" else None,
         })
 
     # 6. Build Snapshots

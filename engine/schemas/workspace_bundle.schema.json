@@ -39,7 +39,10 @@
           },
           "speaker": {
             "type": "string",
-            "enum": ["user", "ai"],
+            "enum": [
+              "user",
+              "ai"
+            ],
             "description": "Speaker for this turn."
           },
           "text": {
@@ -48,7 +51,9 @@
           },
           "attachments": {
             "type": "array",
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "description": "List of attached file names or references."
           },
           "ts": {
@@ -56,7 +61,13 @@
             "description": "Timestamp of the turn."
           }
         },
-        "required": ["pair", "speaker", "text", "attachments", "ts"],
+        "required": [
+          "pair",
+          "speaker",
+          "text",
+          "attachments",
+          "ts"
+        ],
         "additionalProperties": false
       }
     },
@@ -75,12 +86,17 @@
             "description": "Outcome headline/text."
           },
           "parent": {
-            "type": ["string", "null"],
+            "type": [
+              "string",
+              "null"
+            ],
             "description": "Parent outcome id, or null for root outcome."
           },
           "related": {
             "type": "array",
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "description": "IDs of related non-parent outcomes."
           },
           "born": {
@@ -107,11 +123,28 @@
           },
           "sourceSpeaker": {
             "type": "string",
-            "enum": ["human", "ai"],
+            "enum": [
+              "human",
+              "ai"
+            ],
             "description": "Party that originated this outcome."
+          },
+          "evidence": {
+            "$ref": "#/$defs/evidence"
           }
         },
-        "required": ["id", "title", "parent", "related", "born", "x", "y", "root", "sourcePair", "sourceSpeaker"],
+        "required": [
+          "id",
+          "title",
+          "parent",
+          "related",
+          "born",
+          "x",
+          "y",
+          "root",
+          "sourcePair",
+          "sourceSpeaker"
+        ],
         "additionalProperties": false
       }
     },
@@ -131,7 +164,11 @@
           },
           "kind": {
             "type": "string",
-            "enum": ["requirement", "question", "resolved"],
+            "enum": [
+              "requirement",
+              "question",
+              "resolved"
+            ],
             "description": "Atom classification."
           },
           "text": {
@@ -139,17 +176,34 @@
             "description": "Verbatim requirement or question text."
           },
           "question": {
-            "type": ["string", "null"],
+            "type": [
+              "string",
+              "null"
+            ],
             "description": "Underlying question text if resolved slot, else null."
           },
           "origin": {
-            "type": "string",
-            "enum": ["human", "ai"],
-            "description": "Party that first raised this requirement/question."
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "human",
+              "ai",
+              null
+            ],
+            "description": "Who made it (for an answered question: who asked). null only when the engine linked no source action; never guessed."
           },
           "resolver": {
-            "type": ["string", "null"],
-            "enum": ["human", "ai", null],
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "human",
+              "ai",
+              null
+            ],
             "description": "Party that resolved this atom, or null if unclosed."
           },
           "born": {
@@ -168,8 +222,15 @@
             "description": "Pair index of the originating action."
           },
           "sourceSpeaker": {
-            "type": "string",
-            "enum": ["human", "ai"],
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "human",
+              "ai",
+              null
+            ],
             "description": "Originating action speaker."
           },
           "quote": {
@@ -178,11 +239,53 @@
           },
           "choices": {
             "type": "array",
-            "items": { "type": "string" },
+            "items": {
+              "type": "string"
+            },
             "description": "Available choices if structured slot."
+          },
+          "evidence": {
+            "$ref": "#/$defs/evidence"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "open",
+              "answered",
+              "dropped"
+            ],
+            "description": "Questions only."
+          },
+          "answeredAt": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Questions only: exchange of the engine's resolve op."
+          },
+          "droppedAt": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Questions only: exchange of the engine's abandon op."
           }
         },
-        "required": ["id", "nodeId", "kind", "text", "question", "origin", "resolver", "born", "end", "sourcePair", "sourceSpeaker", "quote", "choices"],
+        "required": [
+          "id",
+          "nodeId",
+          "kind",
+          "text",
+          "question",
+          "origin",
+          "resolver",
+          "born",
+          "end",
+          "sourcePair",
+          "sourceSpeaker",
+          "quote",
+          "choices"
+        ],
         "additionalProperties": false
       }
     },
@@ -203,11 +306,24 @@
             "additionalProperties": {
               "type": "object",
               "properties": {
-                "human": { "type": "number", "description": "Cumulative human contribution mass." },
-                "ai": { "type": "number", "description": "Cumulative AI contribution mass." },
-                "delta": { "type": "number", "description": "Mass gained during this pair." }
+                "human": {
+                  "type": "number",
+                  "description": "Cumulative human contribution mass."
+                },
+                "ai": {
+                  "type": "number",
+                  "description": "Cumulative AI contribution mass."
+                },
+                "delta": {
+                  "type": "number",
+                  "description": "Mass gained during this pair."
+                }
               },
-              "required": ["human", "ai", "delta"],
+              "required": [
+                "human",
+                "ai",
+                "delta"
+              ],
               "additionalProperties": false
             }
           },
@@ -216,7 +332,11 @@
             "description": "Outcome id carrying the active terminal focus at this pair."
           }
         },
-        "required": ["pair", "mass", "terminal"],
+        "required": [
+          "pair",
+          "mass",
+          "terminal"
+        ],
         "additionalProperties": false
       }
     },
@@ -226,7 +346,12 @@
     },
     "status": {
       "type": "string",
-      "enum": ["ready", "processing", "needs_review", "error"],
+      "enum": [
+        "ready",
+        "processing",
+        "needs_review",
+        "error"
+      ],
       "default": "ready",
       "description": "Processing status of the chat."
     },
@@ -240,15 +365,27 @@
       "description": "Pairs flagged for review or invariant violation.",
       "items": {
         "anyOf": [
-          { "type": "integer", "minimum": 1 },
+          {
+            "type": "integer",
+            "minimum": 1
+          },
           {
             "type": "object",
             "properties": {
-              "pair": { "type": "integer", "minimum": 1 },
-              "invariant": { "type": "string" },
-              "detail": { "type": "string" }
+              "pair": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "invariant": {
+                "type": "string"
+              },
+              "detail": {
+                "type": "string"
+              }
             },
-            "required": ["pair"]
+            "required": [
+              "pair"
+            ]
           }
         ]
       }
@@ -270,7 +407,9 @@
           "description": "Original platform conversation id."
         }
       },
-      "required": ["platform"],
+      "required": [
+        "platform"
+      ],
       "additionalProperties": false
     }
   },
@@ -288,5 +427,127 @@
     "status",
     "source"
   ],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "$defs": {
+    "evidence": {
+      "type": "array",
+      "description": "Every source supporting this item, anchored to exact words (docs/EVIDENCE_SPEC.md §3). W3C TextQuote + TextPosition selectors on the raw message text.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "introduced",
+              "revised",
+              "carried-out",
+              "asked",
+              "answered"
+            ]
+          },
+          "actionId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pair": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "speaker": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "human",
+              "ai",
+              null
+            ]
+          },
+          "messageId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "textHash": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "match": {
+            "type": "string",
+            "enum": [
+              "exact",
+              "normalized",
+              "multipart",
+              "message",
+              "missing"
+            ]
+          },
+          "fragments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "exact": {
+                  "type": "string"
+                },
+                "prefix": {
+                  "type": "string"
+                },
+                "suffix": {
+                  "type": "string"
+                },
+                "start": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "exact",
+                "prefix",
+                "suffix",
+                "start",
+                "end"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "occurrences": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "role",
+          "actionId",
+          "pair",
+          "speaker",
+          "match",
+          "fragments"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
 }
