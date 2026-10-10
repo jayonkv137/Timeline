@@ -16,6 +16,7 @@ import asyncio
 import json
 import logging
 import shutil
+from contextlib import asynccontextmanager
 from typing import Any
 
 from fastapi import APIRouter, FastAPI, HTTPException, Request, status
@@ -375,6 +376,65 @@ def create_router() -> APIRouter:
         lib: Library = request.app.state.library
         return lib.list_imports()
 
+    class ProcessBatchPayload(BaseModel):
+        conversationIds: list[str] = Field(default_factory=list, description="IDs of conversations to enqueue")
+
+    @router.post("/imports/{import_id}/process")
+    async def process_import_batch_endpoint(
+        import_id: str,
+        payload: ProcessBatchPayload,
+        request: Request,
+    ) -> dict[str, Any]:
+        """Enqueue selected conversations from an import batch for background processing (§4)."""
+        job_queue = request.app.state.job_queue
+        enqueued = await job_queue.enqueue_import_batch(import_id, payload.conversationIds)
+        return {
+            "status": "queued",
+            "importId": import_id,
+            "enqueuedCount": len(enqueued),
+            "jobs": enqueued,
+        }
+
+    @router.get("/jobs")
+    async def list_jobs_endpoint(request: Request) -> dict[str, Any]:
+        """Return queue summary and all jobs from jobs.json."""
+        job_queue = request.app.state.job_queue
+        res = job_queue.get_queue_status()
+        res["jobs"] = job_queue.get_jobs()
+        return res
+
+    @router.post("/jobs/{job_id}/priority")
+    async def map_next_job_endpoint(job_id: str, request: Request) -> dict[str, Any]:
+        """Move job to the front of the queue ('Map next' per §4)."""
+        job_queue = request.app.state.job_queue
+        try:
+            return await job_queue.map_next(job_id)
+        except FileNotFoundError as exc:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc))
+
+    @router.post("/jobs/{job_id}/cancel")
+    async def cancel_job_endpoint(job_id: str, request: Request) -> dict[str, Any]:
+        """Cancel mapping for a job (§3.2, §5). Mapped exchanges are kept."""
+        job_queue = request.app.state.job_queue
+        try:
+            return await job_queue.cancel_job(job_id)
+        except FileNotFoundError as exc:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc))
+
+    @router.post("/jobs/pause-all")
+    async def pause_all_jobs_endpoint(request: Request) -> dict[str, Any]:
+        """Pause queue processing (§3.2)."""
+        job_queue = request.app.state.job_queue
+        job_queue.pause_all(reason="user_paused")
+        return {"status": "paused"}
+
+    @router.post("/jobs/resume-all")
+    async def resume_all_jobs_endpoint(request: Request) -> dict[str, Any]:
+        """Resume queue processing."""
+        job_queue = request.app.state.job_queue
+        job_queue.resume_all()
+        return {"status": "resumed"}
+
     return router
 
 
@@ -388,15 +448,30 @@ DEFAULT_DIST_DIR = Path(__file__).resolve().parent.parent / "web" / "dist-worksp
 def create_app(
     library: Library | None = None,
     dist_dir: Path | str | None = None,
+    job_queue: Any = None,
 ) -> FastAPI:
     """Application factory for the COTRACE server."""
-    app = FastAPI(title="COTRACE Local Server", version="1.0.0")
-
     # Injected library or default
     app_lib = library or Library()
     app_lib.ensure_layout()
+    broadcaster = SSEBroadcaster()
+
+    # Injected job queue or default
+    from server.jobs import JobQueueManager
+    queue = job_queue or JobQueueManager(library=app_lib, broadcaster=broadcaster)
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        if hasattr(app.state, "job_queue") and hasattr(app.state.job_queue, "start"):
+            app.state.job_queue.start()
+        yield
+        if hasattr(app.state, "job_queue") and hasattr(app.state.job_queue, "stop"):
+            await app.state.job_queue.stop()
+
+    app = FastAPI(title="COTRACE Local Server", version="1.0.0", lifespan=lifespan)
     app.state.library = app_lib
-    app.state.broadcaster = SSEBroadcaster()
+    app.state.broadcaster = broadcaster
+    app.state.job_queue = queue
 
     # CORS configuration for local frontends
     app.add_middleware(

@@ -1963,3 +1963,42 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `.venv/bin/python -m pytest`: 274 passed in 6.12s (0 failures, 0 regressions).
   - `data/chats/fixture_pair1/`: 0 diffs.
 - **Next:** S4.3 — Job queue (`server/jobs.py`): persistent `jobs.json`, one worker per chat, cancel, resume after restart.
+
+---
+
+## 2026-10-10 14:55 · Antigravity · Gemini
+- **Phase/Step:** S4.3 — Persistent job queue with shortest-first ordering, concurrency control, and backoff
+- **Did:**
+  - `server/jobs.py` — Built `JobQueueManager`:
+    - Persistent state backed by `$COTRACE_HOME/jobs.json`.
+    - Shortest-chats-first scheduling policy (§4: `(totalPairs - completedPairs)` ascending).
+    - "Map next" priority bump bumping selected chat to the front of waiting queue (§4).
+    - Concurrency limited by `settings.parallel_jobs` (clamped 1–8).
+    - Crash/restart reconciliation: re-queues any `"running"` jobs on startup with `completedPairs` intact; resumes without re-paying for earlier pairs (§5).
+    - Exponential backoff on HTTP 429 rate limit (starts at 2s, doubles up to 60s) (§5).
+    - Budget stop pause handler (`record_budget_stop`).
+    - Event broadcasting hooks: `queue_changed`, `job_progress`, `pair_ready`, `chat_ready`, `job_error`, `budget_stop`.
+    - Pluggable worker handler hook for testing and rehearsal mode.
+  - `server/app.py` — Integrated `JobQueueManager` into FastAPI app with async lifespan management and REST routes:
+    - `POST /imports/{id}/process` — enqueues selected conversations from import batch.
+    - `GET /jobs` — returns queue status, active concurrency, pause state, backoff delay, and job list.
+    - `POST /jobs/{id}/priority` — bumps job to front ("Map next").
+    - `POST /jobs/{id}/cancel` — cancels job; already completed pairs are preserved.
+    - `POST /jobs/pause-all` & `POST /jobs/resume-all` — controls queue processing.
+  - `tests/test_jobs.py` — Tier 1 test suite covering:
+    - Shortest-first ordering (1-pair chat executes before 3-pair and 10-pair chats).
+    - "Map next" priority override.
+    - Concurrency bounded by Settings `parallel_jobs`.
+    - Rate limit exponential backoff and recovery.
+    - Kill-and-restart resumption without re-paying or re-executing completed pairs.
+    - REST endpoints and lifecycles.
+  - Marked `S4.3 ✅` in `docs/plans/STANDALONE_V1_PLAN.md`.
+- **Decisions made:**
+  - Designed worker handler callback pattern in `JobQueueManager` allowing pipeline pluggability (live runner, rehearsal replay mode, mock workers).
+  - Used FastAPI lifespan context manager for clean async startup and shutdown of background queue tasks.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `.venv/bin/python -m pytest tests/test_jobs.py -v`: 6 passed in 2.43s.
+  - `.venv/bin/python -m pytest`: 280 passed in 8.61s (0 failures, 0 regressions).
+  - `data/chats/fixture_pair1/`: 0 diffs.
+- **Next:** S4.R — Rehearsal mode replay before S4.4.
