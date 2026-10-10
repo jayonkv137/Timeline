@@ -196,6 +196,28 @@ def run_pair_checks(
     )
 
 
+def is_state_valid(state: Any, schemas_dir: Path | str | None = None) -> bool:
+    """Check if state data structure is structurally sound for rendering and continued execution (S-D9).
+
+    A state is valid if:
+    1. It is a dictionary-like object with an 'outcomes' list.
+    2. It has at least 1 outcome.
+    3. Outcome tree has exactly 1 root, no cycles, and valid parent links (inv_06).
+    4. State schema validation (inv_01) passes on state.
+    """
+    state_dict = state.to_dict() if hasattr(state, "to_dict") else (state or {})
+    if not isinstance(state_dict, dict):
+        return False
+    outcomes = state_dict.get("outcomes", [])
+    if not outcomes or not isinstance(outcomes, list):
+        return False
+    if inv_06_outcome_tree(state_dict):
+        return False
+    if inv_01_schema_valid({"state": state_dict}, schemas_dir=schemas_dir):
+        return False
+    return True
+
+
 def write_status(
     out_dir: Path | str,
     healthy: bool,

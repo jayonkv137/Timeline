@@ -2077,5 +2077,41 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `.venv/bin/python -m pytest tests/test_pipeline_runner.py -v`: 6 passed in 1.48s.
   - `.venv/bin/python -m pytest`: 290 passed in 9.52s (0 failures, 0 regressions).
   - `npm run build:workspace`: exit code 0, bundled 1.6 MB workspace bundle.
-  - `data/chats/fixture_pair1/`: 0 diffs.
 - **Next:** S4.5 — Product-mode invariants (S-D9): `run_chat(stop_on_violation=False)` records violation, marks pair `needs_review`, keeps going if state valid, bundle carries `flaggedPairs`.
+
+---
+
+## 2026-10-10 15:50 · Antigravity · Gemini
+- **Phase/Step:** S4.5 — Product-mode invariants (S-D9): Flag don't crash, needs_review marking, and flaggedPairs bundles (Upload and batch processing)
+- **Did:**
+  - `engine/checks.py`:
+    - Created `is_state_valid(state)`: verifies structural soundness of state (has outcomes, single root, no cycles via `inv_06`, passes `inv_01` schema).
+  - `engine/pipeline.py`:
+    - Updated `run_chat(stop_on_violation=False)`:
+      - When an invariant fails: records violation, flags pair in `flagged_pairs`.
+      - Strict mode (`stop_on_violation=True`) raises `InvariantViolationError`.
+      - Product mode (`stop_on_violation=False`): tests `is_state_valid(state)`.
+      - If state is valid: logs warning, exports partial bundle with `status="needs_review"` and `flaggedPairs`, and continues pair loop!
+      - If state is corrupt: stops gracefully at last good pair, exports bundle up to last good pair with `status="needs_review"` and `flaggedPairs`.
+      - Final bundle export carries `status="needs_review"` if any pairs flagged, else `"ready"`.
+  - `server/pipeline_runner.py`:
+    - In `_execute_pair_sync`: evaluated runtime checks before bundle export, accumulated `flagged_pairs`, broadcast `pair_flagged` SSE event, verified state validity via `is_state_valid`, and exported `workspace_bundle.json` with `status="needs_review"` and `flaggedPairs`.
+  - `server/library.py`:
+    - Included `flaggedPairs` in `list_chats` summary payload.
+  - `web/src/workspace/`:
+    - `types.ts`: added `flaggedPairs?: any[]` to `Chat` and `ChatSummary`.
+    - `Workspace.tsx`: added `chat-needs-review` sidebar row state rendering amber `!` badge with `"1 exchange needs review"` / `"N exchanges need review"` per PROCESSING_UX_SPEC §3.1.
+    - `workspace.css`: added styles for `.chat-list-item.chat-needs-review` and `.needs-review-badge`.
+  - `tests/test_product_invariants.py` (New):
+    - 5 tier1 tests covering `is_state_valid`, strict-mode exception raising, product-mode continuation with valid state producing renderable `needs_review` bundle carrying `flaggedPairs`, corrupt state halting at last good pair, and `PipelineRunner` integration.
+  - Marked `S4.5 ✅` in `docs/plans/STANDALONE_V1_PLAN.md`.
+- **Decisions made:**
+  - In product mode, invariant failures do not abort execution if the state outcome tree and schema remain sound. Instead, the chat continues processing, marks `needs_review`, and attaches `flaggedPairs` so the user can inspect what happened without losing access to the dialogue or graph.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `.venv/bin/python -m pytest tests/test_product_invariants.py -v`: 5 passed in 0.53s.
+  - `.venv/bin/python -m pytest`: 295 passed in 9.95s (0 failures, 0 regressions).
+  - `npm run build:workspace`: exit code 0.
+  - `data/chats/fixture_pair1/`: 0 diffs.
+- **Next:** S4.6 — Re-upload: same conversation id + same content skipped; new messages appended processed incrementally.
+

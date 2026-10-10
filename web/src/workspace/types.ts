@@ -9,8 +9,8 @@ export interface Evidence { id:string; role:EvidenceRole; actionId:string|null; 
 export interface Atom { id:string; nodeId:string; kind:'requirement'|'question'|'resolved'; text:string; question:string|null; origin:Contributor|null; resolver:Contributor|null; born:number; end:number; sourcePair:number; sourceSpeaker:Contributor|null; quote:string; choices:string[]; evidence?:Evidence[]; state?:'open'|'answered'|'dropped'; answeredAt?:number|null; droppedAt?:number|null }
 export interface Mass { human:number; ai:number; delta:number }
 export interface Snapshot { pair:number; mass:Record<string,Mass>; terminal:string }
-export interface Chat { id:string; title:string; rootTitle:string; category:string; totalPairs:number; dialogue:Turn[]; nodes:Outcome[]; atoms:Atom[]; snapshots:Snapshot[]; summary:string; status?:string; source?:any }
-export interface ChatSummary { id:string; title:string; category:string; totalPairs:number; status:string; updatedAt:string; mass:{you:number;ai:number;total:number}; share:{you:number;ai:number}; source?:any; isTrash?:boolean }
+export interface Chat { id:string; title:string; rootTitle:string; category:string; totalPairs:number; dialogue:Turn[]; nodes:Outcome[]; atoms:Atom[]; snapshots:Snapshot[]; summary:string; status?:string; source?:any; processedPairs?:number; flaggedPairs?:any[] }
+export interface ChatSummary { id:string; title:string; category:string; totalPairs:number; status:string; flaggedPairs?:any[]; updatedAt:string; mass:{you:number;ai:number;total:number}; share:{you:number;ai:number}; source?:any; isTrash?:boolean }
 export type LoadingState = 'idle' | 'loading' | 'ready' | 'empty' | 'error';
 export interface ChatView { pair:number; scroll:number; follow:boolean; selected:string|null; draft:string; zoom:number; pan:{x:number;y:number} }
 export interface ChatLink { source:string; target:string; label:string; evidence?:string }

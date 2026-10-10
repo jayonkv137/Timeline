@@ -281,6 +281,7 @@ class Library:
             total_pairs = 0
             status = "ready"
             source: dict[str, Any] = {"platform": "archive"}
+            flagged_pairs = None
             updated_at = datetime.fromtimestamp(cdir.stat().st_mtime, tz=timezone.utc).isoformat()
             mass = {"you": 0.0, "ai": 0.0, "total": 0.0}
             share = {"you": 50.0, "ai": 50.0}
@@ -294,6 +295,7 @@ class Library:
                     total_pairs = bundle.get("totalPairs", total_pairs)
                     status = bundle.get("status", status)
                     source = bundle.get("source", source)
+                    flagged_pairs = bundle.get("flaggedPairs")
 
                     snapshots = bundle.get("snapshots", [])
                     if snapshots:
@@ -348,6 +350,7 @@ class Library:
                 "category": category,
                 "totalPairs": total_pairs,
                 "status": status,
+                "flaggedPairs": flagged_pairs,
                 "updatedAt": updated_at,
                 "mass": mass,
                 "share": share,

@@ -239,10 +239,13 @@ export function Workspace(){
         const isFailed = job?.status === 'failed';
         const isCanceled = job?.status === 'canceled';
 
+        const isNeedsReview = c.status === 'needs_review' || (c.flaggedPairs && c.flaggedPairs.length > 0);
+
         let itemClass = 'chat-list-item ' + (active === c.id ? 'active' : '');
         if (isRunning) itemClass += ' chat-mapping';
         else if (isQueued) itemClass += ' chat-waiting';
         else if (isFailed) itemClass += ' chat-failed';
+        else if (isNeedsReview) itemClass += ' chat-needs-review';
 
         const progressPct = isRunning
           ? Math.round(((job.completedPairs || 0) / (job.totalPairs || 1)) * 100)
@@ -262,6 +265,17 @@ export function Workspace(){
                   ? 'Couldn’t map · Retry'
                   : isCanceled
                   ? `Mapped ${job.completedPairs} of ${job.totalPairs} · Continue`
+                  : isNeedsReview
+                  ? (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <span className="needs-review-badge">!</span>
+                      <span>
+                        {(c.flaggedPairs?.length || 1) === 1
+                          ? '1 exchange needs review'
+                          : `${c.flaggedPairs?.length} exchanges need review`}
+                      </span>
+                    </span>
+                  )
                   : `${c.category} · ${c.totalPairs ? `${c.totalPairs} exchanges` : 'Draft'}`}
               </small>
             </span>

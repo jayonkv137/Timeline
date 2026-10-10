@@ -18,7 +18,7 @@ from typing import Any
 
 from engine.artifacts import LedgerWriter, write_json_artifact
 from engine.budget import BudgetGuard, BudgetStopError, get_usage_summary
-from engine.checks import InvariantViolationError, run_pair_checks, write_report, write_status
+from engine.checks import InvariantViolationError, is_state_valid, run_pair_checks, write_report, write_status
 from engine.config import Config
 from engine.llm import LLMClient, RateLimitError
 from engine.llm_cache import CachingLLMClient
@@ -211,11 +211,54 @@ class PipelineRunner:
             max_pair=pair,
         )
 
+        # Runtime checks (§11.4 & TEST_STRATEGY §6)
+        chk_res = run_pair_checks(
+            state=state,
+            ledger_rows=ledger_writer.rows,
+            dialogue=dialogue_list,
+            prev_ledger_rows=None,
+            current_pair=pair,
+        )
+        healthy = len(chk_res.violations) == 0
+        write_status(
+            cdir,
+            healthy=healthy,
+            pair_number=pair,
+            violations=chk_res.violations,
+        )
+
+        flagged_list = list(state.run.get("flagged_pairs", []))
+        if not healthy:
+            flagged_record = {
+                "pair": pair,
+                "invariant": chk_res.failed[0] if chk_res.failed else "invariant_violation",
+                "detail": "; ".join(chk_res.violations),
+            }
+            flagged_list.append(flagged_record)
+            state.run["flagged_pairs"] = flagged_list
+
+            if self.broadcaster:
+                self.broadcaster.broadcast(
+                    "pair_flagged",
+                    {"chatId": chat_id, "pair": pair, "reason": "; ".join(chk_res.violations)},
+                )
+
+            # In product mode (S-D9): if state is corrupt, halt and raise
+            if not is_state_valid(state):
+                logger.error(f"State corrupted on {chat_id} pair {pair}: {chk_res.violations}")
+                raise InvariantViolationError(chk_res.violations, chk_res.failed)
+
         # Incremental workspace bundle projection
         source_meta, meta, file_summary = load_chat_metadata(cdir)
         summary_text = state.run.get("dialogue_summary") or file_summary or ""
         is_final = (pair >= total_pairs)
-        status = "ready" if is_final else "processing"
+
+        if flagged_list:
+            status = "needs_review"
+        elif is_final:
+            status = "ready"
+        else:
+            status = "processing"
 
         export_workspace_bundle(
             output_path=cdir / "workspace_bundle.json",
@@ -228,21 +271,7 @@ class PipelineRunner:
             summary=summary_text,
             status=status,
             processed_pairs=pair,
-        )
-
-        # Runtime checks
-        chk_res = run_pair_checks(
-            state=state,
-            ledger_rows=ledger_writer.rows,
-            dialogue=dialogue_list,
-            prev_ledger_rows=None,
-            current_pair=pair,
-        )
-        write_status(
-            cdir,
-            healthy=len(chk_res.violations) == 0,
-            pair_number=pair,
-            violations=chk_res.violations,
+            flagged_pairs=flagged_list if flagged_list else None,
         )
 
         # Final report on completion

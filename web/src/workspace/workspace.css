@@ -947,4 +947,22 @@
   color: var(--color-status-danger);
 }
 
+.chat-list-item.chat-needs-review small {
+  color: #f59e0b;
+}
+
+.needs-review-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+}
+
 

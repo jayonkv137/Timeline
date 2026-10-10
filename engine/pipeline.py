@@ -1136,6 +1136,7 @@ def run_chat(
     from engine.budget import BudgetStopError
     from engine.checks import (
         InvariantViolationError,
+        is_state_valid,
         run_pair_checks,
         write_report,
         write_status,
@@ -1226,6 +1227,10 @@ def run_chat(
     tokens_per_pair: list[int] = []
     passed_checks_set: set[str] = set()
     failed_checks_set: set[str] = set()
+    flagged_pairs: list[dict[str, Any]] = []
+    last_good_pair: int = last_completed
+    last_good_state: dict[str, Any] | None = state.to_dict() if state.outcomes else None
+    last_good_ledger: list[dict[str, Any]] | None = list(ledger_writer.rows) if ledger_writer.rows else None
     prev_ledger = None
 
     for pair_number in sorted_pairs:
@@ -1320,30 +1325,105 @@ def run_chat(
 
         if not chk_res.healthy:
             failed_checks_set.update(chk_res.failed)
+            flagged_record = {
+                "pair": pair_number,
+                "invariant": chk_res.failed[0] if chk_res.failed else "invariant_violation",
+                "detail": "; ".join(chk_res.violations),
+            }
+            flagged_pairs.append(flagged_record)
+
+            if stop_on_violation:
+                write_status(
+                    out_dir,
+                    healthy=False,
+                    pair_number=pair_number,
+                    violations=chk_res.violations,
+                )
+                report_file = write_report(
+                    out_dir=out_dir,
+                    chat_id=chat_id,
+                    pairs_processed=pair_number - 1,
+                    wall_time_per_pair=wall_time_per_pair,
+                    tokens_per_pair=tokens_per_pair,
+                    llm_calls=getattr(client, "call_count", 0),
+                    retries=getattr(client, "retry_count", 0),
+                    cache_hits=getattr(client, "cache_hits", 0),
+                    state=state,
+                    checks_passed=list(passed_checks_set),
+                    checks_failed=list(failed_checks_set),
+                )
+                raise InvariantViolationError(chk_res.violations, chk_res.failed)
+
+            # Product mode (S-D9): stop_on_violation=False
+            # Check if state data structure is still structurally sound
+            state_is_sound = is_state_valid(state)
+            if not state_is_sound:
+                # State is corrupt: stop at the last good pair
+                halt_pair = max(0, pair_number - 1)
+                write_status(
+                    out_dir,
+                    healthy=False,
+                    pair_number=pair_number,
+                    violations=chk_res.violations,
+                )
+                summary_text = state.run.get("dialogue_summary") or file_summary or ""
+                export_workspace_bundle(
+                    output_path=out_dir / "workspace_bundle.json",
+                    dialogue=dialogue_list,
+                    state=last_good_state if last_good_state else state.to_dict(),
+                    ledger=last_good_ledger if last_good_ledger else ledger_writer.rows,
+                    source_meta=source_meta,
+                    meta=meta,
+                    chat_id=chat_id,
+                    summary=summary_text,
+                    status="needs_review",
+                    processed_pairs=halt_pair,
+                    flagged_pairs=flagged_pairs,
+                )
+                report_file = write_report(
+                    out_dir=out_dir,
+                    chat_id=chat_id,
+                    pairs_processed=halt_pair,
+                    wall_time_per_pair=wall_time_per_pair,
+                    tokens_per_pair=tokens_per_pair,
+                    llm_calls=getattr(client, "call_count", 0),
+                    retries=getattr(client, "retry_count", 0),
+                    cache_hits=getattr(client, "cache_hits", 0),
+                    state=state,
+                    checks_passed=list(passed_checks_set),
+                    checks_failed=list(failed_checks_set),
+                )
+                with open(report_file, "r", encoding="utf-8") as f:
+                    report_data = json.load(f)
+                report_data["flagged_pairs"] = flagged_pairs
+                report_data["status"] = "needs_review"
+                return report_data
+
+            # State is valid: record status, export partial bundle with needs_review, and keep going
             write_status(
                 out_dir,
                 healthy=False,
                 pair_number=pair_number,
                 violations=chk_res.violations,
             )
-            report_file = write_report(
-                out_dir=out_dir,
+            summary_text = state.run.get("dialogue_summary") or file_summary or ""
+            export_workspace_bundle(
+                output_path=out_dir / "workspace_bundle.json",
+                dialogue=dialogue_list,
+                state=state.to_dict(),
+                ledger=ledger_writer.rows,
+                source_meta=source_meta,
+                meta=meta,
                 chat_id=chat_id,
-                pairs_processed=pair_number - 1,
-                wall_time_per_pair=wall_time_per_pair,
-                tokens_per_pair=tokens_per_pair,
-                llm_calls=getattr(client, "call_count", 0),
-                retries=getattr(client, "retry_count", 0),
-                cache_hits=getattr(client, "cache_hits", 0),
-                state=state,
-                checks_passed=list(passed_checks_set),
-                checks_failed=list(failed_checks_set),
+                summary=summary_text,
+                status="needs_review",
+                processed_pairs=pair_number,
+                flagged_pairs=flagged_pairs,
             )
-            with open(report_file, "r", encoding="utf-8") as f:
-                report_data = json.load(f)
-            if stop_on_violation:
-                raise InvariantViolationError(chk_res.violations, chk_res.failed)
-            return report_data
+            last_good_pair = pair_number
+            last_good_state = state.to_dict()
+            last_good_ledger = list(ledger_writer.rows)
+            prev_ledger = list(ledger_writer.rows)
         else:
             write_status(
                 out_dir,
@@ -1351,6 +1431,9 @@ def run_chat(
                 pair_number=pair_number,
                 violations=[],
             )
+            last_good_pair = pair_number
+            last_good_state = state.to_dict()
+            last_good_ledger = list(ledger_writer.rows)
             prev_ledger = list(ledger_writer.rows)
 
     # Compute final metrics for report per TEST_STRATEGY §6
@@ -1377,8 +1460,9 @@ def run_chat(
         except Exception:
             final_info = None
 
-    # All pairs finished successfully
+    # All pairs finished successfully (or with flagged pairs kept in product mode)
     summary_text = state.run.get("dialogue_summary") or file_summary or ""
+    final_status = "needs_review" if flagged_pairs else "ready"
     export_workspace_bundle(
         output_path=out_dir / "workspace_bundle.json",
         dialogue=dialogue_list,
@@ -1388,8 +1472,9 @@ def run_chat(
         meta=meta,
         chat_id=chat_id,
         summary=summary_text,
-        status="ready",
+        status=final_status,
         processed_pairs=len(sorted_pairs),
+        flagged_pairs=flagged_pairs if flagged_pairs else None,
     )
 
     report_file = write_report(
@@ -1408,4 +1493,6 @@ def run_chat(
     )
     with open(report_file, "r", encoding="utf-8") as f:
         report_data = json.load(f)
+    report_data["flagged_pairs"] = flagged_pairs
+    report_data["status"] = final_status
     return report_data
