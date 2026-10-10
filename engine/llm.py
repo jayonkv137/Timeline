@@ -173,6 +173,7 @@ class LLMClient:
         self.usage_path = self.out_dir / "run" / "usage.jsonl"
         self.budget_guard = budget_guard
         self.usage_meter = UsageMeter(self.usage_path, budget_guard=budget_guard)
+        self.reasoning_effort = getattr(config, "reasoning_effort", "none")
         self.call_count = 0
         self.retry_count = 0
         self.total_tokens = 0
@@ -195,12 +196,29 @@ class LLMClient:
         last_exc = None
         for attempt in range(1, MAX_ATTEMPTS + 1):
             started = time.monotonic()
+            kwargs: dict[str, Any] = {
+                "model": model,
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": 0,
+            }
+            if self.reasoning_effort and self.reasoning_effort != "default":
+                kwargs["reasoning_effort"] = self.reasoning_effort
+
             try:
-                response = self._client.chat.completions.create(
-                    model=model,
-                    messages=[{"role": "user", "content": prompt}],
-                    temperature=0,
-                )
+                try:
+                    response = self._client.chat.completions.create(**kwargs)
+                except TypeError:
+                    if "reasoning_effort" in kwargs:
+                        kwargs.pop("reasoning_effort", None)
+                        response = self._client.chat.completions.create(**kwargs)
+                    else:
+                        raise
+                except APIStatusError as a_exc:
+                    if "reasoning_effort" in str(a_exc).lower() and "reasoning_effort" in kwargs:
+                        kwargs.pop("reasoning_effort", None)
+                        response = self._client.chat.completions.create(**kwargs)
+                    else:
+                        raise
                 text = response.choices[0].message.content or ""
                 elapsed = time.monotonic() - started
                 usage = getattr(response, "usage", None)

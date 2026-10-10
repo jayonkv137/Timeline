@@ -50,6 +50,7 @@ class Config:
     model_step2: str     # Step 2 (defaults to model_main)
     model_step3: str     # Step 3 (defaults to model_main)
     step3_batch_size: int
+    reasoning_effort: str = "none"  # "none" turns off Gemini/OpenAI thinking tokens
 
 
 def load_config(env_file=None):
@@ -66,4 +67,5 @@ def load_config(env_file=None):
         model_step2=_env(dotenv, "MODEL_STEP2", model_main),
         model_step3=_env(dotenv, "MODEL_STEP3", model_main),
         step3_batch_size=int(_env(dotenv, "STEP3_BATCH_SIZE", "3")),
+        reasoning_effort=_env(dotenv, "REASONING_EFFORT", "none"),
     )
