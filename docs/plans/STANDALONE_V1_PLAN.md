@@ -241,6 +241,8 @@ Full spec: [`docs/EVIDENCE_SPEC.md`](../EVIDENCE_SPEC.md). Goal: clicking any re
 | **SE.G** | You | Approve the evidence contract (workspace_bundle 1.1) and close SE | — |
 
 ### S4 · Upload and batch processing (about 1.5–2 weeks)
+
+> **Processing experience spec:** [`docs/PROCESSING_UX_SPEC.md`](../PROCESSING_UX_SPEC.md) (10 Oct 2026) defines what the user sees from "Process" to a living map: sidebar states, mapping dock, live graph growth, Brain forming, every error state, the event contract, real timing and rehearsal mode. S4.3, S4.4 and S4.8 follow it; its §13 adds steps S4.R and S4.UX1–4. Owner decisions in its §12.
 | Step | Builder | What | Done when |
 |---|---|---|---|
 | S4.1 ✅ | AG+ | Turn the `archive_scan.py` and `promote_from_archive.py` logic into library functions (no CLI-only code paths). `POST /imports` stores raw files; scanning runs in a background thread → `report.json` (conversations, pairs, fidelity grade, duplicates, estimate) | uploading your real Claude export lists 313 conversations with zero LLM calls |
