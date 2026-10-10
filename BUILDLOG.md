@@ -1903,3 +1903,36 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - Real Claude export test: 313 conversations, 2,759 pairs, zero LLM calls, < 5s.
   - Git diff `data/chats/fixture_pair1/`: 0 diffs.
 - **Next:** S4.2 — Import dialog UI: drop zone (zip, json, md) -> review table with filters, search, sort, sensitive flags, and cost gate.
+
+---
+
+## 2026-10-10 · Claude Code · Opus — [SE] Evidence linking, built in parallel with S4 (branch `s/evidence-linking`, merged)
+- **Files:**
+  - engine: `engine/evidence.py` (new), `engine/projections/workspace.py`, `engine/schemas/workspace_bundle.schema.json` (`$defs/evidence`)
+  - scripts and data: `scripts/evidence_audit.py`, `docs/plans/reports/SE_evidence_audit.md`, `web/src/workspace/data.generated.json` (regenerated)
+  - tests: `tests/test_evidence.py`
+  - UI: `web/src/workspace/{evidence.ts,useEvidence.tsx,evidence.css}` (new), `LocalGraph.tsx`, `Workspace.tsx`, `types.ts`
+  - e2e: `scripts/workspace-tests/{evidence.cjs,run-e2e.cjs}`
+  - docs: `docs/EVIDENCE_SPEC.md`, `docs/plans/STANDALONE_V1_PLAN.md` (SE rows)
+- **Did:** clicking a requirement or question in the graph now highlights the exact supporting words in the right speaker's message.
+  - Each item steps through all its sources (Introduced, Revised, Carried out, Asked, Answered).
+  - An answered question highlights its asked and answered passages together.
+  - Honest states replace invented highlights ("Exact passage unavailable · showing the message", "Source not linked yet").
+  - Back to reading restores the reading position; Escape closes.
+  - The graph never changes exchange while you inspect.
+  - Keyboard path: a requirement list in the graph, revealed on Tab.
+- **Truth fixes in the projection (EVIDENCE_SPEC §2):**
+  - all creating actions are kept (32 requirements had extra sources dropped)
+  - revisions are evidence (10 requirements)
+  - "answered" comes from the engine's `resolved_into` (12 → 9; 3 were mislabelled)
+  - no invented `U(1,1)` / `A(1,1)` speakers; unlinked items render grey
+  - the tooltip no longer says "From AI Question" when you asked
+- **Measured:** 630 / 639 action quotes (98.6%) anchor on exact words; the 9 others show the honest state.
+- **Ran:** `pytest` 273 passed on the merged branch (21 new). `tsc` clean. E2E against the dev build (`?offline=1`): smoke ✓, refinement ✓, evidence ✓. Manual: a real mouse click on a bead → highlight; stepping; Back to reading; Escape; keyboard Enter on an answered question → both halves highlighted.
+- **For S4 (Gemini):**
+  - Chats projected through `engine/projections/workspace.py` now carry `evidence[]` automatically.
+  - Library chats seeded before this need re-projecting (`scripts/seed_library.py`, force is the default; `npm run e2e` does it when it starts the server).
+  - `LocalGraph` takes `onAtom` / `activeAtom`.
+  - `Workspace.tsx` uses `useEvidence`; keep the `if(!ev.inspect)` guards on the scroll container's lock resets.
+  - `window.__cotraceBeads` is a DEV-only test probe.
+- **Not built yet:** Brain entry point; browser-side `textHash` "wording changed" check; reverse lookup (select text → linked requirements).
