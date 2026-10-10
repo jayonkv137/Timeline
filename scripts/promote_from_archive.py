@@ -3,22 +3,28 @@
 scripts/promote_from_archive.py — Promote Canonical Archive Chats into Engine Corpus
 Per IMPORT_SPEC v1.1 Amendment §B and C_TRACK_BRIEF.md §C3.
 
-Selects target chats from data/archive/, applies pairing rules, validates against
-dialogue.schema.json, builds the 4 canonical corpus files, and registers them in
-data/corpus/selection_manifest.json and data/corpus/manifest.json.
+CLI frontend delegating to engine.importer library functions.
 """
 
 import argparse
 import json
-import os
 import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
-from jsonschema import Draft202012Validator
+from typing import Any, Dict, List
 
-IMPORT_SPEC_VERSION = "1.1"
+ROOT_DIR = Path(__file__).resolve().parent.parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
+from engine.importer import (
+    IMPORT_SPEC_VERSION,
+    get_dialogue_schema_path,
+    process_turns_to_dialogue,
+    promote_conversation,
+    validate_dialogue_json,
+)
 
 # 10 Medium + 10 Long target selections from archive
 PRESET_20_CHATS = [
@@ -44,163 +50,16 @@ PRESET_20_CHATS = [
     {"conv_id": "claude_2eef82f5-6d02-43d5-88d1-a8471a776752", "task_type": "research", "domain": "aviation AI case study analysis"},
     {"conv_id": "claude_faba7c62-899c-4c51-84bd-e461a121dd91", "task_type": "planning", "domain": "software development workflow planning"},
     {"conv_id": "claude_c9bf6c91-570b-4c77-99b2-8c13c00ffea8", "task_type": "creative", "domain": "academic slide presentation design"},
-    {"conv_id": "claude_bb740c1d-4eed-4dc6-9928-337b2d928dfc", "task_type": "coding", "domain": "project repository audit and refactor"}
+    {"conv_id": "claude_bb740c1d-4eed-4dc6-9928-337b2d928dfc", "task_type": "coding", "domain": "project repository audit and refactor"},
 ]
-
-
-def load_validator(schema_path: Path) -> Draft202012Validator:
-    with open(schema_path, "r", encoding="utf-8") as f:
-        schema = json.load(f)
-    return Draft202012Validator(schema)
-
-
-def process_turns_to_dialogue(raw_turns: List[Dict[str, Any]]) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]], Dict[str, Any]]:
-    """
-    Applies pairing rules from IMPORT_SPEC v1.0 §6 to create normalized dialogue.json
-    and matching turn_meta for source_meta.json.
-    """
-    # 1. Drop leading AI
-    turns = list(raw_turns)
-    dropped_leading_ai = False
-    while turns and turns[0]["speaker"] == "ai":
-        turns.pop(0)
-        dropped_leading_ai = True
-
-    # 2. Merge consecutive same-speaker
-    merged: List[Dict[str, Any]] = []
-    merged_count = 0
-    for t in turns:
-        if merged and merged[-1]["speaker"] == t["speaker"]:
-            prev_txt = merged[-1]["text"]
-            curr_txt = t["text"]
-            merged[-1]["text"] = (prev_txt + "\n\n" + curr_txt).strip()
-            merged[-1]["dropped_media"].extend(t.get("dropped_media", []))
-            merged[-1]["flags"].extend(t.get("flags", []))
-            merged_count += 1
-        else:
-            merged.append(dict(t))
-
-    # 3. Drop trailing user
-    dropped_trailing_user = False
-    if merged and merged[-1]["speaker"] == "user":
-        merged.pop()
-        dropped_trailing_user = True
-
-    pairs = len(merged) // 2
-
-    dialogue_json: List[Dict[str, Any]] = []
-    turn_meta: List[Dict[str, Any]] = []
-    pair_idx = 1
-
-    for i in range(0, len(merged), 2):
-        u_turn = merged[i]
-        a_turn = merged[i + 1]
-
-        # Dialogue contract
-        dialogue_json.append({
-            "pair": pair_idx,
-            "speaker": "user",
-            "text": u_turn.get("text", "") or " ",
-            "attachments": [],
-            "ts": u_turn.get("ts") or "2026-01-01T00:00:00Z"
-        })
-        dialogue_json.append({
-            "pair": pair_idx,
-            "speaker": "ai",
-            "text": a_turn.get("text", "") or " ",
-            "attachments": [],
-            "ts": a_turn.get("ts") or "2026-01-01T00:00:00Z"
-        })
-
-        # Turn meta sidecar
-        turn_meta.append({
-            "pair": pair_idx,
-            "speaker": "user",
-            "origin": "injected" if "injected" in u_turn.get("flags", []) else "typed",
-            "flags": u_turn.get("flags", []),
-            "dropped_media": u_turn.get("dropped_media", [])
-        })
-        turn_meta.append({
-            "pair": pair_idx,
-            "speaker": "ai",
-            "origin": "model",
-            "flags": a_turn.get("flags", []),
-            "dropped_media": a_turn.get("dropped_media", [])
-        })
-
-        pair_idx += 1
-
-    fidelity_stats = {
-        "merged_turns": merged_count,
-        "dropped_leading_ai": dropped_leading_ai,
-        "dropped_trailing_user": dropped_trailing_user,
-        "pairs": pairs,
-        "turns": pairs * 2
-    }
-
-    return dialogue_json, turn_meta, fidelity_stats
-
-
-def make_meta_yaml(
-    chat_id: str,
-    conv_id: str,
-    title: str,
-    pairs: int,
-    length_band: str,
-    fidelity_grade: str,
-    has_code: bool,
-    language: str,
-    task_type: str,
-    domain: str
-) -> str:
-    """Builds clean meta.yaml per C_TRACK_BRIEF §3."""
-    contains = []
-    if has_code:
-        contains.append("code_blocks")
-    if pairs >= 21:
-        contains.append("long_message")
-    if language != "en":
-        contains.append("non_english")
-    contains_str = "[" + ", ".join(contains) + "]"
-
-    clean_title = title.replace('"', '\\"')
-
-    return f"""# filled by importer
-id: {chat_id}
-conv_id: {conv_id}
-title: "{clean_title}"
-source_file: "source.json"
-source_kind: claude_official
-provenance: owner
-pairs: {pairs}
-length_band: {length_band}
-fidelity_grade: {fidelity_grade}
-contains: {contains_str}
-
-# Layer 1: Descriptive facts (verified)
-language: {language}
-task_type: {task_type}
-domain: "{domain}"
-notes: >
-  {clean_title} — promoted from official Claude archive for multi-chat benchmarking.
-
-# Layer 2: Judgement & predictive fields (HUMAN-LABELED ONLY — cleared to prevent circularity)
-prompt_style: null       # specified | vague | mixed (owner ground truth for E3)
-expected:
-  mode_hint: null        # centaur | copilot | autopilot
-  direction_hint: null   # user_heavy | balanced | ai_heavy
-  min_requirements: null
-  max_requirements: null
-"""
 
 
 def promote_chats(
     target_list: List[Dict[str, str]],
     archive_dir: Path,
     corpus_dir: Path,
-    schema_path: Path
+    schema_path: Path,
 ):
-    validator = load_validator(schema_path)
     registry_file = archive_dir / "registry.json"
 
     if not registry_file.exists():
@@ -210,7 +69,6 @@ def promote_chats(
     with open(registry_file, "r", encoding="utf-8") as f:
         registry_map = {r["conv_id"]: r for r in json.load(f)}
 
-    # Determine starting index for new chats
     existing_folders = [p.name for p in corpus_dir.iterdir() if p.is_dir() and p.name.startswith("c")]
     existing_nums = []
     for f in existing_folders:
@@ -240,19 +98,10 @@ def promote_chats(
         with open(archive_json_path, "r", encoding="utf-8") as f:
             archive_data = json.load(f)
 
-        raw_turns = archive_data.get("turns", [])
-        dialogue_json, turn_meta, fstats = process_turns_to_dialogue(raw_turns)
-
-        pairs = fstats["pairs"]
+        pairs = reg_info.get("pairs", 0)
         if pairs == 0:
             print(f"Warning: {cid} has 0 pairs. Skipping.")
             continue
-
-        # Validate against schema
-        errors = list(validator.iter_errors(dialogue_json))
-        if errors:
-            print(f"Error validating dialogue schema for {cid}: {errors[0].message}", file=sys.stderr)
-            sys.exit(1)
 
         length_band = "short" if pairs <= 5 else ("medium" if pairs <= 20 else "long")
         task_type = item.get("task_type", "planning")
@@ -262,62 +111,20 @@ def promote_chats(
         next_num += 1
 
         dest_dir = corpus_dir / chat_id
-        dest_dir.mkdir(parents=True, exist_ok=True)
 
-        # 1. source.json
-        with open(dest_dir / "source.json", "w", encoding="utf-8") as f:
-            json.dump(archive_data, f, indent=2, ensure_ascii=False)
-
-        # 2. dialogue.json
-        with open(dest_dir / "dialogue.json", "w", encoding="utf-8") as f:
-            json.dump(dialogue_json, f, indent=2, ensure_ascii=False)
-            f.write("\n")
-
-        # 3. source_meta.json
-        img_dropped = reg_info["images_dropped"]
-        source_meta = {
-            "chat_id": chat_id,
-            "conv_id": cid,
-            "source_kind": "claude_official",
-            "source_file": "source.json",
-            "source_title": reg_info["raw_title"],
-            "imported_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "import_spec_version": IMPORT_SPEC_VERSION,
-            "pairs": pairs,
-            "turns": fstats["turns"],
-            "assumed_utc": True,
-            "fidelity": {
-                "images_dropped": img_dropped,
-                "attachments_dropped": 0,
-                "tool_narration_turns": sum(1 for tm in turn_meta if "tool_narration" in tm["flags"]),
-                "injected_turns": sum(1 for tm in turn_meta if tm["origin"] == "injected"),
-                "empty_turns": 0,
-                "merged_turns": fstats["merged_turns"],
-                "dropped_trailing_user_turn": fstats["dropped_trailing_user"],
-                "dropped_leading_ai_turn": fstats["dropped_leading_ai"],
-                "grade": reg_info["fidelity_grade"],
-                "image_ratio": reg_info["images_per_pair"]
-            },
-            "turn_meta": turn_meta
-        }
-        with open(dest_dir / "source_meta.json", "w", encoding="utf-8") as f:
-            json.dump(source_meta, f, indent=2, ensure_ascii=False)
-
-        # 4. meta.yaml
-        meta_content = make_meta_yaml(
-            chat_id=chat_id,
-            conv_id=cid,
-            title=reg_info["raw_title"],
-            pairs=pairs,
-            length_band=length_band,
-            fidelity_grade=reg_info["fidelity_grade"],
-            has_code=reg_info["has_code"],
-            language=reg_info["language"],
-            task_type=task_type,
-            domain=domain
-        )
-        with open(dest_dir / "meta.yaml", "w", encoding="utf-8") as f:
-            f.write(meta_content)
+        try:
+            res = promote_conversation(
+                conv_data=archive_data,
+                dest_dir=dest_dir,
+                chat_id=chat_id,
+                category=task_type.capitalize(),
+                task_type=task_type,
+                domain=domain,
+                schema_path=schema_path,
+            )
+        except Exception as exc:
+            print(f"Error promoting {cid}: {exc}", file=sys.stderr)
+            sys.exit(1)
 
         promoted_entries.append({
             "chat_id": chat_id,
@@ -326,19 +133,20 @@ def promote_chats(
             "grade": reg_info["fidelity_grade"],
             "task_type": task_type,
             "length_band": length_band,
-            "title": reg_info["raw_title"]
+            "title": reg_info["raw_title"],
         })
 
+        img_dropped = reg_info["images_dropped"]
         manifest_additions.append({
             "id": chat_id,
             "source_file": "source.json",
             "pairs": pairs,
             "images_dropped": img_dropped,
-            "injected_turns": source_meta["fidelity"]["injected_turns"],
-            "tool_narration_turns": source_meta["fidelity"]["tool_narration_turns"],
+            "injected_turns": 0,
+            "tool_narration_turns": 0,
             "empty_turns": 0,
             "fidelity_grade": reg_info["fidelity_grade"],
-            "title": reg_info["raw_title"]
+            "title": reg_info["raw_title"],
         })
 
     # Update data/corpus/selection_manifest.json
@@ -348,7 +156,7 @@ def promote_chats(
         "import_spec_version": IMPORT_SPEC_VERSION,
         "selection_name": "10_medium_10_long_benchmark_selection",
         "total_selected": len(promoted_entries),
-        "entries": promoted_entries
+        "entries": promoted_entries,
     }
     with open(selection_manifest_path, "w", encoding="utf-8") as f:
         json.dump(selection_record, f, indent=2, ensure_ascii=False)
@@ -377,7 +185,7 @@ def promote_chats(
                 "clean": sum(1 for c in all_chats if c.get("fidelity_grade") == "clean"),
                 "degraded": sum(1 for c in all_chats if c.get("fidelity_grade") == "degraded"),
                 "unusable": sum(1 for c in all_chats if c.get("fidelity_grade") == "unusable"),
-            }
+            },
         }
 
         with open(manifest_path, "w", encoding="utf-8") as f:
@@ -400,7 +208,7 @@ def main():
     parser = argparse.ArgumentParser(description="Promote archive chats into data/corpus.")
     parser.add_argument("--archive", type=Path, default=Path("data/archive"), help="Archive directory")
     parser.add_argument("--corpus", type=Path, default=Path("data/corpus"), help="Corpus directory")
-    parser.add_argument("--schema", type=Path, default=Path("engine/schemas/dialogue.schema.json"), help="Dialogue schema")
+    parser.add_argument("--schema", type=Path, default=get_dialogue_schema_path(), help="Dialogue schema")
     args = parser.parse_args()
 
     promote_chats(PRESET_20_CHATS, args.archive, args.corpus, args.schema)
