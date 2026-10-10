@@ -118,7 +118,12 @@ Steps tick through as `pipeline_status` events arrive. No percentages inside a s
 - **Empty state before the first exchange:** "Mapping the first exchange… your map will start here", with the graph stage's neutral orbit, not a spinner.
 - **Evidence clicks** (EVIDENCE_SPEC) work for mapped exchanges; unmapped ones say "Not mapped yet".
 
-**Composer:** stays usable for live chat later (S5). While an imported chat is mapping, sending is disabled with the reason "Mapping in progress · you can reply when it's done", because the engine state is sequential.
+**Composer: never blocked.** You can reply at any time, even while earlier exchanges are still mapping (owner, 10 Oct 2026: blocking the user is bad design).
+- The AI replies immediately; the reply doesn't depend on the map.
+- The engine maps exchanges strictly in order (each builds on the previous state), so the new exchange **joins the end of this chat's mapping queue**. Its marker reads `PAIR 09 · not mapped yet · after 4 earlier exchanges`, and it maps as soon as they finish.
+- **Replying moves this chat to the front of the mapping queue.** You're engaged with it, so it gets mapped first.
+- The graph keeps growing in order; nothing is skipped or lost.
+- Replying to an imported chat continues it **here in COTRACE**, not on the original platform. The first reply says so once: "This continues the conversation in COTRACE; the original on Claude stays as it was".
 
 ### 5.4 Brain
 - A chat's neuron (or today's territory) **appears at its first mapped exchange** as a faint "forming" outline at its place. It grows as mapped mass grows, and completes with a single **birth pulse** at "chat ready".
@@ -161,6 +166,7 @@ When the window was hidden, a system notification says the same (opt-in, Setting
 | Sensitive-flagged chat | Unticked by default in the review table | Needs an explicit tick; label "flagged sensitive" |
 | Chat deleted while queued or mapping | Removed from the queue (moved to trash, recoverable) | The dock updates; nothing lost |
 | User opens a chat mid-exchange | Shows every mapped exchange; the current one in progress | — |
+| User replies while earlier exchanges are still mapping | The reply is sent at once; the new exchange queues behind them; the chat jumps to the front of the queue | New marker "not mapped yet · after N earlier exchanges"; the row shows the larger total |
 
 ## 8. Persistence and recovery
 - The queue lives in `jobs.json`: order, state, last finished exchange per chat, spend.
@@ -191,7 +197,7 @@ When the window was hidden, a system notification says the same (opt-in, Setting
 ## 12. Decisions for the owner
 1. **Default order:** shortest first (recommended) vs as listed vs newest first.
 2. **Parallel chats:** 2 (recommended; safe for rate limits) vs 3–4.
-3. **While an imported chat maps:** block replying until done (recommended; engine state is sequential) vs queue your message.
+3. ~~While an imported chat maps: block replying~~. **Decided (owner): never block.** Replies go through at once; the new exchange queues behind the earlier ones, and replying moves the chat to the front of the mapping queue (§5.3).
 4. **System notifications** when a batch finishes while the window is hidden: off by default, opt-in in Settings (recommended).
 5. **Rehearsal mode** built first so the experience can be judged before real spend (recommended).
 
