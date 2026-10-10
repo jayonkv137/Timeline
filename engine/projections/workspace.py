@@ -342,6 +342,9 @@ def project_workspace(
 
     if processed_pairs is not None:
         bundle["processedPairs"] = processed_pairs
+        bundle["nodes"] = [n for n in final_nodes if n.get("born", 1) <= processed_pairs]
+        bundle["atoms"] = [a for a in atoms if a.get("born", 1) <= processed_pairs]
+        bundle["snapshots"] = [s for s in snapshots if s.get("pair", 1) <= processed_pairs]
     if flagged_pairs is not None:
         bundle["flaggedPairs"] = flagged_pairs
 

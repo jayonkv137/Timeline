@@ -2002,3 +2002,37 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `.venv/bin/python -m pytest`: 280 passed in 8.61s (0 failures, 0 regressions).
   - `data/chats/fixture_pair1/`: 0 diffs.
 - **Next:** S4.R — Rehearsal mode replay before S4.4.
+
+---
+
+## 2026-10-10 15:08 · Antigravity · Gemini
+- **Phase/Step:** S4.R — Rehearsal mode playback engine (Upload and batch processing)
+- **Did:**
+  - `server/rehearsal.py` (New):
+    - Created `get_available_rehearsal_fixtures` scanning `data/chats/` (excluding frozen `fixture_pair1`) and ordering candidates shortest-first by `totalPairs`.
+    - Created `RehearsalRunner`:
+      - `setup_chat`: prepares library chat directory, copies recorded dialogue/state/ledger, and writes initial pair 0 `workspace_bundle.json` (`status: "processing"`, `processedPairs: 0`, dialogue fully readable, empty nodes).
+      - `handle_pair`: executes pair with configurable delay (`delay_per_pair`), incrementally projects updated `workspace_bundle.json` on disk reflecting nodes, atoms, and snapshots born $\le pair$, setting `status = "ready"` on final pair.
+      - `enqueue_rehearsal_batch`: sets up batch fixtures, sorts shortest-first, and enqueues to `JobQueueManager` with `mode: "rehearsal"`.
+  - `server/jobs.py`:
+    - Added `rehearsal_runner` hook to `JobQueueManager` (`set_rehearsal_runner`).
+    - Extended `enqueue_job` with `mode="rehearsal"` support and job reset for re-runs.
+    - Updated `_run_chat_worker` to dispatch to `rehearsal_runner.handle_pair` when `mode == "rehearsal"`.
+  - `server/app.py`:
+    - Registered `RehearsalPayload` model at module level.
+    - Added REST endpoints: `GET /api/jobs/rehearsal-presets` and `POST /api/jobs/rehearse`.
+    - Initialized and injected `RehearsalRunner` in `create_app`.
+  - `engine/projections/workspace.py`:
+    - Filtered `nodes`, `atoms`, and `snapshots` by `born <= processed_pairs` when `processed_pairs` is specified, enabling true incremental graph growth as pairs progress.
+  - `tests/test_rehearsal.py` (New):
+    - Tier 1 test suite covering fixture discovery, initial pair 0 bundle, full end-to-end multi-chat batch replay with ordered SSE events (`queue_changed`, `job_progress`, `pair_ready`, `chat_ready`), incremental bundle verification on disk, and REST endpoints.
+  - Marked `S4.R ✅` in `docs/plans/STANDALONE_V1_PLAN.md`.
+- **Decisions made:**
+  - Initial bundle before pair 1 has `processedPairs: 0` and `status: "processing"` with full transcript, ensuring transcript is instantly readable while graph shows "Mapping the first exchange…".
+  - Batch replay enforces shortest-first enqueueing order so shortest chats run and finish first even when scheduler runs immediately.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `.venv/bin/python -m pytest tests/test_rehearsal.py -v`: 4 passed in 0.54s.
+  - `.venv/bin/python -m pytest`: 284 passed in 8.92s (0 failures, 0 regressions).
+  - `data/chats/fixture_pair1/`: 0 diffs.
+- **Next:** S4.4 — Pipeline per chat: promote → `run_chat` (caching client, usage meter) → project → `chat_ready`.

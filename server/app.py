@@ -79,6 +79,11 @@ class TestConnectionPayload(BaseModel):
     api_key: str | None = Field(default=None, description="Optional override API key")
 
 
+class RehearsalPayload(BaseModel):
+    chatIds: list[str] = Field(default_factory=list, description="Optional fixture chat IDs to rehearse")
+    delaySeconds: float = Field(default=0.5, description="Pacing delay in seconds per exchange pair")
+
+
 def create_router() -> APIRouter:
     router = APIRouter()
 
@@ -435,6 +440,32 @@ def create_router() -> APIRouter:
         job_queue.resume_all()
         return {"status": "resumed"}
 
+    @router.get("/jobs/rehearsal-presets")
+    def list_rehearsal_presets_endpoint(request: Request) -> list[dict[str, Any]]:
+        """List pre-recorded chat fixtures available for zero-spend rehearsal replay (§7)."""
+        rehearsal = getattr(request.app.state, "rehearsal_runner", None)
+        return rehearsal.list_fixtures() if rehearsal else []
+
+    @router.post("/jobs/rehearse")
+    async def start_rehearsal_endpoint(
+        payload: RehearsalPayload,
+        request: Request,
+    ) -> dict[str, Any]:
+        """Start zero-spend rehearsal mode replay through the job queue (§7)."""
+        rehearsal = request.app.state.rehearsal_runner
+        job_queue = request.app.state.job_queue
+        enqueued = await rehearsal.enqueue_rehearsal_batch(
+            chat_ids=payload.chatIds if payload.chatIds else None,
+            delay_seconds=payload.delaySeconds,
+            queue_manager=job_queue,
+        )
+        return {
+            "status": "rehearsal_started",
+            "enqueuedCount": len(enqueued),
+            "delaySeconds": payload.delaySeconds,
+            "jobs": enqueued,
+        }
+
     return router
 
 
@@ -449,6 +480,7 @@ def create_app(
     library: Library | None = None,
     dist_dir: Path | str | None = None,
     job_queue: Any = None,
+    rehearsal_runner: Any = None,
 ) -> FastAPI:
     """Application factory for the COTRACE server."""
     # Injected library or default
@@ -458,7 +490,11 @@ def create_app(
 
     # Injected job queue or default
     from server.jobs import JobQueueManager
+    from server.rehearsal import RehearsalRunner
     queue = job_queue or JobQueueManager(library=app_lib, broadcaster=broadcaster)
+    rehearsal = rehearsal_runner or RehearsalRunner(library=app_lib, broadcaster=broadcaster)
+    if hasattr(queue, "set_rehearsal_runner") and queue.rehearsal_runner is None:
+        queue.set_rehearsal_runner(rehearsal)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
@@ -472,6 +508,7 @@ def create_app(
     app.state.library = app_lib
     app.state.broadcaster = broadcaster
     app.state.job_queue = queue
+    app.state.rehearsal_runner = rehearsal
 
     # CORS configuration for local frontends
     app.add_middleware(

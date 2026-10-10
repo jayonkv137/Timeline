@@ -43,10 +43,12 @@ class JobQueueManager:
         library: Library,
         broadcaster: Any = None,
         worker_handler: Callable[[dict[str, Any], int], Awaitable[None]] | None = None,
+        rehearsal_runner: Any = None,
     ) -> None:
         self.library = library
         self.broadcaster = broadcaster
         self.worker_handler = worker_handler
+        self.rehearsal_runner = rehearsal_runner
 
         self._lock = asyncio.Lock()
         self._running_tasks: dict[str, asyncio.Task] = {}
@@ -77,6 +79,10 @@ class JobQueueManager:
                 changed = True
         if changed:
             self.library.save_jobs(jobs)
+
+    def set_rehearsal_runner(self, runner: Any) -> None:
+        """Register rehearsal runner for zero-spend replay mode (§7)."""
+        self.rehearsal_runner = runner
 
     def start(self) -> None:
         """Start the background queue scheduler if not already running."""
@@ -148,6 +154,7 @@ class JobQueueManager:
         conv_id: str | None = None,
         import_id: str | None = None,
         priority: int = 0,
+        mode: str = "live",
     ) -> dict[str, Any]:
         """Enqueue a chat for mapping."""
         async with self._lock:
@@ -161,7 +168,10 @@ class JobQueueManager:
                     return existing
                 # If completed or failed, re-queue
                 existing["status"] = "queued"
+                existing["mode"] = mode
                 existing["priority"] = priority
+                existing["completedPairs"] = 0
+                existing["timingLog"] = []
                 existing["updatedAt"] = now
                 existing["error"] = None
                 self.library.save_jobs(jobs)
@@ -176,6 +186,7 @@ class JobQueueManager:
                 "convId": conv_id or chat_id,
                 "importId": import_id,
                 "title": title,
+                "mode": mode,
                 "status": "queued",
                 "totalPairs": int(total_pairs),
                 "completedPairs": 0,
@@ -425,9 +436,11 @@ class JobQueueManager:
 
                 t0 = time.time()
 
-                # Execute pair using registered handler or default pipeline
+                # Execute pair using registered handler, rehearsal runner, or default pipeline
                 if self.worker_handler is not None:
                     await self.worker_handler(job, pair)
+                elif job.get("mode") == "rehearsal" and self.rehearsal_runner is not None:
+                    await self.rehearsal_runner.handle_pair(job, pair)
                 else:
                     await self._default_pair_handler(job, pair)
 
