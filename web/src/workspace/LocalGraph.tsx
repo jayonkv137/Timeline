@@ -658,7 +658,7 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
           return <button key={a.id} type="button" aria-pressed={activeAtom === a.id} onClick={() => { patch({ selected:a.nodeId }); onAtom(a.id); }}>{kind}: {a.text}</button>;
         })}
       </div>}
-      {!total && <div className="graph-empty"><p>Your graph will appear after the first analyzed exchange.</p></div>}
+      {!total && <div className="graph-empty"><p>{chat.status === 'processing' ? 'Mapping the first exchange…' : 'Your graph will appear after the first analyzed exchange.'}</p></div>}
 
       <div className="og-corner-tools">
         <button className="og-tool" aria-label="Recenter graph" title="Recenter graph" onClick={fit}><LocateFixed size={14} /></button>

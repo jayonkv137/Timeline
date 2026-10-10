@@ -22,6 +22,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Awaitable, Callable
 
+from engine.budget import BudgetStopError
+from engine.llm import RateLimitError
 from server.library import Library, atomic_write_json
 
 logger = logging.getLogger("cotrace.jobs")
@@ -44,11 +46,13 @@ class JobQueueManager:
         broadcaster: Any = None,
         worker_handler: Callable[[dict[str, Any], int], Awaitable[None]] | None = None,
         rehearsal_runner: Any = None,
+        pipeline_runner: Any = None,
     ) -> None:
         self.library = library
         self.broadcaster = broadcaster
         self.worker_handler = worker_handler
         self.rehearsal_runner = rehearsal_runner
+        self.pipeline_runner = pipeline_runner
 
         self._lock = asyncio.Lock()
         self._running_tasks: dict[str, asyncio.Task] = {}
@@ -83,6 +87,10 @@ class JobQueueManager:
     def set_rehearsal_runner(self, runner: Any) -> None:
         """Register rehearsal runner for zero-spend replay mode (§7)."""
         self.rehearsal_runner = runner
+
+    def set_pipeline_runner(self, runner: Any) -> None:
+        """Register pipeline runner for live chat processing (§4 Step S4.4)."""
+        self.pipeline_runner = runner
 
     def start(self) -> None:
         """Start the background queue scheduler if not already running."""
@@ -252,6 +260,27 @@ class JobQueueManager:
                         dest_dir=cdir,
                         chat_id=chat_id,
                         category="General",
+                    )
+
+            # Ensure initial pair 0 workspace_bundle.json exists so chat is readable immediately (§3.3)
+            bundle_file = cdir / "workspace_bundle.json"
+            if not bundle_file.is_file():
+                dialogue_path = cdir / "dialogue.json"
+                if dialogue_path.is_file():
+                    from engine.projections.workspace import export_workspace_bundle, load_chat_metadata
+                    dialogue_data = json.loads(dialogue_path.read_text(encoding="utf-8"))
+                    source_meta, meta, summary = load_chat_metadata(cdir)
+                    export_workspace_bundle(
+                        output_path=bundle_file,
+                        dialogue=dialogue_data,
+                        state={"outcomes": [], "requirements": [], "slots": [], "operations_log": [], "actions": []},
+                        ledger=[],
+                        source_meta=source_meta,
+                        meta=meta,
+                        chat_id=chat_id,
+                        summary=summary,
+                        status="processing",
+                        processed_pairs=0,
                     )
 
             total_pairs = row_meta.get("pairs", 0)
@@ -436,11 +465,13 @@ class JobQueueManager:
 
                 t0 = time.time()
 
-                # Execute pair using registered handler, rehearsal runner, or default pipeline
+                # Execute pair using registered handler, rehearsal runner, pipeline runner, or default
                 if self.worker_handler is not None:
                     await self.worker_handler(job, pair)
                 elif job.get("mode") == "rehearsal" and self.rehearsal_runner is not None:
                     await self.rehearsal_runner.handle_pair(job, pair)
+                elif self.pipeline_runner is not None:
+                    await self.pipeline_runner.handle_pair(job, pair)
                 else:
                     await self._default_pair_handler(job, pair)
 
@@ -483,6 +514,26 @@ class JobQueueManager:
 
         except asyncio.CancelledError:
             logger.info(f"Worker for {chat_id} canceled.")
+        except RateLimitError:
+            logger.warning(f"Worker rate-limited on {chat_id}, re-queuing.")
+            async with self._lock:
+                jobs = self.library.get_jobs()
+                j = next((item for item in jobs if item.get("id") == job["id"]), None)
+                if j and j.get("status") == "running":
+                    j["status"] = "queued"
+                    j["updatedAt"] = datetime.now(timezone.utc).isoformat()
+                    self.library.save_jobs(jobs)
+            self._broadcast_queue_changed()
+        except BudgetStopError:
+            logger.warning(f"Worker budget stop on {chat_id}, re-queuing.")
+            async with self._lock:
+                jobs = self.library.get_jobs()
+                j = next((item for item in jobs if item.get("id") == job["id"]), None)
+                if j and j.get("status") == "running":
+                    j["status"] = "queued"
+                    j["updatedAt"] = datetime.now(timezone.utc).isoformat()
+                    self.library.save_jobs(jobs)
+            self._broadcast_queue_changed()
         except Exception as exc:
             logger.exception(f"Worker error processing {chat_id}: {exc}")
             async with self._lock:

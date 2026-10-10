@@ -200,8 +200,15 @@ if (typeof window !== 'undefined' && !checkOffline()) {
       }));
     } else if (event === 'chat_restored') {
       st.refresh();
-    } else if ((event === 'pair_ready' || event === 'chat_ready') && data?.chatId) {
+    } else if (event === 'pair_ready' && data?.chatId) {
       st.loadBundle(data.chatId);
+      window.dispatchEvent(new CustomEvent('cotrace:pair_ready', { detail: data }));
+    } else if (event === 'chat_ready' && data?.chatId) {
+      st.loadBundle(data.chatId);
+      st.refresh();
+      window.dispatchEvent(new CustomEvent('cotrace:chat_ready', { detail: data }));
+    } else if (event === 'queue_changed' || event === 'job_progress' || event === 'job_error') {
+      window.dispatchEvent(new CustomEvent('cotrace:' + event, { detail: data }));
     } else if (event === 'budget_stop') {
       window.dispatchEvent(new CustomEvent('cotrace:budget_stop', { detail: data }));
     }

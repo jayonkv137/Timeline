@@ -2036,3 +2036,46 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `.venv/bin/python -m pytest`: 284 passed in 8.92s (0 failures, 0 regressions).
   - `data/chats/fixture_pair1/`: 0 diffs.
 - **Next:** S4.4 — Pipeline per chat: promote → `run_chat` (caching client, usage meter) → project → `chat_ready`.
+
+---
+
+## 2026-10-10 15:30 · Antigravity · Gemini
+- **Phase/Step:** S4.4 — Live chat pipeline runner with non-blocking threads, usage metering, and processing UX (Upload and batch processing)
+- **Did:**
+  - `server/pipeline_runner.py` (New):
+    - Created `PipelineRunner` executing live extraction pipeline (`process_pair`, `run_chat` logic) for promoted chats.
+    - Uses `CachingLLMClient` with `$COTRACE_HOME/cache` and `UsageMeter` writing per-call token and cost records to `run/usage.jsonl`.
+    - Offloads CPU and model sync operations to worker threads via `asyncio.to_thread` preventing event loop blocks.
+    - Handles `RateLimitError` (HTTP 429 backoff notification to `JobQueueManager`), `BudgetStopError` (budget cap notification to `JobQueueManager`), and invariant violation flagging (`pair_flagged` broadcast in product mode S-D9).
+    - Auth guard: stops before spend if no API key is configured and no mock/caching client is provided, broadcasting `job_error` with `kind: "auth"`.
+  - `server/jobs.py`:
+    - Injected `pipeline_runner` into `JobQueueManager`.
+    - Handled `RateLimitError` and `BudgetStopError` in `_run_chat_worker` to re-queue cleanly without crashing or marking the job failed.
+    - Initial `workspace_bundle.json` created with `processedPairs: 0` and `status: "processing"` upon enqueueing promoted chats so dialogue is instantly readable.
+  - `server/app.py`:
+    - Initialized and injected `PipelineRunner` in `create_app`.
+  - `web/src/workspace/ProcessingPill.tsx` (New):
+    - Floating pill above status bar per PROCESSING_UX_SPEC §3.2 ("Mapping 4 chats · 9 waiting").
+    - Popover listing active running/waiting chats with progress bars, "Map next", "Pause all / Resume all", and single-confirmation "Stop".
+    - Direct alert state for monthly budget cap reached ("Paused · monthly budget reached · Raise cap") and auth/key error ("Can't reach the model · check your key · Settings").
+  - `web/src/workspace/Workspace.tsx`:
+    - Wired `ProcessingPill` into layout.
+    - Updated sidebar rows to display live state: `Mapping · X of Y` with thin progress line, `Waiting · N exchanges`, `Couldn't map · Retry`, `Mapped X of Y · Continue`.
+    - Wired `handleProcessBatch` to `ImportModal`'s `onProcessBatch` prop.
+  - `web/src/workspace/LocalGraph.tsx`:
+    - Shows "Mapping the first exchange…" in empty graph when chat is actively processing.
+  - `web/src/workspace/api.ts` & `store.ts`:
+    - Wired SSE queue events (`queue_changed`, `job_progress`, `job_error`, `pair_flagged`) and job queue API endpoints.
+  - `tests/test_pipeline_runner.py` (New):
+    - 6 tier1 tests verifying auth guard, rate limit backoff, budget stop, invariant flagging, replay execution with caching client, and full end-to-end integration with `JobQueueManager`.
+  - Marked `S4.4 ✅` in `docs/plans/STANDALONE_V1_PLAN.md`.
+- **Decisions made:**
+  - Sync pipeline work runs strictly inside `asyncio.to_thread` to ensure FastAPI endpoints and SSE broadcasting remain real-time and fluid during heavy model/CPU runs.
+  - Rate-limit and budget-cap events revert job status to `queued` so they cleanly resume when backoff expires or budget is raised, preserving all previously mapped pairs.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `.venv/bin/python -m pytest tests/test_pipeline_runner.py -v`: 6 passed in 1.48s.
+  - `.venv/bin/python -m pytest`: 290 passed in 9.52s (0 failures, 0 regressions).
+  - `npm run build:workspace`: exit code 0, bundled 1.6 MB workspace bundle.
+  - `data/chats/fixture_pair1/`: 0 diffs.
+- **Next:** S4.5 — Product-mode invariants (S-D9): `run_chat(stop_on_violation=False)` records violation, marks pair `needs_review`, keeps going if state valid, bundle carries `flaggedPairs`.

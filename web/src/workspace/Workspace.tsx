@@ -8,6 +8,8 @@ import { applyChatUpdate } from './adapter';
 import { SettingsModal } from './SettingsModal';
 import { UsageModal } from './UsageModal';
 import { ImportModal } from './ImportModal';
+import { ProcessingPill } from './ProcessingPill';
+import { fetchJobs, cancelJob, mapNextJob, pauseAllJobs, resumeAllJobs, processImportBatch, type QueueStatus } from './api';
 import { useEvidence, EvidenceStrip } from './useEvidence';
 
 const blankView:ChatView={pair:1,scroll:0,follow:true,selected:null,draft:'',zoom:1,pan:{x:0,y:0}};
@@ -24,6 +26,36 @@ export function Workspace(){
  const {chats,tabs,active,views,open,close,patch,newChat,appendDraft,loading,error,isOffline,refresh}=useWorkspace();
  const [query,setQuery]=useState('');const [sidebar,setSidebar]=useState(true);const [rail,setRail]=useState(true);const [expanded,setExpanded]=useState(false);const [brainSelected,setBrainSelected]=useState<string|null>(null);const [brainFocus,setBrainFocus]=useState<string|null>(null);const [brainVisited,setBrainVisited]=useState(false);const [notice,setNotice]=useState('');const [copied,setCopied]=useState<string|null>(null);const [settingsOpen,setSettingsOpen]=useState(false);const [usageOpen,setUsageOpen]=useState(false);const [importOpen,setImportOpen]=useState(false);
  const scroll=useRef<HTMLDivElement>(null);const lockUntil=useRef(0);const scrollRaf=useRef(0);const search=useRef<HTMLInputElement>(null);const [pending,setPending]=useState<Record<string,boolean>>({});
+ const [queueStatus,setQueueStatus]=useState<QueueStatus|null>(null);
+
+ useEffect(()=>{
+   if(isOffline)return;
+   fetchJobs().then(setQueueStatus).catch(()=>{});
+   const onQueueEvent=()=>{fetchJobs().then(setQueueStatus).catch(()=>{});};
+   window.addEventListener('cotrace:queue_changed',onQueueEvent);
+   window.addEventListener('cotrace:job_progress',onQueueEvent);
+   window.addEventListener('cotrace:chat_ready',onQueueEvent);
+   window.addEventListener('cotrace:job_error',onQueueEvent);
+   return ()=>{
+     window.removeEventListener('cotrace:queue_changed',onQueueEvent);
+     window.removeEventListener('cotrace:job_progress',onQueueEvent);
+     window.removeEventListener('cotrace:chat_ready',onQueueEvent);
+     window.removeEventListener('cotrace:job_error',onQueueEvent);
+   };
+ },[isOffline]);
+
+ async function handleProcessBatch(importId:string,convIds:string[]){
+   try{
+     const res=await processImportBatch(importId,convIds);
+     setNotice(`Processing started for ${res.enqueuedCount} ${res.enqueuedCount===1?'chat':'chats'}.`);
+     await refresh();
+     const q=await fetchJobs();
+     setQueueStatus(q);
+     if(res.jobs&&res.jobs[0]){activate(res.jobs[0].chatId);}
+   }catch(err:any){
+     setNotice(`Could not start batch: ${err.message||err}`);
+   }
+ }
  const isBrain=active==='brain';const chat=chats.find(c=>c.id===active);const view=views[active]||blankView;const selectedChat=chats.find(c=>c.id===brainSelected);const selectedView=brainSelected?views[brainSelected]||blankView:blankView;
  const update=(v:Partial<ChatView>)=>patch(active,v);
  const ev=useEvidence({chat,viewPair:view.pair,scroll,lockUntil}); // EVIDENCE_SPEC: click a node → exact words in the chat
@@ -200,13 +232,67 @@ export function Workspace(){
     <label className="search-box"><Search size={14}/><input ref={search} aria-label="Search chats" placeholder="Search chats" value={query} onChange={e=>setQuery(e.target.value)}/><kbd>⌘ K</kbd></label>
     <div className="history-section"><span>YOUR CONVERSATIONS</span><span>{filtered.length}</span></div>
     <div className="chat-list">
-      {filtered.map(c=><button key={c.id} className={'chat-list-item '+(active===c.id?'active':'')} onClick={()=>activate(c.id)}>
-        <MessageSquare size={14}/>
-        <span><strong>{c.title}</strong><small>{c.category} · {c.totalPairs?`${c.totalPairs} exchanges`:'Draft'}</small></span>
-        {tabs.includes(c.id)&&<i className="open-dot"/>}
-      </button>)}
-      {filtered.length===0&&<p className="quiet-empty">{loading==='empty'?'No conversations in library yet.':loading==='loading'?'Loading conversations…':'No conversations match.'}</p>}
+      {filtered.map(c => {
+        const job = queueStatus?.jobs?.find(j => j.chatId === c.id);
+        const isRunning = job?.status === 'running';
+        const isQueued = job?.status === 'queued';
+        const isFailed = job?.status === 'failed';
+        const isCanceled = job?.status === 'canceled';
+
+        let itemClass = 'chat-list-item ' + (active === c.id ? 'active' : '');
+        if (isRunning) itemClass += ' chat-mapping';
+        else if (isQueued) itemClass += ' chat-waiting';
+        else if (isFailed) itemClass += ' chat-failed';
+
+        const progressPct = isRunning
+          ? Math.round(((job.completedPairs || 0) / (job.totalPairs || 1)) * 100)
+          : 0;
+
+        return (
+          <button key={c.id} className={itemClass} onClick={() => activate(c.id)}>
+            <MessageSquare size={14} />
+            <span>
+              <strong>{c.title}</strong>
+              <small>
+                {isRunning
+                  ? `Mapping · ${job.completedPairs || 0} of ${job.totalPairs}`
+                  : isQueued
+                  ? `Waiting · ${job.totalPairs || c.totalPairs} exchanges`
+                  : isFailed
+                  ? 'Couldn’t map · Retry'
+                  : isCanceled
+                  ? `Mapped ${job.completedPairs} of ${job.totalPairs} · Continue`
+                  : `${c.category} · ${c.totalPairs ? `${c.totalPairs} exchanges` : 'Draft'}`}
+              </small>
+            </span>
+            {isRunning && (
+              <div className="chat-mapping-line">
+                <div className="chat-mapping-fill" style={{ width: `${progressPct}%` }} />
+              </div>
+            )}
+            {tabs.includes(c.id) && <i className="open-dot" />}
+          </button>
+        );
+      })}
+      {filtered.length === 0 && (
+        <p className="quiet-empty">
+          {loading === 'empty'
+            ? 'No conversations in library yet.'
+            : loading === 'loading'
+            ? 'Loading conversations…'
+            : 'No conversations match.'}
+        </p>
+      )}
     </div>
+    <ProcessingPill
+      queueStatus={queueStatus}
+      onMapNext={async (jobId) => { await mapNextJob(jobId); const q = await fetchJobs(); setQueueStatus(q); }}
+      onCancel={async (jobId) => { await cancelJob(jobId); const q = await fetchJobs(); setQueueStatus(q); }}
+      onPauseAll={async () => { await pauseAllJobs(); const q = await fetchJobs(); setQueueStatus(q); }}
+      onResumeAll={async () => { await resumeAllJobs(); const q = await fetchJobs(); setQueueStatus(q); }}
+      onOpenSettings={() => setSettingsOpen(true)}
+      onOpenUsage={() => setUsageOpen(true)}
+    />
     <div className="workspace-footer">
       <span className="workspace-avatar">J</span>
       <div>Jayon’s workspace<small>{isOffline?'Offline sample mode':'Connected local server'}</small></div>
@@ -359,6 +445,6 @@ export function Workspace(){
   {notice&&<div className="toast" role="status">{notice}<button className="icon-button" aria-label="Dismiss notification" onClick={()=>setNotice('')}><X size={14}/></button></div>}
   <SettingsModal isOpen={settingsOpen} onClose={()=>setSettingsOpen(false)}/>
   <UsageModal isOpen={usageOpen} onClose={()=>setUsageOpen(false)}/>
-  <ImportModal isOpen={importOpen} onClose={()=>setImportOpen(false)}/>
+  <ImportModal isOpen={importOpen} onClose={()=>setImportOpen(false)} onProcessBatch={handleProcessBatch}/>
  </div>;
 }

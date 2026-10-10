@@ -86,8 +86,12 @@ export function subscribeEvents(
       'chat_trashed',
       'chat_restored',
       'pair_ready',
+      'pair_flagged',
       'chat_ready',
       'pipeline_status',
+      'queue_changed',
+      'job_progress',
+      'job_error',
       'budget_stop',
     ];
 
@@ -254,6 +258,119 @@ export async function fetchImportsList(): Promise<Array<{ importId: string; stat
   });
   if (!res.ok) {
     throw new Error(`Failed to fetch imports list: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export interface Job {
+  id: string;
+  chatId: string;
+  convId: string;
+  title: string;
+  status: 'queued' | 'running' | 'completed' | 'canceled' | 'failed' | 'paused';
+  totalPairs: number;
+  completedPairs: number;
+  priority: number;
+  mode?: string;
+  error?: string | null;
+}
+
+export interface QueueStatus {
+  isPaused: boolean;
+  pauseReason: string | null;
+  parallelLimit: number;
+  runningCount: number;
+  waitingCount: number;
+  completedCount: number;
+  failedCount: number;
+  runningChats: string[];
+  waitingChats: string[];
+  isBackoff: boolean;
+  backoffRemaining: number;
+  jobs: Job[];
+}
+
+export async function fetchJobs(): Promise<QueueStatus> {
+  const res = await fetch(`${API_BASE}/jobs`, {
+    headers: { Accept: 'application/json' },
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to fetch jobs: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function processImportBatch(
+  importId: string,
+  conversationIds: string[],
+  rehearsal: boolean = false
+): Promise<{ status: string; enqueuedCount: number; jobs: Job[] }> {
+  const res = await fetch(`${API_BASE}/imports/${encodeURIComponent(importId)}/process`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify({ conversationIds, rehearsal }),
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to process import batch: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function mapNextJob(jobId: string): Promise<Job> {
+  const res = await fetch(`${API_BASE}/jobs/${encodeURIComponent(jobId)}/priority`, {
+    method: 'POST',
+    headers: { Accept: 'application/json' },
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to map next: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function cancelJob(jobId: string): Promise<Job> {
+  const res = await fetch(`${API_BASE}/jobs/${encodeURIComponent(jobId)}/cancel`, {
+    method: 'POST',
+    headers: { Accept: 'application/json' },
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to cancel job: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function pauseAllJobs(): Promise<{ status: string }> {
+  const res = await fetch(`${API_BASE}/jobs/pause-all`, {
+    method: 'POST',
+    headers: { Accept: 'application/json' },
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to pause jobs: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function resumeAllJobs(): Promise<{ status: string }> {
+  const res = await fetch(`${API_BASE}/jobs/resume-all`, {
+    method: 'POST',
+    headers: { Accept: 'application/json' },
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to resume jobs: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function startRehearsal(
+  chatIds?: string[],
+  delaySeconds: number = 0.5
+): Promise<{ status: string; enqueuedCount: number; jobs: Job[] }> {
+  const res = await fetch(`${API_BASE}/jobs/rehearse`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify({ chatIds: chatIds || [], delaySeconds }),
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to start rehearsal: ${res.status} ${res.statusText}`);
   }
   return res.json();
 }

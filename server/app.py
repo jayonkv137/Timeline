@@ -481,6 +481,7 @@ def create_app(
     dist_dir: Path | str | None = None,
     job_queue: Any = None,
     rehearsal_runner: Any = None,
+    pipeline_runner: Any = None,
 ) -> FastAPI:
     """Application factory for the COTRACE server."""
     # Injected library or default
@@ -491,10 +492,16 @@ def create_app(
     # Injected job queue or default
     from server.jobs import JobQueueManager
     from server.rehearsal import RehearsalRunner
+    from server.pipeline_runner import PipelineRunner
+
     queue = job_queue or JobQueueManager(library=app_lib, broadcaster=broadcaster)
     rehearsal = rehearsal_runner or RehearsalRunner(library=app_lib, broadcaster=broadcaster)
+    pipeline = pipeline_runner or PipelineRunner(library=app_lib, broadcaster=broadcaster, job_queue=queue)
+
     if hasattr(queue, "set_rehearsal_runner") and queue.rehearsal_runner is None:
         queue.set_rehearsal_runner(rehearsal)
+    if hasattr(queue, "set_pipeline_runner") and queue.pipeline_runner is None:
+        queue.set_pipeline_runner(pipeline)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
@@ -509,6 +516,7 @@ def create_app(
     app.state.broadcaster = broadcaster
     app.state.job_queue = queue
     app.state.rehearsal_runner = rehearsal
+    app.state.pipeline_runner = pipeline
 
     # CORS configuration for local frontends
     app.add_middleware(
