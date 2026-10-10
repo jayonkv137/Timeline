@@ -1801,7 +1801,26 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `npm --prefix web run build:workspace`: clean build in 200ms.
   - Git diff `data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
   - Sacred numbers: 21.7% / 78.3%, 4 · 10, COPILOT verified invariant.
-- **Next:** S3.5 — Model bake-off: 3 golden chats × 3 cheap configurations, graded with `scripts/grade_golden.py` (CC).
+- **Next:** S3.4 Polish — Offline fallback and direct 8765 API connection for UsageModal.
+
+---
+
+## 2026-10-10 09:51 · Antigravity · Gemini 3.8 Flash
+- **Phase/Step:** S3.4 Polish — Offline fallback and direct 8765 API connection for UsageModal
+- **Did:**
+  - `web/src/workspace/api.ts`: updated `API_BASE` to detect `file:` protocol and target `http://127.0.0.1:8765/api` with local CORS.
+  - `web/src/workspace/UsageModal.tsx`: added graceful offline fallback report with default budget numbers ($20.00 allowance, $0.00 spend) and an informative banner with Retry button instead of unhandled `Failed to fetch` error box.
+  - `web/src/workspace/workspace.css`: added token-backed styles for `.usage-offline-notice`, `.usage-offline-text`, and `.usage-retry-btn`.
+  - Rebuilt workspace distribution (`dist-workspace`) and offline artifact (`web/cotrace-workspace.html`).
+- **Decisions made:** Preserved offline preview usability for standalone HTML file usage without requiring a running server to inspect budget caps.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `.venv/bin/python -m pytest`: 233 passed.
+  - `npm --prefix web run build:workspace`: clean build.
+  - Git diff `data/chats/fixture_pair1/`: 0 diffs (frozen fixture untouched).
+  - Sacred numbers: 21.7% / 78.3%, 4 · 10, COPILOT verified invariant.
+- **Next:** S3.5 — Model bake-off: 3 golden chats × 3 cheap configurations, graded with `scripts/grade_golden.py`.
+
 
 
 
