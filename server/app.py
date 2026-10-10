@@ -15,6 +15,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import shutil
 from typing import Any
 
 from fastapi import APIRouter, FastAPI, HTTPException, Request, status
@@ -236,6 +237,143 @@ def create_router() -> APIRouter:
         """Return spend this month, per chat, per step, per model, and remaining budget (S3.4)."""
         lib: Library = request.app.state.library
         return lib.get_usage_summary(year_month=month)
+
+    @router.post("/imports")
+    async def upload_import_endpoint(
+        request: Request,
+        sync: bool = False,
+    ) -> JSONResponse:
+        """Stores raw upload files in $COTRACE_HOME/imports/<importId>/raw/ and runs scan in background."""
+        lib: Library = request.app.state.library
+        broadcaster: SSEBroadcaster = request.app.state.broadcaster
+        import_id, raw_dir = lib.create_import_batch()
+
+        content_type = request.headers.get("content-type", "")
+        body = await request.body()
+        files_saved = 0
+
+        # 1. Multipart form-data upload
+        if "multipart/form-data" in content_type:
+            from email.parser import BytesParser
+            from email.policy import default as email_default
+
+            header_bytes = f"Content-Type: {content_type}\r\n\r\n".encode("utf-8")
+            msg = BytesParser(policy=email_default).parsebytes(header_bytes + body)
+            for part in msg.iter_parts():
+                fn = part.get_filename()
+                if fn:
+                    clean_fn = Path(fn).name
+                    payload = part.get_payload(decode=True)
+                    if payload is not None:
+                        (raw_dir / clean_fn).write_bytes(payload)
+                        files_saved += 1
+
+        # 2. JSON payload (disk path reference or direct export JSON)
+        elif "application/json" in content_type:
+            try:
+                parsed_json = json.loads(body.decode("utf-8"))
+                if isinstance(parsed_json, dict) and ("filePath" in parsed_json or "path" in parsed_json):
+                    target_str = parsed_json.get("filePath") or parsed_json.get("path")
+                    target_path = Path(target_str).expanduser().resolve()
+                    if not target_path.exists():
+                        raise HTTPException(
+                            status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=f"Source file not found: {target_str}",
+                        )
+                    if target_path.suffix.lower() == ".zip":
+                        shutil.copy2(target_path, raw_dir / target_path.name)
+                    else:
+                        shutil.copy2(target_path, raw_dir / target_path.name)
+                    files_saved += 1
+                else:
+                    # Raw export JSON uploaded directly as request body
+                    (raw_dir / "conversations.json").write_bytes(body)
+                    files_saved += 1
+            except json.JSONDecodeError:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Malformed JSON body")
+
+        # 3. Direct binary or stream upload
+        else:
+            raw_filename = request.headers.get("x-filename")
+            if not raw_filename:
+                # Detect format from magic bytes or text
+                if body.startswith(b"PK\x03\x04"):
+                    raw_filename = "export.zip"
+                elif body.strip().startswith((b"[", b"{")):
+                    raw_filename = "conversations.json"
+                else:
+                    raw_filename = "export.dat"
+
+            clean_fn = Path(raw_filename).name
+            if body:
+                (raw_dir / clean_fn).write_bytes(body)
+                files_saved += 1
+
+        if files_saved == 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="No files received in upload payload",
+            )
+
+        from engine.importer import scan_import
+
+        def run_scan() -> dict[str, Any]:
+            try:
+                rep = scan_import(raw_dir, import_id, lib.root)
+                broadcaster.broadcast(
+                    "import_ready",
+                    {
+                        "importId": import_id,
+                        "status": "ready",
+                        "totalConversations": rep.get("totalConversations", 0),
+                        "totalPairs": rep.get("totalPairs", 0),
+                    },
+                )
+                return rep
+            except Exception as exc:
+                err_rep = {
+                    "importId": import_id,
+                    "status": "failed",
+                    "error": str(exc),
+                    "conversations": [],
+                }
+                lib.save_import_report(import_id, err_rep)
+                broadcaster.broadcast(
+                    "import_failed",
+                    {"importId": import_id, "status": "failed", "error": str(exc)},
+                )
+                return err_rep
+
+        if sync:
+            final_report = await asyncio.to_thread(run_scan)
+            return JSONResponse(status_code=status.HTTP_200_OK, content=final_report)
+
+        asyncio.create_task(asyncio.to_thread(run_scan))
+        return JSONResponse(
+            status_code=status.HTTP_202_ACCEPTED,
+            content={
+                "importId": import_id,
+                "status": "scanning",
+                "message": "Import upload received; background scan initiated.",
+            },
+        )
+
+    @router.get("/imports/{import_id}")
+    def get_import_endpoint(import_id: str, request: Request) -> dict[str, Any]:
+        """Return triage report.json for an import batch."""
+        lib: Library = request.app.state.library
+        try:
+            return lib.get_import_report(import_id)
+        except FileNotFoundError as exc:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc))
+        except ValueError as exc:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
+
+    @router.get("/imports")
+    def list_imports_endpoint(request: Request) -> list[dict[str, Any]]:
+        """List all import batches with status and summary metrics."""
+        lib: Library = request.app.state.library
+        return lib.list_imports()
 
     return router
 

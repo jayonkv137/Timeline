@@ -1876,22 +1876,30 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - Sacred numbers: 21.7% / 78.3%, 4 · 10, COPILOT verified invariant.
 - **Next:** S3.T — Owner test: read the 3 maps and the cost report; decide whether quality is worth the cost.
 
+---
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## 2026-10-10 11:48 · Antigravity · Gemini
+- **Phase/Step:** S4.1 — Import library functions and POST /imports endpoint (Upload and batch processing)
+- **Did:**
+  - Built `engine/importer.py` encapsulating multi-platform archive ingestion, triage scanning, pairing rules (IMPORT_SPEC v1.0/v1.1), language/sensitive keyword detection, pre-flight token & dollar estimation (`engine.estimator`), duplicate detection against local library, and chat promotion with `dialogue.schema.json` validation into pure library functions.
+  - Refactored `scripts/archive_scan.py` and `scripts/promote_from_archive.py` to delegate directly to `engine.importer`, eliminating CLI-only code paths while preserving full command-line backward compatibility.
+  - Extended `server/library.py` with `create_import_batch`, `get_import_report`, `save_import_report`, and `list_imports` adhering to library layout `$COTRACE_HOME/imports/<importId>/raw/` and `report.json`.
+  - Added REST endpoints in `server/app.py`:
+    - `POST /imports` (and `/api/imports`): supports multipart/form-data, JSON file path references, and direct binary streams; persists files into `raw/`; runs triage scan in a background thread; immediately returns 202 Accepted with status `"scanning"`; broadcasts `import_ready` over SSE when complete. Supports `?sync=true` for testing.
+    - `GET /imports/{import_id}`: returns the complete triage report (`conversations`, `pairs`, `fidelity`, `duplicates`, `estimate`).
+    - `GET /imports`: lists import batches and their status.
+  - Built comprehensive Tier 1 unit & integration tests in `tests/test_importer.py` (8 tests) and `tests/test_server_app.py` (3 new tests, 11 total).
+  - Verified benchmark on real Claude export `data/calude/conversations.json`: parses and estimates all 313 conversations (2,759 pairs) in **0.39s** with **zero LLM calls** (well within §6A T3 <= 30s budget).
+  - Validated that `data/chats/fixture_pair1/` remains strictly untouched (0 diffs).
+  - Marked `S4.1 ✅` in `docs/plans/STANDALONE_V1_PLAN.md`.
+- **Decisions made:**
+  - Standard library multipart parsing via `email.parser.BytesParser(policy=default)` eliminates any dependency on `python-multipart`.
+  - Background scanning executed via `asyncio.to_thread` ensures uploads return immediately while maintaining non-blocking async server event loops.
+  - Pre-flight estimation integrated directly into per-conversation triage rows so import dialogs can display estimated cost without any additional API latency.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `.venv/bin/python -m pytest`: 252 passed in 4.45s (0 failures, 0 regressions).
+  - `python scripts/archive_scan.py --report`: prints 313 conversation summary correctly.
+  - Real Claude export test: 313 conversations, 2,759 pairs, zero LLM calls, < 5s.
+  - Git diff `data/chats/fixture_pair1/`: 0 diffs.
+- **Next:** S4.2 — Import dialog UI: drop zone (zip, json, md) -> review table with filters, search, sort, sensitive flags, and cost gate.

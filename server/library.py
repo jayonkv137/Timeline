@@ -128,6 +128,73 @@ class Library:
         _validate_id(import_id, "import ID")
         return self.imports_dir / import_id
 
+    def create_import_batch(self, import_id: str | None = None) -> tuple[str, Path]:
+        """Create a new import directory layout: $COTRACE_HOME/imports/<import_id>/raw/"""
+        self.ensure_layout()
+        if import_id is None:
+            now_str = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+            import uuid
+            import_id = f"imp_{now_str}_{uuid.uuid4().hex[:6]}"
+        _validate_id(import_id, "import ID")
+
+        bdir = self.import_dir(import_id)
+        raw_dir = bdir / "raw"
+        raw_dir.mkdir(parents=True, exist_ok=True)
+
+        initial_report = {
+            "importId": import_id,
+            "status": "scanning",
+            "createdAt": datetime.now(timezone.utc).isoformat(),
+            "conversations": [],
+        }
+        atomic_write_json(bdir / "report.json", initial_report)
+        return import_id, raw_dir
+
+    def get_import_report(self, import_id: str) -> dict[str, Any]:
+        """Load and return report.json for an import batch."""
+        bdir = self.import_dir(import_id)
+        report_file = bdir / "report.json"
+        if not report_file.is_file():
+            raise FileNotFoundError(f"Report for import '{import_id}' not found at {report_file}")
+        with report_file.open("r", encoding="utf-8") as f:
+            return json.load(f)
+
+    def save_import_report(self, import_id: str, report: dict[str, Any]) -> None:
+        """Atomically persist report.json for an import batch."""
+        bdir = self.import_dir(import_id)
+        bdir.mkdir(parents=True, exist_ok=True)
+        atomic_write_json(bdir / "report.json", report)
+
+    def list_imports(self) -> list[dict[str, Any]]:
+        """List all import batches with status and summary metrics."""
+        if not self.imports_dir.is_dir():
+            return []
+        results: list[dict[str, Any]] = []
+        for idir in self.imports_dir.iterdir():
+            if not idir.is_dir():
+                continue
+            rfile = idir / "report.json"
+            if rfile.is_file():
+                try:
+                    with rfile.open("r", encoding="utf-8") as f:
+                        rep = json.load(f)
+                    results.append({
+                        "importId": rep.get("importId", idir.name),
+                        "status": rep.get("status", "ready"),
+                        "createdAt": rep.get("createdAt", ""),
+                        "sourceFilename": rep.get("sourceFilename", ""),
+                        "totalConversations": rep.get("totalConversations", 0),
+                        "totalPairs": rep.get("totalPairs", 0),
+                        "fidelity": rep.get("fidelity", {}),
+                        "estimate": rep.get("estimate", {}),
+                    })
+                except Exception:
+                    results.append({"importId": idir.name, "status": "unknown"})
+            else:
+                results.append({"importId": idir.name, "status": "scanning"})
+        results.sort(key=lambda x: x.get("createdAt", ""), reverse=True)
+        return results
+
     def chat_exists(self, chat_id: str) -> bool:
         """Return True if an active chat directory exists."""
         try:

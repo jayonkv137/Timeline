@@ -186,3 +186,77 @@ async def test_sse_broadcaster() -> None:
     await broadcaster.unsubscribe(queue)
     broadcaster.broadcast("chat_created", {"chatId": "c02"})
     assert queue.empty()
+
+
+@pytest.mark.tier1
+def test_upload_imports_multipart(client: TestClient, library: Library) -> None:
+    sample_convs = [
+        {
+            "uuid": "server-test-uuid-1",
+            "name": "Server Test Chat",
+            "created_at": "2026-07-01T10:00:00Z",
+            "chat_messages": [
+                {"sender": "human", "text": "Question 1", "created_at": "2026-07-01T10:00:00Z"},
+                {"sender": "assistant", "text": "Answer 1", "created_at": "2026-07-01T10:01:00Z"},
+            ],
+        }
+    ]
+    json_bytes = json.dumps(sample_convs).encode("utf-8")
+
+    # Upload using sync=true
+    res = client.post(
+        "/api/imports?sync=true",
+        files={"file": ("conversations.json", json_bytes, "application/json")},
+    )
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "ready"
+    assert data["totalConversations"] == 1
+    assert data["totalPairs"] == 1
+    assert data["estimate"]["cost"]["expected"] > 0
+    import_id = data["importId"]
+
+    # GET /imports/{id}
+    res_get = client.get(f"/api/imports/{import_id}")
+    assert res_get.status_code == 200
+    assert res_get.json()["importId"] == import_id
+    assert res_get.json()["totalConversations"] == 1
+
+    # GET /imports list
+    res_list = client.get("/api/imports")
+    assert res_list.status_code == 200
+    assert len(res_list.json()) >= 1
+    assert any(item["importId"] == import_id for item in res_list.json())
+
+
+@pytest.mark.tier1
+def test_upload_imports_json_filepath(client: TestClient, library: Library, tmp_path: Path) -> None:
+    sample_file = tmp_path / "custom_export.json"
+    sample_convs = [
+        {
+            "uuid": "file-path-uuid-2",
+            "name": "Disk Path Chat",
+            "created_at": "2026-08-01T12:00:00Z",
+            "chat_messages": [
+                {"sender": "human", "text": "Disk Q", "created_at": "2026-08-01T12:00:00Z"},
+                {"sender": "assistant", "text": "Disk A", "created_at": "2026-08-01T12:01:00Z"},
+            ],
+        }
+    ]
+    sample_file.write_text(json.dumps(sample_convs), encoding="utf-8")
+
+    res = client.post(
+        "/api/imports?sync=true",
+        json={"filePath": str(sample_file)},
+    )
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "ready"
+    assert data["totalConversations"] == 1
+    assert data["conversations"][0]["convId"] == "claude_file-path-uuid-2"
+
+
+@pytest.mark.tier1
+def test_get_import_not_found(client: TestClient) -> None:
+    res = client.get("/api/imports/non_existent_import_id")
+    assert res.status_code == 404
