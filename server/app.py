@@ -541,6 +541,10 @@ def create_app(
             def root_index() -> FileResponse:
                 return FileResponse(workspace_html)
 
+            @app.get("/workspace", include_in_schema=False)
+            def root_workspace() -> FileResponse:
+                return FileResponse(workspace_html)
+
             @app.get("/workspace.html", include_in_schema=False)
             def root_workspace_html() -> FileResponse:
                 return FileResponse(workspace_html)
