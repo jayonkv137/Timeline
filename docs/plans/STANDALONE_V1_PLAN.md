@@ -242,7 +242,7 @@ Full spec: [`docs/EVIDENCE_SPEC.md`](../EVIDENCE_SPEC.md). Goal: clicking any re
 
 ### S4 · Upload and batch processing (about 1.5–2 weeks)
 
-> **Processing experience spec:** [`docs/PROCESSING_UX_SPEC.md`](../PROCESSING_UX_SPEC.md) (10 Oct 2026) defines what the user sees from "Process" to a living map: sidebar states, mapping dock, live graph growth, Brain forming, every error state, the event contract, real timing and rehearsal mode. S4.3, S4.4 and S4.8 follow it; its §13 adds steps S4.R and S4.UX1–4. Owner decisions in its §12.
+> **Processing experience spec:** [`docs/PROCESSING_UX_SPEC.md`](../PROCESSING_UX_SPEC.md) (v1.1, minimal by owner request). From "Process" to a living map: row states, one small pill while chats run, the graph growing with the existing motion, never-blocked replies, 1–8 parallel chats with automatic rate-limit backoff, every error state, the event contract and rehearsal mode. S4.3, S4.4 and S4.8 follow it; its §7 adds S4.R and S4.UX; its §8 lists what is deliberately left for later.
 | Step | Builder | What | Done when |
 |---|---|---|---|
 | S4.1 ✅ | AG+ | Turn the `archive_scan.py` and `promote_from_archive.py` logic into library functions (no CLI-only code paths). `POST /imports` stores raw files; scanning runs in a background thread → `report.json` (conversations, pairs, fidelity grade, duplicates, estimate) | uploading your real Claude export lists 313 conversations with zero LLM calls |
