@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BarChart3, BrainCircuit, Check, Copy, GitBranch, Menu, MessageSquare, PanelLeftClose, PanelRightClose, PanelRightOpen, Plus, Search, Settings, X, Pin, RotateCcw } from 'lucide-react';
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BarChart3, BrainCircuit, Check, Copy, GitBranch, Menu, MessageSquare, PanelLeftClose, PanelRightClose, PanelRightOpen, Plus, Search, Settings, Upload, X, Pin, RotateCcw } from 'lucide-react';
 import { useWorkspace } from './store';
 import type { Chat, ChatView } from './types';
 import { LocalGraph } from './LocalGraph';
@@ -7,6 +7,7 @@ import { Brain } from './Brain';
 import { applyChatUpdate } from './adapter';
 import { SettingsModal } from './SettingsModal';
 import { UsageModal } from './UsageModal';
+import { ImportModal } from './ImportModal';
 import { useEvidence, EvidenceStrip } from './useEvidence';
 
 const blankView:ChatView={pair:1,scroll:0,follow:true,selected:null,draft:'',zoom:1,pan:{x:0,y:0}};
@@ -21,7 +22,7 @@ function RichText({text}:{text:string}){
 
 export function Workspace(){
  const {chats,tabs,active,views,open,close,patch,newChat,appendDraft,loading,error,isOffline,refresh}=useWorkspace();
- const [query,setQuery]=useState('');const [sidebar,setSidebar]=useState(true);const [rail,setRail]=useState(true);const [expanded,setExpanded]=useState(false);const [brainSelected,setBrainSelected]=useState<string|null>(null);const [brainFocus,setBrainFocus]=useState<string|null>(null);const [brainVisited,setBrainVisited]=useState(false);const [notice,setNotice]=useState('');const [copied,setCopied]=useState<string|null>(null);const [settingsOpen,setSettingsOpen]=useState(false);const [usageOpen,setUsageOpen]=useState(false);
+ const [query,setQuery]=useState('');const [sidebar,setSidebar]=useState(true);const [rail,setRail]=useState(true);const [expanded,setExpanded]=useState(false);const [brainSelected,setBrainSelected]=useState<string|null>(null);const [brainFocus,setBrainFocus]=useState<string|null>(null);const [brainVisited,setBrainVisited]=useState(false);const [notice,setNotice]=useState('');const [copied,setCopied]=useState<string|null>(null);const [settingsOpen,setSettingsOpen]=useState(false);const [usageOpen,setUsageOpen]=useState(false);const [importOpen,setImportOpen]=useState(false);
  const scroll=useRef<HTMLDivElement>(null);const lockUntil=useRef(0);const scrollRaf=useRef(0);const search=useRef<HTMLInputElement>(null);const [pending,setPending]=useState<Record<string,boolean>>({});
  const isBrain=active==='brain';const chat=chats.find(c=>c.id===active);const view=views[active]||blankView;const selectedChat=chats.find(c=>c.id===brainSelected);const selectedView=brainSelected?views[brainSelected]||blankView:blankView;
  const update=(v:Partial<ChatView>)=>patch(active,v);
@@ -183,6 +184,7 @@ export function Workspace(){
     <button className={'icon-button '+(!isBrain?'current':'')} aria-label="Show chats" onClick={()=>setSidebar(!sidebar)}><MessageSquare size={19}/></button>
     <button className={'icon-button '+(isBrain?'current':'')} aria-label="Brain overview" onClick={()=>open('brain')}><BrainCircuit size={20}/></button>
     <button className="icon-button" aria-label="Search conversations" onClick={()=>{setSidebar(true);setTimeout(()=>search.current?.focus(),0);}}><Search size={18}/></button>
+    <button className={'icon-button '+(importOpen?'current':'')} aria-label="Import history" title="Import history" onClick={()=>setImportOpen(true)}><Upload size={18}/></button>
     <button className={'icon-button '+(usageOpen?'current':'')} aria-label="View usage and budget" title="Usage & Budget" onClick={()=>setUsageOpen(true)}><BarChart3 size={18}/></button>
     <button className={'icon-button '+(settingsOpen?'current':'')} aria-label="Open settings" title="Settings" onClick={()=>setSettingsOpen(true)}><Settings size={18}/></button>
     <div className="rail-spacer"/>
@@ -191,7 +193,10 @@ export function Workspace(){
 
   {sidebar&&<aside className="history-panel">
     <div className="history-brand"><span>COTRACE</span><button className="icon-button" aria-label="Close sidebar" onClick={()=>setSidebar(false)}><PanelLeftClose size={17}/></button></div>
-    <button className="new-chat" onClick={newChat}><Plus size={16}/>New conversation<kbd>⌘ ↵</kbd></button>
+    <div style={{ display: 'flex', gap: '6px' }}>
+      <button className="new-chat" style={{ flex: 1 }} onClick={newChat}><Plus size={16}/>New conversation<kbd>⌘ ↵</kbd></button>
+      <button className="new-chat" style={{ flex: 'initial', padding: '0 10px', background: 'transparent' }} aria-label="Import history" title="Import history" onClick={()=>setImportOpen(true)}><Upload size={15}/></button>
+    </div>
     <label className="search-box"><Search size={14}/><input ref={search} aria-label="Search chats" placeholder="Search chats" value={query} onChange={e=>setQuery(e.target.value)}/><kbd>⌘ K</kbd></label>
     <div className="history-section"><span>YOUR CONVERSATIONS</span><span>{filtered.length}</span></div>
     <div className="chat-list">
@@ -354,5 +359,6 @@ export function Workspace(){
   {notice&&<div className="toast" role="status">{notice}<button className="icon-button" aria-label="Dismiss notification" onClick={()=>setNotice('')}><X size={14}/></button></div>}
   <SettingsModal isOpen={settingsOpen} onClose={()=>setSettingsOpen(false)}/>
   <UsageModal isOpen={usageOpen} onClose={()=>setUsageOpen(false)}/>
+  <ImportModal isOpen={importOpen} onClose={()=>setImportOpen(false)}/>
  </div>;
 }

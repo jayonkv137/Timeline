@@ -3,7 +3,7 @@
  * Connects to /api endpoints and /api/events SSE stream per STANDALONE_V1_PLAN §3.2 & §3.3.
  */
 
-import type { Chat, ChatSummary } from './types';
+import type { Chat, ChatSummary, ImportReport } from './types';
 
 export const API_BASE =
   typeof window !== 'undefined' && window.location.protocol === 'file:'
@@ -220,6 +220,40 @@ export async function fetchUsage(month?: string): Promise<UsageReport> {
   });
   if (!res.ok) {
     throw new Error(`Failed to fetch usage: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function uploadImport(file: File): Promise<{ importId: string; status: string; message?: string }> {
+  const formData = new FormData();
+  formData.append('file', file);
+  const res = await fetch(`${API_BASE}/imports`, {
+    method: 'POST',
+    body: formData,
+  });
+  if (!res.ok) {
+    const errText = await res.text().catch(() => '');
+    throw new Error(`Upload failed: ${res.status} ${errText || res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function fetchImportReport(importId: string): Promise<ImportReport> {
+  const res = await fetch(`${API_BASE}/imports/${encodeURIComponent(importId)}`, {
+    headers: { Accept: 'application/json' },
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to fetch import report '${importId}': ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function fetchImportsList(): Promise<Array<{ importId: string; status: string; totalConversations?: number; totalPairs?: number }>> {
+  const res = await fetch(`${API_BASE}/imports`, {
+    headers: { Accept: 'application/json' },
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to fetch imports list: ${res.status} ${res.statusText}`);
   }
   return res.json();
 }

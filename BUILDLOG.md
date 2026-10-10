@@ -1936,3 +1936,30 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `Workspace.tsx` uses `useEvidence`; keep the `if(!ev.inspect)` guards on the scroll container's lock resets.
   - `window.__cotraceBeads` is a DEV-only test probe.
 - **Not built yet:** Brain entry point; browser-side `textHash` "wording changed" check; reverse lookup (select text → linked requirements).
+
+---
+
+## 2026-10-10 13:05 · Antigravity · Gemini
+- **Phase/Step:** S4.2 — Import dialog UI: drop zone and review table (Upload and batch processing)
+- **Did:**
+  - Built `web/src/workspace/ImportModal.tsx` and `web/src/workspace/import.css`:
+    - Full drag-and-drop zone supporting `.zip`, `.json`, and `.md` archives with progress loader during zero-LLM triage scanning.
+    - Summary status bar showing source filename, conversation count, total exchange pairs, fidelity breakdown, and sensitive count.
+    - Mechanical review table with per-row checkboxes, title, formatted creation date, exchanges count, fidelity pills (`clean`, `degraded`, `unusable`), sensitive warning badges with hover trigger keywords, code pills, duplicate pills, and pre-flight dollar estimates.
+    - Quick-filter bar: search input with instant query matching, `"≥ 3 exchanges"` filter toggle, fidelity grade dropdown, and multi-field sorting (pairs, date, cost, title).
+    - Cost-gated footer: live selection count, pairs tally, and prominent primary action button displaying `"Process X chats · ≈ $LOW–HIGH"` (disabled when 0 selected).
+  - Extended `web/src/workspace/types.ts` with `ImportConversation` and `ImportReport` interfaces.
+  - Extended `web/src/workspace/api.ts` with `uploadImport`, `fetchImportReport`, and `fetchImportsList`.
+  - Wired `ImportModal` into `web/src/workspace/Workspace.tsx` with activity rail upload button, history panel action button, and empty-state import trigger.
+  - Added end-to-end integration test in `tests/test_import_e2e.py` verifying multi-chat fixture upload, review table row extraction, filtering, sorting, and cost gate footer computation.
+  - Marked `S4.2 ✅` in `docs/plans/STANDALONE_V1_PLAN.md`.
+- **Decisions made:**
+  - Pre-selected all chats with >= 1 pair and non-unusable fidelity by default, allowing quick one-click processing while leaving 0-pair or unusable chats unchecked.
+  - Added tooltip hints for sensitive categories so users immediately understand why a conversation was flagged.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `npm run build:workspace`: compiles clean in 204ms with zero errors.
+  - `npm run tokens:check`: 100% token compliant.
+  - `.venv/bin/python -m pytest`: 274 passed in 6.12s (0 failures, 0 regressions).
+  - `data/chats/fixture_pair1/`: 0 diffs.
+- **Next:** S4.3 — Job queue (`server/jobs.py`): persistent `jobs.json`, one worker per chat, cancel, resume after restart.

@@ -15,3 +15,52 @@ export type LoadingState = 'idle' | 'loading' | 'ready' | 'empty' | 'error';
 export interface ChatView { pair:number; scroll:number; follow:boolean; selected:string|null; draft:string; zoom:number; pan:{x:number;y:number} }
 export interface ChatLink { source:string; target:string; label:string; evidence?:string }
 export const newView=(pair=1):ChatView=>({pair,scroll:-1,follow:true,selected:null,draft:'',zoom:1,pan:{x:0,y:0}});
+
+export interface ImportConversation {
+  convId: string;
+  title: string;
+  rawTitle: string;
+  createdAt: string;
+  updatedAt: string;
+  pairs: number;
+  rawTurns: number;
+  totalChars: number;
+  maxTurnChars: number;
+  imagesDropped: number;
+  imagesPerPair: number;
+  language: string;
+  hasCode: boolean;
+  fidelityGrade: 'clean' | 'degraded' | 'unusable';
+  sensitive: boolean;
+  sensitiveTriggers: string[];
+  isDuplicate: boolean;
+  duplicateOf?: string | null;
+  estimate: {
+    tokens: { low: number; high: number; expected: number };
+    cost: { low: number; high: number; expected: number };
+  };
+}
+
+export interface ImportReport {
+  importId: string;
+  status: 'scanning' | 'ready' | 'failed';
+  createdAt: string;
+  sourceFilename: string;
+  sourceFormat: string;
+  totalConversations: number;
+  totalPairs: number;
+  totalChars: number;
+  fidelity: {
+    clean: number;
+    degraded: number;
+    unusable: number;
+  };
+  duplicates: number;
+  sensitiveCount: number;
+  estimate: {
+    tokens: { low: number; high: number; expected: number };
+    cost: { low: number; high: number; expected: number };
+  };
+  conversations: ImportConversation[];
+  error?: string | null;
+}
