@@ -85,5 +85,49 @@ verdict. A phase cannot close while any entry for it says **Changes needed**.
 
 **Verdict:** Approved
 
+---
+
+### S3.T · 2026-10-10 · Phase S3 (Keys, models, cost and budget)
+**Build:** commit `41212d0` · live metered CLI run + local server (`http://127.0.0.1:8765`)
+
+**Checklist** (prepared by Antigravity from §6A):
+1. Review Settings API and credential safety:
+   - Verify `secrets.json` has permissions `0600` (user read/write only).
+   - Verify `GET /api/settings` and `/api/health` never expose `llm_api_key` in plaintext (masked `••••...`).
+   - Expected: API key write-only, never leaks in bundles, logs, or responses.
+   - Result: [ ] (Owner to confirm)
+2. Review S3 Cost and Performance Milestone Report ([`docs/plans/reports/S3_cost_perf.md`](reports/S3_cost_perf.md)):
+   - Total real spend: **$0.2586** across 40 pairs (under the **$1.00** ceiling, **74.1% margin**).
+   - Cost per pair: **$0.00647** (< 0.65¢ / pair).
+   - Pre-flight estimate accuracy: **-12.5%** variance ($0.2956 est. vs $0.2586 actual, within ±35% tolerance).
+   - Step breakdown: Step 1a ($0.00619, 2.4%), Step 1b ($0.03878, 15.0%), Step 2 ($0.02068, 8.0%), Step 3 ($0.18932, 73.2%).
+   - Expected: Costs align with token economics; zero hidden reasoning tokens (`reasoning_effort="none"`).
+   - Result: [ ] (Owner to confirm)
+3. Read the 3 newly processed readable chat reports (S1.7 contract):
+   - [`docs/plans/reports/c45_writing_medium.md`](reports/c45_writing_medium.md) (Short, 6 pairs — German professional scheduling, COPILOT, 49% You / 51% AI).
+   - [`docs/plans/reports/c38_planning_medium.md`](reports/c38_planning_medium.md) (Medium, 13 pairs — Bremen room search, COPILOT, 46% You / 54% AI).
+   - [`docs/plans/reports/c48_learning_long.md`](reports/c48_learning_long.md) (Long, 21 pairs — German A1 language learning, COPILOT, 42% You / 58% AI).
+   - Expected: Outcome trees, contribution balances, and decision attributions reflect memory of conversations.
+   - Result: [ ] (Owner to confirm)
+4. Open the 3 chats in the Standalone Workspace (`http://127.0.0.1:8765`):
+   - All 3 chats appear in sidebar and library (`~/Cotrace/chats/`).
+   - Graphs render with live nodes, atoms, and snapshots; pair scrubbing is responsive.
+   - Expected: High visual quality and seamless interaction.
+   - Result: [ ] (Owner to confirm)
+5. Runtime invariant health:
+   - Invariants 1–9 and 21 are 100% green (10/10 PASS) across all 3 chats.
+   - Expected: Zero invariant failures or corrupt state.
+   - Result: [ ] (Owner to confirm)
+
+**Cost and performance:**
+- Real spend: **$0.2586** (Budget cap: $1.00).
+- Model bake-off winner verified: Config A (`gemini-3.1-flash-lite` for Step 1a, `gemini-3.5-flash` for Main).
+- Report: [`docs/plans/reports/S3_cost_perf.md`](reports/S3_cost_perf.md).
+
+**Findings:**
+- *(Owner notes or findings from reviewing maps and costs)*
+
+**Verdict:** (Approved / Changes needed — owner only)
+
 
 
