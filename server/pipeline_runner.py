@@ -212,11 +212,12 @@ class PipelineRunner:
         )
 
         # Runtime checks (§11.4 & TEST_STRATEGY §6)
+        prev_rows = [r for r in ledger_writer.rows if r.get("pair", 0) < pair]
         chk_res = run_pair_checks(
             state=state,
             ledger_rows=ledger_writer.rows,
             dialogue=dialogue_list,
-            prev_ledger_rows=None,
+            prev_ledger_rows=prev_rows if prev_rows else None,
             current_pair=pair,
         )
         healthy = len(chk_res.violations) == 0

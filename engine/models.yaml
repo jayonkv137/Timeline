@@ -4,6 +4,10 @@
 
 models:
   # Google Gemini models
+  gemini-3.6-flash:
+    input_cost_per_m: 0.750
+    output_cost_per_m: 3.750
+
   gemini-3.5-flash:
     input_cost_per_m: 0.075
     output_cost_per_m: 0.300

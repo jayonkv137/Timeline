@@ -2115,3 +2115,35 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - `data/chats/fixture_pair1/`: 0 diffs.
 - **Next:** S4.6 — Re-upload: same conversation id + same content skipped; new messages appended processed incrementally.
 
+---
+
+## 2026-10-11 23:18 · Antigravity · Gemini
+- **Phase/Step:** S4.6 — Re-upload: deduplication and incremental extension (Upload and batch processing)
+- **Did:**
+  - `engine/models.yaml`:
+    - Registered official pricing for `gemini-3.6-flash` ($0.75 / 1M in, $3.75 / 1M out promo rate; $1.50 / $7.50 standard) following deprecation update. Kept `gemini-3.5-flash` for cassette and test compatibility.
+  - `engine/importer.py`:
+    - In `parse_claude_export`: added `isIncremental`, `existingPairs`, `newPairs` to summary rows.
+    - In `scan_import`: mapped existing library chats with pair counts and completion status; detected identical re-uploads (`isDuplicate: True, isIncremental: False, newPairs: 0, estimate cost: 0`) and incremental extensions (`isIncremental: True, existingPairs: N, newPairs: M - N`).
+    - Pre-flight estimation on extensions calculates token and cost bounds strictly for newly appended pairs.
+    - In `promote_conversation`: preserved existing `createdAt` and `category` from `meta.json`; preserved `state.json` and `ledger.jsonl`; updated `workspace_bundle.json` with new dialogue turns and `status="processing"`.
+  - `server/jobs.py`:
+    - Added `completed_pairs` tracking to `enqueue_job`: resumes from last completed pair or defaults to existing `state.json` completed pair.
+    - In `enqueue_import_batch`: skipped identical duplicates (`isDuplicate and not isIncremental`) with zero queue work; enqueued incremental extensions starting at `completedPairs = existingPairs`.
+  - `server/pipeline_runner.py`:
+    - Passed `prev_ledger_rows` to `run_pair_checks` to validate append-only ledger invariant `inv_17`.
+  - `tests/test_reupload.py` (New):
+    - 5 `@pytest.mark.tier1` tests covering `gemini-3.6-flash` price table lookup, identical re-upload detection and queue skipping, incremental extension detection and new-pair estimation, preservation of existing artifacts during extension promotion, and proof that a chat extended by 2 pairs costs exactly 2 pairs (pairs 1 and 2 skipped, pairs 3 and 4 processed from existing state).
+  - Marked `S4.6 ✅` in `docs/plans/STANDALONE_V1_PLAN.md`.
+- **Decisions made:**
+  - Identical re-uploads are automatically excluded during batch enqueueing to prevent redundant LLM expenditure.
+  - For extended conversations, the engine preserves the accumulated `state.json` and `ledger.jsonl`, promoting only the expanded `dialogue.json` and enqueuing workers strictly from `completedPairs + 1` to `totalPairs`.
+- **Spec contradictions/gaps flagged:** none.
+- **Verification:**
+  - `.venv/bin/python -m pytest tests/test_reupload.py -v`: 5 passed in 2.03s.
+  - `.venv/bin/python -m pytest`: 300 passed in 12.10s (0 failures, 0 regressions).
+  - `npm run build:workspace`: exit code 0.
+  - `data/chats/fixture_pair1/`: 0 diffs (untouched).
+- **Next:** S4.7 — Category: owner sets in review table; optional "Suggest categories" with MODEL_FAST.
+
+

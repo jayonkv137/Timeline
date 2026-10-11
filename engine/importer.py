@@ -458,7 +458,10 @@ def parse_claude_export(
         "sensitive": sensitive_flag,
         "sensitiveTriggers": sensitive_triggers,
         "isDuplicate": False,
+        "isIncremental": False,
         "duplicateOf": None,
+        "existingPairs": 0,
+        "newPairs": pairs,
         "estimate": est_data,
     }
 
@@ -541,26 +544,71 @@ def scan_import(
         else:
             raise ValueError(f"Expected list of conversations in {primary_file}")
 
-    # Build known chat IDs from existing library to detect duplicates
-    existing_chats: set[str] = set()
-    existing_titles: set[str] = set()
+    # Build rich chat info from existing library to detect duplicates and extensions
+    existing_chats_map: dict[str, dict[str, Any]] = {}
     if library_root is not None:
         chats_dir = Path(library_root) / "chats"
         if chats_dir.is_dir():
             for c_path in chats_dir.iterdir():
                 if c_path.is_dir():
-                    existing_chats.add(c_path.name)
+                    chat_id = c_path.name
                     meta_p = c_path / "meta.json"
+                    dialogue_p = c_path / "dialogue.json"
+                    state_p = c_path / "state.json"
+
+                    pairs = 0
+                    completed_pairs = 0
+                    conv_id = None
+                    title = None
+
                     if meta_p.is_file():
                         try:
                             with open(meta_p, "r", encoding="utf-8") as mf:
                                 mdata = json.load(mf)
-                                if mdata.get("conv_id"):
-                                    existing_chats.add(mdata["conv_id"])
-                                if mdata.get("title"):
-                                    existing_titles.add(mdata["title"])
+                                pairs = int(mdata.get("pairs", 0))
+                                conv_id = mdata.get("conv_id")
+                                title = mdata.get("title")
                         except Exception:
                             pass
+
+                    if dialogue_p.is_file():
+                        try:
+                            with open(dialogue_p, "r", encoding="utf-8") as df:
+                                ddata = json.load(df)
+                                if isinstance(ddata, list) and ddata:
+                                    max_dp = max((int(t.get("pair", 0)) for t in ddata if isinstance(t, dict)), default=0)
+                                    if max_dp > pairs:
+                                        pairs = max_dp
+                        except Exception:
+                            pass
+
+                    if state_p.is_file():
+                        try:
+                            with open(state_p, "r", encoding="utf-8") as sf:
+                                sdata = json.load(sf)
+                                completed_pairs = int(sdata.get("run", {}).get("last_completed_pair", pairs))
+                        except Exception:
+                            completed_pairs = pairs
+                    else:
+                        completed_pairs = pairs
+
+                    chat_info = {
+                        "chatId": chat_id,
+                        "convId": conv_id or chat_id,
+                        "title": title,
+                        "pairs": pairs,
+                        "completedPairs": completed_pairs,
+                        "dir": str(c_path),
+                    }
+                    existing_chats_map[chat_id] = chat_info
+                    if conv_id:
+                        existing_chats_map[conv_id] = chat_info
+                        if conv_id.startswith("claude_"):
+                            existing_chats_map[conv_id[7:]] = chat_info
+                        else:
+                            existing_chats_map[f"claude_{conv_id}"] = chat_info
+                    if title and title != "Untitled Conversation":
+                        existing_chats_map[f"title:{title}"] = chat_info
 
     conversations: list[dict[str, Any]] = []
     seen_conv_ids: set[str] = set()
@@ -570,6 +618,7 @@ def scan_import(
     degraded_count = 0
     unusable_count = 0
     duplicates_count = 0
+    incremental_count = 0
     sensitive_count = 0
 
     total_est_tokens_low = 0
@@ -582,26 +631,79 @@ def scan_import(
     for raw_conv in raw_data:
         archive_rec, row = parse_claude_export(raw_conv, estimate_costs=True)
         cid = row["convId"]
+        raw_title = row.get("rawTitle", "")
+        pairs = row["pairs"]
 
-        # Duplicate detection
-        is_dup = False
-        dup_of = None
+        # Duplicate & Extension detection against batch and library
         if cid in seen_conv_ids:
-            is_dup = True
-            dup_of = cid
-        elif cid in existing_chats:
-            is_dup = True
-            dup_of = cid
-        elif row["rawTitle"] in existing_titles and row["rawTitle"] != "Untitled Conversation":
-            is_dup = True
-            dup_of = row["rawTitle"]
-
-        if is_dup:
+            # Duplicate within same batch
             duplicates_count += 1
             row["isDuplicate"] = True
-            row["duplicateOf"] = dup_of
+            row["isIncremental"] = False
+            row["duplicateOf"] = cid
+            row["existingPairs"] = pairs
+            row["newPairs"] = 0
+            row["estimate"] = {
+                "tokens": {"low": 0, "high": 0, "expected": 0},
+                "cost": {"low": 0.0, "high": 0.0, "expected": 0.0},
+            }
         else:
             seen_conv_ids.add(cid)
+            match_info = (
+                existing_chats_map.get(cid)
+                or (existing_chats_map.get(cid[7:]) if cid.startswith("claude_") else None)
+                or (existing_chats_map.get(f"claude_{cid}") if not cid.startswith("claude_") else None)
+                or (existing_chats_map.get(f"title:{raw_title}") if raw_title and raw_title != "Untitled Conversation" else None)
+            )
+
+            if match_info is not None:
+                existing_pairs = match_info.get("completedPairs") or match_info.get("pairs", 0)
+                dup_of = match_info["chatId"]
+                if pairs <= existing_pairs:
+                    # Identical duplicate: same or fewer pairs already in library
+                    duplicates_count += 1
+                    row["isDuplicate"] = True
+                    row["isIncremental"] = False
+                    row["duplicateOf"] = dup_of
+                    row["existingPairs"] = existing_pairs
+                    row["newPairs"] = 0
+                    row["estimate"] = {
+                        "tokens": {"low": 0, "high": 0, "expected": 0},
+                        "cost": {"low": 0.0, "high": 0.0, "expected": 0.0},
+                    }
+                else:
+                    # Incremental extension: new messages appended since last run
+                    incremental_count += 1
+                    new_pairs = pairs - existing_pairs
+                    row["isDuplicate"] = False
+                    row["isIncremental"] = True
+                    row["duplicateOf"] = dup_of
+                    row["existingPairs"] = existing_pairs
+                    row["newPairs"] = new_pairs
+
+                    # Calculate pre-flight estimate strictly for the new pairs
+                    raw_turns = archive_rec.get("turns", [])
+                    dialogue_turns, _, _ = process_turns_to_dialogue(raw_turns)
+                    new_turns = [t for t in dialogue_turns if t.get("pair", 0) > existing_pairs]
+                    if new_turns:
+                        est_turns = []
+                        for t in new_turns:
+                            tc = dict(t)
+                            tc["pair"] = tc["pair"] - existing_pairs
+                            est_turns.append(tc)
+                        est = estimate(est_turns)
+                        row["estimate"] = {
+                            "tokens": {
+                                "low": est.low.tokens,
+                                "high": est.high.tokens,
+                                "expected": est.expected_tokens,
+                            },
+                            "cost": {
+                                "low": est.low.cost,
+                                "high": est.high.cost,
+                                "expected": est.expected_cost,
+                            },
+                        }
 
         if row["sensitive"]:
             sensitive_count += 1
@@ -642,6 +744,7 @@ def scan_import(
             "unusable": unusable_count,
         },
         "duplicates": duplicates_count,
+        "incremental": incremental_count,
         "sensitiveCount": sensitive_count,
         "estimate": {
             "tokens": {
@@ -760,12 +863,25 @@ def promote_conversation(
         f.write("\n")
 
     # 4. meta.json
+    created_at = archive_rec.get("created_at")
+    existing_meta_file = dest / "meta.json"
+    if existing_meta_file.is_file():
+        try:
+            with open(existing_meta_file, "r", encoding="utf-8") as emf:
+                old_m = json.load(emf)
+                if old_m.get("createdAt"):
+                    created_at = old_m["createdAt"]
+                if old_m.get("category"):
+                    category = old_m["category"]
+        except Exception:
+            pass
+
     meta_json = {
         "id": target_chat_id,
         "conv_id": cid,
         "title": title,
         "category": category,
-        "createdAt": archive_rec.get("created_at") or datetime.now(timezone.utc).isoformat(),
+        "createdAt": created_at or datetime.now(timezone.utc).isoformat(),
         "updatedAt": archive_rec.get("updated_at") or datetime.now(timezone.utc).isoformat(),
         "pairs": pairs,
         "length_band": length_band,
@@ -778,6 +894,31 @@ def promote_conversation(
     with open(dest / "meta.json", "w", encoding="utf-8") as f:
         json.dump(meta_json, f, indent=2, ensure_ascii=False)
         f.write("\n")
+
+    # If workspace_bundle.json exists (incremental extension), refresh its dialogue turns
+    bundle_file = dest / "workspace_bundle.json"
+    if bundle_file.is_file():
+        try:
+            with open(bundle_file, "r", encoding="utf-8") as bf:
+                bdata = json.load(bf)
+            bdata["totalPairs"] = pairs
+            bdata["dialogue"] = [
+                {
+                    "pair": t["pair"],
+                    "speaker": t["speaker"],
+                    "text": t["text"],
+                    "attachments": list(t.get("attachments", [])),
+                    "ts": t["ts"],
+                }
+                for t in dialogue_json
+            ]
+            if bdata.get("status") == "ready":
+                bdata["status"] = "processing"
+            with open(bundle_file, "w", encoding="utf-8") as bf:
+                json.dump(bdata, bf, indent=2, ensure_ascii=False)
+                bf.write("\n")
+        except Exception:
+            pass
 
     # 5. meta.yaml
     clean_title = title.replace('"', '\\"')

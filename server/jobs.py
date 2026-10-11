@@ -163,6 +163,7 @@ class JobQueueManager:
         import_id: str | None = None,
         priority: int = 0,
         mode: str = "live",
+        completed_pairs: int = 0,
     ) -> dict[str, Any]:
         """Enqueue a chat for mapping."""
         async with self._lock:
@@ -170,15 +171,28 @@ class JobQueueManager:
             existing = next((j for j in jobs if j.get("chatId") == chat_id), None)
 
             now = datetime.now(timezone.utc).isoformat()
+
+            # If completed_pairs not specified, check if existing state.json has progress
+            if completed_pairs == 0:
+                cdir = self.library.chat_dir(chat_id)
+                state_file = cdir / "state.json"
+                if state_file.is_file():
+                    try:
+                        sdata = json.loads(state_file.read_text(encoding="utf-8"))
+                        completed_pairs = int(sdata.get("run", {}).get("last_completed_pair", 0))
+                    except Exception:
+                        completed_pairs = 0
+
             if existing:
                 # If already active, return existing
                 if existing.get("status") in ("queued", "running", "paused"):
                     return existing
                 # If completed or failed, re-queue
-                existing["status"] = "queued"
+                existing["status"] = "completed" if completed_pairs >= total_pairs else "queued"
                 existing["mode"] = mode
                 existing["priority"] = priority
-                existing["completedPairs"] = 0
+                existing["completedPairs"] = completed_pairs
+                existing["totalPairs"] = total_pairs
                 existing["timingLog"] = []
                 existing["updatedAt"] = now
                 existing["error"] = None
@@ -195,9 +209,9 @@ class JobQueueManager:
                 "importId": import_id,
                 "title": title,
                 "mode": mode,
-                "status": "queued",
+                "status": "completed" if completed_pairs >= total_pairs else "queued",
                 "totalPairs": int(total_pairs),
-                "completedPairs": 0,
+                "completedPairs": int(completed_pairs),
                 "priority": int(priority),
                 "createdAt": now,
                 "startedAt": None,
@@ -251,8 +265,23 @@ class JobQueueManager:
             chat_id = cid
             cdir = self.library.chat_dir(chat_id)
 
+            # S4.6: Re-upload deduplication — skip identical conversations with same content
+            if row_meta.get("isDuplicate") and not row_meta.get("isIncremental"):
+                logger.info(f"Skipping identical duplicate {cid} — already present in library.")
+                continue
+
             # Promote conversation to active library if not already promoted
             if not cdir.is_dir():
+                raw_conv = convs_by_id.get(cid) or convs_by_id.get(cid.replace("claude_", ""))
+                if raw_conv:
+                    promote_conversation(
+                        conv_data=raw_conv,
+                        dest_dir=cdir,
+                        chat_id=chat_id,
+                        category="General",
+                    )
+            elif row_meta.get("isIncremental"):
+                # Incremental extension: update dialogue.json & metadata with appended turns
                 raw_conv = convs_by_id.get(cid) or convs_by_id.get(cid.replace("claude_", ""))
                 if raw_conv:
                     promote_conversation(
@@ -284,6 +313,10 @@ class JobQueueManager:
                     )
 
             total_pairs = row_meta.get("pairs", 0)
+            completed_pairs = 0
+            if row_meta.get("isIncremental"):
+                completed_pairs = int(row_meta.get("existingPairs", 0))
+
             title = row_meta.get("rawTitle") or row_meta.get("title") or chat_id
 
             job = await self.enqueue_job(
@@ -293,6 +326,7 @@ class JobQueueManager:
                 conv_id=cid,
                 import_id=import_id,
                 priority=0,
+                completed_pairs=completed_pairs,
             )
             enqueued.append(job)
 
