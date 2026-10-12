@@ -100,16 +100,23 @@ export const useWorkspace = create<State>((set, get) => ({
   },
 
   appendDraft: (id: string, text: string) => set(s => ({
-    chats: s.chats.map(c => c.id !== id ? c : {
-      ...c,
-      title: c.title === 'New conversation' ? text.slice(0, 42) : c.title,
-      dialogue: [...c.dialogue, {
-        pair: c.totalPairs + 1,
-        speaker: 'user',
-        text,
-        attachments: [],
-        ts: new Date().toISOString(),
-      }],
+    chats: s.chats.map(c => {
+      if (c.id !== id) return c;
+      const last = c.dialogue[c.dialogue.length - 1];
+      if (last && last.speaker === 'user' && last.text === text) {
+        return c;
+      }
+      return {
+        ...c,
+        title: c.title === 'New conversation' ? text.slice(0, 42) : c.title,
+        dialogue: [...c.dialogue, {
+          pair: c.totalPairs + 1,
+          speaker: 'user',
+          text,
+          attachments: [],
+          ts: new Date().toISOString(),
+        }],
+      };
     }),
     views: {
       ...s.views,

@@ -201,7 +201,7 @@ class LLMClient:
                 "messages": [{"role": "user", "content": prompt}],
                 "temperature": 0,
             }
-            if self.reasoning_effort and self.reasoning_effort != "default":
+            if self.reasoning_effort and self.reasoning_effort not in ("default", "none"):
                 kwargs["reasoning_effort"] = self.reasoning_effort
 
             try:
@@ -214,7 +214,11 @@ class LLMClient:
                     else:
                         raise
                 except APIStatusError as a_exc:
-                    if "reasoning_effort" in str(a_exc).lower() and "reasoning_effort" in kwargs:
+                    if "reasoning_effort" in kwargs and (
+                        "reasoning_effort" in str(a_exc).lower()
+                        or "invalid_argument" in str(a_exc).lower()
+                        or a_exc.status_code == 400
+                    ):
                         kwargs.pop("reasoning_effort", None)
                         response = self._client.chat.completions.create(**kwargs)
                     else:

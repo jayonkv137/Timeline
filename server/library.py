@@ -342,6 +342,10 @@ class Library:
                 else:
                     pair = max(1, max_pair)
 
+        # Prevent duplicate consecutive user turn with identical text
+        if speaker == "user" and dialogue and dialogue[-1].get("speaker") == "user" and dialogue[-1].get("text") == text:
+            return int(dialogue[-1].get("pair", pair or 1)), dialogue
+
         turn = {
             "pair": int(pair),
             "speaker": speaker,
