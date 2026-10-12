@@ -2222,3 +2222,28 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
 - **Spec contradictions/gaps flagged:** none
 - **Verification:** `.venv/bin/pytest` → 316 passed (5 new), 1 warning in 20.96s.
 - **Next:** Step S4.10 (Batch cost and performance report).
+
+---
+
+## 2026-10-12 12:15 · Antigravity · Gemini 2.5
+- **Phase/Step:** S4.10 — Batch Cost & Performance Report (`docs/plans/reports/S4_cost_perf.md`)
+- **Did:**
+  - `scripts/s4_batch_report.py`:
+    - Benchmarked archive scan throughput on real 313 Claude conversations (2,759 pairs) in `data/calude/conversations.json`.
+    - Computed actual vs estimate variance across Short (`c45`), Medium (`c38`), and Long (`c48`) chats.
+    - Benchmarked queue concurrency and rehearsal mode throughput.
+    - Generated comprehensive markdown report in `docs/plans/reports/S4_cost_perf.md`.
+  - `docs/plans/reports/S4_cost_perf.md`:
+    - Committed scorecard verifying 100% of §6A Table T3 budgets met:
+      - 313-chat scan: 0.84s (budget $\le 30$s, 35.8× faster).
+      - Throughput: 373 convs/s (3,288 pairs/s).
+      - Cost / pair: $0.00647 / pair (budget $\le \$0.0100$).
+      - Estimate variance: -12.5% (within $\pm 35\%$ margin).
+      - Zero LLM spend on scan.
+  - `tests/test_perf_report.py`:
+    - Added tier1 unit test `test_s4_batch_report_generation` asserting report generation and metric accuracy.
+- **Decisions made:**
+  - Automated report generation via reusable CLI script `python scripts/s4_batch_report.py`.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** `.venv/bin/pytest` → 317 passed, 1 warning in 20.85s.
+- **Next:** Step S4.T / S4.G (Owner upload test & gate) or Step S5.1 (Live chat model streaming).

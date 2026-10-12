@@ -49,3 +49,44 @@ def test_generate_report_markdown_content() -> None:
     assert "58.0 fps" in md
     assert "PASS" in md
     assert "100% OF PERFORMANCE BUDGETS MET" in md
+
+
+@pytest.mark.tier1
+def test_s4_batch_report_generation() -> None:
+    from scripts.s4_batch_report import generate_report
+
+    data = {
+        "scan_duration": 0.85,
+        "scan_convs": 313,
+        "scan_pairs": 2759,
+        "scan_throughput_convs": 368.2,
+        "scan_throughput_pairs": 3245.8,
+        "scan_rep": {
+            "fidelity": {"clean": 167, "degraded": 52, "unusable": 94},
+            "sensitiveCount": 14,
+            "estimate": {"cost": {"low": 13.52, "high": 32.25, "expected": 20.80}},
+        },
+        "chat_comparisons": [
+            {
+                "id": "c45_writing_medium",
+                "pairs": 6,
+                "est_tokens": 216337,
+                "act_tokens": 89186,
+                "est_cost": 0.0399,
+                "act_cost": 0.0120,
+                "variance": -69.9,
+            }
+        ],
+        "total_est_cost": 0.2956,
+        "total_act_cost": 0.2586,
+        "total_pairs": 40,
+        "queue_throughput": 5000.0,
+    }
+    md = generate_report(data)
+    assert "# S4 Batch Processing Cost and Performance Report" in md
+    assert "313" in md
+    assert "2,759" in md
+    assert "0.85 s" in md
+    assert "$0.00647" in md
+    assert "PASS" in md
+
