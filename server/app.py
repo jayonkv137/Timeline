@@ -134,6 +134,44 @@ def create_router() -> APIRouter:
         )
         return chat_bundle
 
+    @router.post("/chats/{chat_id}/map")
+    async def trigger_chat_mapping_endpoint(chat_id: str, request: Request) -> dict[str, Any]:
+        """Trigger on-demand background cognitive mapping for a conversation."""
+        lib: Library = request.app.state.library
+        try:
+            bundle = lib.get_chat_bundle(chat_id)
+        except FileNotFoundError as exc:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc))
+
+        total_pairs = int(bundle.get("totalPairs", 0))
+        if total_pairs <= 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Cannot map a conversation with no exchanges. Start chatting first.",
+            )
+
+        job_queue = getattr(request.app.state, "job_queue", None)
+        if not job_queue:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Background job runner is unavailable.",
+            )
+
+        lib.mark_chat_mapped(chat_id, is_mapped=True)
+        job = await job_queue.enqueue_job(
+            chat_id=chat_id,
+            title=bundle.get("title", chat_id),
+            total_pairs=total_pairs,
+            priority=2,
+        )
+
+        return {
+            "status": "queued",
+            "chatId": chat_id,
+            "jobId": job.get("id"),
+            "totalPairs": total_pairs,
+        }
+
     @router.post("/chats/{chat_id}/messages")
     async def send_chat_message_endpoint(
         chat_id: str,
@@ -236,18 +274,19 @@ def create_router() -> APIRouter:
                 yield f"event: done\ndata: {json.dumps(done_payload)}\n\n"
                 broadcaster.broadcast("pair_ready", {"chatId": chat_id, "pair": pair})
 
-                # 7. S5.2 trigger background pipeline runner to map the new pair into the graph node
+                # 7. S5.2 trigger background pipeline runner only if user has already triggered mapping for this chat
                 job_queue = getattr(request.app.state, "job_queue", None)
                 if job_queue:
                     chat_bundle = lib.get_chat_bundle(chat_id)
-                    asyncio.create_task(
-                        job_queue.enqueue_job(
-                            chat_id=chat_id,
-                            title=chat_bundle.get("title", chat_id),
-                            total_pairs=pair,
-                            priority=1,
+                    if chat_bundle.get("isMapped") is True or len(chat_bundle.get("nodes", [])) > 0:
+                        asyncio.create_task(
+                            job_queue.enqueue_job(
+                                chat_id=chat_id,
+                                title=chat_bundle.get("title", chat_id),
+                                total_pairs=pair,
+                                priority=1,
+                            )
                         )
-                    )
 
             except Exception as exc:
                 logger.exception(f"Chat streaming error for {chat_id}: {exc}")

@@ -228,3 +228,39 @@ def test_send_message_missing_api_key_error(tmp_path: Path, monkeypatch: pytest.
     error_events = [d for e, d in events if e == "error"]
     assert len(error_events) == 1
     assert "No API key configured" in error_events[0]["error"]
+
+
+@pytest.mark.tier1
+def test_on_demand_chat_mapping_endpoint(client: TestClient, library: Library) -> None:
+    # 1. Create a live chat - starts with isMapped = False
+    create_res = client.post("/api/chats", json={"title": "On-demand Mapping Chat"})
+    assert create_res.status_code == 201
+    chat_id = create_res.json()["id"]
+    assert create_res.json().get("isMapped") is False
+
+    # 2. Trying to map an empty conversation (0 exchanges) returns 400
+    empty_map_res = client.post(f"/api/chats/{chat_id}/map")
+    assert empty_map_res.status_code == 400
+    assert "no exchanges" in empty_map_res.json()["detail"].lower()
+
+    # 3. Add 1 exchange
+    msg_res = client.post(f"/api/chats/{chat_id}/messages", json={"text": "Explain cognitive tracing"})
+    assert msg_res.status_code == 200
+
+    # Verify chat is still isMapped: False (decoupled eager mapping)
+    bundle_before = library.get_chat_bundle(chat_id)
+    assert bundle_before["totalPairs"] == 1
+    assert bundle_before.get("isMapped") is False
+
+    # 4. Trigger on-demand mapping explicitly
+    map_res = client.post(f"/api/chats/{chat_id}/map")
+    assert map_res.status_code == 200
+    map_data = map_res.json()
+    assert map_data["status"] == "queued"
+    assert map_data["chatId"] == chat_id
+    assert map_data["totalPairs"] == 1
+
+    # Verify isMapped is now True
+    bundle_after = library.get_chat_bundle(chat_id)
+    assert bundle_after.get("isMapped") is True
+

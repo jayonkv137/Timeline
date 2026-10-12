@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import seed from './data.generated.json';
 import type { Chat, ChatSummary, ChatView, LoadingState } from './types';
 import { newView } from './types';
-import { createChat, fetchBundle, fetchChats, subscribeEvents } from './api';
+import { createChat, fetchBundle, fetchChats, subscribeEvents, triggerChatMapping } from './api';
 
 const defaultChats = seed.chats as unknown as Chat[];
 
@@ -26,6 +26,7 @@ interface State {
   patch: (id: string, p: Partial<ChatView>) => void;
   newChat: () => void;
   appendDraft: (id: string, text: string) => void;
+  mapChat: (id: string) => Promise<void>;
   loadBundle: (id: string) => Promise<void>;
   refresh: () => Promise<void>;
 }
@@ -124,6 +125,19 @@ export const useWorkspace = create<State>((set, get) => ({
     },
   })),
 
+  mapChat: async (id: string) => {
+    if (get().isOffline || id === 'brain' || id.startsWith('draft-')) return;
+    try {
+      await triggerChatMapping(id);
+      set(s => ({
+        chats: s.chats.map(c => c.id === id ? { ...c, isMapped: true } : c),
+      }));
+    } catch (err: any) {
+      console.error(`Failed to trigger mapping for ${id}:`, err);
+      throw err;
+    }
+  },
+
   loadBundle: async (id: string) => {
     if (get().isOffline || id === 'brain' || id.startsWith('draft-')) return;
     try {
@@ -162,6 +176,7 @@ export const useWorkspace = create<State>((set, get) => ({
             totalPairs: item.totalPairs,
             status: item.status,
             source: item.source,
+            isMapped: item.isMapped ?? true,
           };
         }
         return {
@@ -170,13 +185,14 @@ export const useWorkspace = create<State>((set, get) => ({
           rootTitle: item.title,
           category: item.category,
           totalPairs: item.totalPairs,
-          dialogue: [],
-          nodes: [],
-          atoms: [],
-          snapshots: [],
-          summary: '',
+          dialogue: existing?.dialogue || [],
+          nodes: existing?.nodes || [],
+          atoms: existing?.atoms || [],
+          snapshots: existing?.snapshots || [],
+          summary: existing?.summary || '',
           status: item.status,
           source: item.source,
+          isMapped: item.isMapped ?? false,
         };
       });
 

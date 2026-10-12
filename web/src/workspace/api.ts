@@ -45,6 +45,21 @@ export async function createChat(params?: { title?: string; category?: string })
   return res.json();
 }
 
+export async function triggerChatMapping(chatId: string): Promise<{ status: string; chatId: string; jobId?: string; totalPairs: number }> {
+  const res = await fetch(`${API_BASE}/chats/${encodeURIComponent(chatId)}/map`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+    },
+  });
+  if (!res.ok) {
+    const errJson = await res.json().catch(() => null);
+    throw new Error(errJson?.detail || `Failed to trigger mapping: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+}
+
+
 export async function sendChatMessageStream(
   chatId: string,
   text: string,

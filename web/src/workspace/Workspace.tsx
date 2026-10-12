@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BarChart3, BrainCircuit, Check, Copy, GitBranch, Menu, MessageSquare, PanelLeftClose, PanelRightClose, PanelRightOpen, Plus, Search, Settings, Upload, X, Pin, RotateCcw } from 'lucide-react';
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BarChart3, BrainCircuit, Check, Copy, GitBranch, Menu, MessageSquare, PanelLeftClose, PanelRightClose, PanelRightOpen, Plus, Search, Settings, Upload, X, Pin, RotateCcw, Sparkles } from 'lucide-react';
 import { useWorkspace } from './store';
 import type { Chat, ChatView } from './types';
 import { LocalGraph } from './LocalGraph';
@@ -23,27 +23,49 @@ function RichText({text}:{text:string}){
 }
 
 export function Workspace(){
- const {chats,tabs,active,views,open,close,patch,newChat,appendDraft,loading,error,isOffline,refresh,loadBundle}=useWorkspace();
+ const {chats,tabs,active,views,open,close,patch,newChat,appendDraft,mapChat,loading,error,isOffline,refresh,loadBundle}=useWorkspace();
  const [query,setQuery]=useState('');const [sidebar,setSidebar]=useState(true);const [rail,setRail]=useState(true);const [expanded,setExpanded]=useState(false);const [brainSelected,setBrainSelected]=useState<string|null>(null);const [brainFocus,setBrainFocus]=useState<string|null>(null);const [brainVisited,setBrainVisited]=useState(false);const [notice,setNotice]=useState('');const [copied,setCopied]=useState<string|null>(null);const [settingsOpen,setSettingsOpen]=useState(false);const [usageOpen,setUsageOpen]=useState(false);const [importOpen,setImportOpen]=useState(false);
  const scroll=useRef<HTMLDivElement>(null);const lockUntil=useRef(0);const scrollRaf=useRef(0);const search=useRef<HTMLInputElement>(null);const [pending,setPending]=useState<Record<string,boolean>>({});
  const [streaming,setStreaming]=useState<{chatId:string;text:string;pair:number}|null>(null);
  const [queueStatus,setQueueStatus]=useState<QueueStatus|null>(null);
+ const [initiatingMap,setInitiatingMap]=useState<string|null>(null);
+
+ const handleTriggerMap=async(targetId:string)=>{
+   if(initiatingMap)return;
+   setInitiatingMap(targetId);
+   try{
+     await mapChat(targetId);
+     setNotice('Tracing decisions into spatial timeline…');
+   }catch(err:any){
+     setNotice(err?.message||'Could not initiate mapping');
+     setInitiatingMap(null);
+   }
+ };
 
  useEffect(()=>{
    if(isOffline)return;
    fetchJobs().then(setQueueStatus).catch(()=>{});
    const onQueueEvent=()=>{fetchJobs().then(setQueueStatus).catch(()=>{});};
+   const onJobFinished=(e:any)=>{
+     if(e.detail?.chatId&&initiatingMap===e.detail.chatId){
+       setInitiatingMap(null);
+     }
+   };
    window.addEventListener('cotrace:queue_changed',onQueueEvent);
    window.addEventListener('cotrace:job_progress',onQueueEvent);
    window.addEventListener('cotrace:chat_ready',onQueueEvent);
    window.addEventListener('cotrace:job_error',onQueueEvent);
+   window.addEventListener('cotrace:pair_ready',onJobFinished);
+   window.addEventListener('cotrace:chat_ready',onJobFinished);
    return ()=>{
      window.removeEventListener('cotrace:queue_changed',onQueueEvent);
      window.removeEventListener('cotrace:job_progress',onQueueEvent);
      window.removeEventListener('cotrace:chat_ready',onQueueEvent);
      window.removeEventListener('cotrace:job_error',onQueueEvent);
+     window.removeEventListener('cotrace:pair_ready',onJobFinished);
+     window.removeEventListener('cotrace:chat_ready',onJobFinished);
    };
- },[isOffline]);
+ },[isOffline,initiatingMap]);
 
  async function handleProcessBatch(importId:string,convIds:string[]){
    try{
@@ -102,10 +124,16 @@ export function Workspace(){
      if(e.key==='Escape'){setExpanded(false);if(innerWidth<760){setSidebar(false);setRail(false);}}
      if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();setSidebar(true);setTimeout(()=>search.current?.focus(),0);}
      if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){e.preventDefault();newChat();}
+     if((e.metaKey||e.ctrlKey)&&e.key==='m'){
+       e.preventDefault();
+       if(chat&&(!chat.nodes||chat.nodes.length===0)&&!chat.isMapped&&chat.totalPairs>0){
+         handleTriggerMap(chat.id);
+       }
+     }
    }
    window.addEventListener('keydown',key);
    return()=>window.removeEventListener('keydown',key);
- },[newChat,expanded]);
+ },[newChat,expanded,chat,initiatingMap]);
 
  useEffect(()=>{
    const mq=matchMedia('(max-width: 1000px)');
@@ -406,7 +434,7 @@ export function Workspace(){
      </div>
 
      {!isBrain&&chat&&<div className="conversation-pane">
-      <div className="conversation-scroll" ref={scroll} onScroll={onScroll} onWheel={()=>{if(!ev.inspect)lockUntil.current=0}} onTouchStart={()=>{if(!ev.inspect)lockUntil.current=0}} onMouseDown={()=>{if(!ev.inspect)lockUntil.current=0}} onKeyDown={()=>{if(!ev.inspect)lockUntil.current=0}}>
+      <div className={`conversation-scroll ${initiatingMap===chat.id?'is-scanning':''}`} ref={scroll} onScroll={onScroll} onWheel={()=>{if(!ev.inspect)lockUntil.current=0}} onTouchStart={()=>{if(!ev.inspect)lockUntil.current=0}} onMouseDown={()=>{if(!ev.inspect)lockUntil.current=0}} onKeyDown={()=>{if(!ev.inspect)lockUntil.current=0}}>
        <div className="conversation-document">
         {chat.dialogue.length===0?<div className="new-conversation-empty">
           <div className="empty-logo"><GitBranch size={28}/></div>
@@ -518,7 +546,55 @@ export function Workspace(){
         </div>
       </div>}
       <div className="cross-chat-note"><span className="eyebrow">CONNECTIONS BETWEEN CHATS</span><p>No verified cross-chat links are supplied yet. Shared topics alone are not shown as relationships.</p></div>
-      </>:chat&&graphFor(chat,view)}
+      </>:chat&&<div className="unmapped-stage-container">
+        {graphFor(chat,view)}
+        {(!chat.isMapped&&(!chat.nodes||chat.nodes.length===0))&&(
+          <div className={`mapping-stage-veil ${initiatingMap===chat.id?'is-initiating':''}`}>
+            <div className="veil-ambient-drift" aria-hidden="true">
+              <svg className="drift-constellation" viewBox="0 0 300 300">
+                <circle cx="100" cy="120" r="14" className="drift-node drift-human"/>
+                <circle cx="210" cy="180" r="16" className="drift-node drift-ai"/>
+                <line x1="100" y1="120" x2="210" y2="180" className="drift-tether"/>
+              </svg>
+            </div>
+
+            <div className="mapping-card">
+              <div className="mapping-card-badge">
+                <Sparkles size={12} className="badge-sparkle"/>
+                <span>COGNITIVE TOPOLOGY</span>
+              </div>
+
+              <h3 className="mapping-card-title">Explore Decision Structure</h3>
+              <p className="mapping-card-desc">
+                Synthesize outcome milestones, human choices, and AI propositions into an interactive spatial map.
+              </p>
+
+              <button 
+                className="trace-decisions-btn"
+                onClick={()=>handleTriggerMap(chat.id)}
+                disabled={initiatingMap===chat.id||chat.totalPairs===0}
+                aria-label="Trace Decisions in this conversation"
+              >
+                <span className="btn-icon-synapse">
+                  <span className="synapse-dot dot-sky"/>
+                  <span className="synapse-bar"/>
+                  <span className="synapse-dot dot-ember"/>
+                </span>
+                <span className="btn-label">
+                  {initiatingMap===chat.id?'Tracing decisions…':'Trace Decisions'}
+                </span>
+                <kbd className="btn-shortcut">⌘M</kbd>
+              </button>
+
+              <div className="mapping-card-meta">
+                <span>{chat.totalPairs>0?`${chat.totalPairs} ${chat.totalPairs===1?'exchange':'exchanges'} ready`:'Send a message to start'}</span>
+                <span>·</span>
+                <span>Zero delay on chat</span>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>}
     </aside>}
 
     {expanded&&chat&&<div className="expanded-overlay" role="dialog" aria-modal="true" aria-label="Expanded conversation map">

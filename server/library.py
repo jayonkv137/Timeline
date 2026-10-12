@@ -272,6 +272,7 @@ class Library:
             "createdAt": now,
             "updatedAt": now,
             "source": {"platform": "live"},
+            "isMapped": False,
         }
         source_meta = {
             "id": chat_id,
@@ -294,6 +295,7 @@ class Library:
             "snapshots": [],
             "summary": "",
             "status": "ready",
+            "isMapped": False,
             "source": {"platform": "live"},
         }
 
@@ -413,9 +415,41 @@ class Library:
             bundle["status"] = "ready"
         if "source" not in bundle:
             bundle["source"] = meta.get("source", {"platform": "live"})
+        bundle["isMapped"] = bool(meta.get("isMapped", False) or bundle.get("isMapped", False) or len(bundle.get("nodes", [])) > 0)
 
         atomic_write_json(bundle_file, bundle)
         return int(pair), dialogue
+
+    def mark_chat_mapped(self, chat_id: str, is_mapped: bool = True) -> dict[str, Any]:
+        """Mark a chat as mapped or unmapped in its meta.json and workspace_bundle.json."""
+        _validate_id(chat_id, "chat ID")
+        cdir = self.chat_dir(chat_id)
+        if not cdir.is_dir():
+            raise FileNotFoundError(f"Chat '{chat_id}' not found in library")
+
+        meta_path = cdir / "meta.json"
+        bundle_path = cdir / "workspace_bundle.json"
+
+        meta: dict[str, Any] = {}
+        if meta_path.is_file():
+            try:
+                with meta_path.open("r", encoding="utf-8") as f:
+                    meta = json.load(f)
+            except Exception:
+                meta = {}
+        meta["isMapped"] = is_mapped
+        atomic_write_json(meta_path, meta)
+
+        bundle: dict[str, Any] = {}
+        if bundle_path.is_file():
+            try:
+                with bundle_path.open("r", encoding="utf-8") as f:
+                    bundle = json.load(f)
+            except Exception:
+                bundle = {}
+        bundle["isMapped"] = is_mapped
+        atomic_write_json(bundle_path, bundle)
+        return bundle
 
     def get_chat_bundle(self, chat_id: str) -> dict[str, Any]:
         """Load and return the workspace_bundle.json for a chat."""
@@ -431,7 +465,11 @@ class Library:
             )
 
         with bundle_path.open("r", encoding="utf-8") as f:
-            return json.load(f)
+            data = json.load(f)
+
+        if "isMapped" not in data:
+            data["isMapped"] = bool(data.get("nodes", []))
+        return data
 
     def list_chats(self, include_trash: bool = False) -> list[dict[str, Any]]:
         """List active chats (and optionally trashed chats) with summarized metadata."""
@@ -459,6 +497,8 @@ class Library:
             updated_at = datetime.fromtimestamp(cdir.stat().st_mtime, tz=timezone.utc).isoformat()
             mass = {"you": 0.0, "ai": 0.0, "total": 0.0}
             share = {"you": 50.0, "ai": 50.0}
+            bundle: dict[str, Any] = {}
+            meta: dict[str, Any] = {}
 
             if bundle_file.is_file():
                 try:
@@ -518,6 +558,11 @@ class Library:
                     pass
 
             is_trashed = cdir.parent == self.trash_dir
+            is_mapped = bool(
+                bundle.get("isMapped", False)
+                or (bundle and len(bundle.get("nodes", [])) > 0)
+                or meta.get("isMapped", False)
+            )
             entries.append({
                 "id": cid,
                 "title": title,
@@ -530,6 +575,7 @@ class Library:
                 "share": share,
                 "source": source,
                 "isTrash": is_trashed,
+                "isMapped": is_mapped,
             })
 
         entries.sort(key=lambda x: x["updatedAt"], reverse=True)
