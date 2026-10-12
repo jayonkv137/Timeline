@@ -558,39 +558,20 @@ export function Workspace(){
               </svg>
             </div>
 
-            <div className="mapping-card">
-              <div className="mapping-card-badge">
-                <Sparkles size={12} className="badge-sparkle"/>
-                <span>COGNITIVE TOPOLOGY</span>
-              </div>
-
-              <h3 className="mapping-card-title">Explore Decision Structure</h3>
-              <p className="mapping-card-desc">
-                Synthesize outcome milestones, human choices, and AI propositions into an interactive spatial map.
-              </p>
-
+            <div className="mapping-card minimal">
               <button 
                 className="trace-decisions-btn"
                 onClick={()=>handleTriggerMap(chat.id)}
                 disabled={initiatingMap===chat.id||chat.totalPairs===0}
-                aria-label="Trace Decisions in this conversation"
+                aria-label="Map this conversation"
               >
-                <span className="btn-icon-synapse">
-                  <span className="synapse-dot dot-sky"/>
-                  <span className="synapse-bar"/>
-                  <span className="synapse-dot dot-ember"/>
-                </span>
+                <Sparkles size={14} style={{color:'var(--color-party-ai-solid)'}}/>
                 <span className="btn-label">
-                  {initiatingMap===chat.id?'Tracing decisions…':'Trace Decisions'}
+                  {initiatingMap===chat.id?'Mapping conversation…':'Map this conversation'}
                 </span>
                 <kbd className="btn-shortcut">⌘M</kbd>
               </button>
-
-              <div className="mapping-card-meta">
-                <span>{chat.totalPairs>0?`${chat.totalPairs} ${chat.totalPairs===1?'exchange':'exchanges'} ready`:'Send a message to start'}</span>
-                <span>·</span>
-                <span>Zero delay on chat</span>
-              </div>
+              {chat.totalPairs===0&&<span className="mapping-hint">Send a message to start mapping</span>}
             </div>
           </div>
         )}

@@ -1054,39 +1054,26 @@
   z-index: 2;
 }
 
-.mapping-card-badge {
-  display: inline-flex;
+.mapping-card.minimal {
+  max-width: 260px;
+  width: auto;
+  padding: 12px 16px;
+  background: rgba(24, 26, 28, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--p-radius-xl, 12px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 3px 10px;
-  border-radius: var(--p-radius-pill, 9999px);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  color: var(--color-text-muted, #969c9f);
-  text-transform: uppercase;
+  gap: 8px;
 }
 
-.badge-sparkle {
-  color: var(--color-party-ai-solid, #fb923c);
+.mapping-hint {
+  font-size: 11px;
+  color: var(--color-text-faint, #7f888d);
 }
 
-.mapping-card-title {
-  margin: 0;
-  font-size: 15px;
-  font-weight: 550;
-  color: var(--color-text-strong, #f1f5f9);
-  letter-spacing: -0.01em;
-}
-
-.mapping-card-desc {
-  margin: 0;
-  font-size: 12px;
-  line-height: 1.55;
-  color: var(--color-text-secondary, #c5c9ca);
-}
 
 .trace-decisions-btn {
   margin-top: 6px;
