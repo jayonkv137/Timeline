@@ -1,0 +1,2442 @@
+{
+ "domains": [
+  {
+   "id": "work",
+   "name": "Work & career",
+   "direction": [
+    -0.7401480444148052,
+    0.3400680204068024,
+    0.580116034811604
+   ]
+  },
+  {
+   "id": "research",
+   "name": "Research & ideas",
+   "direction": [
+    -0.2207851835852316,
+    0.7426410720594154,
+    0.6322484802667997
+   ]
+  },
+  {
+   "id": "tech",
+   "name": "Technology & code",
+   "direction": [
+    0.2996257016633534,
+    0.6991266372144912,
+    0.649189020270599
+   ]
+  },
+  {
+   "id": "creative",
+   "name": "Creative & media",
+   "direction": [
+    0.8198360491836058,
+    0.11997600719760085,
+    0.559888033588804
+   ]
+  },
+  {
+   "id": "health",
+   "name": "Health & personal",
+   "direction": [
+    0.499077558986007,
+    -0.359335842469925,
+    0.7885425431978911
+   ]
+  },
+  {
+   "id": "learning",
+   "name": "Learning & education",
+   "direction": [
+    0.20007003677145066,
+    -0.5201820956057717,
+    0.8302906526015201
+   ]
+  },
+  {
+   "id": "writing",
+   "name": "Writing & communication",
+   "direction": [
+    -0.5013806979968224,
+    -0.4612702421570766,
+    0.7320158190753606
+   ]
+  },
+  {
+   "id": "life",
+   "name": "Life & admin",
+   "direction": [
+    -0.8629389974094929,
+    -0.060205046330894844,
+    0.5017087194241238
+   ]
+  },
+  {
+   "id": "other",
+   "name": "Other",
+   "direction": [
+    0.0,
+    0.04993761694389223,
+    0.9987523388778446
+   ]
+  }
+ ],
+ "regions": {
+  "r1": {
+   "name": "action · requirement · outcome",
+   "keywords": [
+    "action",
+    "requirement",
+    "outcome",
+    "paper",
+    "role",
+    "tool"
+   ],
+   "members": [
+    "c47_writing_long",
+    "c51_writing_long",
+    "c05_research_medium",
+    "c56_coding_long",
+    "c53_research_long",
+    "c18_research_long",
+    "c55_creative_long",
+    "c06_planning_long",
+    "c14_pipeline_run",
+    "c49_coding_long"
+   ]
+  },
+  "r2": {
+   "name": "page · head · box",
+   "keywords": [
+    "page",
+    "head",
+    "box",
+    "brain",
+    "color",
+    "branch"
+   ],
+   "members": [
+    "c02_coding_long",
+    "c54_planning_long",
+    "c03_coding_short",
+    "c34_planning_long",
+    "c52_coding_long",
+    "c36_coding_long",
+    "c29_research_medium",
+    "c35_coding_long",
+    "c21_debugging_medium"
+   ]
+  },
+  "r3": {
+   "name": "nike · creating · film",
+   "keywords": [
+    "image",
+    "character",
+    "shot",
+    "reference",
+    "style",
+    "prompt"
+   ],
+   "members": [
+    "c25_creative_long",
+    "c19_creative_long",
+    "c12_creative_medium",
+    "c32_creative_long",
+    "c33_creative_medium",
+    "c13_creative_long"
+   ]
+  },
+  "r4": {
+   "name": "german · session · minute",
+   "keywords": [
+    "word",
+    "das",
+    "bus",
+    "lesson",
+    "preposition",
+    "ease"
+   ],
+   "members": [
+    "c48_learning_long",
+    "c42_planning_medium",
+    "c43_learning_medium",
+    "c37_learning_medium",
+    "c41_planning_medium"
+   ]
+  },
+  "r5": {
+   "name": "image · kerala · age",
+   "keywords": [
+    "image",
+    "kerala",
+    "age",
+    "photo",
+    "church",
+    "white"
+   ],
+   "members": [
+    "c31_creative_long",
+    "c28_creative_medium",
+    "c01_creative_long"
+   ]
+  },
+  "r6": {
+   "name": "room · jayon · september",
+   "keywords": [
+    "room",
+    "jayon",
+    "september",
+    "bremen",
+    "bego",
+    "living"
+   ],
+   "members": [
+    "c38_planning_medium",
+    "c40_planning_medium",
+    "c22_writing_long"
+   ]
+  },
+  "r7": {
+   "name": "redesign · page · portfolio",
+   "keywords": [
+    "attenborough",
+    "film",
+    "video",
+    "david",
+    "interactive",
+    "specimen"
+   ],
+   "members": [
+    "c15_creative_medium",
+    "golden_01"
+   ]
+  },
+  "r8": {
+   "name": "contract · bremen · month",
+   "keywords": [
+    "contract",
+    "bremen",
+    "month",
+    "permit",
+    "germany",
+    "visa"
+   ],
+   "members": [
+    "c26_planning_medium",
+    "c50_planning_long"
+   ]
+  }
+ },
+ "chats": {
+  "c45_writing_medium": {
+   "title": "Telefoninterview-Termin vereinbaren",
+   "domain": "work",
+   "domainSource": "own text",
+   "domainMargin": 0.1,
+   "region": null,
+   "area": "a20",
+   "side": 1,
+   "direction": [
+    -0.74015,
+    0.34007,
+    0.58012
+   ],
+   "mapped": true,
+   "pairs": 6,
+   "human": 117,
+   "ai": 122,
+   "share": 0.4895,
+   "outcomes": [
+    {
+     "id": "outcome 1",
+     "title": "plan for appointment call setup",
+     "parent": null,
+     "root": true,
+     "x": 0.0,
+     "y": 0.0,
+     "human": 10,
+     "ai": 4
+    },
+    {
+     "id": "outcome 2",
+     "title": "draft for follow-up response",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 159.4,
+     "y": -13.6,
+     "human": 51,
+     "ai": 26
+    },
+    {
+     "id": "outcome 3",
+     "title": "advice on calling timing and etiquette",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -76.0,
+     "y": 140.8,
+     "human": 34,
+     "ai": 41
+    },
+    {
+     "id": "outcome 4",
+     "title": "German phone conversation script",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -81.7,
+     "y": -137.5,
+     "human": 22,
+     "ai": 51
+    }
+   ],
+   "decisions": {
+    "human": 5,
+    "ai": 4
+   }
+  },
+  "c56_coding_long": {
+   "title": "Reviewing chats and project contents",
+   "domain": "research",
+   "domainSource": "region vote",
+   "domainMargin": 0.18,
+   "region": "r1",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    -0.22079,
+    0.74264,
+    0.63225
+   ],
+   "mapped": false,
+   "pairs": 242,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c51_writing_long": {
+   "title": "Crafting a compelling application for AI content automation role",
+   "domain": "research",
+   "domainSource": "region vote",
+   "domainMargin": 0.36,
+   "region": "r1",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    -0.18183,
+    0.76223,
+    0.62125
+   ],
+   "mapped": false,
+   "pairs": 134,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c55_creative_long": {
+   "title": "AI and creativity presentation task clarification",
+   "domain": "research",
+   "domainSource": "region vote",
+   "domainMargin": 0.68,
+   "region": "r1",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    -0.24107,
+    0.69877,
+    0.6735
+   ],
+   "mapped": false,
+   "pairs": 102,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c06_planning_long": {
+   "title": "AI and creativity presentation task clarification",
+   "domain": "research",
+   "domainSource": "region vote",
+   "domainMargin": 0.75,
+   "region": "r1",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    -0.24966,
+    0.78169,
+    0.57151
+   ],
+   "mapped": false,
+   "pairs": 93,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c53_research_long": {
+   "title": "Understanding Diehl Aviation's AI implementation strategy",
+   "domain": "research",
+   "domainSource": "region vote",
+   "domainMargin": 0.55,
+   "region": "r1",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    -0.14039,
+    0.7292,
+    0.66975
+   ],
+   "mapped": false,
+   "pairs": 64,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c18_research_long": {
+   "title": "Understanding Diehl Aviation's AI implementation strategy",
+   "domain": "research",
+   "domainSource": "region vote",
+   "domainMargin": 0.62,
+   "region": "r1",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    -0.31258,
+    0.70292,
+    0.6389
+   ],
+   "mapped": false,
+   "pairs": 59,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c47_writing_long": {
+   "title": "Boehringer Ingelheim Internship Cover Letter",
+   "domain": "research",
+   "domainSource": "region vote",
+   "domainMargin": 0.5,
+   "region": "r1",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    -0.1667,
+    0.80903,
+    0.56364
+   ],
+   "mapped": false,
+   "pairs": 27,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c49_coding_long": {
+   "title": "Project revival guide for new engineer",
+   "domain": "research",
+   "domainSource": "region vote",
+   "domainMargin": 0.32,
+   "region": "r1",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    -0.19348,
+    0.66717,
+    0.71934
+   ],
+   "mapped": false,
+   "pairs": 26,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c14_pipeline_run": {
+   "title": "Dialogue action extraction framework",
+   "domain": "research",
+   "domainSource": "region vote",
+   "domainMargin": 0.35,
+   "region": "r1",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    -0.32038,
+    0.7657,
+    0.55772
+   ],
+   "mapped": false,
+   "pairs": 14,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c05_research_medium": {
+   "title": "Finding research papers on AI creativity and design",
+   "domain": "research",
+   "domainSource": "region vote",
+   "domainMargin": 0.66,
+   "region": "r1",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    -0.08955,
+    0.77015,
+    0.63154
+   ],
+   "mapped": true,
+   "pairs": 7,
+   "human": 285,
+   "ai": 852,
+   "share": 0.2507,
+   "outcomes": [
+    {
+     "id": "outcome 1",
+     "title": "Course assignment strategy and deliverables",
+     "parent": null,
+     "root": true,
+     "x": 0.0,
+     "y": 0.0,
+     "human": 0,
+     "ai": 0
+    },
+    {
+     "id": "outcome 2",
+     "title": "Initial assignment plan and paper search strategy",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 159.8,
+     "y": -8.2,
+     "human": 19,
+     "ai": 25
+    },
+    {
+     "id": "outcome 3",
+     "title": "Expanded paper bank and recommendations",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 52.0,
+     "y": 151.3,
+     "human": 66,
+     "ai": 252
+    },
+    {
+     "id": "outcome 4",
+     "title": "Reading strategy and presentation preparation guide",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -128.7,
+     "y": 95.0,
+     "human": 34,
+     "ai": 104
+    },
+    {
+     "id": "outcome 5",
+     "title": "Comparative analysis and recommendation of the final four selected papers",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -131.4,
+     "y": -91.2,
+     "human": 124,
+     "ai": 383
+    },
+    {
+     "id": "outcome 6",
+     "title": "Reading strategy and presentation preparation guide for the selected 'Disembodied Creativity' paper",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 32.2,
+     "y": -156.7,
+     "human": 42,
+     "ai": 88
+    }
+   ],
+   "decisions": {
+    "human": 13,
+    "ai": 5
+   }
+  },
+  "c44_writing_medium": {
+   "title": "Text correction and document formatting",
+   "domain": "research",
+   "domainSource": "own text",
+   "domainMargin": 0.34,
+   "region": null,
+   "area": "a17",
+   "side": -1,
+   "direction": [
+    -0.22079,
+    0.74264,
+    0.63225
+   ],
+   "mapped": false,
+   "pairs": 7,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c04_writing_short": {
+   "title": "Analogies for explaining AI and automation styles",
+   "domain": "research",
+   "domainSource": "own text",
+   "domainMargin": 0.38,
+   "region": null,
+   "area": "a14",
+   "side": 1,
+   "direction": [
+    -0.10788,
+    0.79476,
+    0.59726
+   ],
+   "mapped": true,
+   "pairs": 4,
+   "human": 212,
+   "ai": 248,
+   "share": 0.4609,
+   "outcomes": [
+    {
+     "id": "outcome 1",
+     "title": "Design system for AI interaction modes in a chat interface",
+     "parent": null,
+     "root": true,
+     "x": 0.0,
+     "y": 0.0,
+     "human": 46,
+     "ai": 39
+    },
+    {
+     "id": "outcome 2",
+     "title": "Analogies and conceptual framing for AI interaction modes",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 159.7,
+     "y": -10.2,
+     "human": 10,
+     "ai": 10
+    },
+    {
+     "id": "outcome 3",
+     "title": "Interactive widget demonstrating the car metaphor animation",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 3.4,
+     "y": 160.0,
+     "human": 15,
+     "ai": 12
+    },
+    {
+     "id": "outcome 4",
+     "title": "Design and mockup of the right-side minimap panel",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -160.0,
+     "y": 1.5,
+     "human": 16,
+     "ai": 17
+    },
+    {
+     "id": "outcome 5",
+     "title": "Design and mockup of the bottom identity bar and chat interface",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -4.3,
+     "y": -159.9,
+     "human": 125,
+     "ai": 170
+    }
+   ],
+   "decisions": {
+    "human": 10,
+    "ai": 4
+   }
+  },
+  "c07_research_short": {
+   "title": "AI-stated plans versus user requirements",
+   "domain": "research",
+   "domainSource": "own text",
+   "domainMargin": 0.83,
+   "region": null,
+   "area": "a16",
+   "side": -1,
+   "direction": [
+    -0.10788,
+    0.79476,
+    0.59726
+   ],
+   "mapped": true,
+   "pairs": 4,
+   "human": 72,
+   "ai": 273,
+   "share": 0.2087,
+   "outcomes": [
+    {
+     "id": "outcome 1",
+     "title": "Clarification and background context of the 'open slot' concept in requirement extraction rules",
+     "parent": null,
+     "root": true,
+     "x": 0.0,
+     "y": 0.0,
+     "human": 8,
+     "ai": 25
+    },
+    {
+     "id": "outcome 2",
+     "title": "Search and proposal regarding the Necessity gate and AI-stated plans",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 159.4,
+     "y": -13.6,
+     "human": 4,
+     "ai": 18
+    },
+    {
+     "id": "outcome 3",
+     "title": "Identification of the 'open slot' concept in past chats",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -76.0,
+     "y": 140.8,
+     "human": 45,
+     "ai": 160
+    },
+    {
+     "id": "outcome 4",
+     "title": "Detailed explanation of the origin and lifecycle of the 'open slot' concept",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -81.7,
+     "y": -137.5,
+     "human": 15,
+     "ai": 70
+    }
+   ],
+   "decisions": {
+    "human": 4,
+    "ai": 1
+   }
+  },
+  "c10_research_short": {
+   "title": "Analyzing my role and contribution patterns in this project",
+   "domain": "research",
+   "domainSource": "own text",
+   "domainMargin": 0.79,
+   "region": null,
+   "area": "a11",
+   "side": 1,
+   "direction": [
+    -0.27617,
+    0.60977,
+    0.7429
+   ],
+   "mapped": true,
+   "pairs": 1,
+   "human": 72,
+   "ai": 28,
+   "share": 0.72,
+   "outcomes": [
+    {
+     "id": "outcome 1",
+     "title": "Comprehensive analysis of project contributions and interaction patterns",
+     "parent": null,
+     "root": true,
+     "x": 0.0,
+     "y": 0.0,
+     "human": 14,
+     "ai": 5
+    },
+    {
+     "id": "outcome 2",
+     "title": "Analysis of individual contributions (user's creative vs. AI's technical)",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 159.4,
+     "y": -13.6,
+     "human": 5,
+     "ai": 8
+    },
+    {
+     "id": "outcome 3",
+     "title": "Evaluation of user's role and interaction style using study analogies",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -76.0,
+     "y": 140.8,
+     "human": 53,
+     "ai": 15
+    },
+    {
+     "id": "outcome 4",
+     "title": "Proposal for improving technical engagement",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -81.7,
+     "y": -137.5,
+     "human": 0,
+     "ai": 0
+    }
+   ],
+   "decisions": {
+    "human": 4,
+    "ai": 1
+   }
+  },
+  "c16_research_short": {
+   "title": "Co-creative systems design and timeline interface analogies",
+   "domain": "research",
+   "domainSource": "own text",
+   "domainMargin": 0.58,
+   "region": null,
+   "area": "a18",
+   "side": -1,
+   "direction": [
+    -0.27617,
+    0.60977,
+    0.7429
+   ],
+   "mapped": true,
+   "pairs": 1,
+   "human": 29,
+   "ai": 32,
+   "share": 0.4754,
+   "outcomes": [
+    {
+     "id": "outcome 1",
+     "title": "Design analysis and evaluation of the co-creative panel",
+     "parent": null,
+     "root": true,
+     "x": 0.0,
+     "y": 0.0,
+     "human": 0,
+     "ai": 0
+    },
+    {
+     "id": "outcome 2",
+     "title": "Project status and timeline review",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 159.4,
+     "y": -13.6,
+     "human": 5,
+     "ai": 11
+    },
+    {
+     "id": "outcome 3",
+     "title": "Evaluation of how the panel addresses co-creative system challenges",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -76.0,
+     "y": 140.8,
+     "human": 17,
+     "ai": 16
+    },
+    {
+     "id": "outcome 4",
+     "title": "Analogies for the timeline mechanism",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -81.7,
+     "y": -137.5,
+     "human": 7,
+     "ai": 5
+    }
+   ],
+   "decisions": {
+    "human": 4,
+    "ai": 0
+   }
+  },
+  "c17_research_short": {
+   "title": "Datafied society research topics",
+   "domain": "research",
+   "domainSource": "own text",
+   "domainMargin": 0.82,
+   "region": null,
+   "area": "a8",
+   "side": 1,
+   "direction": [
+    -0.29889,
+    0.84125,
+    0.45052
+   ],
+   "mapped": true,
+   "pairs": 1,
+   "human": 13,
+   "ai": 12,
+   "share": 0.52,
+   "outcomes": [
+    {
+     "id": "outcome 1",
+     "title": "Research topics and directions for a Datafied Society course assignment",
+     "parent": null,
+     "root": true,
+     "x": 0.0,
+     "y": 0.0,
+     "human": 13,
+     "ai": 12
+    },
+    {
+     "id": "outcome 2",
+     "title": "Clarification of assignment requirements and syllabus details",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 154.8,
+     "y": -40.4,
+     "human": 0,
+     "ai": 0
+    }
+   ],
+   "decisions": {
+    "human": 2,
+    "ai": 0
+   }
+  },
+  "c54_planning_long": {
+   "title": "Confirming Phase 2 workflow context",
+   "domain": "tech",
+   "domainSource": "region vote",
+   "domainMargin": 0.7,
+   "region": "r2",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    0.29963,
+    0.69913,
+    0.64919
+   ],
+   "mapped": false,
+   "pairs": 71,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c35_coding_long": {
+   "title": "Redesigning technology page with branch-based experience sections",
+   "domain": "tech",
+   "domainSource": "region vote",
+   "domainMargin": 0.51,
+   "region": "r2",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    0.32052,
+    0.72013,
+    0.61537
+   ],
+   "mapped": false,
+   "pairs": 68,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c34_planning_long": {
+   "title": "Confirming Phase 2 workflow context",
+   "domain": "tech",
+   "domainSource": "region vote",
+   "domainMargin": 0.53,
+   "region": "r2",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    0.31252,
+    0.65248,
+    0.69037
+   ],
+   "mapped": false,
+   "pairs": 64,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c52_coding_long": {
+   "title": "Timeline design specification and schema",
+   "domain": "tech",
+   "domainSource": "region vote",
+   "domainMargin": 0.47,
+   "region": "r2",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    0.23772,
+    0.74111,
+    0.62789
+   ],
+   "mapped": false,
+   "pairs": 50,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c36_coding_long": {
+   "title": "Timeline design specification and schema",
+   "domain": "tech",
+   "domainSource": "region vote",
+   "domainMargin": 0.45,
+   "region": "r2",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    0.38314,
+    0.68515,
+    0.6195
+   ],
+   "mapped": false,
+   "pairs": 46,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c02_coding_long": {
+   "title": "3D interactive portfolio website design",
+   "domain": "tech",
+   "domainSource": "region vote",
+   "domainMargin": 0.13,
+   "region": "r2",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    0.23716,
+    0.65719,
+    0.71544
+   ],
+   "mapped": false,
+   "pairs": 40,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c29_research_medium": {
+   "title": "Lando Norris effect implementation details",
+   "domain": "tech",
+   "domainSource": "region vote",
+   "domainMargin": 0.55,
+   "region": "r2",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    0.29265,
+    0.77057,
+    0.5662
+   ],
+   "mapped": false,
+   "pairs": 18,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c21_debugging_medium": {
+   "title": "Fixing stuttering box page animation and masking transition",
+   "domain": "tech",
+   "domainSource": "region vote",
+   "domainMargin": 0.79,
+   "region": "r2",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    0.37774,
+    0.61921,
+    0.6884
+   ],
+   "mapped": false,
+   "pairs": 12,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c03_coding_short": {
+   "title": "3D interactive portfolio website setup continuation",
+   "domain": "tech",
+   "domainSource": "region vote",
+   "domainMargin": 0.71,
+   "region": "r2",
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    0.17686,
+    0.7245,
+    0.6662
+   ],
+   "mapped": true,
+   "pairs": 3,
+   "human": 64,
+   "ai": 184,
+   "share": 0.2581,
+   "outcomes": [
+    {
+     "id": "outcome 1",
+     "title": "3D interactive portfolio website",
+     "parent": null,
+     "root": true,
+     "x": 0.0,
+     "y": 0.0,
+     "human": 0,
+     "ai": 0
+    },
+    {
+     "id": "outcome 2",
+     "title": "Resolution of npm install issues and context sync",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 159.4,
+     "y": -13.6,
+     "human": 7,
+     "ai": 6
+    },
+    {
+     "id": "outcome 3",
+     "title": "Decision on project folder naming convention",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -76.0,
+     "y": 140.8,
+     "human": 21,
+     "ai": 20
+    },
+    {
+     "id": "outcome 4",
+     "title": "Wired project scaffold and design tokens",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -81.7,
+     "y": -137.5,
+     "human": 36,
+     "ai": 158
+    }
+   ],
+   "decisions": {
+    "human": 3,
+    "ai": 5
+   }
+  },
+  "c46_coding_medium": {
+   "title": "Simple SVG for data processing flow",
+   "domain": "tech",
+   "domainSource": "own text",
+   "domainMargin": 0.32,
+   "region": null,
+   "area": "a7",
+   "side": -1,
+   "direction": [
+    0.29963,
+    0.69913,
+    0.64919
+   ],
+   "mapped": false,
+   "pairs": 17,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c20_coding_short": {
+   "title": "Converting website pages to Figma components and auditing design system",
+   "domain": "tech",
+   "domainSource": "own text",
+   "domainMargin": 0.87,
+   "region": null,
+   "area": "a1",
+   "side": 1,
+   "direction": [
+    0.35792,
+    0.75556,
+    0.54866
+   ],
+   "mapped": true,
+   "pairs": 3,
+   "human": 115,
+   "ai": 274,
+   "share": 0.2956,
+   "outcomes": [
+    {
+     "id": "outcome 1",
+     "title": "Design system audit and Figma migration plan (Phase 9)",
+     "parent": null,
+     "root": true,
+     "x": 0.0,
+     "y": 0.0,
+     "human": 21,
+     "ai": 55
+    },
+    {
+     "id": "outcome 2",
+     "title": "Figma migration strategy and research",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 158.7,
+     "y": -20.4,
+     "human": 33,
+     "ai": 37
+    },
+    {
+     "id": "outcome 3",
+     "title": "Design system audit workflow and scope definition",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -159.9,
+     "y": 6.8,
+     "human": 45,
+     "ai": 129
+    },
+    {
+     "id": "outcome 4",
+     "title": "AntiGravity design audit brief and testing checklist",
+     "parent": "outcome 3",
+     "root": false,
+     "x": 319.8,
+     "y": -12.1,
+     "human": 16,
+     "ai": 53
+    }
+   ],
+   "decisions": {
+    "human": 3,
+    "ai": 11
+   }
+  },
+  "c13_creative_long": {
+   "title": "Creating a Berliner raver sausage character",
+   "domain": "creative",
+   "domainSource": "region vote",
+   "domainMargin": 0.91,
+   "region": "r3",
+   "area": "a2",
+   "side": 1,
+   "direction": [
+    0.81984,
+    0.11998,
+    0.55989
+   ],
+   "mapped": false,
+   "pairs": 76,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c19_creative_long": {
+   "title": "Exporting clips from Adobe for AI film reference",
+   "domain": "creative",
+   "domainSource": "region vote",
+   "domainMargin": 0.94,
+   "region": "r3",
+   "area": "a2",
+   "side": 1,
+   "direction": [
+    0.83469,
+    0.15,
+    0.52989
+   ],
+   "mapped": false,
+   "pairs": 47,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c32_creative_long": {
+   "title": "Nike production-grade ad creative direction",
+   "domain": "creative",
+   "domainSource": "region vote",
+   "domainMargin": 0.86,
+   "region": "r3",
+   "area": "a2",
+   "side": 1,
+   "direction": [
+    0.82132,
+    0.05692,
+    0.56762
+   ],
+   "mapped": false,
+   "pairs": 28,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c25_creative_long": {
+   "title": "Creating hybrid art style for AI short film",
+   "domain": "creative",
+   "domainSource": "region vote",
+   "domainMargin": 0.93,
+   "region": "r3",
+   "area": "a2",
+   "side": 1,
+   "direction": [
+    0.78458,
+    0.18084,
+    0.59307
+   ],
+   "mapped": false,
+   "pairs": 26,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c33_creative_medium": {
+   "title": "Nike production video animation prompts with Seedance",
+   "domain": "creative",
+   "domainSource": "region vote",
+   "domainMargin": 0.97,
+   "region": "r3",
+   "area": "a2",
+   "side": 1,
+   "direction": [
+    0.86786,
+    0.10399,
+    0.4858
+   ],
+   "mapped": false,
+   "pairs": 19,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c12_creative_medium": {
+   "title": "Applying artistic style to hallway scene in Midjourney",
+   "domain": "creative",
+   "domainSource": "region vote",
+   "domainMargin": 0.92,
+   "region": "r3",
+   "area": "a2",
+   "side": 1,
+   "direction": [
+    0.7734,
+    0.06603,
+    0.63047
+   ],
+   "mapped": false,
+   "pairs": 18,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c01_creative_long": {
+   "title": "Crafting a 1930s Kerala Catholic wedding photograph",
+   "domain": "creative",
+   "domainSource": "region vote",
+   "domainMargin": 0.63,
+   "region": "r5",
+   "area": "a2",
+   "side": -1,
+   "direction": [
+    0.81984,
+    0.11998,
+    0.55989
+   ],
+   "mapped": false,
+   "pairs": 60,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c31_creative_long": {
+   "title": "Creating a centennial AI video biography for Malabar Amacchi",
+   "domain": "creative",
+   "domainSource": "region vote",
+   "domainMargin": 0.95,
+   "region": "r5",
+   "area": "a2",
+   "side": -1,
+   "direction": [
+    0.83469,
+    0.15,
+    0.52989
+   ],
+   "mapped": false,
+   "pairs": 56,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c28_creative_medium": {
+   "title": "Kerala family growth sequence shot progression",
+   "domain": "creative",
+   "domainSource": "region vote",
+   "domainMargin": 0.85,
+   "region": "r5",
+   "area": "a2",
+   "side": -1,
+   "direction": [
+    0.82132,
+    0.05692,
+    0.56762
+   ],
+   "mapped": false,
+   "pairs": 16,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c23_creative_medium": {
+   "title": "Honey product showcase video with dolly shot",
+   "domain": "creative",
+   "domainSource": "own text",
+   "domainMargin": 0.87,
+   "region": null,
+   "area": "a5",
+   "side": 1,
+   "direction": [
+    0.85797,
+    0.20543,
+    0.47083
+   ],
+   "mapped": false,
+   "pairs": 14,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c24_planning_short": {
+   "title": "Hybrid AI filmmaking for action short film",
+   "domain": "creative",
+   "domainSource": "own text",
+   "domainMargin": 0.93,
+   "region": null,
+   "area": "a5",
+   "side": -1,
+   "direction": [
+    0.85797,
+    0.20543,
+    0.47083
+   ],
+   "mapped": false,
+   "pairs": 5,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c09_creative_short": {
+   "title": "Analyzing background lighting and color contrast in images",
+   "domain": "creative",
+   "domainSource": "own text",
+   "domainMargin": 0.92,
+   "region": null,
+   "area": "a13",
+   "side": 1,
+   "direction": [
+    0.81525,
+    -0.06083,
+    0.5759
+   ],
+   "mapped": false,
+   "pairs": 4,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c08_writing_short": {
+   "title": "Portfolio website content for Adidas product video",
+   "domain": "creative",
+   "domainSource": "own text",
+   "domainMargin": 0.8,
+   "region": null,
+   "area": "a10",
+   "side": -1,
+   "direction": [
+    0.81525,
+    -0.06083,
+    0.5759
+   ],
+   "mapped": false,
+   "pairs": 3,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c27_creative_short": {
+   "title": "Jellyfish animation prompt for Cling 3.0",
+   "domain": "creative",
+   "domainSource": "own text",
+   "domainMargin": 0.89,
+   "region": null,
+   "area": "a9",
+   "side": 1,
+   "direction": [
+    0.70716,
+    0.29011,
+    0.64479
+   ],
+   "mapped": true,
+   "pairs": 2,
+   "human": 91,
+   "ai": 78,
+   "share": 0.5385,
+   "outcomes": [
+    {
+     "id": "outcome 1",
+     "title": "Comprehensive prompt package for jellyfish image modification and animation",
+     "parent": null,
+     "root": true,
+     "x": 0.0,
+     "y": 0.0,
+     "human": 10,
+     "ai": 7
+    },
+    {
+     "id": "outcome 2",
+     "title": "Kling 3.0 Pro image-to-video animation prompt and settings",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 159.4,
+     "y": -13.6,
+     "human": 8,
+     "ai": 10
+    },
+    {
+     "id": "outcome 3",
+     "title": "Nano Banana Pro image editing prompt and instructions to reduce jellyfish artifact height",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -76.0,
+     "y": 140.8,
+     "human": 67,
+     "ai": 46
+    },
+    {
+     "id": "outcome 4",
+     "title": "Prompting principles and iteration strategy",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -81.7,
+     "y": -137.5,
+     "human": 6,
+     "ai": 15
+    }
+   ],
+   "decisions": {
+    "human": 7,
+    "ai": 2
+   }
+  },
+  "c48_learning_long": {
+   "title": "German A1 learning progress and vocabulary review",
+   "domain": "learning",
+   "domainSource": "region vote",
+   "domainMargin": 0.89,
+   "region": "r4",
+   "area": "a3",
+   "side": 1,
+   "direction": [
+    0.21021,
+    -0.4413,
+    0.87239
+   ],
+   "mapped": true,
+   "pairs": 21,
+   "human": 626,
+   "ai": 1596,
+   "share": 0.2817,
+   "outcomes": [
+    {
+     "id": "outcome 1",
+     "title": "German language learning session on vocabulary, directions, and grammar",
+     "parent": null,
+     "root": true,
+     "x": 0.0,
+     "y": 0.0,
+     "human": 18,
+     "ai": 65
+    },
+    {
+     "id": "outcome 2",
+     "title": "Vocabulary review and drill exercises",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 159.9,
+     "y": -6.8,
+     "human": 20,
+     "ai": 80
+    },
+    {
+     "id": "outcome 3",
+     "title": "Directions and grammar instruction (Formal Imperative & Prepositions)",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 82.0,
+     "y": 137.4,
+     "human": 166,
+     "ai": 275
+    },
+    {
+     "id": "outcome 4",
+     "title": "Interactive directions roleplay and multi-level practice drills",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -79.1,
+     "y": 139.1,
+     "human": 80,
+     "ai": 217
+    },
+    {
+     "id": "outcome 5",
+     "title": "Session data summary for tracking progress",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -160.0,
+     "y": 2.9,
+     "human": 108,
+     "ai": 272
+    },
+    {
+     "id": "outcome 6",
+     "title": "Adherence to the 60% German / 40% English language ratio constraint",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -92.5,
+     "y": -130.5,
+     "human": 182,
+     "ai": 456
+    },
+    {
+     "id": "outcome 7",
+     "title": "Integration of user-provided tips and vocabulary into the exercise bank",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 76.6,
+     "y": -140.5,
+     "human": 52,
+     "ai": 231
+    }
+   ],
+   "decisions": {
+    "human": 8,
+    "ai": 36
+   }
+  },
+  "c37_learning_medium": {
+   "title": "German A1 lesson: commuting with prepositions",
+   "domain": "learning",
+   "domainSource": "region vote",
+   "domainMargin": 0.86,
+   "region": "r4",
+   "area": "a3",
+   "side": 1,
+   "direction": [
+    0.24416,
+    -0.4349,
+    0.86674
+   ],
+   "mapped": false,
+   "pairs": 16,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c41_planning_medium": {
+   "title": "20-minute German learning session plan",
+   "domain": "learning",
+   "domainSource": "region vote",
+   "domainMargin": 0.93,
+   "region": "r4",
+   "area": "a3",
+   "side": 1,
+   "direction": [
+    0.2026,
+    -0.45612,
+    0.86655
+   ],
+   "mapped": false,
+   "pairs": 9,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c42_planning_medium": {
+   "title": "30-40 minute session planning",
+   "domain": "learning",
+   "domainSource": "region vote",
+   "domainMargin": 0.82,
+   "region": "r4",
+   "area": "a3",
+   "side": 1,
+   "direction": [
+    0.1644,
+    -0.42882,
+    0.88831
+   ],
+   "mapped": false,
+   "pairs": 8,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c43_learning_medium": {
+   "title": "Long session request",
+   "domain": "learning",
+   "domainSource": "region vote",
+   "domainMargin": 0.87,
+   "region": "r4",
+   "area": "a3",
+   "side": 1,
+   "direction": [
+    0.29949,
+    -0.4442,
+    0.84439
+   ],
+   "mapped": false,
+   "pairs": 7,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c11_research_medium": {
+   "title": "Anki language learning workflows and methods",
+   "domain": "learning",
+   "domainSource": "own text",
+   "domainMargin": 0.75,
+   "region": null,
+   "area": "a15",
+   "side": -1,
+   "direction": [
+    0.21021,
+    -0.4413,
+    0.87239
+   ],
+   "mapped": false,
+   "pairs": 7,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c30_creative_short": {
+   "title": "Building a language learning story universe with AI agents",
+   "domain": "learning",
+   "domainSource": "own text",
+   "domainMargin": 0.1,
+   "region": null,
+   "area": "a19",
+   "side": 1,
+   "direction": [
+    0.30476,
+    -0.4207,
+    0.85448
+   ],
+   "mapped": true,
+   "pairs": 2,
+   "human": 57,
+   "ai": 173,
+   "share": 0.2478,
+   "outcomes": [
+    {
+     "id": "outcome 1",
+     "title": "Development plan for a language learning video production system and content pipeline",
+     "parent": null,
+     "root": true,
+     "x": 0.0,
+     "y": 0.0,
+     "human": 10,
+     "ai": 0
+    },
+    {
+     "id": "outcome 2",
+     "title": "Workflow strategy for incremental automation",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 158.7,
+     "y": -20.4,
+     "human": 5,
+     "ai": 18
+    },
+    {
+     "id": "outcome 3",
+     "title": "Series bible and content strategy for the German language learning show",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -159.9,
+     "y": 6.8,
+     "human": 42,
+     "ai": 155
+    }
+   ],
+   "decisions": {
+    "human": 3,
+    "ai": 7
+   }
+  },
+  "c15_creative_medium": {
+   "title": "Portfolio about page redesign",
+   "domain": "writing",
+   "domainSource": "region vote",
+   "domainMargin": 0.25,
+   "region": "r7",
+   "area": "a6",
+   "side": 1,
+   "direction": [
+    -0.50138,
+    -0.46127,
+    0.73202
+   ],
+   "mapped": false,
+   "pairs": 8,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "golden_01": {
+   "title": "Portfolio about page redesign",
+   "domain": "writing",
+   "domainSource": "region vote",
+   "domainMargin": 0.25,
+   "region": "r7",
+   "area": "a6",
+   "side": 1,
+   "direction": [
+    -0.48144,
+    -0.43386,
+    0.76156
+   ],
+   "mapped": true,
+   "pairs": 8,
+   "human": 223,
+   "ai": 335,
+   "share": 0.3996,
+   "outcomes": [
+    {
+     "id": "outcome 1",
+     "title": "Interactive AI video portfolio experience design",
+     "parent": null,
+     "root": true,
+     "x": 0.0,
+     "y": 0.0,
+     "human": 58,
+     "ai": 54
+    },
+    {
+     "id": "outcome 2",
+     "title": "Concept and script for the AI video",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 159.4,
+     "y": -13.6,
+     "human": 0,
+     "ai": 0
+    },
+    {
+     "id": "outcome 3",
+     "title": "Research and analysis of David Attenborough's narration style",
+     "parent": "outcome 2",
+     "root": false,
+     "x": 318.8,
+     "y": -27.3,
+     "human": 66,
+     "ai": 101
+    },
+    {
+     "id": "outcome 4",
+     "title": "Interactive flow and technical feasibility plan",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -78.3,
+     "y": 139.6,
+     "human": 22,
+     "ai": 51
+    },
+    {
+     "id": "outcome 5",
+     "title": "Interactive flow and technical implementation plan",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -84.9,
+     "y": -135.6,
+     "human": 77,
+     "ai": 129
+    }
+   ],
+   "decisions": {
+    "human": 9,
+    "ai": 4
+   }
+  },
+  "c39_writing_medium": {
+   "title": "Bumble bio feedback and revision",
+   "domain": "writing",
+   "domainSource": "own text",
+   "domainMargin": 0.34,
+   "region": null,
+   "area": "a12",
+   "side": -1,
+   "direction": [
+    -0.50138,
+    -0.46127,
+    0.73202
+   ],
+   "mapped": false,
+   "pairs": 12,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c22_writing_long": {
+   "title": "Hemelingen room inquiry and move-in verification",
+   "domain": "life",
+   "domainSource": "region vote",
+   "domainMargin": 0.85,
+   "region": "r6",
+   "area": "a4",
+   "side": 1,
+   "direction": [
+    -0.86294,
+    -0.06021,
+    0.50171
+   ],
+   "mapped": false,
+   "pairs": 65,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c38_planning_medium": {
+   "title": "Room rental in Bremen's river district",
+   "domain": "life",
+   "domainSource": "region vote",
+   "domainMargin": 0.18,
+   "region": "r6",
+   "area": "a4",
+   "side": 1,
+   "direction": [
+    -0.84699,
+    -0.02983,
+    0.53078
+   ],
+   "mapped": true,
+   "pairs": 13,
+   "human": 429,
+   "ai": 721,
+   "share": 0.373,
+   "outcomes": [
+    {
+     "id": "outcome 1",
+     "title": "housing application assistance and workflow setup",
+     "parent": null,
+     "root": true,
+     "x": 0.0,
+     "y": 0.0,
+     "human": 5,
+     "ai": 0
+    },
+    {
+     "id": "outcome 2",
+     "title": "drafts and rationale for housing application messages",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 159.7,
+     "y": -10.2,
+     "human": 9,
+     "ai": 12
+    },
+    {
+     "id": "outcome 3",
+     "title": "advice on platform risks and full automation constraints",
+     "parent": "outcome 1",
+     "root": false,
+     "x": 3.4,
+     "y": 160.0,
+     "human": 45,
+     "ai": 82
+    },
+    {
+     "id": "outcome 4",
+     "title": "setup and rules configuration for a mobile semi-automated drafting pipeline and application tracker",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -160.0,
+     "y": 1.5,
+     "human": 235,
+     "ai": 350
+    },
+    {
+     "id": "outcome 5",
+     "title": "research and strategic advice on out-of-the-box housing automation and multi-channel search options",
+     "parent": "outcome 1",
+     "root": false,
+     "x": -4.3,
+     "y": -159.9,
+     "human": 135,
+     "ai": 277
+    }
+   ],
+   "decisions": {
+    "human": 12,
+    "ai": 10
+   }
+  },
+  "c40_planning_medium": {
+   "title": "Room in shared apartment in Bremen",
+   "domain": "life",
+   "domainSource": "region vote",
+   "domainMargin": 0.91,
+   "region": "r6",
+   "area": "a4",
+   "side": 1,
+   "direction": [
+    -0.86069,
+    -0.12324,
+    0.49398
+   ],
+   "mapped": false,
+   "pairs": 10,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c50_planning_long": {
+   "title": "Getting a Schufa report in Germany",
+   "domain": "life",
+   "domainSource": "region vote",
+   "domainMargin": 0.84,
+   "region": "r8",
+   "area": "a4",
+   "side": -1,
+   "direction": [
+    -0.86294,
+    -0.06021,
+    0.50171
+   ],
+   "mapped": false,
+   "pairs": 27,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  },
+  "c26_planning_medium": {
+   "title": "Indian student visa extension requirements in Bremen",
+   "domain": "life",
+   "domainSource": "region vote",
+   "domainMargin": 0.75,
+   "region": "r8",
+   "area": "a4",
+   "side": -1,
+   "direction": [
+    -0.84699,
+    -0.02983,
+    0.53078
+   ],
+   "mapped": false,
+   "pairs": 15,
+   "human": null,
+   "ai": null,
+   "share": null,
+   "outcomes": [],
+   "decisions": null
+  }
+ },
+ "links": [
+  {
+   "a": "c15_creative_medium",
+   "b": "golden_01",
+   "type": "continued",
+   "score": 0.995,
+   "evidence": {
+    "keywords": [
+     "attenborough",
+     "pod",
+     "specimen",
+     "attenborough'",
+     "david"
+    ],
+    "reason": "near-identical text",
+    "gapHours": -3.1
+   }
+  },
+  {
+   "a": "c52_coding_long",
+   "b": "c36_coding_long",
+   "type": "continued",
+   "score": 0.979,
+   "evidence": {
+    "keywords": [
+     "lifeline",
+     "vahr",
+     "feb",
+     "subcategory",
+     "gitkraken"
+    ],
+    "reason": "near-identical text",
+    "gapHours": -4.9
+   }
+  },
+  {
+   "a": "c54_planning_long",
+   "b": "c34_planning_long",
+   "type": "continued",
+   "score": 0.977,
+   "evidence": {
+    "keywords": [
+     "void",
+     "boxframe",
+     "boxpage",
+     "windmill",
+     "devpanel"
+    ],
+    "reason": "near-identical text",
+    "gapHours": -77.8
+   }
+  },
+  {
+   "a": "c55_creative_long",
+   "b": "c06_planning_long",
+   "type": "continued",
+   "score": 0.904,
+   "evidence": {
+    "keywords": [
+     "handout",
+     "prezi",
+     "originality",
+     "paradoxe",
+     "paradox"
+    ],
+    "reason": "near-identical text",
+    "gapHours": -197.9
+   }
+  },
+  {
+   "a": "c53_research_long",
+   "b": "c18_research_long",
+   "type": "continued",
+   "score": 0.895,
+   "evidence": {
+    "keywords": [
+     "artu",
+     "diehl",
+     "n8n",
+     "marketing",
+     "okapi"
+    ],
+    "reason": "same title",
+    "gapHours": -450.8
+   }
+  },
+  {
+   "a": "c02_coding_long",
+   "b": "c03_coding_short",
+   "type": "continued",
+   "score": 0.215,
+   "evidence": {
+    "keywords": [
+     "jayon-portfolio",
+     "terminal",
+     "finder",
+     "accent-cyan",
+     "webp"
+    ],
+    "reason": "continuation in title",
+    "gapHours": -0.2
+   }
+  },
+  {
+   "a": "c42_planning_medium",
+   "b": "c43_learning_medium",
+   "type": "reused",
+   "score": 0.403,
+   "evidence": {
+    "keywords": [
+     "accusative",
+     "zug",
+     "fahre",
+     "beruf",
+     "dativ"
+    ],
+    "sharedPassages": 413,
+    "passages": [
+     "04 11 session type review lesson a1 10",
+     "1 combined with articles and agreement in accusative"
+    ],
+    "gapHours": 0.1
+   }
+  },
+  {
+   "a": "c56_coding_long",
+   "b": "c14_pipeline_run",
+   "type": "reused",
+   "score": 0.287,
+   "evidence": {
+    "keywords": [
+     "shaper",
+     "prince",
+     "req",
+     "preceding",
+     "intake"
+    ],
+    "sharedPassages": 6080,
+    "passages": [
+     "' as an illustrative possibility rather than a",
+     "' followed by a list no option has"
+    ],
+    "gapHours": -178.0
+   }
+  },
+  {
+   "a": "c22_writing_long",
+   "b": "c50_planning_long",
+   "type": "reused",
+   "score": 0.18,
+   "evidence": {
+    "keywords": [
+     "schufa",
+     "bego",
+     "rent",
+     "rgschaft",
+     "wgs"
+    ],
+    "sharedPassages": 522,
+    "passages": [
+     "08 h tte ich zeit f r eine",
+     "15 oder 16 08 h tte ich zeit"
+    ],
+    "gapHours": -131.3
+   }
+  },
+  {
+   "a": "c40_planning_medium",
+   "b": "c22_writing_long",
+   "type": "similar",
+   "score": 0.372,
+   "evidence": {
+    "keywords": [
+     "bego",
+     "balcony",
+     "move-in",
+     "koche",
+     "stefan"
+    ],
+    "gapHours": 11.8
+   }
+  },
+  {
+   "a": "c19_creative_long",
+   "b": "c12_creative_medium",
+   "type": "similar",
+   "score": 0.371,
+   "evidence": {
+    "keywords": [
+     "locker",
+     "vine",
+     "rune",
+     "orbs",
+     "magical"
+    ],
+    "gapHours": -1.3
+   }
+  },
+  {
+   "a": "c31_creative_long",
+   "b": "c01_creative_long",
+   "type": "similar",
+   "score": 0.369,
+   "evidence": {
+    "keywords": [
+     "mundu",
+     "catholic",
+     "laterite",
+     "syrian",
+     "village"
+    ],
+    "gapHours": 1.2
+   }
+  },
+  {
+   "a": "c56_coding_long",
+   "b": "c49_coding_long",
+   "type": "similar",
+   "score": 0.36,
+   "evidence": {
+    "keywords": [
+     "ledger",
+     "fixture",
+     "shaper",
+     "buildlog",
+     "cotrace"
+    ],
+    "gapHours": 1659.9
+   }
+  },
+  {
+   "a": "c02_coding_long",
+   "b": "c54_planning_long",
+   "type": "similar",
+   "score": 0.357,
+   "evidence": {
+    "keywords": [
+     "geist",
+     "gif",
+     "diffuse",
+     "cosmo",
+     "chromatic"
+    ],
+    "gapHours": -2.0
+   }
+  },
+  {
+   "a": "c02_coding_long",
+   "b": "c34_planning_long",
+   "type": "similar",
+   "score": 0.354,
+   "evidence": {
+    "keywords": [
+     "geist",
+     "gif",
+     "cosmo",
+     "diffuse",
+     "chromatic"
+    ],
+    "gapHours": 0.0
+   }
+  },
+  {
+   "a": "c31_creative_long",
+   "b": "c28_creative_medium",
+   "type": "similar",
+   "score": 0.354,
+   "evidence": {
+    "keywords": [
+     "woodpile",
+     "ip-adapter",
+     "mundu",
+     "de-aging",
+     "girl"
+    ],
+    "gapHours": -0.5
+   }
+  },
+  {
+   "a": "c51_writing_long",
+   "b": "c53_research_long",
+   "type": "similar",
+   "score": 0.33,
+   "evidence": {
+    "keywords": [
+     "ali",
+     "urn",
+     "marketing",
+     "posting",
+     "daniel"
+    ],
+    "gapHours": -165.7
+   }
+  },
+  {
+   "a": "c42_planning_medium",
+   "b": "c37_learning_medium",
+   "type": "similar",
+   "score": 0.318,
+   "evidence": {
+    "keywords": [
+     "reps",
+     "accusative",
+     "wohin",
+     "akkusativ",
+     "dativ"
+    ],
+    "gapHours": 49.2
+   }
+  },
+  {
+   "a": "c51_writing_long",
+   "b": "c18_research_long",
+   "type": "similar",
+   "score": 0.311,
+   "evidence": {
+    "keywords": [
+     "marketing",
+     "n8n",
+     "comfyui",
+     "rzhandel",
+     "posting"
+    ],
+    "gapHours": -163.7
+   }
+  }
+ ],
+ "balance": {
+  "human": 2405,
+  "ai": 4928,
+  "mappedChats": 14,
+  "chats": 57
+ },
+ "method": {
+  "domains": "keyword baseline (zero cost) + region vote; owner corrections win",
+  "regions": {
+   "similarity": "tfidf-v1",
+   "fingerprint": "title + full dialogue + engine extraction",
+   "nearDuplicate": 0.9,
+   "regionCut": 0.1318,
+   "areaCut": 0.101,
+   "similarCut": 0.3002,
+   "chats": 57,
+   "pairs": 1596
+  }
+ }
+}

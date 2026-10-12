@@ -2177,3 +2177,21 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
   - B1.5 (naming and renaming)
   - B1.6 (the workspace switch)
 - **Next:** Owner reviews the map in `brain-lab.html` and decides spec §2. Gemini should not start the old S4.7 ("categories drive lobes").
+
+---
+
+## 2026-10-12 · Claude Code · Opus — [DESIGN] The simple brain (BRAIN_V2_SPEC, proposed)
+- **Files:** `docs/design-system/foundations/BRAIN_V2_SPEC.md` (new); `scripts/design_system/brain_v2_data.py` (new); `web/brain-v2.html`, `web/src/brain-v2/{main.ts,v2.css,brain_v2.generated.json}` (new prototype); `docs/design-system/foundations/BRAIN_NEURON_SPEC.md` (status note); screenshots `docs/design-system/brain-neuron/v2/`.
+- **Did:** The owner rejected the neuron template ("nobody can distinguish in one second what it is") and asked for a universal, KISS design. Built a new, separate prototype:
+  - one glowing dot per chat (size ∛mass; colour in three states: human-led / co-created / AI-led)
+  - outcome dots and lines around each chat
+  - eight universal lobes, the same for everyone, adapted from OpenAI's ChatGPT topic taxonomy and Anthropic's Economic Index (O*NET), with the person's own regions inside
+  - lobe glow coloured by the lobe's balance
+  - a whole-brain balance bar
+  - Who / Topics lenses
+  - evidence-only arcs between chats
+  - a chat card on click
+- **Checked:** COTRACE (Kim et al. 2026) goes broader only within a chat (intentions); there is no cross-chat topic layer.
+- **Ran:** `npx tsc --noEmit -p tsconfig.app.json` → clean (note: `-p .` checks nothing because the root tsconfig has `files: []`). The prototype renders 57 chats with no console errors. Measured balance: you 33% · AI 67%. The keyword lobe baseline is about 9 in 10 sensible, with 5 clear misses listed in the spec.
+- **Open (owner):** AI colour (amber vs violet, DDR-005); the eight lobes; the 60/40 thresholds; retire the detailed neuron fully?
+- **Next:** owner review of `brain-v2.html`; then the production lobe classifier (cost-gated) and owner corrections.

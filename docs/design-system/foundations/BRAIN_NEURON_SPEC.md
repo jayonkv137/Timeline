@@ -2,6 +2,8 @@
 
 Status: **v0, in design.** Sessions 1 and 2 decided (9 Oct 2026). The neuron template (§7) is in the Brain Lab for review. This is the rulebook we are building rule by rule, the same way `design_pack/GRAPH_SYSTEM_SPEC.md` was built for the 2D graph. If the owner approves the neuron direction, it supersedes the cell territories in [`BRAIN_SYSTEM_SPEC.md`](BRAIN_SYSTEM_SPEC.md) (DDR-008).
 
+> **12 Oct 2026, owner review:** the detailed neuron (template, hybrid membrane, twigs) is retired as the Brain's overview design. See [BRAIN_V2_SPEC](BRAIN_V2_SPEC.md) (the simple brain). The empirical rules here (size, share, sessions) carry over.
+
 Lane: design track only. It touches `web/src/workspace/brain-*`, a dev-only Brain Lab page, `docs/design-system/` and tokens, and never `engine/`, `server/` or Track S files. The one shared file, `Brain.tsx`, is coordinated through BUILDLOG.
 
 ## Owner's vision (owner's words)

@@ -1,0 +1,35 @@
+/* The simple brain (BRAIN_V2_SPEC). Tokens only, except the stage black. */
+html, body { margin: 0; height: 100%; background: #05070b; color: var(--color-text-primary); font-family: var(--type-body-family); }
+#v2 { position: fixed; inset: 0; overflow: hidden; }
+.v2-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; }
+.v2-labels { position: absolute; inset: 0; pointer-events: none; }
+.v2-lobe { position: absolute; transform: translate(-50%, -50%); text-align: center; white-space: nowrap; text-shadow: 0 1px 8px #000, 0 0 16px #000; }
+.v2-lobe b { display: block; font-size: 11px; font-weight: var(--p-font-weight-medium); letter-spacing: .16em; text-transform: uppercase; color: var(--lobe); }
+.v2-lobe span { display: block; margin-top: 2px; font-size: 11px; color: var(--color-text-muted); }
+.v2-hud { position: absolute; top: var(--p-space-5); left: var(--p-space-5); width: 280px; padding: var(--p-space-4); border-radius: var(--p-radius-lg); background: rgb(10 13 19 / .78); border: 1px solid var(--color-border-subtle); backdrop-filter: blur(6px); }
+.v2-eyebrow { font-size: var(--type-overline-size); font-weight: var(--type-overline-weight); letter-spacing: var(--type-overline-tracking); text-transform: uppercase; color: var(--color-text-faint); }
+.v2-hud h1 { margin: var(--p-space-1) 0 var(--p-space-3); font-size: var(--type-title-size); font-weight: var(--type-title-weight); }
+.v2-balance { display: flex; height: 10px; border-radius: var(--p-radius-pill); overflow: hidden; gap: 2px; }
+.v2-balance.small { height: 6px; margin: var(--p-space-2) 0; }
+.v2-balance-text { display: flex; justify-content: space-between; margin-top: var(--p-space-1-5); font-size: var(--type-ui-size); font-variant-numeric: tabular-nums; }
+.v2-note { margin: var(--p-space-1-5) 0 0; font-size: var(--type-caption-size); color: var(--color-text-muted); line-height: 1.45; }
+.v2-switch { display: flex; gap: var(--p-space-1); margin: var(--p-space-4) 0 var(--p-space-2); padding: var(--p-space-1); border-radius: var(--p-radius-pill); background: var(--color-bg-app); border: 1px solid var(--color-border-subtle); }
+.v2-switch button { flex: 1; border: 0; background: none; color: var(--color-text-muted); font: inherit; font-size: var(--type-ui-size); padding: var(--p-space-1-5); border-radius: var(--p-radius-pill); cursor: pointer; }
+.v2-switch button[aria-pressed="true"] { background: var(--color-surface-raised); color: var(--color-text-primary); }
+.v2-switch button:focus-visible, .v2-close:focus-visible, .v2-check input:focus-visible, .v2-select select:focus-visible { outline: 2px solid var(--color-focus-ring); outline-offset: 2px; }
+.v2-legend { list-style: none; margin: var(--p-space-2) 0; padding: 0; display: flex; flex-direction: column; gap: var(--p-space-1); font-size: var(--type-caption-size); color: var(--color-text-secondary); }
+.v2-legend i { display: inline-block; width: 9px; height: 9px; border-radius: var(--p-radius-round); margin-right: var(--p-space-2); vertical-align: middle; box-shadow: 0 0 8px currentColor; }
+.v2-check, .v2-select { display: flex; align-items: center; gap: var(--p-space-2); margin-top: var(--p-space-1-5); font-size: var(--type-caption-size); color: var(--color-text-muted); }
+.v2-select select { flex: 1; font: inherit; color: var(--color-text-primary); background: var(--color-bg-app); border: 1px solid var(--color-border-default); border-radius: var(--p-radius-sm); padding: var(--p-space-0-5) var(--p-space-1); }
+.v2-card { position: absolute; top: var(--p-space-5); right: var(--p-space-5); width: 320px; max-height: calc(100% - 2 * var(--p-space-5)); overflow-y: auto; padding: var(--p-space-4); border-radius: var(--p-radius-lg); background: rgb(10 13 19 / .86); border: 1px solid var(--color-border-subtle); backdrop-filter: blur(6px); }
+.v2-card h2 { margin: var(--p-space-1) 0 0; font-size: var(--type-title-size); font-weight: var(--type-title-weight); line-height: 1.3; }
+.v2-card h3 { margin: var(--p-space-4) 0 var(--p-space-1); font-size: var(--type-overline-size); font-weight: var(--type-overline-weight); letter-spacing: var(--type-overline-tracking); text-transform: uppercase; color: var(--color-text-faint); }
+.v2-card ul { margin: 0; padding-left: var(--p-space-4); font-size: var(--type-caption-size); color: var(--color-text-secondary); }
+.v2-card li { margin: var(--p-space-1) 0; } .v2-card li small { display: block; color: var(--color-text-faint); }
+.v2-row { margin: var(--p-space-1) 0; font-size: var(--type-caption-size); color: var(--color-text-secondary); font-variant-numeric: tabular-nums; }
+.v2-row.muted { color: var(--color-text-faint); }
+.v2-close { position: absolute; top: var(--p-space-2); right: var(--p-space-2); width: 28px; height: 28px; border: 0; border-radius: var(--p-radius-sm); background: none; color: var(--color-text-muted); font-size: 18px; cursor: pointer; }
+.v2-tip { position: absolute; pointer-events: none; max-width: 240px; padding: var(--p-space-1-5) var(--p-space-2-5); border-radius: var(--p-radius-md); background: rgb(10 13 19 / .92); border: 1px solid var(--color-border-subtle); font-size: var(--type-caption-size); }
+.v2-tip b { display: block; font-weight: var(--p-font-weight-medium); } .v2-tip span { color: var(--color-text-muted); }
+.v2-hint { position: absolute; bottom: var(--p-space-4); left: 50%; transform: translateX(-50%); margin: 0; font-size: var(--type-caption-size); color: var(--color-text-faint); }
+@media (max-width: 760px) { .v2-hud { left: var(--p-space-3); right: var(--p-space-3); width: auto; top: var(--p-space-3); } .v2-card { left: var(--p-space-3); right: var(--p-space-3); width: auto; top: auto; bottom: var(--p-space-3); max-height: 50%; } }
