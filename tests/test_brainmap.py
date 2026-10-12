@@ -130,11 +130,15 @@ def test_corpus_reproduces_the_study_regions(corpus_map):
     _, m = corpus_map
     region = lambda cid: m["chats"][cid]["region"]
     german = ["c37_learning_medium", "c41_planning_medium", "c42_planning_medium", "c43_learning_medium", "c48_learning_long"]
-    bremen = ["c22_writing_long", "c38_planning_medium", "c40_planning_medium", "c50_planning_long"]
+    rooms = ["c22_writing_long", "c38_planning_medium", "c40_planning_medium"]
+    paperwork = ["c26_planning_medium", "c50_planning_long"]
     film = ["c12_creative_medium", "c19_creative_long", "c25_creative_long", "c32_creative_long", "c33_creative_medium"]
-    for group in (german, bremen, film):
+    for group in (german, rooms, paperwork, film):
         assert region(group[0]) is not None and len({region(c) for c in group}) == 1, group
-    assert len({region(german[0]), region(bremen[0]), region(film[0])}) == 3
+    assert len({region(german[0]), region(rooms[0]), region(paperwork[0]), region(film[0])}) == 4
+    # Room hunting and German paperwork are two regions of one area: life in Bremen.
+    area = lambda cid: m["chats"][cid]["area"]
+    assert len({area(c) for c in rooms + paperwork}) == 1
 
 
 @pytest.mark.tier1

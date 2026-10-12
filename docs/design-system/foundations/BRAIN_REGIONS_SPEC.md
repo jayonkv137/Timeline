@@ -1,6 +1,6 @@
 # BRAIN_REGIONS_SPEC: where each chat lives, what it sits next to, and how chats connect
 
-Status: **v0.1, proposed (track B1).** Research done; the empirical study ran on the 55 labelled corpus chats (zero LLM, zero spend). Rules are proposed for owner decision. The engine module and the Brain Lab preview follow the plan in §12.
+Status: **v0.2, proposed (track B1).** Research and empirical study done (55 labelled corpus chats, zero LLM, zero spend). B1.1 (engine module) and B1.2 (Brain Lab preview) are built; the owner reviews the map (§12).
 Companions:
 - [`BRAIN_NEURON_SPEC.md`](BRAIN_NEURON_SPEC.md) (what a neuron looks like). This spec decides *where* it sits and *what it connects to*; it closes that spec's Sessions 11–13.
 - [`BRAIN_SYSTEM_SPEC.md`](BRAIN_SYSTEM_SPEC.md) §3 (territory claiming, kept).
@@ -197,6 +197,25 @@ On the full fingerprint (title + dialogue + engine extraction), pair similarity 
 
 So **regions use p90** (about 0.13, project level) and **areas use p80** (about 0.10, broad).
 
+### 9.6 The engine map on the corpus (B1.1, 57 chats, German function words removed, names from member titles)
+
+| Area | Regions inside |
+|---|---|
+| german · session · minute | German learning (5) |
+| room · bremen | **room hunting** (3: Hemelingen, river district, shared flat) · **German paperwork** (2: visa extension, Schufa) |
+| image · shot · character | **nike · creating · film** (6: AI film and ad production) · **Kerala family** (3) |
+| page · action · design | AI research, career and COTRACE (10) · front-end building (9) |
+| video · product · omni | (2 chats: hybrid AI filmmaking, honey product video; no region yet) |
+| redesign · page · portfolio | the portfolio about page, exported twice (2) |
+
+- 14 chats are solitary.
+- 19 connections: 6 continued, 3 reused, 10 similar, each with readable evidence. Examples:
+  - "Room in shared apartment" ↔ "Hemelingen room inquiry": similar (bego, balcony, move-in)
+  - the German session plans: reused (shared exercises)
+  - the job application ↔ Diehl Aviation: similar
+- **Names from member titles beat names from the text.** "german · session · minute" and "room · bremen" against "die · der · word" and "ich · und · room".
+- Two names are still weak ("action · requirement · outcome", "page · head · box"). Those are the cases for model naming or your rename (§5.3).
+
 ### 9.4 Similarity distribution (calibrates link thresholds)
 All 1,485 pairs, F3: median 0.033 · 90th percentile 0.101 · 95th 0.134 · 99th 0.268 · max 0.996. Almost all pairs are unrelated, so thresholds must be percentiles of *your* data, not fixed constants.
 
@@ -233,15 +252,27 @@ All 1,485 pairs, F3: median 0.033 · 90th percentile 0.101 · 95th 0.134 · 99th
 
 | Step | What | Done when | Gate |
 |---|---|---|---|
-| **B1.0** | This spec + study | committed | **owner reads §2 and decides: regions by content, task type as property** |
-| **B1.1** | `engine/brainmap.py` baseline: fingerprints, TF-IDF, near-duplicates, two-level clustering, keyword names, continued/reused/similar links, flat-map layout → `brain_map.json`; CLI; tier1 tests (determinism, near-duplicates join, solitary stays solitary, every link has evidence, stability: adding a chat moves no one) | tests green; corpus map reproduces §9.2 | — |
-| **B1.2** | Brain Lab preview: placement from `brain_map.json`, area and region labels, axons with evidence on hover; unmapped corpus chats shown as faint, unprocessed somas | screenshot review | **owner judges the map** |
+| **B1.0** ✅ | This spec + study | committed | **owner reads §2 and decides: regions by content, task type as property** |
+| **B1.1** ✅ | `engine/brainmap.py` baseline: fingerprints, TF-IDF, near-duplicates, two-level clustering, keyword names, continued/reused/similar links, flat-map layout → `brain_map.json`; CLI; tier1 tests (determinism, near-duplicates join, solitary stays solitary, every link has evidence, stability: adding a chat moves no one) | tests green; corpus map reproduces §9.2 | — |
+| **B1.2** ✅ built | Brain Lab preview: placement from `brain_map.json`, area and region labels, axons with evidence on hover; unmapped corpus chats shown as faint, unprocessed somas | screenshot review | **owner judges the map** |
 | **B1.3** | **S4.7 amended:** the review-table picker is **task type** (6 kinds; optional cheap suggestion, never auto-accepted). After promotion the engine assigns the chat to a region (zero LLM) and the Brain places it | a newly imported chat lands next to related chats | — |
 | **B1.4** | `MODEL_EMBED` seam + cache; run the §4 acceptance test on the corpus | acceptance numbers in this spec | **cost gate, then owner decides baseline vs embeddings** |
 | **B1.5** | Region naming by model (optional) + owner rename/merge/split UI; versioned re-map with preview | owner can rename a region and re-map with a preview | owner |
 | **B1.6** | Workspace Brain switches from `LOBES` to `brain_map.json` | the workspace Brain shows regions | owner |
 
 ---
+
+## 13. What the preview shows (B1.2; screenshots in `brain-neuron/b1-regions/`)
+- **Overview:** area names float over their part of the cortex. Right hemisphere: German learning, the AI-work area, video/product. Left: AI film and image, life in Bremen, the portfolio.
+- **Chats not yet processed:** the 47 corpus chats appear as faint cell bodies inside their regions, so each region's real population is visible before it is mapped. No mass is invented for them.
+- **Closer:** zooming in switches to region names (e.g. "nike · creating · film", "redesign · page · portfolio").
+- **Opening a chat:** shows all its connections. The inspector lists the chat's area, its region (with the words that define it), every connection with its evidence, and its placement, including that its task type never moves it.
+- **Known weak spots, for review:**
+  - two keyword names are weak ("page · action · design", "action · requirement · outcome")
+  - one name contains the owner's first name ("room · jayon · september", from signed messages)
+  - 14 chats are solitary on word-matching alone
+
+  These are the B1.4 (embeddings) and B1.5 (naming) cases.
 
 ## Sources
 - Huth, de Heer, Griffiths, Theunissen, Gallant, *Natural speech reveals the semantic maps that tile human cerebral cortex*, Nature 532 (2016): [PMC4852309](https://pmc.ncbi.nlm.nih.gov/articles/PMC4852309), [Gallant Lab](https://gallantlab.org/publications/2016-natural-speech-reveals-semantic/)

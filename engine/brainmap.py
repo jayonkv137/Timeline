@@ -35,6 +35,10 @@ here's let's i'm it's don't can't you're that's there's we're i've i'll would've
 GENERIC = set("""step thing things right real really good great sure know think see look looks made just still actually
 feel go going done work working first next two three part section version check help create add update clear keep
 around exactly maybe something""".split())
+# German function words (the corpus has German chats; without these, names read "die · der · und").
+STOP |= set("""aber alle als auch auf aus bei bin bis bist dann dass dein dem den der des dich die dir doch durch ein eine
+einem einen einer eines für hab habe haben hat ich ihr ist jetzt kann kein mal man mein mich mir mit muss nach nicht noch nur
+oder sehr sein sich sie sind über und uns unser von vor war weil wenn wer wie wir wird zum zur""".split())
 CONTINUATION = re.compile(r"\b(continu\w*|part\s*\d+|phase\s*\d+|follow[- ]?up|revisit\w*)\b", re.I)
 
 
@@ -192,6 +196,14 @@ def average_linkage(S: list[list[float]], groups: list[list[int]], cut: float) -
             sim[ka] = (na * sim[ka] + nb * sim.pop(kb)) / (na + nb)
         sim = {key: s for key, s in sim.items() if b not in key}
     return sorted((groups[g] for g in alive), key=lambda g: (-len(g), g[0]))
+
+
+def group_name(members: list[int], chats: list[dict], all_groups: list[list[int]], fallback: list[str]) -> str:
+    """Name a group from its members' own titles (class-based TF-IDF over title words); fall back to text keywords."""
+    title_toks = [tokens(c["title"]) for c in chats]
+    words = keywords(members, title_toks, all_groups, top=3)
+    shared = [w for w in words if sum(w in title_toks[i] for i in members) >= max(2, len(members) // 3)]
+    return " · ".join(shared if len(shared) >= 2 else fallback[:3])
 
 
 def keywords(members: list[int], toks: list[list[str]], all_groups: list[list[int]], top: int = 6) -> list[str]:
@@ -357,7 +369,7 @@ def build_map(chats: list[dict], previous: dict | None = None) -> dict:
         rid = f"r{k + 1}"
         cohesion = (sum(S[i][j] for i in g for j in g if i < j) / (len(g) * (len(g) - 1) / 2)) if len(g) > 1 else 1.0
         kw = keywords(g, toks, region_groups)
-        regions[rid] = {"name": " · ".join(kw[:3]), "nameSource": "keywords", "keywords": kw,
+        regions[rid] = {"name": group_name(g, chats, region_groups, kw), "nameSource": "keywords", "keywords": kw,
                         "members": [chats[i]["id"] for i in g], "cohesion": round(cohesion, 3)}
         for i in g:
             chat_region[i] = rid
@@ -367,7 +379,7 @@ def build_map(chats: list[dict], previous: dict | None = None) -> dict:
         aid = f"a{k + 1}"
         kw = keywords(g, toks, area_groups)
         member_regions = sorted({chat_region[i] for i in g if i in chat_region}, key=lambda r: int(r[1:]))
-        areas[aid] = {"name": " · ".join(kw[:3]), "nameSource": "keywords", "keywords": kw,
+        areas[aid] = {"name": group_name(g, chats, area_groups, kw), "nameSource": "keywords", "keywords": kw,
                       "regions": member_regions, "members": [chats[i]["id"] for i in g], "solitary": len(g) == 1}
         for i in g:
             chat_area[i] = aid

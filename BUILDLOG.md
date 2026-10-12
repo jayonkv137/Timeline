@@ -2147,3 +2147,33 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
 - **Next:** S4.7 — Category: owner sets in review table; optional "Suggest categories" with MODEL_FAST.
 
 
+
+---
+
+## 2026-10-12 · Claude Code · Opus — [ENGINE + DESIGN] B1.0–B1.2: where each chat lives (regions, connections)
+- **Files:** `docs/design-system/foundations/BRAIN_REGIONS_SPEC.md` (new); `engine/brainmap.py` (new); `engine/__main__.py` (`brainmap` subcommand); `tests/test_brainmap.py` (new, 11 tier1); `web/src/workspace/brain-engine.js` (lab-only: unmapped chats, axons, area/region labels, evidence rows); `web/src/brain-lab/{main.ts,brain_map.generated.json}`; `docs/plans/STANDALONE_V1_PLAN.md` (S4.7 amended); `docs/design-system/foundations/BRAIN_NEURON_SPEC.md` (sessions 11–12 point to the new spec); screenshots `docs/design-system/brain-neuron/b1-regions/`.
+- **Did:** Researched how chats and notes are grouped and placed:
+  - Huth 2016 semantic atlas
+  - Anthropic Clio
+  - OpenAI "How People Use ChatGPT"
+  - Obsidian Smart Connections and Graph Analysis
+  - BERTopic and UMAP
+  - Nomic Atlas and Cosmograph
+  - mental-map stability
+  - shingling for reuse
+
+  Ran a zero-spend study on the 55 labelled corpus chats. Built the baseline engine (fingerprint → TF-IDF → near-duplicates → two-level average linkage with percentile cuts → names from member titles → continued/reused/similar links with evidence → flat-map layout) and the Brain Lab preview.
+- **Decided (proposed, owner to confirm):**
+  - Placement = content (regions); task type = property only. The six lobes are retired as placement.
+  - S4.7 amended: the picker sets task type; it never places a chat.
+- **Evidence:**
+  - Task-type labels are recovered only weakly by content: nearest neighbour 0.49 vs chance 0.19, NMI 0.33.
+  - The content groups by topic across task types: German learning = learning + planning; Bremen = writing + planning.
+  - 4 near-duplicate re-exports carry different labels.
+- **Ran:** `.venv/bin/python -m pytest` → 311 passed (11 new); `npx tsc --noEmit` clean; Brain Lab renders 57 chats, 6 areas, 8 regions, 19 connections with no console errors; the workspace Brain is unchanged (13 territories).
+- **Not done:**
+  - B1.3 (the S4.7 UI and engine assignment after promotion)
+  - B1.4 (embeddings, cost-gated)
+  - B1.5 (naming and renaming)
+  - B1.6 (the workspace switch)
+- **Next:** Owner reviews the map in `brain-lab.html` and decides spec §2. Gemini should not start the old S4.7 ("categories drive lobes").
