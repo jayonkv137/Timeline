@@ -300,15 +300,6 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
         else { lines.push(line); line = words[i]; }
       }
       lines.push(line);
-      const maxLines = isRoot ? 5 : 4;
-      if (lines.length > maxLines) {
-        let last = lines[maxLines - 1];
-        while (last.length > 0 && ctx!.measureText(last + '…').width > maxWidth) {
-          last = last.slice(0, -1).trim();
-        }
-        lines[maxLines - 1] = (last || lines[maxLines - 1]) + '…';
-        lines.length = maxLines;
-      }
       lines.forEach((l, i) => ctx!.fillText(l, x, y + i * lineHeight));
       ctx!.shadowBlur = 0;
     }
