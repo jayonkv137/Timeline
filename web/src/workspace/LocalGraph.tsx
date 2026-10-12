@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Maximize2, Minimize2, LocateFixed, Sparkles } from 'lucide-react';
+import { Maximize2, Minimize2, LocateFixed } from 'lucide-react';
 import type { Atom, Chat, ChatView, Outcome } from './types';
 import './obsidian-graph.css';
 import { tokens } from '../design-system/tokens/tokens';
@@ -483,44 +483,44 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
       const isNascent = (curTotal > maxMapped || curIsMapping) && sim.current.nodes.length > 0;
 
       if (isNascent) {
-        const anchor = sim.current.nodes.find(n => n.isTerminalActive)
-          || sim.current.nodes.slice().sort((a, b) => (b.outcome?.born || 0) - (a.outcome?.born || 0))[0]
-          || sim.current.nodes[0];
+        // Form directly branching from the centre root node
+        const anchor = sim.current.nodes.find(n => n.isRoot) || sim.current.nodes[0];
 
         const floatY = Math.sin(now * 0.0022) * 5;
         const floatX = Math.cos(now * 0.0018) * 3;
-        const gx = anchor.x + 112 + floatX;
-        const gy = anchor.y + 36 + floatY;
-        const gr = 16;
+        // Cleanly separated from the centre node
+        const gx = anchor.x + 115 + floatX;
+        const gy = anchor.y + 70 + floatY;
+        const gr = 15;
         const nextPairNum = maxMapped + 1;
         ghostNodeRef.current = { x: gx, y: gy, r: gr, nextPair: nextPairNum };
 
-        // Animated flowing synaptic tether from anchor node
+        // Animated flowing synaptic tether from centre node
         ctx!.save();
         ctx!.setLineDash([5, 5]);
         ctx!.lineDashOffset = -now * 0.016;
         const tetherGrad = ctx!.createLinearGradient(anchor.x, anchor.y, gx, gy);
-        tetherGrad.addColorStop(0, rgbaOf(AI, 0.75));
-        tetherGrad.addColorStop(1, rgbaOf(USER, curIsMapping ? 0.9 : 0.45));
+        tetherGrad.addColorStop(0, rgbaOf(WHITE, 0.75));
+        tetherGrad.addColorStop(1, rgbaOf(curIsMapping ? AI : USER, 0.65));
         ctx!.strokeStyle = tetherGrad;
-        ctx!.lineWidth = 1.75;
+        ctx!.lineWidth = 1.5;
         ctx!.beginPath();
         const midX = (anchor.x + gx) / 2;
-        const midY = (anchor.y + gy) / 2 - 12;
+        const midY = (anchor.y + gy) / 2 - 14;
         ctx!.moveTo(anchor.x, anchor.y);
         ctx!.quadraticCurveTo(midX, midY, gx, gy);
         ctx!.stroke();
         ctx!.restore();
 
         // Pulsing synaptic aura glow
-        const breathe = Math.sin(now * 0.0035) * 3.5;
-        const aura = ctx!.createRadialGradient(gx, gy, 3, gx, gy, gr + 16 + breathe);
-        aura.addColorStop(0, rgbaOf(curIsMapping ? AI : USER, curIsMapping ? 0.28 : 0.14));
-        aura.addColorStop(0.6, rgbaOf(AI, curIsMapping ? 0.15 : 0.06));
+        const breathe = Math.sin(now * 0.0035) * 3;
+        const aura = ctx!.createRadialGradient(gx, gy, 2, gx, gy, gr + 12 + breathe);
+        aura.addColorStop(0, rgbaOf(curIsMapping ? AI : USER, curIsMapping ? 0.25 : 0.12));
+        aura.addColorStop(0.6, rgbaOf(curIsMapping ? AI : USER, curIsMapping ? 0.10 : 0.04));
         aura.addColorStop(1, 'rgba(0,0,0,0)');
         ctx!.fillStyle = aura;
         ctx!.beginPath();
-        ctx!.arc(gx, gy, gr + 16 + breathe, 0, Math.PI * 2);
+        ctx!.arc(gx, gy, gr + 12 + breathe, 0, Math.PI * 2);
         ctx!.fill();
 
         // Frosted glass dark orb base
@@ -532,15 +532,15 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
         // Perimeter dashed ring
         ctx!.save();
         ctx!.strokeStyle = curIsMapping ? rgbaOf(AI, 0.85) : rgbaOf(WHITE, 0.45);
-        ctx!.lineWidth = 1.5;
-        if (!curIsMapping) ctx!.setLineDash([4, 4]);
+        ctx!.lineWidth = 1.4;
+        ctx!.setLineDash([3, 3]);
         ctx!.beginPath();
         ctx!.arc(gx, gy, gr, 0, Math.PI * 2);
         ctx!.stroke();
         ctx!.restore();
 
-        // Dual orbiting particles (Sky = Human, Ember = AI)
-        const orbitR = gr + 7;
+        // Dual orbiting particles (the circling thing: Sky = Human, Ember = AI)
+        const orbitR = gr + 6.5;
         const ang = now * 0.003;
         const px1 = gx + Math.cos(ang) * orbitR;
         const py1 = gy + Math.sin(ang) * orbitR;
@@ -557,12 +557,12 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
         ctx!.fill();
 
         // Core glowing spark
-        ctx!.fillStyle = curIsMapping ? AI : rgbaOf(WHITE, 0.75);
+        ctx!.fillStyle = curIsMapping ? AI : rgbaOf(WHITE, 0.8);
         ctx!.beginPath();
-        ctx!.arc(gx, gy, 3 + (curIsMapping ? Math.sin(now * 0.006) * 1 : 0), 0, Math.PI * 2);
+        ctx!.arc(gx, gy, 2.5 + (curIsMapping ? Math.sin(now * 0.006) * 1 : 0), 0, Math.PI * 2);
         ctx!.fill();
 
-        // Label for ghost node
+        // Simple, clean label for nascent node
         const ghostLabelText = curIsMapping
           ? `✦ Synthesizing Pair ${nextPairNum}…`
           : `✦ Pair ${nextPairNum} Pending`;
@@ -570,10 +570,10 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
           text: ghostLabelText,
           wx: gx,
           wy: gy + gr,
-          dy: 12,
-          maxWidth: 160,
-          lineHeight: 14,
-          opacity: curIsMapping ? 0.95 : 0.7,
+          dy: 10,
+          maxWidth: 140,
+          lineHeight: 13,
+          opacity: curIsMapping ? 0.9 : 0.7,
           isRoot: false
         });
       } else {
@@ -772,8 +772,6 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
   const maxMappedPair = chat.snapshots && chat.snapshots.length > 0
     ? chat.snapshots.length
     : (chat.nodes && chat.nodes.length > 0 ? Math.max(...chat.nodes.map(n => n.born || 1)) : 0);
-  const hasUnmapped = total > maxMappedPair || Boolean(isMapping);
-  const nextPair = maxMappedPair + 1;
   const pair = Math.max(1, Math.min(total || 1, view.pair));
   const fillPct = total <= 1 ? 100 : ((pair - 1) / (total - 1)) * 100;
   const trackWidth = Math.min(Math.max(140, Math.min(380, total * 54)), Math.max(120, size.w - (compact ? 110 : 330)));
@@ -834,35 +832,6 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
 
       {total > 0 && <>
         {compact && <div className="og-badge og-badge-float"><div className="og-badge-dot" /><span>{badge}</span></div>}
-        {hasUnmapped && (
-          <div className={`og-synthesis-hud ${!isMapping ? 'is-unmapped' : ''}`}>
-            <div className="hud-orbit-ring">
-              <span className="hud-dot sky" />
-              <span className="hud-dot ember" />
-            </div>
-            <Sparkles size={12} className="hud-sparkle" />
-            <span>
-              {isMapping
-                ? `Synthesizing Pair ${nextPair}…`
-                : `New exchange: Pair ${nextPair}`}
-            </span>
-            {isMapping ? (
-              <div className="hud-progress-track">
-                <div className="hud-progress-fill" />
-              </div>
-            ) : onTriggerMap ? (
-              <button
-                type="button"
-                className="hud-map-btn"
-                onClick={onTriggerMap}
-                title="Map this new exchange"
-              >
-                <span>Map Pair {nextPair}</span>
-                <kbd>⌘M</kbd>
-              </button>
-            ) : null}
-          </div>
-        )}
         <div className="og-capsule">
           <button className="og-nav" disabled={pair <= 1} onClick={() => seek(pair - 1)} title="Previous Pair (Left Arrow)" aria-label="Previous pair">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6" /></svg>
