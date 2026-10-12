@@ -29,18 +29,44 @@ export function Workspace(){
  const [streaming,setStreaming]=useState<{chatId:string;text:string;pair:number}|null>(null);
  const [queueStatus,setQueueStatus]=useState<QueueStatus|null>(null);
  const [initiatingMap,setInitiatingMap]=useState<string|null>(null);
+ const [queuedMapChats,setQueuedMapChats]=useState<Record<string,boolean>>({});
+ const [revealingChats,setRevealingChats]=useState<Record<string,boolean>>({});
+ const prevNodesCount=useRef<Record<string,number>>({});
 
  const handleTriggerMap=async(targetId:string)=>{
-   if(initiatingMap)return;
+   if(pending[targetId]){
+     setQueuedMapChats(q=>({...q,[targetId]:true}));
+     return;
+   }
+   if(initiatingMap===targetId)return;
    setInitiatingMap(targetId);
    try{
      await mapChat(targetId);
-     setNotice('Tracing decisions into spatial timeline…');
+     const q=await fetchJobs().catch(()=>null);
+     if(q) setQueueStatus(q);
    }catch(err:any){
      setNotice(err?.message||'Could not initiate mapping');
      setInitiatingMap(null);
    }
  };
+
+ useEffect(()=>{
+   chats.forEach(c=>{
+     const prev=prevNodesCount.current[c.id]||0;
+     const curr=c.nodes?.length||0;
+     if(prev===0&&curr>0){
+       setRevealingChats(r=>({...r,[c.id]:true}));
+       setTimeout(()=>{
+         setRevealingChats(r=>{
+           const next={...r};
+           delete next[c.id];
+           return next;
+         });
+       },420);
+     }
+     prevNodesCount.current[c.id]=curr;
+   });
+ },[chats]);
 
  useEffect(()=>{
    if(isOffline)return;
@@ -80,6 +106,10 @@ export function Workspace(){
    }
  }
  const isBrain=active==='brain';const chat=chats.find(c=>c.id===active);const view=views[active]||blankView;const selectedChat=chats.find(c=>c.id===brainSelected);const selectedView=brainSelected?views[brainSelected]||blankView:blankView;
+ const activeJob=queueStatus?.jobs?.find(j=>j.chatId===chat?.id);
+ const isJobActive=Boolean(activeJob&&(activeJob.status==='running'||activeJob.status==='queued'));
+ const isQueuedForCompletion=Boolean(chat&&queuedMapChats[chat.id]);
+ const isMappingInProgress=Boolean(initiatingMap===chat?.id||isJobActive||isQueuedForCompletion);
  const update=(v:Partial<ChatView>)=>patch(active,v);
  const ev=useEvidence({chat,viewPair:view.pair,scroll,lockUntil}); // EVIDENCE_SPEC: click a node → exact words in the chat
 
@@ -215,6 +245,14 @@ export function Workspace(){
        setPending(p => ({ ...p, [targetChatId]: false }));
        loadBundle(targetChatId);
        setTimeout(() => { if (scroll.current) scroll.current.scrollTop = scroll.current.scrollHeight; }, 60);
+       if (queuedMapChats[targetChatId]) {
+         setQueuedMapChats(q => {
+           const next = { ...q };
+           delete next[targetChatId];
+           return next;
+         });
+         handleTriggerMap(targetChatId);
+       }
      },
      onError: (errMsg) => {
        setStreaming(null);
@@ -548,8 +586,8 @@ export function Workspace(){
       <div className="cross-chat-note"><span className="eyebrow">CONNECTIONS BETWEEN CHATS</span><p>No verified cross-chat links are supplied yet. Shared topics alone are not shown as relationships.</p></div>
       </>:chat&&<div className="unmapped-stage-container">
         {graphFor(chat,view)}
-        {(!chat.isMapped&&(!chat.nodes||chat.nodes.length===0))&&(
-          <div className={`mapping-stage-veil ${initiatingMap===chat.id?'is-initiating':''}`}>
+        {((!chat.nodes||chat.nodes.length===0)||Boolean(revealingChats[chat.id]))&&(
+          <div className={`mapping-stage-veil ${revealingChats[chat.id] ? 'is-revealing' : ''}`}>
             <div className="veil-ambient-drift" aria-hidden="true">
               <svg className="drift-constellation" viewBox="0 0 300 300">
                 <circle cx="100" cy="120" r="14" className="drift-node drift-human"/>
@@ -558,21 +596,51 @@ export function Workspace(){
               </svg>
             </div>
 
-            <div className="mapping-card minimal">
-              <button 
-                className="trace-decisions-btn"
-                onClick={()=>handleTriggerMap(chat.id)}
-                disabled={initiatingMap===chat.id||chat.totalPairs===0}
-                aria-label="Map this conversation"
-              >
-                <Sparkles size={14} style={{color:'var(--color-party-ai-solid)'}}/>
-                <span className="btn-label">
-                  {initiatingMap===chat.id?'Mapping conversation…':'Map this conversation'}
-                </span>
-                <kbd className="btn-shortcut">⌘M</kbd>
-              </button>
-              {chat.totalPairs===0&&<span className="mapping-hint">Send a message to start mapping</span>}
-            </div>
+            {isMappingInProgress ? (
+              <div className="mapping-synthesis-state">
+                <div className="synthesis-core">
+                  <div className="synthesis-ring-orbit">
+                    <span className="orbit-dot sky"/>
+                    <span className="orbit-dot ember"/>
+                    <Sparkles size={20} className="synthesis-sparkle"/>
+                  </div>
+                  <h3>Synthesizing Decision Map</h3>
+                  <p className="synthesis-status">
+                    {isQueuedForCompletion
+                      ? 'Finishing AI response before cognitive synthesis…'
+                      : activeJob?.status === 'running'
+                      ? 'Analyzing human & AI intent, decisions, and evidence…'
+                      : 'Queued for cognitive synthesis…'}
+                  </p>
+                  <div className="synthesis-progress-bar">
+                    <div className="synthesis-progress-fill"/>
+                  </div>
+                  <span className="synthesis-time-hint">Takes ~10–15 seconds</span>
+                </div>
+              </div>
+            ) : activeJob?.status === 'failed' ? (
+              <div className="mapping-error-state">
+                <span className="error-title">Couldn't map conversation</span>
+                <p className="error-desc">{activeJob.error ? 'API or pipeline error encountered.' : 'Analysis could not complete.'}</p>
+                <button className="retry-map-btn" onClick={()=>handleTriggerMap(chat.id)}>
+                  <RotateCcw size={13}/> Retry Mapping
+                </button>
+              </div>
+            ) : (
+              <div className="mapping-card minimal">
+                <button 
+                  className="trace-decisions-btn"
+                  onClick={()=>handleTriggerMap(chat.id)}
+                  disabled={chat.totalPairs===0}
+                  aria-label="Map this conversation"
+                >
+                  <Sparkles size={14} style={{color:'var(--color-party-ai-solid)'}}/>
+                  <span className="btn-label">Map this conversation</span>
+                  <kbd className="btn-shortcut">⌘M</kbd>
+                </button>
+                {chat.totalPairs===0&&<span className="mapping-hint">Send a message to start mapping</span>}
+              </div>
+            )}
           </div>
         )}
       </div>}
