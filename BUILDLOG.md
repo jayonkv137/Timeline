@@ -2195,3 +2195,30 @@ Overall Status: ALL DOD CRITERIA MET (PHASES E0 & E1)
 - **Ran:** `npx tsc --noEmit -p tsconfig.app.json` → clean (note: `-p .` checks nothing because the root tsconfig has `files: []`). The prototype renders 57 chats with no console errors. Measured balance: you 33% · AI 67%. The keyword lobe baseline is about 9 in 10 sensible, with 5 clear misses listed in the spec.
 - **Open (owner):** AI colour (amber vs violet, DDR-005); the eight lobes; the 60/40 thresholds; retire the detailed neuron fully?
 - **Next:** owner review of `brain-v2.html`; then the production lobe classifier (cost-gated) and owner corrections.
+
+---
+
+## 2026-10-12 12:10 · Antigravity · Gemini 2.5
+- **Phase/Step:** S4.9 — ChatGPT and Gemini Takeout Parsers (C-track work)
+- **Did:**
+  - `engine/importer.py`:
+    - Implemented `parse_chatgpt_export` per `IMPORT_SPEC v1.1 §D`: mapping tree walk from active leaf to root, discarding alternate branches, computing `branches` metrics (`total_nodes`, `nodes_on_path`, `discarded_branches`, `regenerations`, `user_edits`), filtering system/tool turns, and scoring fidelity grade with `regen_ratio > 0.3` downgrade penalty.
+    - Implemented `GeminiTakeoutHTMLParser` and `parse_gemini_takeout_html` per `IMPORT_SPEC v1.1 §E Layout C` with mandatory `degraded` fidelity grade.
+    - Implemented `parse_gemini_export` per `IMPORT_SPEC v1.1 §E Layouts A/B` for JSON conversations.
+    - Added `sniff_export_format`, `parse_conversation`, and multi-platform ID/file detection in `find_export_file`, `scan_import`, and `promote_conversation`.
+  - `server/jobs.py`:
+    - Updated job enqueuing to recognize and index ChatGPT and Gemini conversation identifiers alongside Claude IDs.
+  - `tests/data/import/chatgpt_tree.json`:
+    - Realistic ChatGPT mapping tree fixture with active leaf resolution and regeneration branch.
+  - `tests/data/import/gemini_takeout.json`:
+    - Gemini Takeout JSON conversations fixture.
+  - `tests/data/import/gemini_activity.html`:
+    - Gemini Takeout HTML activity fixture.
+  - `tests/test_importer.py`:
+    - Added 5 tier1 tests: tree walking, Gemini JSON, Gemini HTML, promotion schema validation, and multi-platform scan.
+- **Decisions made:**
+  - Preserved pure zero-LLM contract during archive scanning.
+  - Ensured `conv_id` prefixing (`chatgpt_...`, `gemini_...`, `claude_...`) remains idempotent and cross-indexable so that existing library duplicate/extension checks work transparently across platforms.
+- **Spec contradictions/gaps flagged:** none
+- **Verification:** `.venv/bin/pytest` → 316 passed (5 new), 1 warning in 20.96s.
+- **Next:** Step S4.10 (Batch cost and performance report).

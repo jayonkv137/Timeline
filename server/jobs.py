@@ -242,17 +242,31 @@ class JobQueueManager:
 
         # Load raw conversations list
         from engine.importer import find_export_file
-        primary_file, _ = find_export_file(raw_dir)
-        with open(primary_file, "r", encoding="utf-8") as f:
-            raw_convs_data = json.load(f)
-        if isinstance(raw_convs_data, dict):
-            raw_convs_data = [raw_convs_data]
+        primary_file, fmt = find_export_file(raw_dir)
+        if fmt == "gemini_takeout_html":
+            from engine.importer import parse_gemini_takeout_html
+            raw_convs_data = parse_gemini_takeout_html(primary_file)
+        else:
+            with open(primary_file, "r", encoding="utf-8") as f:
+                raw_convs_data = json.load(f)
+            if isinstance(raw_convs_data, dict):
+                if "conversations" in raw_convs_data and isinstance(raw_convs_data["conversations"], list):
+                    raw_convs_data = raw_convs_data["conversations"]
+                else:
+                    raw_convs_data = [raw_convs_data]
 
         convs_by_id = {}
         for c in raw_convs_data:
             uuid_str = c.get("uuid", "")
-            cid = f"claude_{uuid_str}" if uuid_str else c.get("id") or c.get("name")
-            convs_by_id[cid] = c
+            raw_id = c.get("id") or c.get("name") or uuid_str
+            if uuid_str:
+                convs_by_id[uuid_str] = c
+                convs_by_id[f"claude_{uuid_str}"] = c
+            if raw_id:
+                convs_by_id[str(raw_id)] = c
+                convs_by_id[f"chatgpt_{raw_id}"] = c
+                convs_by_id[f"gemini_{raw_id}"] = c
+                convs_by_id[f"claude_{raw_id}"] = c
 
         rep_convs = {c["convId"]: c for c in rep.get("conversations", [])}
         enqueued: list[dict[str, Any]] = []
@@ -271,8 +285,14 @@ class JobQueueManager:
                 continue
 
             # Promote conversation to active library if not already promoted
+            clean_cid = cid
+            for prefix in ("claude_", "chatgpt_", "gemini_"):
+                if clean_cid.startswith(prefix):
+                    clean_cid = clean_cid[len(prefix):]
+                    break
+
             if not cdir.is_dir():
-                raw_conv = convs_by_id.get(cid) or convs_by_id.get(cid.replace("claude_", ""))
+                raw_conv = convs_by_id.get(cid) or convs_by_id.get(clean_cid)
                 if raw_conv:
                     promote_conversation(
                         conv_data=raw_conv,
@@ -282,7 +302,7 @@ class JobQueueManager:
                     )
             elif row_meta.get("isIncremental"):
                 # Incremental extension: update dialogue.json & metadata with appended turns
-                raw_conv = convs_by_id.get(cid) or convs_by_id.get(cid.replace("claude_", ""))
+                raw_conv = convs_by_id.get(cid) or convs_by_id.get(clean_cid)
                 if raw_conv:
                     promote_conversation(
                         conv_data=raw_conv,

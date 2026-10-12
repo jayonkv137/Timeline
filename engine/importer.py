@@ -18,6 +18,7 @@ import re
 import shutil
 import zipfile
 from datetime import datetime, timezone
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 
@@ -468,6 +469,502 @@ def parse_claude_export(
     return archive_record, summary_row
 
 
+class GeminiTakeoutHTMLParser(HTMLParser):
+    """Parses Google Takeout HTML activity records (Layout C per IMPORT_SPEC v1.1 §E)."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.cells: list[str] = []
+        self._current_text: list[str] = []
+        self._in_content_cell = False
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        attrs_dict = dict(attrs)
+        classes = attrs_dict.get("class", "")
+        if "content-cell" in classes or "body-1" in classes or tag == "p":
+            self._in_content_cell = True
+
+    def handle_endtag(self, tag: str) -> None:
+        if self._in_content_cell and tag in ("div", "p"):
+            text = " ".join("".join(self._current_text).split())
+            if text:
+                self.cells.append(text)
+            self._current_text = []
+            self._in_content_cell = False
+
+    def handle_data(self, data: str) -> None:
+        if self._in_content_cell:
+            self._current_text.append(data)
+
+
+def parse_gemini_takeout_html(html_path: Path) -> list[dict[str, Any]]:
+    """Extracts raw conversation turns from Google Takeout HTML activity files."""
+    with open(html_path, "r", encoding="utf-8", errors="replace") as f:
+        content = f.read()
+
+    parser = GeminiTakeoutHTMLParser()
+    parser.feed(content)
+
+    turns: list[dict[str, Any]] = []
+    for cell in parser.cells:
+        if cell.startswith("Prompt:"):
+            txt = cell[len("Prompt:"):].strip()
+            # If timestamp attached, split
+            ts_match = re.search(r"(\d{4}-\d{2}-\d{2}T[\d:]+Z)", txt)
+            ts = ts_match.group(1) if ts_match else ""
+            txt_clean = re.sub(r"\d{4}-\d{2}-\d{2}T[\d:]+Z", "", txt).strip()
+            turns.append({"speaker": "user", "text": txt_clean, "raw_role": "user", "ts": ts, "flags": [], "dropped_media": []})
+        elif cell.startswith("Response:"):
+            txt = cell[len("Response:"):].strip()
+            turns.append({"speaker": "ai", "text": txt, "raw_role": "model", "ts": "", "flags": [], "dropped_media": []})
+
+    if not turns:
+        # Fallback: alternate every 2 cells
+        for i, cell in enumerate(parser.cells):
+            speaker = "user" if i % 2 == 0 else "ai"
+            role = "user" if speaker == "user" else "model"
+            turns.append({"speaker": speaker, "text": cell, "raw_role": role, "ts": "", "flags": [], "dropped_media": []})
+
+    conv = {
+        "id": f"gemini_html_{html_path.stem}",
+        "title": f"Gemini Activity ({html_path.name})",
+        "created_time": "",
+        "updated_time": "",
+        "turns": turns,
+        "platform": "gemini",
+        "source_kind": "gemini_takeout_html",
+        "extraction_method": "html",
+    }
+    return [conv]
+
+
+def parse_chatgpt_export(
+    raw_conv: dict[str, Any],
+    estimate_costs: bool = True,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Parses a single conversation from chatgpt_official export.
+    Per IMPORT_SPEC v1.1 §D:
+    Reconstructs the active conversation path by walking parent pointers from
+    the current leaf node to the root. Discards abandoned branches, calculates
+    branch metrics (regenerations, user edits, discarded branches), filters system
+    and tool messages, and computes fidelity grade.
+    """
+    raw_id = raw_conv.get("id") or str(int(datetime.now(timezone.utc).timestamp()))
+    conv_id = f"chatgpt_{raw_id}" if not str(raw_id).startswith("chatgpt_") else str(raw_id)
+    title = raw_conv.get("title") or "Untitled Conversation"
+
+    create_time = raw_conv.get("create_time")
+    created_at = (
+        datetime.fromtimestamp(create_time, tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        if isinstance(create_time, (int, float))
+        else (str(create_time) if create_time else "")
+    )
+    update_time = raw_conv.get("update_time")
+    updated_at = (
+        datetime.fromtimestamp(update_time, tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        if isinstance(update_time, (int, float))
+        else (str(update_time) if update_time else "")
+    )
+
+    mapping = raw_conv.get("mapping", {})
+    total_nodes = len(mapping)
+
+    # 1. Identify active leaf node
+    current_node = raw_conv.get("current_node")
+    leaf_id = None
+    if current_node and current_node in mapping:
+        leaf_id = current_node
+    else:
+        # Find leaf candidates (nodes with no children)
+        leaves: list[tuple[float, str]] = []
+        for nid, node in mapping.items():
+            if not node.get("children"):
+                msg = node.get("message") or {}
+                t = msg.get("create_time") or 0.0
+                leaves.append((float(t) if isinstance(t, (int, float)) else 0.0, nid))
+        if leaves:
+            leaves.sort(key=lambda x: x[0], reverse=True)
+            leaf_id = leaves[0][1]
+        elif mapping:
+            leaf_id = list(mapping.keys())[-1]
+
+    # 2. Walk parent pointers to root
+    path_node_ids: list[str] = []
+    curr = leaf_id
+    visited: set[str] = set()
+    while curr and curr in mapping and curr not in visited:
+        visited.add(curr)
+        path_node_ids.append(curr)
+        curr = mapping[curr].get("parent")
+    path_node_ids.reverse()
+
+    nodes_on_path = len(path_node_ids)
+    discarded_branches = total_nodes - nodes_on_path
+
+    # Count regenerations and user edits
+    regenerations = 0
+    user_edits = 0
+    for nid, node in mapping.items():
+        children = node.get("children", [])
+        if len(children) > 1:
+            asst_count = 0
+            user_count = 0
+            for cid in children:
+                cnode = mapping.get(cid, {})
+                cmsg = cnode.get("message")
+                if cmsg:
+                    crole = (cmsg.get("author") or {}).get("role")
+                    if crole == "assistant":
+                        asst_count += 1
+                    elif crole == "user":
+                        user_count += 1
+            if asst_count > 1:
+                regenerations += (asst_count - 1)
+            if user_count > 1:
+                user_edits += (user_count - 1)
+
+    branches_meta = {
+        "total_nodes": total_nodes,
+        "nodes_on_path": nodes_on_path,
+        "discarded_branches": discarded_branches,
+        "regenerations": regenerations,
+        "user_edits": user_edits,
+    }
+
+    # 3. Extract turns from path
+    turns: list[dict[str, Any]] = []
+    all_dropped_media: list[str] = []
+    user_sample_texts: list[str] = []
+    total_chars = 0
+    max_turn_chars = 0
+    has_code = False
+
+    for nid in path_node_ids:
+        node = mapping.get(nid, {})
+        msg = node.get("message")
+        if not msg:
+            continue
+        author = msg.get("author") or {}
+        role = author.get("role", "")
+        if role in ("system", "tool"):
+            continue
+        speaker = "user" if role == "user" else ("ai" if role == "assistant" else "")
+        if not speaker:
+            continue
+
+        content = msg.get("content") or {}
+        parts = content.get("parts", [])
+        text_chunks: list[str] = []
+        msg_dropped_media: list[str] = []
+        flags: list[str] = []
+
+        for p in parts:
+            if isinstance(p, str):
+                text_chunks.append(p)
+            elif isinstance(p, dict):
+                ptype = p.get("content_type", "attachment")
+                name = p.get("asset_pointer") or p.get("name") or f"{ptype}.png"
+                msg_dropped_media.append(str(name))
+            elif p is not None:
+                text_chunks.append(str(p))
+
+        text = "".join(text_chunks).strip()
+        if not text:
+            flags.append("empty")
+
+        for rule_name, pattern in INJECTED_RULES:
+            if pattern.search(text):
+                flags.append(rule_name)
+        if text.lower() in AUTO_CONTINUE:
+            flags.append("auto_continue")
+
+        all_dropped_media.extend(msg_dropped_media)
+        char_len = len(text)
+        total_chars += char_len
+        if char_len > max_turn_chars:
+            max_turn_chars = char_len
+        if "```" in text:
+            has_code = True
+
+        if speaker == "user" and len(user_sample_texts) < 3 and text:
+            user_sample_texts.append(text[:300])
+
+        msg_ts = msg.get("create_time")
+        if isinstance(msg_ts, (int, float)):
+            ts_str = datetime.fromtimestamp(msg_ts, tz=timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        elif isinstance(msg_ts, str):
+            ts_str = msg_ts
+        else:
+            ts_str = ""
+
+        turns.append({
+            "speaker": speaker,
+            "text": text,
+            "ts": ts_str,
+            "raw_role": role,
+            "flags": flags,
+            "dropped_media": msg_dropped_media,
+        })
+
+    dialogue_json, turn_meta, fstats = process_turns_to_dialogue(turns)
+    pairs = fstats["pairs"]
+
+    images_dropped = sum(
+        1 for item in all_dropped_media
+        if any(item.lower().endswith(ext) for ext in IMAGE_EXTENSIONS) or "image" in item.lower()
+    )
+    img_per_pair = round(images_dropped / pairs, 2) if pairs > 0 else 0.0
+    regen_ratio = round(regenerations / pairs, 2) if pairs > 0 else 0.0
+
+    # Fidelity grade: clean <= 0.05, degraded <= 0.5 or regen_ratio > 0.3, unusable > 0.5
+    if img_per_pair <= 0.05 and regen_ratio <= 0.30:
+        fidelity_grade = "clean"
+    elif img_per_pair <= 0.50 or regen_ratio > 0.30:
+        fidelity_grade = "degraded"
+    else:
+        fidelity_grade = "unusable"
+
+    language = detect_language(user_sample_texts)
+    sensitive_flag, sensitive_triggers = check_sensitive(title, " ".join(user_sample_texts))
+
+    est_data: dict[str, Any] = {
+        "tokens": {"low": 0, "high": 0, "expected": 0},
+        "cost": {"low": 0.0, "high": 0.0, "expected": 0.0},
+    }
+    if estimate_costs and dialogue_json:
+        est = estimate(dialogue_json)
+        est_data = {
+            "tokens": {"low": est.low.tokens, "high": est.high.tokens, "expected": est.expected_tokens},
+            "cost": {"low": est.low.cost, "high": est.high.cost, "expected": est.expected_cost},
+        }
+
+    archive_record = {
+        "conv_id": conv_id,
+        "platform": "chatgpt",
+        "source_kind": "chatgpt_official",
+        "title": title,
+        "created_at": created_at,
+        "updated_at": updated_at,
+        "turns": turns,
+        "platform_meta": {
+            "branches": branches_meta,
+            "raw_message_count": len(turns),
+            "merged_turns": fstats["merged_turns"],
+            "dropped_trailing_user": bool(fstats["dropped_trailing_user"]),
+            "dropped_leading_ai": bool(fstats["dropped_leading_ai"]),
+        },
+        "import_spec_version": IMPORT_SPEC_VERSION,
+    }
+
+    display_title = "[REDACTED]" if sensitive_flag else title
+    summary_row = {
+        "convId": conv_id,
+        "platform": "chatgpt",
+        "sourceKind": "chatgpt_official",
+        "title": display_title,
+        "rawTitle": title,
+        "createdAt": created_at,
+        "updatedAt": updated_at,
+        "rawTurns": len(turns),
+        "pairs": pairs,
+        "totalChars": total_chars,
+        "maxTurnChars": max_turn_chars,
+        "imagesDropped": images_dropped,
+        "imagesPerPair": img_per_pair,
+        "language": language,
+        "hasCode": has_code,
+        "fidelityGrade": fidelity_grade,
+        "sensitive": sensitive_flag,
+        "sensitiveTriggers": sensitive_triggers,
+        "isDuplicate": False,
+        "isIncremental": False,
+        "duplicateOf": None,
+        "existingPairs": 0,
+        "newPairs": pairs,
+        "estimate": est_data,
+        "branches": branches_meta,
+    }
+
+    return archive_record, summary_row
+
+
+def parse_gemini_export(
+    raw_conv: dict[str, Any],
+    estimate_costs: bool = True,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Parses a single conversation from gemini_takeout export (JSON or HTML).
+    Per IMPORT_SPEC v1.1 §E.
+    """
+    raw_id = raw_conv.get("id") or raw_conv.get("conversation_id") or str(int(datetime.now(timezone.utc).timestamp()))
+    conv_id = f"gemini_{raw_id}" if not str(raw_id).startswith("gemini_") else str(raw_id)
+    title = raw_conv.get("title") or raw_conv.get("name") or "Untitled Conversation"
+    created_at = raw_conv.get("created_time") or raw_conv.get("created_at") or ""
+    updated_at = raw_conv.get("updated_time") or raw_conv.get("updated_at") or ""
+    extraction_method = raw_conv.get("extraction_method", "json")
+
+    raw_turns_input = raw_conv.get("turns") or raw_conv.get("messages") or raw_conv.get("chat_history") or []
+    turns: list[dict[str, Any]] = []
+    all_dropped_media: list[str] = []
+    user_sample_texts: list[str] = []
+    total_chars = 0
+    max_turn_chars = 0
+    has_code = False
+
+    for m in raw_turns_input:
+        raw_role = m.get("role") or m.get("raw_role") or "user"
+        if raw_role in ("system",):
+            continue
+        speaker = "user" if raw_role in ("user", "human") else ("ai" if raw_role in ("model", "gemini", "assistant") else "")
+        if not speaker:
+            continue
+
+        text = ""
+        msg_dropped: list[str] = []
+        if "text" in m and isinstance(m["text"], str):
+            text = m["text"]
+        elif "parts" in m and isinstance(m["parts"], list):
+            chunks: list[str] = []
+            for p in m["parts"]:
+                if isinstance(p, str):
+                    chunks.append(p)
+                elif isinstance(p, dict):
+                    if "text" in p:
+                        chunks.append(p["text"])
+                    elif "inline_data" in p or "file_data" in p:
+                        msg_dropped.append("image_data.png")
+            text = "".join(chunks)
+
+        flags: list[str] = list(m.get("flags", []))
+        text = text.strip()
+        if not text:
+            flags.append("empty")
+
+        for rule_name, pattern in INJECTED_RULES:
+            if pattern.search(text):
+                flags.append(rule_name)
+        if text.lower() in AUTO_CONTINUE:
+            flags.append("auto_continue")
+
+        all_dropped_media.extend(msg_dropped)
+        char_len = len(text)
+        total_chars += char_len
+        if char_len > max_turn_chars:
+            max_turn_chars = char_len
+        if "```" in text:
+            has_code = True
+
+        if speaker == "user" and len(user_sample_texts) < 3 and text:
+            user_sample_texts.append(text[:300])
+
+        ts_val = m.get("created_time") or m.get("ts") or created_at
+        turns.append({
+            "speaker": speaker,
+            "text": text,
+            "ts": ts_val,
+            "raw_role": raw_role,
+            "flags": flags,
+            "dropped_media": msg_dropped,
+        })
+
+    dialogue_json, turn_meta, fstats = process_turns_to_dialogue(turns)
+    pairs = fstats["pairs"]
+
+    images_dropped = len(all_dropped_media)
+    img_per_pair = round(images_dropped / pairs, 2) if pairs > 0 else 0.0
+
+    # Layout C: attempt basic HTML-to-text extraction, mark degraded regardless of images
+    if extraction_method == "html":
+        fidelity_grade = "degraded"
+    else:
+        if img_per_pair <= 0.05:
+            fidelity_grade = "clean"
+        elif img_per_pair <= 0.50:
+            fidelity_grade = "degraded"
+        else:
+            fidelity_grade = "unusable"
+
+    language = detect_language(user_sample_texts)
+    sensitive_flag, sensitive_triggers = check_sensitive(title, " ".join(user_sample_texts))
+
+    est_data: dict[str, Any] = {
+        "tokens": {"low": 0, "high": 0, "expected": 0},
+        "cost": {"low": 0.0, "high": 0.0, "expected": 0.0},
+    }
+    if estimate_costs and dialogue_json:
+        est = estimate(dialogue_json)
+        est_data = {
+            "tokens": {"low": est.low.tokens, "high": est.high.tokens, "expected": est.expected_tokens},
+            "cost": {"low": est.low.cost, "high": est.high.cost, "expected": est.expected_cost},
+        }
+
+    archive_record = {
+        "conv_id": conv_id,
+        "platform": "gemini",
+        "source_kind": "gemini_takeout" if extraction_method != "html" else "gemini_takeout_html",
+        "title": title,
+        "created_at": created_at,
+        "updated_at": updated_at,
+        "turns": turns,
+        "platform_meta": {
+            "extraction_method": extraction_method,
+            "raw_message_count": len(turns),
+            "merged_turns": fstats["merged_turns"],
+            "dropped_trailing_user": bool(fstats["dropped_trailing_user"]),
+            "dropped_leading_ai": bool(fstats["dropped_leading_ai"]),
+        },
+        "import_spec_version": IMPORT_SPEC_VERSION,
+    }
+
+    display_title = "[REDACTED]" if sensitive_flag else title
+    summary_row = {
+        "convId": conv_id,
+        "platform": "gemini",
+        "sourceKind": "gemini_takeout" if extraction_method != "html" else "gemini_takeout_html",
+        "title": display_title,
+        "rawTitle": title,
+        "createdAt": created_at,
+        "updatedAt": updated_at,
+        "rawTurns": len(turns),
+        "pairs": pairs,
+        "totalChars": total_chars,
+        "maxTurnChars": max_turn_chars,
+        "imagesDropped": images_dropped,
+        "imagesPerPair": img_per_pair,
+        "language": language,
+        "hasCode": has_code,
+        "fidelityGrade": fidelity_grade,
+        "sensitive": sensitive_flag,
+        "sensitiveTriggers": sensitive_triggers,
+        "isDuplicate": False,
+        "isIncremental": False,
+        "duplicateOf": None,
+        "existingPairs": 0,
+        "newPairs": pairs,
+        "estimate": est_data,
+    }
+
+    return archive_record, summary_row
+
+
+def parse_conversation(
+    raw_conv: dict[str, Any],
+    estimate_costs: bool = True,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Dispatches a conversation record to the appropriate platform parser
+    (Claude, ChatGPT, or Gemini).
+    """
+    if "mapping" in raw_conv:
+        return parse_chatgpt_export(raw_conv, estimate_costs=estimate_costs)
+    if "chat_messages" in raw_conv or ("messages" in raw_conv and "metadata" in raw_conv):
+        return parse_claude_export(raw_conv, estimate_costs=estimate_costs)
+    if raw_conv.get("platform") == "gemini" or raw_conv.get("extraction_method") == "html" or any(
+        isinstance(m, dict) and m.get("role") in ("model", "gemini")
+        for m in (raw_conv.get("messages", []) or raw_conv.get("turns", []) or [])
+    ):
+        return parse_gemini_export(raw_conv, estimate_costs=estimate_costs)
+    return parse_claude_export(raw_conv, estimate_costs=estimate_costs)
+
+
 def extract_archive(raw_path: Path, target_dir: Path) -> list[Path]:
     """Safely extracts a zip archive or copies a single file to target_dir.
     Guards against Zip Slip vulnerabilities.
@@ -493,21 +990,62 @@ def extract_archive(raw_path: Path, target_dir: Path) -> list[Path]:
         return [dest]
 
 
+def sniff_export_format(path: Path) -> str:
+    """Sniffs whether a file is claude_official, chatgpt_official, gemini_takeout, or html."""
+    if path.suffix.lower() == ".html":
+        return "gemini_takeout_html"
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        sample = data[0] if isinstance(data, list) and data else (data if isinstance(data, dict) else {})
+        if "mapping" in sample:
+            return "chatgpt_official"
+        if "chat_messages" in sample:
+            return "claude_official"
+        if "messages" in sample and "metadata" in sample:
+            return "claude_web_json"
+        if "conversations" in data or sample.get("platform") == "gemini" or "candidates" in sample:
+            return "gemini_takeout"
+        msgs = sample.get("messages", []) or sample.get("turns", [])
+        if any(isinstance(m, dict) and m.get("role") in ("model", "gemini") for m in msgs):
+            return "gemini_takeout"
+    except Exception:
+        pass
+    return "claude_official"
+
+
 def find_export_file(raw_dir: Path) -> tuple[Path, str]:
     """Locates the primary conversation file inside raw_dir.
     Returns: (file_path, format_type)
     """
-    # 1. Check for conversations.json (Claude or ChatGPT)
+    # 1. Check for Gemini Apps directory
+    for gemini_dir in raw_dir.rglob("Gemini Apps"):
+        if gemini_dir.is_dir():
+            json_files = list(gemini_dir.glob("*.json"))
+            if json_files:
+                return json_files[0], "gemini_takeout"
+            html_files = list(gemini_dir.glob("*.html"))
+            if html_files:
+                return html_files[0], "gemini_takeout_html"
+
+    # 2. Check for conversations.json (Claude or ChatGPT)
     for p in raw_dir.rglob("conversations.json"):
         if p.is_file():
-            return p, "claude_official"
+            fmt = sniff_export_format(p)
+            return p, fmt
 
-    # 2. Check for any JSON files
+    # 3. Check for any JSON files
     json_files = list(raw_dir.glob("*.json"))
     if json_files:
-        return json_files[0], "claude_official"
+        fmt = sniff_export_format(json_files[0])
+        return json_files[0], fmt
 
-    # 3. Check for Markdown files
+    # 4. Check for HTML files (Gemini Takeout Layout C)
+    html_files = list(raw_dir.glob("*.html"))
+    if html_files:
+        return html_files[0], "gemini_takeout_html"
+
+    # 5. Check for Markdown files
     md_files = list(raw_dir.glob("*.md"))
     if md_files:
         return md_files[0], "markdown"
@@ -535,13 +1073,18 @@ def scan_import(
     primary_file, fmt = find_export_file(raw_dir)
 
     # Load conversations
-    with open(primary_file, "r", encoding="utf-8") as f:
-        raw_data = json.load(f)
+    if fmt == "gemini_takeout_html":
+        raw_data = parse_gemini_takeout_html(primary_file)
+    else:
+        with open(primary_file, "r", encoding="utf-8") as f:
+            raw_data = json.load(f)
 
-    if not isinstance(raw_data, list):
         if isinstance(raw_data, dict):
-            raw_data = [raw_data]
-        else:
+            if "conversations" in raw_data and isinstance(raw_data["conversations"], list):
+                raw_data = raw_data["conversations"]
+            else:
+                raw_data = [raw_data]
+        elif not isinstance(raw_data, list):
             raise ValueError(f"Expected list of conversations in {primary_file}")
 
     # Build rich chat info from existing library to detect duplicates and extensions
@@ -629,7 +1172,7 @@ def scan_import(
     total_est_cost_exp = 0.0
 
     for raw_conv in raw_data:
-        archive_rec, row = parse_claude_export(raw_conv, estimate_costs=True)
+        archive_rec, row = parse_conversation(raw_conv, estimate_costs=True)
         cid = row["convId"]
         raw_title = row.get("rawTitle", "")
         pairs = row["pairs"]
@@ -649,10 +1192,17 @@ def scan_import(
             }
         else:
             seen_conv_ids.add(cid)
+            clean_cid = cid
+            for prefix in ("claude_", "chatgpt_", "gemini_"):
+                if clean_cid.startswith(prefix):
+                    clean_cid = clean_cid[len(prefix):]
+                    break
             match_info = (
                 existing_chats_map.get(cid)
-                or (existing_chats_map.get(cid[7:]) if cid.startswith("claude_") else None)
-                or (existing_chats_map.get(f"claude_{cid}") if not cid.startswith("claude_") else None)
+                or existing_chats_map.get(clean_cid)
+                or existing_chats_map.get(f"claude_{clean_cid}")
+                or existing_chats_map.get(f"chatgpt_{clean_cid}")
+                or existing_chats_map.get(f"gemini_{clean_cid}")
                 or (existing_chats_map.get(f"title:{raw_title}") if raw_title and raw_title != "Untitled Conversation" else None)
             )
 
@@ -793,8 +1343,15 @@ def promote_conversation(
     (dest / "run").mkdir(parents=True, exist_ok=True)
 
     # If raw export conversation, parse it first
-    if "chat_messages" in conv_data:
+    if "mapping" in conv_data:
+        archive_rec, reg_info = parse_chatgpt_export(conv_data, estimate_costs=False)
+    elif "chat_messages" in conv_data or ("messages" in conv_data and "metadata" in conv_data):
         archive_rec, reg_info = parse_claude_export(conv_data, estimate_costs=False)
+    elif conv_data.get("platform") == "gemini" or conv_data.get("extraction_method") == "html" or any(
+        isinstance(m, dict) and m.get("role") in ("model", "gemini")
+        for m in (conv_data.get("messages", []) or conv_data.get("turns", []) or [])
+    ):
+        archive_rec, reg_info = parse_gemini_export(conv_data, estimate_costs=False)
     elif "turns" in conv_data:
         archive_rec = conv_data
         cid = archive_rec.get("conv_id", "conv_unknown")
@@ -808,7 +1365,7 @@ def promote_conversation(
             "language": "en",
         }
     else:
-        raise ValueError("Invalid conversation data format for promotion")
+        archive_rec, reg_info = parse_conversation(conv_data, estimate_costs=False)
 
     raw_turns = archive_rec.get("turns", [])
     dialogue_json, turn_meta, fstats = process_turns_to_dialogue(raw_turns)

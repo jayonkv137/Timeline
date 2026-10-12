@@ -1,0 +1,87 @@
+[
+  {
+    "id": "chatgpt-tree-001",
+    "title": "Quantum Computing Superposition",
+    "create_time": 1716038400.0,
+    "update_time": 1716038900.0,
+    "current_node": "node-ai-2-active",
+    "mapping": {
+      "node-root": {
+        "id": "node-root",
+        "message": null,
+        "parent": null,
+        "children": ["node-user-1"]
+      },
+      "node-user-1": {
+        "id": "node-user-1",
+        "message": {
+          "id": "msg-u1",
+          "author": {"role": "user"},
+          "create_time": 1716038410.0,
+          "content": {
+            "content_type": "text",
+            "parts": ["Explain quantum superposition in simple terms."]
+          }
+        },
+        "parent": "node-root",
+        "children": ["node-ai-1-regen", "node-ai-1-active"]
+      },
+      "node-ai-1-regen": {
+        "id": "node-ai-1-regen",
+        "message": {
+          "id": "msg-a1-regen",
+          "author": {"role": "assistant"},
+          "create_time": 1716038450.0,
+          "content": {
+            "content_type": "text",
+            "parts": ["Superposition means a qubit can be in state 0 and 1 at once."]
+          }
+        },
+        "parent": "node-user-1",
+        "children": []
+      },
+      "node-ai-1-active": {
+        "id": "node-ai-1-active",
+        "message": {
+          "id": "msg-a1-active",
+          "author": {"role": "assistant"},
+          "create_time": 1716038460.0,
+          "content": {
+            "content_type": "text",
+            "parts": ["Imagine a spinning coin: while it spins, it is both heads and tails."]
+          }
+        },
+        "parent": "node-user-1",
+        "children": ["node-user-2"]
+      },
+      "node-user-2": {
+        "id": "node-user-2",
+        "message": {
+          "id": "msg-u2",
+          "author": {"role": "user"},
+          "create_time": 1716038500.0,
+          "content": {
+            "content_type": "text",
+            "parts": ["How does entanglement relate to this?"]
+          }
+        },
+        "parent": "node-ai-1-active",
+        "children": ["node-ai-2-active"]
+      },
+      "node-ai-2-active": {
+        "id": "node-ai-2-active",
+        "message": {
+          "id": "msg-a2-active",
+          "author": {"role": "assistant"},
+          "create_time": 1716038550.0,
+          "content": {
+            "content_type": "text",
+            "parts": ["Entanglement links two qubits so measuring one instantly determines the other."]
+          }
+        },
+        "parent": "node-user-2",
+        "children": []
+      }
+    }
+  }
+]
