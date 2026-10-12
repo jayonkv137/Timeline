@@ -94,7 +94,7 @@ The overview shows areas; zooming in shows regions (§8).
 ### 5.2 Method (deterministic, data-calibrated)
 1. **Near-duplicates first:** pairs with similarity ≥ 0.90 are the same conversation exported or continued twice. They are linked as **continued** (§7) and always share a region.
 2. **Average-linkage agglomerative clustering** on cosine similarity. It needs no fixed number of clusters, is deterministic, and handles odd shapes better than k-means at this size.
-3. **Cut heights are calibrated from the data, not hard-coded:** the region cut sits at the corpus's 95th-percentile pair similarity, the area cut at the 90th. On the corpus (baseline) those are about 0.12 and 0.08, the cuts that produced §9.2.
+3. **Cut heights are calibrated from the data, not hard-coded:** the region cut sits at the corpus's **90th-percentile** pair similarity, the area cut at the **80th**. On the 57 corpus chats with the full fingerprint (dialogue + engine text), those are 0.132 and 0.103. They give about 8 project-level regions and 4 broad areas (study §9.5). Libraries under 12 chats use those measured values directly.
 4. **Minimum region size 2.** A chat that joins nothing stays a **solitary neuron.** It is never forced into a region; Clio and BERTopic both keep an outlier class.
 
 ### 5.3 Names
@@ -184,6 +184,18 @@ Reading:
 ### 9.3 What the baseline misses (why embeddings, §4)
 - The 18 solitary chats include ones a person would place instantly: hybrid AI filmmaking (c24), the honey product video (c23), the jellyfish animation (c27) → film; Anki flashcards (c11) → German learning; the visa extension (c26) → Bremen.
 - Word overlap can't see these, but meaning can. Those five, plus the four near-duplicates, are the acceptance set in §4.
+
+### 9.5 Calibrating the cuts on the full fingerprint (engine module, 57 chats)
+On the full fingerprint (title + dialogue + engine extraction), pair similarity runs higher than on user messages only: p50 0.052 · p80 0.103 · p90 0.132 · p95 0.168 · p99 0.301.
+
+| Cut | Regions (≥ 2 chats) | Solitary | Region sizes |
+|---|---|---|---|
+| 0.16 | 8 | 21 | 8, 6, 5, 5, 4, 3, 3, 2 |
+| 0.14 | 8 | 18 | 9, 6, 6, 5, 4, 4, 3, 2 |
+| 0.12 | 6 | 17 | 10, 10, 9, 5, 4, 2 |
+| 0.10 | 4 | 14 | 22, 11, 5, 5 |
+
+So **regions use p90** (about 0.13, project level) and **areas use p80** (about 0.10, broad).
 
 ### 9.4 Similarity distribution (calibrates link thresholds)
 All 1,485 pairs, F3: median 0.033 · 90th percentile 0.101 · 95th 0.134 · 99th 0.268 · max 0.996. Almost all pairs are unrelated, so thresholds must be percentiles of *your* data, not fixed constants.

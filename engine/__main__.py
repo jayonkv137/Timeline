@@ -56,6 +56,16 @@ def main(argv: list[str] | None = None) -> int:
         help="Optional output file path to write Markdown (defaults to stdout)",
     )
 
+    # Subcommand: brainmap (BRAIN_REGIONS_SPEC, track B1)
+    brainmap_parser = subparsers.add_parser(
+        "brainmap",
+        help="Place chats in the Brain: regions by content, evidence-only links, flat-map layout (zero LLM)",
+    )
+    brainmap_parser.add_argument("paths", nargs="+", help="Chat folders or parents of chat folders (e.g. data/corpus or <library>/chats)")
+    brainmap_parser.add_argument("--engine-root", default=None, help="Folder holding processed artifacts per chat id (e.g. data/chats) when they live apart from the dialogue")
+    brainmap_parser.add_argument("--previous", default=None, help="Previous brain_map.json: placed chats stay pinned, owner names survive")
+    brainmap_parser.add_argument("--output", "-o", default=None, help="Output path (defaults to stdout)")
+
     args = parser.parse_args(argv)
 
     if args.subcommand == "project":
@@ -91,6 +101,10 @@ def main(argv: list[str] | None = None) -> int:
         else:
             print(report_md)
         return 0
+
+    if args.subcommand == "brainmap":
+        from engine.brainmap import main as brainmap_main
+        return brainmap_main(args.paths, args.output, args.engine_root, args.previous)
 
     return 0
 
