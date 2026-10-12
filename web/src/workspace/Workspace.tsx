@@ -303,7 +303,11 @@ export function Workspace(){
  const filtered=chats.filter(c=>(c.title+' '+c.rootTitle+' '+c.summary).toLowerCase().includes(query.toLowerCase()));
 
  function graphFor(c:Chat,v:ChatView,global=false){
-   return <LocalGraph chat={c} view={v} patch={p=>patch(c.id,p)} jump={(p,s,k)=>{
+   const jobForC=queueStatus?.jobs?.find(j=>j.chatId===c.id);
+   const isJobActiveC=Boolean(jobForC&&(jobForC.status==='running'||jobForC.status==='queued'));
+   const isQueuedC=Boolean(queuedMapChats[c.id]);
+   const isMappingC=Boolean(initiatingMap===c.id||isJobActiveC||isQueuedC);
+   return <LocalGraph chat={c} view={v} isMapping={isMappingC} activeJob={jobForC} onTriggerMap={()=>handleTriggerMap(c.id)} patch={p=>patch(c.id,p)} jump={(p,s,k)=>{
      if(global){
        open(c.id);
        patch(c.id,{pair:p});

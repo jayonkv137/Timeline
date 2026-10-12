@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Maximize2, Minimize2, LocateFixed } from 'lucide-react';
+import { Maximize2, Minimize2, LocateFixed, Sparkles } from 'lucide-react';
 import type { Atom, Chat, ChatView, Outcome } from './types';
 import './obsidian-graph.css';
 import { tokens } from '../design-system/tokens/tokens';
@@ -12,7 +12,7 @@ import { tokens } from '../design-system/tokens/tokens';
  * playground is intentionally omitted.
  */
 
-interface Props { chat:Chat; view:ChatView; expanded?:boolean; patch:(v:Partial<ChatView>)=>void; jump:(pair:number,speaker?:string,keepGraph?:boolean)=>void; expand:()=>void; locate:()=>void; inspect?:boolean; onAtom?:(atomId:string)=>void; activeAtom?:string|null }
+interface Props { chat:Chat; view:ChatView; expanded?:boolean; patch:(v:Partial<ChatView>)=>void; jump:(pair:number,speaker?:string,keepGraph?:boolean)=>void; expand:()=>void; locate:()=>void; inspect?:boolean; onAtom?:(atomId:string)=>void; activeAtom?:string|null; isMapping?:boolean; activeJob?:any; onTriggerMap?:()=>void; }
 
 // Colours and geometry come from the design system (web/src/design-system/tokens). Canvas code reads
 // resolved values from tokens.ts; stylesheets use the CSS variables.
@@ -134,7 +134,7 @@ function tipHeader(s:Sat){
   return { title:a.origin === 'human' ? 'User Requirement' : 'AI Requirement', color:a.origin === 'human' ? USER : AI };
 }
 
-export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect, onAtom, activeAtom }:Props){
+export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect, onAtom, activeAtom, isMapping, activeJob, onTriggerMap }:Props){
   const activeAtomRef = useRef<string|null|undefined>(activeAtom);
   activeAtomRef.current = activeAtom; // the requirement whose evidence is shown (EVIDENCE_SPEC §5.1): white ring, never a party colour
   const stageRef = useRef<HTMLDivElement>(null);
@@ -147,8 +147,9 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
   const [toast, setToast] = useState<Toast|null>(null);
   const [cursor, setCursor] = useState('grab');
   const hoverSat = useRef<Sat|null>(null);
-  const latest = useRef({ view, patch, jump, inspect, chat });
-  latest.current = { view, patch, jump, inspect, chat };
+  const ghostNodeRef = useRef<{ x:number; y:number; r:number; nextPair:number }|null>(null);
+  const latest = useRef({ view, patch, jump, inspect, chat, isMapping, activeJob, onTriggerMap });
+  latest.current = { view, patch, jump, inspect, chat, isMapping, activeJob, onTriggerMap };
 
   const wide = size.w >= 1500; // room for the legend beside the centered capsule, as in the full-screen original
   const compact = size.w < 560;
@@ -171,10 +172,12 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
 
   // Rebuild the frame when the pair or conversation changes, keeping remembered positions.
   useEffect(() => {
-    if (!chat.totalPairs) { sim.current = { nodes:[], links:[] }; return; }
+    const curDialogueMax = chat.dialogue?.length ? Math.max(...chat.dialogue.map(t => t.pair)) : 0;
+    const curTotal = Math.max(chat.totalPairs || 0, curDialogueMax);
+    if (!curTotal) { sim.current = { nodes:[], links:[] }; return; }
     const memory = positionMemory.get(chat.id);
     if (memory) for (const n of sim.current.nodes) memory.set(n.id, { x:n.x, y:n.y });
-    sim.current = buildFrame(chat, Math.max(1, Math.min(chat.totalPairs, view.pair)), geometry.current.spread);
+    sim.current = buildFrame(chat, Math.max(1, Math.min(curTotal, view.pair)), geometry.current.spread);
     setTip(null);
   }, [chat, view.pair]);
 
@@ -466,6 +469,116 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
         }
       }
       for (const n of sim.current.nodes) { if (n.isRoot) drawRootNode(n); else drawChild(n, now); }
+
+      // Synaptogenesis: when a new exchange turn exists or is mapping while an existing graph is visible
+      const curChat = latest.current.chat;
+      const curIsMapping = Boolean(latest.current.isMapping);
+      const maxMapped = curChat.snapshots && curChat.snapshots.length > 0
+        ? curChat.snapshots.length
+        : (curChat.nodes && curChat.nodes.length > 0 ? Math.max(...curChat.nodes.map(n => n.born || 1)) : 0);
+      const curDialogueMax = curChat.dialogue && curChat.dialogue.length > 0
+        ? Math.max(...curChat.dialogue.map(t => t.pair))
+        : 0;
+      const curTotal = Math.max(curChat.totalPairs || 0, curDialogueMax);
+      const isNascent = (curTotal > maxMapped || curIsMapping) && sim.current.nodes.length > 0;
+
+      if (isNascent) {
+        const anchor = sim.current.nodes.find(n => n.isTerminalActive)
+          || sim.current.nodes.slice().sort((a, b) => (b.outcome?.born || 0) - (a.outcome?.born || 0))[0]
+          || sim.current.nodes[0];
+
+        const floatY = Math.sin(now * 0.0022) * 5;
+        const floatX = Math.cos(now * 0.0018) * 3;
+        const gx = anchor.x + 112 + floatX;
+        const gy = anchor.y + 36 + floatY;
+        const gr = 16;
+        const nextPairNum = maxMapped + 1;
+        ghostNodeRef.current = { x: gx, y: gy, r: gr, nextPair: nextPairNum };
+
+        // Animated flowing synaptic tether from anchor node
+        ctx!.save();
+        ctx!.setLineDash([5, 5]);
+        ctx!.lineDashOffset = -now * 0.016;
+        const tetherGrad = ctx!.createLinearGradient(anchor.x, anchor.y, gx, gy);
+        tetherGrad.addColorStop(0, rgbaOf(AI, 0.75));
+        tetherGrad.addColorStop(1, rgbaOf(USER, curIsMapping ? 0.9 : 0.45));
+        ctx!.strokeStyle = tetherGrad;
+        ctx!.lineWidth = 1.75;
+        ctx!.beginPath();
+        const midX = (anchor.x + gx) / 2;
+        const midY = (anchor.y + gy) / 2 - 12;
+        ctx!.moveTo(anchor.x, anchor.y);
+        ctx!.quadraticCurveTo(midX, midY, gx, gy);
+        ctx!.stroke();
+        ctx!.restore();
+
+        // Pulsing synaptic aura glow
+        const breathe = Math.sin(now * 0.0035) * 3.5;
+        const aura = ctx!.createRadialGradient(gx, gy, 3, gx, gy, gr + 16 + breathe);
+        aura.addColorStop(0, rgbaOf(curIsMapping ? AI : USER, curIsMapping ? 0.28 : 0.14));
+        aura.addColorStop(0.6, rgbaOf(AI, curIsMapping ? 0.15 : 0.06));
+        aura.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx!.fillStyle = aura;
+        ctx!.beginPath();
+        ctx!.arc(gx, gy, gr + 16 + breathe, 0, Math.PI * 2);
+        ctx!.fill();
+
+        // Frosted glass dark orb base
+        ctx!.fillStyle = rgbaOf('#0f172a', 0.88);
+        ctx!.beginPath();
+        ctx!.arc(gx, gy, gr, 0, Math.PI * 2);
+        ctx!.fill();
+
+        // Perimeter dashed ring
+        ctx!.save();
+        ctx!.strokeStyle = curIsMapping ? rgbaOf(AI, 0.85) : rgbaOf(WHITE, 0.45);
+        ctx!.lineWidth = 1.5;
+        if (!curIsMapping) ctx!.setLineDash([4, 4]);
+        ctx!.beginPath();
+        ctx!.arc(gx, gy, gr, 0, Math.PI * 2);
+        ctx!.stroke();
+        ctx!.restore();
+
+        // Dual orbiting particles (Sky = Human, Ember = AI)
+        const orbitR = gr + 7;
+        const ang = now * 0.003;
+        const px1 = gx + Math.cos(ang) * orbitR;
+        const py1 = gy + Math.sin(ang) * orbitR;
+        ctx!.fillStyle = USER;
+        ctx!.beginPath();
+        ctx!.arc(px1, py1, 2.5, 0, Math.PI * 2);
+        ctx!.fill();
+
+        const px2 = gx + Math.cos(ang + Math.PI) * orbitR;
+        const py2 = gy + Math.sin(ang + Math.PI) * orbitR;
+        ctx!.fillStyle = AI;
+        ctx!.beginPath();
+        ctx!.arc(px2, py2, 2.5, 0, Math.PI * 2);
+        ctx!.fill();
+
+        // Core glowing spark
+        ctx!.fillStyle = curIsMapping ? AI : rgbaOf(WHITE, 0.75);
+        ctx!.beginPath();
+        ctx!.arc(gx, gy, 3 + (curIsMapping ? Math.sin(now * 0.006) * 1 : 0), 0, Math.PI * 2);
+        ctx!.fill();
+
+        // Label for ghost node
+        const ghostLabelText = curIsMapping
+          ? `✦ Synthesizing Pair ${nextPairNum}…`
+          : `✦ Pair ${nextPairNum} Pending`;
+        labels.push({
+          text: ghostLabelText,
+          wx: gx,
+          wy: gy + gr,
+          dy: 12,
+          maxWidth: 160,
+          lineHeight: 14,
+          opacity: curIsMapping ? 0.95 : 0.7,
+          isRoot: false
+        });
+      } else {
+        ghostNodeRef.current = null;
+      }
       ctx!.restore();
       // Labels at a constant, readable screen size.
       for (const l of labels) {
@@ -600,6 +713,14 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
   function onHover(e:React.MouseEvent){
     if (pointer.current.dragNode || pointer.current.panning) return;
     const p = world(e);
+    if (ghostNodeRef.current) {
+      const g = ghostNodeRef.current;
+      if (Math.hypot(p.x - g.x, p.y - g.y) <= g.r + 10) {
+        setCursor('pointer');
+        setTip(null);
+        return;
+      }
+    }
     const s = satAt(p.x, p.y);
     const rect = stageRef.current!.getBoundingClientRect();
     hoverSat.current = s;
@@ -612,6 +733,16 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
   function onClick(e:React.MouseEvent){
     if (pointer.current.moved) return; // a drag or pan is not a click
     const p = world(e);
+    if (ghostNodeRef.current) {
+      const g = ghostNodeRef.current;
+      if (Math.hypot(p.x - g.x, p.y - g.y) <= g.r + 10) {
+        if (!isMapping && onTriggerMap) {
+          onTriggerMap();
+          setToast({ kind:'ai', text:`Mapping Pair ${g.nextPair}…`, key:Date.now() });
+          return;
+        }
+      }
+    }
     const s = satAt(p.x, p.y);
     if (s) {
       const a = s.atom;
@@ -634,7 +765,15 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
     patch({ zoom:1, pan:{ x:0, y:0 } });
   }
 
-  const total = chat.totalPairs;
+  const curDialogueMax = chat.dialogue && chat.dialogue.length > 0
+    ? Math.max(...chat.dialogue.map(t => t.pair))
+    : 0;
+  const total = Math.max(chat.totalPairs || 0, curDialogueMax);
+  const maxMappedPair = chat.snapshots && chat.snapshots.length > 0
+    ? chat.snapshots.length
+    : (chat.nodes && chat.nodes.length > 0 ? Math.max(...chat.nodes.map(n => n.born || 1)) : 0);
+  const hasUnmapped = total > maxMappedPair || Boolean(isMapping);
+  const nextPair = maxMappedPair + 1;
   const pair = Math.max(1, Math.min(total || 1, view.pair));
   const fillPct = total <= 1 ? 100 : ((pair - 1) / (total - 1)) * 100;
   const trackWidth = Math.min(Math.max(140, Math.min(380, total * 54)), Math.max(120, size.w - (compact ? 110 : 330)));
@@ -695,6 +834,35 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
 
       {total > 0 && <>
         {compact && <div className="og-badge og-badge-float"><div className="og-badge-dot" /><span>{badge}</span></div>}
+        {hasUnmapped && (
+          <div className={`og-synthesis-hud ${!isMapping ? 'is-unmapped' : ''}`}>
+            <div className="hud-orbit-ring">
+              <span className="hud-dot sky" />
+              <span className="hud-dot ember" />
+            </div>
+            <Sparkles size={12} className="hud-sparkle" />
+            <span>
+              {isMapping
+                ? `Synthesizing Pair ${nextPair}…`
+                : `New exchange: Pair ${nextPair}`}
+            </span>
+            {isMapping ? (
+              <div className="hud-progress-track">
+                <div className="hud-progress-fill" />
+              </div>
+            ) : onTriggerMap ? (
+              <button
+                type="button"
+                className="hud-map-btn"
+                onClick={onTriggerMap}
+                title="Map this new exchange"
+              >
+                <span>Map Pair {nextPair}</span>
+                <kbd>⌘M</kbd>
+              </button>
+            ) : null}
+          </div>
+        )}
         <div className="og-capsule">
           <button className="og-nav" disabled={pair <= 1} onClick={() => seek(pair - 1)} title="Previous Pair (Left Arrow)" aria-label="Previous pair">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6" /></svg>
@@ -703,11 +871,29 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
             <div className="og-rail" />
             <div className="og-fill" style={{ transform:`scaleX(${fillPct / 100})` }} />
             <div className="og-notches">
-              {Array.from({ length:total }, (_, i) => i + 1).map(i =>
-                <button key={i} type="button" className={'og-notch' + (i <= pair ? ' active' : '') + (i === pair ? ' current' : '')} onClick={() => seek(i)} aria-label={`Pair ${i}`} aria-current={i === pair ? 'step' : undefined}>
-                  <span className="og-notch-marker" />
-                  <span className="og-notch-tag">P{i}</span>
-                </button>)}
+              {Array.from({ length:total }, (_, i) => i + 1).map(i => {
+                const isSynth = isMapping && i > maxMappedPair;
+                const isUnmap = !isMapping && i > maxMappedPair;
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    className={
+                      'og-notch' +
+                      (i <= pair ? ' active' : '') +
+                      (i === pair ? ' current' : '') +
+                      (isSynth ? ' synthesizing' : '') +
+                      (isUnmap ? ' unmapped' : '')
+                    }
+                    onClick={() => seek(i)}
+                    aria-label={`Pair ${i}`}
+                    aria-current={i === pair ? 'step' : undefined}
+                  >
+                    <span className="og-notch-marker" />
+                    <span className="og-notch-tag">P{i}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
           <button className="og-nav" disabled={pair >= total} onClick={() => seek(pair + 1)} title="Next Pair (Right Arrow)" aria-label="Next pair">

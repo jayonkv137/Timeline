@@ -16,7 +16,7 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from engine.artifacts import LedgerWriter, write_json_artifact
+from engine.artifacts import LedgerWriter, read_ledger, write_json_artifact
 from engine.budget import BudgetGuard, BudgetStopError, get_usage_summary
 from engine.checks import InvariantViolationError, is_state_valid, run_pair_checks, write_report, write_status
 from engine.config import Config
@@ -182,7 +182,13 @@ class PipelineRunner:
 
         run_dir = cdir / "run"
         run_dir.mkdir(parents=True, exist_ok=True)
-        ledger_writer = LedgerWriter(cdir / "ledger.jsonl")
+        ledger_path = cdir / "ledger.jsonl"
+        if ledger_path.exists():
+            existing_rows = [r for r in read_ledger(ledger_path) if r.get("pair_added", 0) < pair]
+            with ledger_path.open("w", encoding="utf-8") as f:
+                for r in existing_rows:
+                    f.write(json.dumps(r, ensure_ascii=False) + "\n")
+        ledger_writer = LedgerWriter(ledger_path)
 
         # Execute extraction steps 1a -> 1b -> 1c -> 2 -> 3
         new_actions, l2_res = process_pair(
@@ -228,7 +234,7 @@ class PipelineRunner:
             violations=chk_res.violations,
         )
 
-        flagged_list = list(state.run.get("flagged_pairs", []))
+        flagged_list = [f for f in list(state.run.get("flagged_pairs", [])) if f.get("pair") != pair]
         if not healthy:
             flagged_record = {
                 "pair": pair,
