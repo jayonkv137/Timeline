@@ -108,7 +108,7 @@ function buildFrame(chat:Chat, pair:number, spread:number){
 function badgeFor(chat:Chat, pair:number){
   const snap = chat.snapshots[pair - 1];
   const prev = chat.snapshots[pair - 2];
-  if (!snap) return `Pair ${pair}`;
+  if (!snap) return chat.status === 'processing' ? `Pair ${pair} · Mapping…` : `Pair ${pair} · Pending`;
   const children = chat.nodes.filter(n => !n.root && n.born <= pair);
   const massOf = (id:string, s = snap) => { const m = s?.mass[id]; return m ? m.human + m.ai : 0; };
   const childMass = children.reduce((sum, n) => sum + massOf(n.id), 0);
@@ -300,6 +300,15 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
         else { lines.push(line); line = words[i]; }
       }
       lines.push(line);
+      const maxLines = isRoot ? 3 : 2;
+      if (lines.length > maxLines) {
+        let last = lines[maxLines - 1];
+        while (last.length > 0 && ctx!.measureText(last + '…').width > maxWidth) {
+          last = last.slice(0, -1).trim();
+        }
+        lines[maxLines - 1] = (last || lines[maxLines - 1]) + '…';
+        lines.length = maxLines;
+      }
       lines.forEach((l, i) => ctx!.fillText(l, x, y + i * lineHeight));
       ctx!.shadowBlur = 0;
     }
@@ -486,11 +495,21 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
         // Form directly branching from the centre root node
         const anchor = sim.current.nodes.find(n => n.isRoot) || sim.current.nodes[0];
 
+        let targetAngle = 0.55;
+        if (sim.current.nodes.length > 1) {
+          const angles = sim.current.nodes
+            .filter(n => !n.isRoot)
+            .map(n => Math.atan2(n.y - anchor.y, n.x - anchor.x));
+          if (angles.length > 0) {
+            const maxAngle = Math.max(...angles);
+            targetAngle = maxAngle + 0.65;
+          }
+        }
+        const dist = 135;
         const floatY = Math.sin(now * 0.0022) * 5;
         const floatX = Math.cos(now * 0.0018) * 3;
-        // Cleanly separated from the centre node
-        const gx = anchor.x + 115 + floatX;
-        const gy = anchor.y + 70 + floatY;
+        const gx = anchor.x + Math.cos(targetAngle) * dist + floatX;
+        const gy = anchor.y + Math.sin(targetAngle) * dist + floatY;
         const gr = 15;
         const nextPairNum = maxMapped + 1;
         ghostNodeRef.current = { x: gx, y: gy, r: gr, nextPair: nextPairNum };

@@ -73,8 +73,18 @@ export function Workspace(){
    fetchJobs().then(setQueueStatus).catch(()=>{});
    const onQueueEvent=()=>{fetchJobs().then(setQueueStatus).catch(()=>{});};
    const onJobFinished=(e:any)=>{
-     if(e.detail?.chatId&&initiatingMap===e.detail.chatId){
-       setInitiatingMap(null);
+     if(e.detail?.chatId){
+       if(initiatingMap===e.detail.chatId){
+         setInitiatingMap(null);
+       }
+       if(queuedMapChats[e.detail.chatId]){
+         setQueuedMapChats(q=>{
+           const next={...q};
+           delete next[e.detail.chatId];
+           return next;
+         });
+         handleTriggerMap(e.detail.chatId);
+       }
      }
    };
    window.addEventListener('cotrace:queue_changed',onQueueEvent);
