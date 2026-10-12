@@ -17,6 +17,7 @@ import json
 import logging
 import shutil
 from contextlib import asynccontextmanager
+from datetime import datetime, timezone
 from typing import Any
 
 from fastapi import APIRouter, FastAPI, HTTPException, Request, status
@@ -55,6 +56,15 @@ class SSEBroadcaster:
                 q.put_nowait(message)
             except asyncio.QueueFull:
                 pass
+
+
+class CreateChatPayload(BaseModel):
+    title: str = Field(default="New conversation", description="Initial chat title")
+    category: str = Field(default="General", description="Initial chat category")
+
+
+class SendMessagePayload(BaseModel):
+    text: str = Field(..., min_length=1, description="Message text from user")
 
 
 class ChatUpdatePayload(BaseModel):
@@ -112,6 +122,146 @@ def create_router() -> APIRouter:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc))
         except ValueError as exc:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
+
+    @router.post("/chats", status_code=status.HTTP_201_CREATED)
+    def create_chat_endpoint(payload: CreateChatPayload, request: Request) -> dict[str, Any]:
+        lib: Library = request.app.state.library
+        broadcaster: SSEBroadcaster = request.app.state.broadcaster
+        chat_bundle = lib.create_live_chat(title=payload.title, category=payload.category)
+        broadcaster.broadcast(
+            "chat_created",
+            {"chatId": chat_bundle["id"], "title": chat_bundle.get("title", payload.title)},
+        )
+        return chat_bundle
+
+    @router.post("/chats/{chat_id}/messages")
+    async def send_chat_message_endpoint(
+        chat_id: str,
+        payload: SendMessagePayload,
+        request: Request,
+    ) -> StreamingResponse:
+        lib: Library = request.app.state.library
+        broadcaster: SSEBroadcaster = request.app.state.broadcaster
+
+        if not lib.chat_exists(chat_id):
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Chat '{chat_id}' not found")
+
+        raw_text = payload.text.strip()
+        if not raw_text:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Message text cannot be empty")
+
+        # 1. Append user turn atomically
+        pair, dialogue = lib.append_turn(chat_id=chat_id, speaker="user", text=raw_text)
+
+        # 2. Build model prompt context from recent dialogue turns
+        messages: list[dict[str, str]] = [
+            {
+                "role": "system",
+                "content": (
+                    "You are COTRACE Assistant, an intelligent, helpful, and insightful collaborator. "
+                    "You help the user explore ideas, analyze complex problems, brainstorm solutions, "
+                    "and structure their thinking clearly. Keep your answers direct, insightful, and natural."
+                ),
+            }
+        ]
+        recent_turns = dialogue[-20:]
+        for t in recent_turns:
+            role = "user" if t.get("speaker") == "user" else "assistant"
+            messages.append({"role": role, "content": t.get("text", "")})
+
+        # 3. Retrieve settings and credentials
+        settings = lib.get_effective_settings()
+        api_key = lib.get_api_key()
+        provider_url = settings.get("provider_url") or "https://generativelanguage.googleapis.com/v1beta/openai/"
+        chat_model = settings.get("chat_model") or "gemini-3.6-flash"
+
+        from engine.llm import stream_chat_turn
+
+        async def stream_generator():
+            full_ai_text = ""
+
+            try:
+                if not api_key:
+                    err_msg = "No API key configured. Please configure your API key in Settings."
+                    yield f"event: error\ndata: {json.dumps({'error': err_msg})}\n\n"
+                    return
+
+                async for token_chunk in stream_chat_turn(
+                    messages=messages,
+                    api_key=api_key,
+                    base_url=provider_url,
+                    model=chat_model,
+                ):
+                    full_ai_text += token_chunk
+                    yield f"event: token\ndata: {json.dumps({'token': token_chunk})}\n\n"
+
+                # 4. On stream completion, append AI turn to dialogue.json and sync bundle
+                lib.append_turn(chat_id=chat_id, speaker="ai", text=full_ai_text, pair=pair)
+
+                # 5. Record usage in library usage log
+                prompt_chars = sum(len(m.get("content", "")) for m in messages)
+                completion_chars = len(full_ai_text)
+                prompt_tokens = max(1, prompt_chars // 4)
+                completion_tokens = max(1, completion_chars // 4)
+                from engine.models import compute_token_cost
+
+                cost = compute_token_cost(
+                    model_name=chat_model,
+                    prompt_tokens=prompt_tokens,
+                    completion_tokens=completion_tokens,
+                )
+                usage_entry = {
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                    "chat_id": chat_id,
+                    "step": f"chat_turn:pair{pair}",
+                    "call": f"chat_turn:pair{pair}",
+                    "pair": pair,
+                    "model": chat_model,
+                    "tokens": {
+                        "prompt": prompt_tokens,
+                        "completion": completion_tokens,
+                        "total": prompt_tokens + completion_tokens,
+                    },
+                    "cost": cost,
+                    "mode": "live",
+                }
+                lib.record_usage(usage_entry)
+
+                # 6. Emit done event and broadcast pair_ready
+                done_payload = {
+                    "chatId": chat_id,
+                    "pair": pair,
+                    "text": full_ai_text,
+                }
+                yield f"event: done\ndata: {json.dumps(done_payload)}\n\n"
+                broadcaster.broadcast("pair_ready", {"chatId": chat_id, "pair": pair})
+
+                # 7. S5.2 trigger background pipeline runner to map the new pair into the graph node
+                job_queue = getattr(request.app.state, "job_queue", None)
+                if job_queue:
+                    chat_bundle = lib.get_chat_bundle(chat_id)
+                    asyncio.create_task(
+                        job_queue.enqueue_job(
+                            chat_id=chat_id,
+                            title=chat_bundle.get("title", chat_id),
+                            total_pairs=pair,
+                            priority=1,
+                        )
+                    )
+
+            except Exception as exc:
+                logger.exception(f"Chat streaming error for {chat_id}: {exc}")
+                yield f"event: error\ndata: {json.dumps({'error': str(exc)})}\n\n"
+
+        return StreamingResponse(
+            stream_generator(),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+                "X-Accel-Buffering": "no",
+            },
+        )
 
     @router.patch("/chats/{chat_id}")
     def update_chat(chat_id: str, payload: ChatUpdatePayload, request: Request) -> dict[str, Any]:

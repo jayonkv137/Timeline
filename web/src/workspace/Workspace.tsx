@@ -9,7 +9,7 @@ import { SettingsModal } from './SettingsModal';
 import { UsageModal } from './UsageModal';
 import { ImportModal } from './ImportModal';
 import { ProcessingPill } from './ProcessingPill';
-import { fetchJobs, cancelJob, mapNextJob, pauseAllJobs, resumeAllJobs, processImportBatch, type QueueStatus } from './api';
+import { fetchJobs, cancelJob, mapNextJob, pauseAllJobs, resumeAllJobs, processImportBatch, createChat, sendChatMessageStream, type QueueStatus } from './api';
 import { useEvidence, EvidenceStrip } from './useEvidence';
 
 const blankView:ChatView={pair:1,scroll:0,follow:true,selected:null,draft:'',zoom:1,pan:{x:0,y:0}};
@@ -23,9 +23,10 @@ function RichText({text}:{text:string}){
 }
 
 export function Workspace(){
- const {chats,tabs,active,views,open,close,patch,newChat,appendDraft,loading,error,isOffline,refresh}=useWorkspace();
+ const {chats,tabs,active,views,open,close,patch,newChat,appendDraft,loading,error,isOffline,refresh,loadBundle}=useWorkspace();
  const [query,setQuery]=useState('');const [sidebar,setSidebar]=useState(true);const [rail,setRail]=useState(true);const [expanded,setExpanded]=useState(false);const [brainSelected,setBrainSelected]=useState<string|null>(null);const [brainFocus,setBrainFocus]=useState<string|null>(null);const [brainVisited,setBrainVisited]=useState(false);const [notice,setNotice]=useState('');const [copied,setCopied]=useState<string|null>(null);const [settingsOpen,setSettingsOpen]=useState(false);const [usageOpen,setUsageOpen]=useState(false);const [importOpen,setImportOpen]=useState(false);
  const scroll=useRef<HTMLDivElement>(null);const lockUntil=useRef(0);const scrollRaf=useRef(0);const search=useRef<HTMLInputElement>(null);const [pending,setPending]=useState<Record<string,boolean>>({});
+ const [streaming,setStreaming]=useState<{chatId:string;text:string;pair:number}|null>(null);
  const [queueStatus,setQueueStatus]=useState<QueueStatus|null>(null);
 
  useEffect(()=>{
@@ -134,14 +135,65 @@ export function Workspace(){
  function activate(id:string){open(id);if(innerWidth<760)setSidebar(false);}
  function locate(id:string){setBrainSelected(id);setBrainFocus(id);setBrainVisited(true);open('brain');setRail(true);}
 
- function send(){
+ async function send(){
    if(!chat||!view.draft.trim()||pending[chat.id])return;
    const text=view.draft.trim();
-   appendDraft(chat.id,text);
-   setPending(p=>({...p,[chat.id]:true}));
-   setNotice('Message saved in this preview. Connect the chat service to receive a reply.');
-   window.dispatchEvent(new CustomEvent('cotrace:send-request',{detail:{chatId:chat.id,text}}));
-   setTimeout(()=>{if(scroll.current)scroll.current.scrollTop=scroll.current.scrollHeight},30);
+   update({draft:''});
+
+   let targetChatId = chat.id;
+
+   // If active conversation is a draft, create real chat on server
+   if (targetChatId.startsWith('draft-')) {
+     try {
+       const created = await createChat({ title: text.slice(0, 42) });
+       targetChatId = created.id;
+       useWorkspace.setState(s => ({
+         chats: s.chats.map(c => c.id === chat.id ? { ...created, title: text.slice(0, 42) } : c),
+         tabs: s.tabs.map(t => t === chat.id ? created.id : t),
+         active: created.id,
+         views: { ...s.views, [created.id]: s.views[chat.id] || blankView },
+       }));
+     } catch (err: any) {
+       setNotice(`Could not create conversation: ${err.message || err}`);
+       return;
+     }
+   }
+
+   const currentTotal = chat.totalPairs || (chat.dialogue.length > 0 ? Math.max(...chat.dialogue.map(t => t.pair)) : 0);
+   const nextPair = currentTotal + 1;
+
+   appendDraft(targetChatId, text);
+   setPending(p => ({ ...p, [targetChatId]: true }));
+   setStreaming({ chatId: targetChatId, text: '', pair: nextPair });
+
+   setTimeout(() => { if (scroll.current) scroll.current.scrollTop = scroll.current.scrollHeight; }, 30);
+
+   if (isOffline) {
+     setNotice('Running in offline mode. Live Gemini generation requires local COTRACE server.');
+     setPending(p => ({ ...p, [targetChatId]: false }));
+     setStreaming(null);
+     return;
+   }
+
+   sendChatMessageStream(targetChatId, text, {
+     onToken: (chunk) => {
+       setStreaming(s => s && s.chatId === targetChatId ? { ...s, text: s.text + chunk } : s);
+       if (scroll.current) {
+         scroll.current.scrollTop = scroll.current.scrollHeight;
+       }
+     },
+     onDone: () => {
+       setStreaming(null);
+       setPending(p => ({ ...p, [targetChatId]: false }));
+       loadBundle(targetChatId);
+       setTimeout(() => { if (scroll.current) scroll.current.scrollTop = scroll.current.scrollHeight; }, 60);
+     },
+     onError: (errMsg) => {
+       setStreaming(null);
+       setPending(p => ({ ...p, [targetChatId]: false }));
+       setNotice(`Chat error: ${errMsg}`);
+     },
+   });
  }
 
  async function copyText(text:string,id:string){
@@ -378,8 +430,44 @@ export function Workspace(){
               <RichText text={t.text}/>
               {t.attachments?.length>0&&<small className="attachments-note">{t.attachments.length} attachment references in original conversation</small>}
             </article>)}
+            {streaming&&streaming.chatId===chat.id&&streaming.pair===p&&<article data-speaker="ai" className="message ai streaming">
+              <div className="message-heading">
+                <span className="author-avatar ai"><span className="ai-emblem">✳</span></span>
+                <strong>Assistant</strong>
+                <span className="streaming-status">{streaming.text?'Replying…':'Thinking…'}</span>
+              </div>
+              <div className="message-text">
+                {streaming.text ? (
+                  <>
+                    <RichText text={streaming.text} />
+                    <span className="streaming-cursor" />
+                  </>
+                ) : (
+                  <div className="typing-indicator"><span /><span /><span /></div>
+                )}
+              </div>
+            </article>}
           </section>)}
-          {pending[chat.id]&&<div className="pending-note">Your message is saved for this session. Connect the chat backend to receive the assistant’s reply; the graph will update after analysis completes.</div>}
+          {streaming&&streaming.chatId===chat.id&&!chat.dialogue.some(t=>t.pair===streaming.pair)&&<section data-pair={streaming.pair} className="exchange viewed" key="streaming-pair">
+            <div className="exchange-marker"><span>PAIR {streaming.pair.toString().padStart(2,'0')}</span><i/></div>
+            <article data-speaker="ai" className="message ai streaming">
+              <div className="message-heading">
+                <span className="author-avatar ai"><span className="ai-emblem">✳</span></span>
+                <strong>Assistant</strong>
+                <span className="streaming-status">{streaming.text?'Replying…':'Thinking…'}</span>
+              </div>
+              <div className="message-text">
+                {streaming.text ? (
+                  <>
+                    <RichText text={streaming.text} />
+                    <span className="streaming-cursor" />
+                  </>
+                ) : (
+                  <div className="typing-indicator"><span /><span /><span /></div>
+                )}
+              </div>
+            </article>
+          </section>}
         </>}
        </div>
       </div>
@@ -387,9 +475,9 @@ export function Workspace(){
         {ev.inspect&&ev.atom&&<EvidenceStrip atom={ev.atom} evidence={ev.evidence} index={ev.inspect.index} resolution={ev.resolution} onStep={ev.step} onBack={ev.back} onClose={ev.close}/>}
         {!ev.inspect&&chat.totalPairs>0&&view.pair<chat.totalPairs&&<button className="back-latest" onClick={()=>jump(chat.totalPairs)}>Back to latest<ArrowDown size={13}/></button>}
         <div className="composer">
-          <textarea aria-label="Message" placeholder={pending[chat.id]?'Waiting for backend connection…':'Continue the conversation…'} value={view.draft} disabled={pending[chat.id]} rows={2} onChange={e=>update({draft:e.target.value})} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}}/>
+          <textarea aria-label="Message" placeholder={pending[chat.id]?'Generating response…':'Continue the conversation…'} value={view.draft} disabled={pending[chat.id]} rows={2} onChange={e=>update({draft:e.target.value})} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}}/>
           <div className="composer-bottom">
-            <span><span className={`model-dot ${isOffline?'offline':'online'}`}/>{isOffline?'Chat backend in offline mode':'Live backend ready'}</span>
+            <span><span className={`model-dot ${isOffline?'offline':'online'}`}/>{isOffline?'Chat backend in offline mode':'Live Gemini model ready'}</span>
             <button className="send-button" aria-label="Send message" disabled={!view.draft.trim()||pending[chat.id]} onClick={send}><ArrowUp size={17}/></button>
           </div>
         </div>

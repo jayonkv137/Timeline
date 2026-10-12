@@ -243,6 +243,176 @@ class Library:
         atomic_write_json(cdir / "dialogue.json", [])
         return cdir
 
+    def create_live_chat(
+        self,
+        title: str = "New conversation",
+        category: str = "General",
+        chat_id: str | None = None,
+    ) -> dict[str, Any]:
+        """Create a new live conversation adhering to STANDALONE_V1_PLAN §3.2 & S5.1."""
+        self.ensure_layout()
+        if chat_id is None:
+            now_str = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+            import uuid
+            chat_id = f"chat_{now_str}_{uuid.uuid4().hex[:6]}"
+
+        _validate_id(chat_id, "chat ID")
+        cdir = self.chat_dir(chat_id)
+        if cdir.exists():
+            raise FileExistsError(f"Chat '{chat_id}' already exists in library")
+
+        cdir.mkdir(parents=True, exist_ok=False)
+        (cdir / "run").mkdir(parents=True, exist_ok=True)
+
+        now = datetime.now(timezone.utc).isoformat()
+        meta = {
+            "id": chat_id,
+            "title": title,
+            "category": category,
+            "createdAt": now,
+            "updatedAt": now,
+            "source": {"platform": "live"},
+        }
+        source_meta = {
+            "id": chat_id,
+            "title": title,
+            "category": category,
+            "createdAt": now,
+            "updatedAt": now,
+            "source": {"platform": "live"},
+        }
+
+        bundle = {
+            "id": chat_id,
+            "title": title,
+            "rootTitle": title,
+            "category": category,
+            "totalPairs": 0,
+            "dialogue": [],
+            "nodes": [],
+            "atoms": [],
+            "snapshots": [],
+            "summary": "",
+            "status": "ready",
+            "source": {"platform": "live"},
+        }
+
+        atomic_write_json(cdir / "meta.json", meta)
+        atomic_write_json(cdir / "source_meta.json", source_meta)
+        atomic_write_json(cdir / "dialogue.json", [])
+        atomic_write_json(cdir / "workspace_bundle.json", bundle)
+        return bundle
+
+    def append_turn(
+        self,
+        chat_id: str,
+        speaker: str,
+        text: str,
+        pair: int | None = None,
+    ) -> tuple[int, list[dict[str, Any]]]:
+        """Atomically append a user or ai turn to dialogue.json and sync workspace_bundle.json."""
+        _validate_id(chat_id, "chat ID")
+        cdir = self.chat_dir(chat_id)
+        if not cdir.is_dir():
+            raise FileNotFoundError(f"Chat '{chat_id}' not found in library")
+
+        dialogue_path = cdir / "dialogue.json"
+        dialogue: list[dict[str, Any]] = []
+        if dialogue_path.is_file():
+            try:
+                with dialogue_path.open("r", encoding="utf-8") as f:
+                    dialogue = json.load(f)
+                if not isinstance(dialogue, list):
+                    dialogue = []
+            except Exception:
+                dialogue = []
+
+        # Determine pair number if not provided
+        if pair is None:
+            if not dialogue:
+                pair = 1
+            else:
+                max_pair = max((int(t.get("pair", 0)) for t in dialogue), default=0)
+                last_turn = dialogue[-1]
+                if speaker == "user":
+                    if last_turn.get("speaker") == "ai":
+                        pair = max_pair + 1
+                    else:
+                        pair = max(1, max_pair)
+                else:
+                    pair = max(1, max_pair)
+
+        turn = {
+            "pair": int(pair),
+            "speaker": speaker,
+            "text": text,
+            "attachments": [],
+            "ts": datetime.now(timezone.utc).isoformat(),
+        }
+        dialogue.append(turn)
+        atomic_write_json(dialogue_path, dialogue)
+
+        now = datetime.now(timezone.utc).isoformat()
+        total_pairs = max((int(t.get("pair", 0)) for t in dialogue), default=0)
+
+        # Update meta.json
+        meta_file = cdir / "meta.json"
+        meta: dict[str, Any] = {}
+        if meta_file.is_file():
+            try:
+                with meta_file.open("r", encoding="utf-8") as f:
+                    meta = json.load(f)
+            except Exception:
+                meta = {}
+
+        # Auto-title on first user turn if placeholder title
+        current_title = meta.get("title", "")
+        if (
+            speaker == "user"
+            and pair == 1
+            and (not current_title or current_title in ("New conversation", "Untitled chat") or current_title.startswith("draft-"))
+        ):
+            first_line = text.strip().split("\n")[0][:42].strip()
+            if first_line:
+                meta["title"] = first_line
+
+        meta["updatedAt"] = now
+        meta["id"] = chat_id
+        atomic_write_json(meta_file, meta)
+
+        # Sync workspace_bundle.json
+        bundle_file = cdir / "workspace_bundle.json"
+        bundle: dict[str, Any] = {}
+        if bundle_file.is_file():
+            try:
+                with bundle_file.open("r", encoding="utf-8") as f:
+                    bundle = json.load(f)
+            except Exception:
+                bundle = {}
+
+        bundle["id"] = chat_id
+        if "title" in meta:
+            bundle["title"] = meta["title"]
+            bundle["rootTitle"] = meta["title"]
+        bundle["dialogue"] = dialogue
+        bundle["totalPairs"] = total_pairs
+        bundle["updatedAt"] = now
+        if "category" in meta:
+            bundle["category"] = meta["category"]
+        if "nodes" not in bundle:
+            bundle["nodes"] = []
+        if "atoms" not in bundle:
+            bundle["atoms"] = []
+        if "snapshots" not in bundle:
+            bundle["snapshots"] = []
+        if "status" not in bundle:
+            bundle["status"] = "ready"
+        if "source" not in bundle:
+            bundle["source"] = meta.get("source", {"platform": "live"})
+
+        atomic_write_json(bundle_file, bundle)
+        return int(pair), dialogue
+
     def get_chat_bundle(self, chat_id: str) -> dict[str, Any]:
         """Load and return the workspace_bundle.json for a chat."""
         cdir = self.chat_dir(chat_id)

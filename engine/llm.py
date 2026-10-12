@@ -280,3 +280,58 @@ class LLMClient:
         )
         with open(self.monitor_path, "a") as f:
             f.write(entry)
+
+
+import asyncio
+from typing import AsyncGenerator
+from openai import AsyncOpenAI
+
+
+async def stream_chat_turn(
+    messages: list[dict[str, str]],
+    api_key: str,
+    base_url: str = "https://generativelanguage.googleapis.com/v1beta/openai/",
+    model: str = "gemini-3.6-flash",
+    temperature: float = 0.7,
+) -> AsyncGenerator[str, None]:
+    """Asynchronously stream chat completion tokens from OpenAI-compatible endpoint.
+    
+    Yields string chunks as they arrive from the model.
+    Supports mock/test bypass for fast deterministic unit tests.
+    """
+    if not api_key:
+        raise LLMError("No API key configured for live chat.")
+
+    # Mock or test mode bypass for unit tests without external network dependencies
+    if (
+        api_key.lower().startswith(("mock", "test", "fake"))
+        or "mock" in (base_url or "").lower()
+        or "fake" in (base_url or "").lower()
+    ):
+        mock_tokens = [
+            "Hello! ",
+            "I am ",
+            "ready to help ",
+            "you explore ",
+            "and develop ",
+            "this topic.",
+        ]
+        for token in mock_tokens:
+            await asyncio.sleep(0.01)
+            yield token
+        return
+
+    client = AsyncOpenAI(api_key=api_key, base_url=base_url)
+    try:
+        response = await client.chat.completions.create(
+            model=model,
+            messages=messages,
+            stream=True,
+            temperature=temperature,
+        )
+        async for chunk in response:
+            if chunk.choices and chunk.choices[0].delta and chunk.choices[0].delta.content:
+                yield chunk.choices[0].delta.content
+    except Exception as exc:
+        raise LLMError(f"Error streaming chat completion: {exc}") from exc
+

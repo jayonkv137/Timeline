@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import seed from './data.generated.json';
 import type { Chat, ChatSummary, ChatView, LoadingState } from './types';
 import { newView } from './types';
-import { fetchBundle, fetchChats, subscribeEvents } from './api';
+import { createChat, fetchBundle, fetchChats, subscribeEvents } from './api';
 
 const defaultChats = seed.chats as unknown as Chat[];
 
@@ -62,7 +62,21 @@ export const useWorkspace = create<State>((set, get) => ({
     },
   })),
 
-  newChat: () => set(s => {
+  newChat: async () => {
+    if (!get().isOffline) {
+      try {
+        const created = await createChat();
+        set(s => ({
+          chats: [created, ...s.chats],
+          tabs: [...s.tabs, created.id],
+          active: created.id,
+          views: { ...s.views, [created.id]: newView() },
+        }));
+        return;
+      } catch (err) {
+        console.warn('Could not create live chat on server, creating local draft:', err);
+      }
+    }
     const id = 'draft-' + Date.now();
     const draftChat: Chat = {
       id,
@@ -77,13 +91,13 @@ export const useWorkspace = create<State>((set, get) => ({
       summary: '',
       status: 'ready',
     };
-    return {
+    set(s => ({
       chats: [draftChat, ...s.chats],
       tabs: [...s.tabs, id],
       active: id,
       views: { ...s.views, [id]: newView() },
-    };
-  }),
+    }));
+  },
 
   appendDraft: (id: string, text: string) => set(s => ({
     chats: s.chats.map(c => c.id !== id ? c : {

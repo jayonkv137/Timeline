@@ -30,6 +30,94 @@ export async function fetchBundle(id: string): Promise<Chat> {
   return res.json();
 }
 
+export async function createChat(params?: { title?: string; category?: string }): Promise<Chat> {
+  const res = await fetch(`${API_BASE}/chats`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify(params || {}),
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to create chat: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+}
+
+export async function sendChatMessageStream(
+  chatId: string,
+  text: string,
+  callbacks: {
+    onToken: (token: string) => void;
+    onDone: (data: { chatId: string; pair: number; text: string }) => void;
+    onError: (error: string) => void;
+  }
+): Promise<void> {
+  const res = await fetch(`${API_BASE}/chats/${encodeURIComponent(chatId)}/messages`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'text/event-stream',
+    },
+    body: JSON.stringify({ text }),
+  });
+
+  if (!res.ok) {
+    const errJson = await res.json().catch(() => null);
+    const errMsg = errJson?.detail || `Error sending message: ${res.status} ${res.statusText}`;
+    callbacks.onError(errMsg);
+    return;
+  }
+
+  const reader = res.body?.getReader();
+  if (!reader) {
+    callbacks.onError('ReadableStream not supported by browser environment');
+    return;
+  }
+
+  const decoder = new TextDecoder();
+  let buffer = '';
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      let currentEvent = 'message';
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) continue;
+        if (trimmed.startsWith('event:')) {
+          currentEvent = trimmed.slice(6).trim();
+        } else if (trimmed.startsWith('data:')) {
+          const dataStr = trimmed.slice(5).trim();
+          try {
+            const data = JSON.parse(dataStr);
+            if (currentEvent === 'token') {
+              callbacks.onToken(data.token || data.text || '');
+            } else if (currentEvent === 'done') {
+              callbacks.onDone(data);
+            } else if (currentEvent === 'error') {
+              callbacks.onError(data.error || 'Server streaming error');
+            }
+          } catch {
+            if (currentEvent === 'token') {
+              callbacks.onToken(dataStr);
+            }
+          }
+        }
+      }
+    }
+  } catch (err: any) {
+    callbacks.onError(err.message || 'Stream connection failed');
+  }
+}
+
 export async function updateChatMeta(
   id: string,
   patch: { title?: string; category?: string }
