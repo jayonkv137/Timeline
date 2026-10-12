@@ -73,8 +73,8 @@ A rule that looks good but can't be read is rejected. Examples:
 | 8 | Signal | What the spiral or pulse means (activity? live?) | per-exchange deltas, live pipeline events | — |
 | 9 | Titles | Placement, zoom fading, collisions, size priority | title; mass | — |
 | 10 | Zoom levels | What appears at overview, region and neuron zoom | — | — |
-| 11 | Clustering into areas | Which chats are related, and where they go | ❌ needs engine work (B1) | research |
-| 12 | Axons between chats | Connection types and their look | ❌ needs 11 | — |
+| 11 | Clustering into areas | Which chats are related, and where they go | full dialogue + engine text | **spec'd in [BRAIN_REGIONS_SPEC](BRAIN_REGIONS_SPEC.md)** (B1) |
+| 12 | Axons between chats | Connection types and their look | continued · reused · similar evidence | **rules in BRAIN_REGIONS_SPEC §7**; look pending |
 | 13 | Whole-brain read | Where you are human-led and where you are symbiotic | all of the above | — |
 | AD-final | Polish + critique | Fresh-eye review of the finished brain and interface | — | — |
 
