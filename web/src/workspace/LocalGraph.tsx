@@ -46,7 +46,7 @@ const BEAD = { core:G.bead.core, ring:G.bead.ring, resolvedOuter:G.bead['resolve
 const MIX = new URLSearchParams(location.search).get('mix') === 'legacy' ? 'legacy' : 'ring';
 interface SimNode { edgeR?:number; id:string; text:string; isRoot:boolean; x:number; y:number; vx:number; vy:number; radius:number; userScore:number; aiScore:number; isDormant:boolean; isTerminalActive:boolean; pinned:boolean; outcome:Outcome; satellites:Sat[] }
 interface SimLink { source:string; target:string; type:'parent_child'|'related'; isDormant:boolean; length:number }
-interface Tip { sat:Sat; x:number; y:number }
+interface Tip { sat?:Sat; node?:SimNode; x:number; y:number }
 interface Toast { kind:'user'|'ai'|'neutral'; text:string; key:number }
 
 // Node positions survive pair changes, tab switches and remounts within a session,
@@ -300,7 +300,7 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
         else { lines.push(line); line = words[i]; }
       }
       lines.push(line);
-      const maxLines = isRoot ? 3 : 2;
+      const maxLines = isRoot ? 5 : 4;
       if (lines.length > maxLines) {
         let last = lines[maxLines - 1];
         while (last.length > 0 && ctx!.measureText(last + '…').width > maxWidth) {
@@ -674,6 +674,9 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
     const s = transform().s;
     return sim.current.nodes.find(n => Math.hypot(n.x - x, n.y - y) <= n.radius + 8 / s) || null;
   }
+  function nodeCircleAt(x:number, y:number){
+    return sim.current.nodes.find(n => Math.hypot(n.x - x, n.y - y) <= n.radius) || null;
+  }
   // Dev-only probe so the browser tests can click real beads (EVIDENCE_SPEC §8); never shipped in builds.
   useEffect(() => {
     if (!import.meta.env.DEV) return;
@@ -744,6 +747,14 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
     const rect = stageRef.current!.getBoundingClientRect();
     hoverSat.current = s;
     if (s) { setTip({ sat:s, x:e.clientX - rect.left, y:e.clientY - rect.top }); setCursor('pointer'); return; }
+
+    const nc = nodeCircleAt(p.x, p.y);
+    if (nc) {
+      setTip({ node:nc, x:e.clientX - rect.left, y:e.clientY - rect.top });
+      setCursor(nc.pinned ? 'pointer' : 'grab');
+      return;
+    }
+
     setTip(null);
     const n = nodeAt(p.x, p.y);
     setCursor(n ? (n.pinned ? 'pointer' : 'grab') : 'grab');
@@ -822,6 +833,27 @@ export function LocalGraph({ chat, view, expanded, patch, jump, expand, inspect,
       </div>
 
       {tip && (() => {
+        if (tip.node) {
+          const n = tip.node;
+          const maxW = Math.min(320, size.w - 20);
+          const left = Math.max(8, Math.min(tip.x + 14, size.w - maxW - 8));
+          return (
+            <div className="og-tooltip" role="tooltip" style={{ left, top:Math.max(8, Math.min(tip.y + 10, size.h - 200)), maxWidth:maxW, borderColor:rgbaOf(n.isRoot ? WHITE : AI, 0.4) }}>
+              <div className="og-tip-row">
+                <div className="og-tip-head" style={{ color:n.isRoot ? WHITE : AI }}>
+                  {n.isRoot ? 'Genesis Purpose (Root)' : `Outcome · Born Pair ${n.outcome.born}`}
+                </div>
+                {!n.isRoot && (
+                  <span className="og-tip-pill">Mass {Math.round(n.userScore + n.aiScore)}</span>
+                )}
+              </div>
+              <div className="og-tip-body strong" style={{ fontSize:'12px', lineHeight:1.55 }}>
+                {n.text}
+              </div>
+            </div>
+          );
+        }
+        if (!tip.sat) return null;
         const s = tip.sat, a = s.atom, head = tipHeader(s);
         const maxW = Math.min(320, size.w - 20);
         const left = Math.max(8, Math.min(tip.x + 14, size.w - maxW - 8));
