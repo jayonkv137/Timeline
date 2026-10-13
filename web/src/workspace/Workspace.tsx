@@ -11,6 +11,7 @@ import { ImportModal } from './ImportModal';
 import { ProcessingPill } from './ProcessingPill';
 import { fetchJobs, cancelJob, mapNextJob, pauseAllJobs, resumeAllJobs, processImportBatch, createChat, sendChatMessageStream, type QueueStatus } from './api';
 import { useEvidence, EvidenceStrip } from './useEvidence';
+import { SymbiotMark } from './SymbiotMark';
 
 const blankView:ChatView={pair:1,scroll:0,follow:true,selected:null,draft:'',zoom:1,pan:{x:0,y:0}};
 
@@ -237,7 +238,7 @@ export function Workspace(){
    setTimeout(() => { if (scroll.current) scroll.current.scrollTop = scroll.current.scrollHeight; }, 30);
 
    if (isOffline) {
-     setNotice('Running in offline mode. Live Gemini generation requires local COTRACE server.');
+     setNotice('Running in offline mode. Live Gemini generation requires the local Symbiot server.');
      setPending(p => ({ ...p, [targetChatId]: false }));
      setStreaming(null);
      return;
@@ -344,7 +345,7 @@ export function Workspace(){
 
  return <div className={`cotrace-workspace ${sidebar?'':'sidebar-closed'} ${rail?'':'rail-closed'} ${isBrain?'brain-active':''}`}>
   <nav className="activity-rail" aria-label="Workspace tools">
-    <button className="brand-symbol" aria-label="Open Brain" onClick={()=>open('brain')}><span/><span/></button>
+    <button className="brand-symbol" aria-label="Open Brain" onClick={()=>open('brain')}><SymbiotMark/></button>
     <button className={'icon-button '+(!isBrain?'current':'')} aria-label="Show chats" onClick={()=>setSidebar(!sidebar)}><MessageSquare size={19}/></button>
     <button className={'icon-button '+(isBrain?'current':'')} aria-label="Brain overview" onClick={()=>open('brain')}><BrainCircuit size={20}/></button>
     <button className="icon-button" aria-label="Search conversations" onClick={()=>{setSidebar(true);setTimeout(()=>search.current?.focus(),0);}}><Search size={18}/></button>
@@ -356,7 +357,7 @@ export function Workspace(){
   </nav>
 
   {sidebar&&<aside className="history-panel">
-    <div className="history-brand"><span>COTRACE</span><button className="icon-button" aria-label="Close sidebar" onClick={()=>setSidebar(false)}><PanelLeftClose size={17}/></button></div>
+    <div className="history-brand"><span>SYMBIOT</span><button className="icon-button" aria-label="Close sidebar" onClick={()=>setSidebar(false)}><PanelLeftClose size={17}/></button></div>
     <div style={{ display: 'flex', gap: '6px' }}>
       <button className="new-chat" style={{ flex: 1 }} onClick={newChat}><Plus size={16}/>New conversation<kbd>⌘ ↵</kbd></button>
       <button className="new-chat" style={{ flex: 'initial', padding: '0 10px', background: 'transparent' }} aria-label="Import history" title="Import history" onClick={()=>setImportOpen(true)}><Upload size={15}/></button>
@@ -569,7 +570,7 @@ export function Workspace(){
        <div className="conversation-document">
          <div className="new-conversation-empty">
            <div className="empty-logo"><GitBranch size={28}/></div>
-           <span className="eyebrow">COTRACE LIBRARY</span>
+           <span className="eyebrow">SYMBIOT LIBRARY</span>
            <h1>No conversations yet</h1>
            <p>Start a new conversation to begin co-creating with AI.</p>
            <button className="new-chat" style={{margin:'20px auto',display:'inline-flex'}} onClick={newChat}>

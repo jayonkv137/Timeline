@@ -15,6 +15,7 @@ This ledger records every system-level design decision in the repository.
 | [**DDR-000h**](DDR-000h-ui-craft-license-attribution.md) | Upstream Apache-2.0 License & Attribution (Settlement A8) | **Ratified** | 2026-10-08 | D0.S3 | Compliance, Repository |
 | [**DDR-001**](DDR-001-brand-personality-and-principles.md) | Brand Personality Scales, Strategic Principles & Persona Panel | **Ratified** | 2026-10-08 | D1.S4 | Strategic Anchor, Personas |
 | [**DDR-002**](DDR-002-prototype-baseline-v0-1.md) | Workspace Prototype Becomes Design System v0.1 (Baseline) | **Accepted** | 2026-10-09 | D2/D3 | Tokens, Build, All Surfaces |
+| [**DDR-003**](DDR-003-product-identity-symbiot.md) | Product Identity: the Name "Symbiot" and the Two-Ring Brain Mark | **Accepted (name) · Proposed (mark)** | 2026-10-13 | D2 | Brand, Rail, Title, Favicon |
 | [**DDR-006**](DDR-006-graph-share-ring-and-bead-rules.md) | Graph Share Ring, Bead Rules & Click Behaviour (prototype) | **Accepted (prototype)** | 2026-10-09 | pre-D5 | Graph View, Visual Grammar |
 | [**DDR-007**](DDR-007-brain-chat-lights-and-unfold.md) | Chats in the Brain: Lights, Cortex Glow & Unfolding Maps | **Superseded by DDR-008** | 2026-10-09 | pre-D5 | Brain, Visual Grammar |
 | [**DDR-008**](DDR-008-symbiotic-cortex.md) | The Symbiotic Cortex: Cell Territories & Surface Circuits | **Proposed** | 2026-10-09 | pre-D5 | Brain, Visual Grammar |
@@ -24,7 +25,6 @@ This ledger records every system-level design decision in the repository.
 ## Planned Decisions
 
 - **DDR-002b (later):** Visual direction exploration on top of v0.1 (deferred to the UI/UX phase by DDR-002)
-- **DDR-003:** Product Identity & Head Motif Mark (Phase D2)
 - **DDR-004:** Token Naming Grammar & Spatial 3D Tokens (Phase D3)
 - **DDR-005:** Party Colours Resolution (Conflict 1, Phase D4.S1)
 

@@ -19,6 +19,12 @@ Symbiot is an AI chat that draws a live map of each conversation and shows which
 
 Symbiot is a chat interface for people who work on long creative or research projects with AI. It maps every chat into *goal → outcomes → requirements* and shows who shaped each part, so you stay aware of your own direction instead of drifting with the AI's suggestions. It is built on CoTrace, a published method for measuring how much an AI shapes a person's goals.
 
+## Name and mark
+
+![The Symbiot mark: a human ring and an AI ring, interlocked, with one shared brain between them](logo/symbiot-lockup.png)
+
+The mark is two interlocked rings with one brain between them. The blue ring is me, the human, and the orange ring is the AI. It uses the same two colours as everything inside the app.
+
 ## Context
 
 While building my portfolio projects with AI, I kept following suggestions that sounded good. After a few days I could no longer say which ideas were mine and which were the AI's. The chats were long and hard to look back through, and the overload made me lose track of what I had decided.
@@ -133,6 +139,7 @@ CoTrace is a research method that analyses a finished chat afterwards. Symbiot a
   - It drafted the text from my voice-recorded description, and I edited it.
   - It scripted the screenshots and the framing.
 - **The prototype's mapping** uses a language model (Gemini) to run the CoTrace analysis.
+- **The name and mark:** Claude Code proposed the logo as SVG code, in four rounds of rendered options (in `logo/`), from my brief. No image-generation model was used.
 
 **My requests to Claude Code** (voice-transcribed, filler words removed):
 
@@ -140,4 +147,6 @@ CoTrace is a research method that analyses a finished chat afterwards. Symbiot a
 
 > Please use my exact UI from the working prototype to make this. You created a new UI representation for the use case; instead, showcase it with one of my simple real chats, the side view and the exact UI, and also the Brain page.
 
-The first request also included the course brief, the DM website rules and my project description. The first version used drawn schematics. The second request replaced them with these screenshots.
+> Change the logo and name of the app from CoTrace to Symbiot, and make the logo a mix of the rings and a brain in between, like a really good logo.
+
+The first request also included the course brief, the DM website rules and my project description. The first version used drawn schematics. The second request replaced them with these screenshots. The third request renamed the app and added the mark, and all screenshots were retaken.

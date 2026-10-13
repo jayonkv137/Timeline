@@ -72,7 +72,7 @@ def test_fastapi_serves_actual_compiled_dist_workspace() -> None:
 
     res = client.get("/")
     assert res.status_code == 200
-    assert "<title>COTRACE · Workspace</title>" in res.text
+    assert "<title>Symbiot · Workspace</title>" in res.text
 
     res_health = client.get("/api/health")
     assert res_health.status_code == 200
