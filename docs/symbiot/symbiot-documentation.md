@@ -1,9 +1,11 @@
-**Title:** Symbiot
-**Category:** Semester project
-**Student:** Jayon K Vinod
-**Course Title:** Designing for Competence
-**Lecturer:** _[name]_
-**Year:** 2026
+## information
+
+- Title: Symbiot
+- Category: Semester project
+- Student/s: Jayon K Vinod
+- Course Title: Designing for Competence
+- Lecturer/s: Peter Von Maydell
+- Year: 2026
 
 ---
 
