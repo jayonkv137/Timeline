@@ -173,9 +173,6 @@
 <hr />
 <h2>In short</h2>
 <p>Symbiot is a chat interface for people who work on long creative or research projects with AI. It maps every chat into <em>goal → outcomes → requirements</em> and shows who shaped each part, so you stay aware of your own direction instead of drifting with the AI's suggestions. It is built on CoTrace, a published method for measuring how much an AI shapes a person's goals.</p>
-<h2>Name and mark</h2>
-<figure class="doc-figure"><img src="logo/symbiot-lockup.png" alt="The Symbiot mark: a human ring and an AI ring, interlocked, with one shared brain between them" /><figcaption>The Symbiot mark: a human ring and an AI ring, interlocked, with one shared brain between them</figcaption></figure>
-<p>The mark is two interlocked rings with one brain between them. The blue ring is me, the human, and the orange ring is the AI. It uses the same two colours as everything inside the app.</p>
 <h2>Context</h2>
 <p>While building my portfolio projects with AI, I kept following suggestions that sounded good. After a few days I could no longer say which ideas were mine and which were the AI's. The chats were long and hard to look back through, and the overload made me lose track of what I had decided.</p>
 <p>The course asks how a tool can build competence instead of replacing it. Symbiot's answer is <strong>awareness, not restriction</strong>: it never blocks or corrects the AI. It makes the AI's influence visible, so the human stays the one who decides.</p>
@@ -267,32 +264,6 @@
 <li>a brain across all chats</li>
 </ul>
 
-<h2>How the images were made, and use of generative AI</h2>
-<ul>
-<li><strong>All images are screenshots of the working prototype</strong>, using one of my real chats. The step number, the title, the one-line explanation and the yellow boxes and labels were added on top afterwards. No image-generation model was used.</li>
-<li>To keep my private chats out of the pictures, the app ran on a copy of my library that holds only my ten reference chats.</li>
-<li><strong>Step 2</strong> was captured in the app's rehearsal mode. It replays this chat's earlier recorded mapping through the real interface, so the in-progress state could be shown without paying for a new model run. All other steps show the normal mapped chat.</li>
-<li><strong>Claude Code (Anthropic)</strong> helped me in two ways:</li>
-<li>It drafted the text from my voice-recorded description, and I edited it.</li>
-<li>It scripted the screenshots and the framing.</li>
-<li><strong>The prototype's mapping</strong> uses a language model (Gemini) to run the CoTrace analysis.</li>
-<li><strong>The name and mark:</strong> Claude Code proposed the logo as SVG code, in four rounds of rendered options (in <code>logo/</code>), from my brief. No image-generation model was used.</li>
-</ul>
-
-<p><strong>My requests to Claude Code</strong> (voice-transcribed, filler words removed):</p>
-<blockquote>
-<p>Help me write a documentation for this full project, based on the simple project description, then context. Write a very simple … what is the current workflow happening in the chat. Very simple: basically what the node does and the simple workflow of the chat. And then also write a very simple, not too complicated documentation for this.</p>
-</blockquote>
-
-<blockquote>
-<p>Please use my exact UI from the working prototype to make this. You created a new UI representation for the use case; instead, showcase it with one of my simple real chats, the side view and the exact UI, and also the Brain page.</p>
-</blockquote>
-
-<blockquote>
-<p>Change the logo and name of the app from CoTrace to Symbiot, and make the logo a mix of the rings and a brain in between, like a really good logo.</p>
-</blockquote>
-
-<p>The first request also included the course brief, the DM website rules and my project description. The first version used drawn schematics. The second request replaced them with these screenshots. The third request renamed the app and added the mark, and all screenshots were retaken.</p>
 <hr />
 <h2>Try running Symbiot with your real chats</h2>
 <p>If you want to run Symbiot locally on your machine with your own data and API key:</p>
