@@ -150,3 +150,44 @@ CoTrace is a research method that analyses a finished chat afterwards. Symbiot a
 > Change the logo and name of the app from CoTrace to Symbiot, and make the logo a mix of the rings and a brain in between, like a really good logo.
 
 The first request also included the course brief, the DM website rules and my project description. The first version used drawn schematics. The second request replaced them with these screenshots. The third request renamed the app and added the mark, and all screenshots were retaken.
+
+---
+
+## Try running Symbiot with your real chats
+
+If you want to run Symbiot locally on your machine with your own data and API key:
+
+1. **Start the app:**
+   - In your terminal, run `./cotrace start`.
+   - It will open your browser at `http://localhost:8765`.
+   - Ten reference chats are already loaded so you can explore the interface right away without setting anything up.
+
+2. **Add your Gemini key (for live mapping):**
+   - Click the gear icon (**Settings**) in the bottom-left corner.
+   - Paste your free Google Gemini API key from [aistudio.google.com](https://aistudio.google.com).
+   - Click **Test Connection** to make sure it works, then **Save**.
+   - Your key stays on your computer in `~/.Cotrace/secrets.json` and is never sent anywhere else.
+
+3. **Drop in your own chat:**
+   - Click the **Upload** icon at the top of the sidebar.
+   - Drag and drop your Claude or ChatGPT export file (`.zip` or `conversations.json`), or any JSON transcript.
+   - Symbiot shows you the chats inside. Pick one and click **Import & Map**.
+
+4. **Watch it map in real time:**
+   - The map grows exchange by exchange next to your conversation.
+   - Click any requirement node to jump straight to the exact words where you or the AI introduced it.
+
+---
+
+## Limitations
+
+- **Cost:** Running the mapping calls Google Gemini in the background. Because it makes multiple model calls per exchange, it costs real money: about $0.02 for a short 3-exchange chat, and around $0.30 for a long 21-exchange chat.
+- **Time:** As the dialogue grows, the pipeline takes longer because it re-checks earlier decisions to keep the map consistent. A 3-exchange chat maps in about 1 minute, but a 21-exchange chat can take 8 to 10 minutes.
+- **The Brain view is early:** The Brain page is still a rough prototype. The grouping and visual layout need to be redesigned to show large libraries of chats clearly.
+
+## Future upgrades
+
+- **Live inside your chats:** The main goal is for people to use Symbiot directly while chatting with ChatGPT or Claude, instead of mapping it afterwards.
+- **Browser extension:** Turn this standalone app into a browser extension that works on top of any AI chat interface.
+- **A better Brain view:** Improve how the Brain page categorises chats by topic and visualises the balance across all of them.
+- **UI polish:** Refine the interface, smooth out the transitions, and make timeline scrubbing feel better.
