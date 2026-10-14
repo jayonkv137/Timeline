@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Symbiot — Project Documentation</title>
+  <style>
+    :root {
+      --bg: #090a0f;
+      --card-bg: #12141c;
+      --border: #232736;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --accent-human: #38bdf8;
+      --accent-ai: #fb923c;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.65;
+      padding: 40px 20px 80px;
+    }
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    header.brand-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+      margin-bottom: 32px;
+    }
+    .badge-course {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: #1e293b;
+      color: #cbd5e1;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+    }
+    h1, h2, h3 {
+      color: #f8fafc;
+      font-weight: 600;
+      line-height: 1.3;
+      margin-top: 36px;
+      margin-bottom: 16px;
+    }
+    h1 { font-size: 32px; }
+    h2 {
+      font-size: 22px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+    h3 { font-size: 18px; }
+    p {
+      margin-bottom: 16px;
+      color: #cbd5e1;
+    }
+    ul {
+      margin-left: 24px;
+      margin-bottom: 20px;
+    }
+    li {
+      margin-bottom: 6px;
+      color: #cbd5e1;
+    }
+    hr {
+      border: 0;
+      height: 1px;
+      background: var(--border);
+      margin: 40px 0;
+    }
+    blockquote {
+      border-left: 3px solid var(--accent-human);
+      background: rgba(56, 189, 248, 0.05);
+      padding: 12px 18px;
+      border-radius: 0 8px 8px 0;
+      margin: 20px 0;
+      font-style: italic;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 14px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: #181c26;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+    figure.doc-figure {
+      margin: 28px 0;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+    figure.doc-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    figcaption {
+      padding: 10px 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+      background: #12141c;
+      border-top: 1px solid var(--border);
+      font-style: italic;
+    }
+    code {
+      background: #1e293b;
+      color: #38bdf8;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    a {
+      color: var(--accent-human);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .numbered-step {
+      font-weight: 500;
+      color: #f1f5f9;
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="brand-nav">
+      <span class="badge-course">Designing for Competence · 2026</span>
+      <span style="font-size: 13px; color: var(--text-muted);">Digital Media Bremen Project Documentation</span>
+    </header>
+    <main>
+      <h2>information</h2>
+<ul>
+<li>Title: Symbiot</li>
+<li>Category: Semester project</li>
+<li>Student/s: Jayon K Vinod</li>
+<li>Course Title: Designing for Competence</li>
+<li>Lecturer/s: Peter Von Maydell</li>
+<li>Year: 2026</li>
+</ul>
+
+<hr />
+<h2>Abstract</h2>
+<p>Symbiot is an AI chat that draws a live map of each conversation and shows which ideas came from you and which came from the AI. It sorts the dialogue into one goal, its outcomes and their requirements, colours every requirement blue (you) or orange (AI), and links it back to the exact words in the chat. A brain view shows this balance across all your chats, so you can see when the AI starts steering.</p>
+<figure class="doc-figure"><img src="website/jkv-symbiot-01.jpg" alt="The Symbiot prototype: one chat located in the brain, with its map beside it" /><figcaption>The Symbiot prototype: one chat located in the brain, with its map beside it</figcaption></figure>
+<hr />
+<h2>In short</h2>
+<p>Symbiot is a chat interface for people who work on long creative or research projects with AI. It maps every chat into <em>goal → outcomes → requirements</em> and shows who shaped each part, so you stay aware of your own direction instead of drifting with the AI's suggestions. It is built on CoTrace, a published method for measuring how much an AI shapes a person's goals.</p>
+<h2>Name and mark</h2>
+<figure class="doc-figure"><img src="logo/symbiot-lockup.png" alt="The Symbiot mark: a human ring and an AI ring, interlocked, with one shared brain between them" /><figcaption>The Symbiot mark: a human ring and an AI ring, interlocked, with one shared brain between them</figcaption></figure>
+<p>The mark is two interlocked rings with one brain between them. The blue ring is me, the human, and the orange ring is the AI. It uses the same two colours as everything inside the app.</p>
+<h2>Context</h2>
+<p>While building my portfolio projects with AI, I kept following suggestions that sounded good. After a few days I could no longer say which ideas were mine and which were the AI's. The chats were long and hard to look back through, and the overload made me lose track of what I had decided.</p>
+<p>The course asks how a tool can build competence instead of replacing it. Symbiot's answer is <strong>awareness, not restriction</strong>: it never blocks or corrects the AI. It makes the AI's influence visible, so the human stays the one who decides.</p>
+<h2>Platform</h2>
+<p>A desktop web app that runs locally on your computer and opens in the browser. You chat with the AI inside it, or bring in earlier chats. The chat sits on the left and its map on the right. The mapping uses a language model (Gemini) in the background.</p>
+<h2>How the map works</h2>
+<p>The examples are from my real chat about setting up my 3D portfolio website.</p>
+<table>
+
+<tr><th>Part</th><th>What it is</th><th>Example from my chat</th></tr>
+<tr><td><strong>Goal</strong> (bright centre)</td><td>What the whole chat is about</td><td>"3D interactive portfolio website"</td></tr>
+<tr><td><strong>Outcome</strong> (circle)</td><td>Something I want to end up with</td><td>"Wired project scaffold and design tokens"</td></tr>
+<tr><td><strong>Requirement</strong> (small dot)</td><td>One concrete decision about that outcome</td><td>"Leftover Vite files must be deleted"</td></tr>
+<tr><td><strong>Colour</strong></td><td>Who brought the requirement in</td><td>blue = me · orange = the AI</td></tr>
+<tr><td><strong>Open question</strong> (hollow ring)</td><td>Something raised but not yet decided</td><td>"Which folder name?"</td></tr>
+<tr><td><strong>Share ring</strong></td><td>The ring around an outcome: how much of it came from me and how much from the AI</td><td>mostly orange on the scaffold outcome</td></tr>
+<tr><td><strong>Timeline</strong> (P1, P2, P3 …)</td><td>One step per exchange (my message plus the AI's reply)</td><td>3 exchanges</td></tr>
+</table>
+
+<h2>What happens in the chat</h2>
+<p class="numbered-step">I chat with the AI as usual. The map panel stays empty.</p>
+<p class="numbered-step">I press <strong>Map this conversation</strong> (or ⌘M).</p>
+<p class="numbered-step">In the background, the CoTrace pipeline reads the chat one exchange at a time. It finds the goal, splits it into outcomes, pulls out the requirements and decides who introduced each one: me or the AI.</p>
+<p class="numbered-step">The map grows next to the chat. The sidebar shows the progress, and I can keep reading and writing.</p>
+<p class="numbered-step">Clicking any dot scrolls the chat to the exact words it came from and highlights them.</p>
+<p class="numbered-step">The timeline replays how the map formed, exchange by exchange.</p>
+<p class="numbered-step">The Brain page shows all mapped chats together. <strong>Locate in Brain</strong> finds the current chat there.</p>
+<p><strong>Prototype status:</strong> everything shown below works in the current prototype. It runs locally, and mapping a chat calls the paid Gemini API.</p>
+<hr />
+<h2>Use case: setting up my 3D portfolio website with AI</h2>
+<p>A real chat with three exchanges:</p>
+<p class="numbered-step">I ask the AI to continue the setup from an earlier chat.</p>
+<p class="numbered-step">I choose a folder name.</p>
+<p class="numbered-step">I type only "start task", and the AI answers with a long step-by-step plan.</p>
+<p><strong>1. Chat with the AI as usual</strong></p>
+<ul>
+<li>A normal chat. The map panel waits until I choose to map it.</li>
+</ul>
+
+<figure class="doc-figure"><img src="website/jkv-symbiot-02.jpg" alt="Step 1: the chat, not mapped yet" /><figcaption>Step 1: the chat, not mapped yet</figcaption></figure>
+<p><strong>2. Map it: it builds in the background</strong></p>
+<ul>
+<li>I press <strong>Map this conversation</strong>.</li>
+<li>The chat is analysed one exchange at a time, and the sidebar shows "Mapping · 1 of 3".</li>
+<li>I can keep reading and writing. Nothing is blocked.</li>
+</ul>
+
+<figure class="doc-figure"><img src="website/jkv-symbiot-03.jpg" alt="Step 2: mapping in the background" /><figcaption>Step 2: mapping in the background</figcaption></figure>
+<p><strong>3. See who shaped each goal</strong></p>
+<ul>
+<li>The goal sits in the centre with four outcomes around it.</li>
+<li>Two outcomes hold only my own requirements (blue): fixing the npm install and the folder name.</li>
+<li>"Wired project scaffold and design tokens" holds five requirements, and all five came from the AI. Three of them arrived right after I typed only "start task".</li>
+</ul>
+
+<figure class="doc-figure"><img src="website/jkv-symbiot-04.jpg" alt="Step 3: who shaped each outcome" /><figcaption>Step 3: who shaped each outcome</figcaption></figure>
+<p><strong>4. Click a dot to see the exact words</strong></p>
+<ul>
+<li>I click an orange dot.</li>
+<li>The chat jumps to the AI's sentence <em>"7e: Delete the leftover Vite junk"</em> and highlights it.</li>
+<li>A strip reads "Introduced by the AI · exchange 3". <strong>Back to reading</strong> returns me to where I was.</li>
+<li>Now I can decide on purpose whether I agree.</li>
+</ul>
+
+<figure class="doc-figure"><img src="website/jkv-symbiot-05.jpg" alt="Step 4: from a dot to the exact words" /><figcaption>Step 4: from a dot to the exact words</figcaption></figure>
+<p><strong>5. Come back later and replay how it formed</strong></p>
+<ul>
+<li>I step back to exchange 1.</li>
+<li>At that point every requirement on the map was mine, and the AI's outcome had none yet.</li>
+<li>This shows when the AI took over.</li>
+</ul>
+
+<figure class="doc-figure"><img src="website/jkv-symbiot-06.jpg" alt="Step 5: replaying exchange 1" /><figcaption>Step 5: replaying exchange 1</figcaption></figure>
+<p><strong>6. See all my chats as one brain</strong></p>
+<ul>
+<li>Each mapped chat claims a patch of the brain, sized by how much happened in it and grouped by topic.</li>
+<li>Inside each patch, blue cells are my share and orange cells are the AI's.</li>
+<li>Any chat is one click away.</li>
+</ul>
+
+<figure class="doc-figure"><img src="website/jkv-symbiot-07.jpg" alt="Step 6: the Brain page" /><figcaption>Step 6: the Brain page</figcaption></figure>
+<hr />
+<h2>Built on</h2>
+<p><strong>CoTrace:</strong> Kim, Mindel, Kim and Wu, <em>Measuring AI Contributions to Goal Shaping</em>, arXiv 2605.21363. Code: github.com/rladmstn1714/CoTrace.</p>
+<p>CoTrace is a research method that analyses a finished chat afterwards. Symbiot adds three things on top of it:</p>
+<ul>
+<li>a map next to the chat</li>
+<li>a link from every requirement back to its exact words</li>
+<li>a brain across all chats</li>
+</ul>
+
+<h2>How the images were made, and use of generative AI</h2>
+<ul>
+<li><strong>All images are screenshots of the working prototype</strong>, using one of my real chats. The step number, the title, the one-line explanation and the yellow boxes and labels were added on top afterwards. No image-generation model was used.</li>
+<li>To keep my private chats out of the pictures, the app ran on a copy of my library that holds only my ten reference chats.</li>
+<li><strong>Step 2</strong> was captured in the app's rehearsal mode. It replays this chat's earlier recorded mapping through the real interface, so the in-progress state could be shown without paying for a new model run. All other steps show the normal mapped chat.</li>
+<li><strong>Claude Code (Anthropic)</strong> helped me in two ways:</li>
+<li>It drafted the text from my voice-recorded description, and I edited it.</li>
+<li>It scripted the screenshots and the framing.</li>
+<li><strong>The prototype's mapping</strong> uses a language model (Gemini) to run the CoTrace analysis.</li>
+<li><strong>The name and mark:</strong> Claude Code proposed the logo as SVG code, in four rounds of rendered options (in <code>logo/</code>), from my brief. No image-generation model was used.</li>
+</ul>
+
+<p><strong>My requests to Claude Code</strong> (voice-transcribed, filler words removed):</p>
+<blockquote>
+<p>Help me write a documentation for this full project, based on the simple project description, then context. Write a very simple … what is the current workflow happening in the chat. Very simple: basically what the node does and the simple workflow of the chat. And then also write a very simple, not too complicated documentation for this.</p>
+</blockquote>
+
+<blockquote>
+<p>Please use my exact UI from the working prototype to make this. You created a new UI representation for the use case; instead, showcase it with one of my simple real chats, the side view and the exact UI, and also the Brain page.</p>
+</blockquote>
+
+<blockquote>
+<p>Change the logo and name of the app from CoTrace to Symbiot, and make the logo a mix of the rings and a brain in between, like a really good logo.</p>
+</blockquote>
+
+<p>The first request also included the course brief, the DM website rules and my project description. The first version used drawn schematics. The second request replaced them with these screenshots. The third request renamed the app and added the mark, and all screenshots were retaken.</p>
+<hr />
+<h2>Try running Symbiot with your real chats</h2>
+<p>If you want to run Symbiot locally on your machine with your own data and API key:</p>
+<p class="numbered-step"><strong>Start the app:</strong></p>
+<ul>
+<li>In your terminal, run <code>./cotrace start</code>.</li>
+<li>It will open your browser at <code>http://localhost:8765</code>.</li>
+<li>Ten reference chats are already loaded so you can explore the interface right away without setting anything up.</li>
+</ul>
+
+<p class="numbered-step"><strong>Add your Gemini key (for live mapping):</strong></p>
+<ul>
+<li>Click the gear icon (<strong>Settings</strong>) in the bottom-left corner.</li>
+<li>Paste your free Google Gemini API key from <a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a>.</li>
+<li>Click <strong>Test Connection</strong> to make sure it works, then <strong>Save</strong>.</li>
+<li>Your key stays on your computer in <code>~/.Cotrace/secrets.json</code> and is never sent anywhere else.</li>
+</ul>
+
+<p class="numbered-step"><strong>Drop in your own chat:</strong></p>
+<ul>
+<li>Click the <strong>Upload</strong> icon at the top of the sidebar.</li>
+<li>Drag and drop your Claude or ChatGPT export file (<code>.zip</code> or <code>conversations.json</code>), or any JSON transcript.</li>
+<li>Symbiot shows you the chats inside. Pick one and click <strong>Import & Map</strong>.</li>
+</ul>
+
+<p class="numbered-step"><strong>Watch it map in real time:</strong></p>
+<ul>
+<li>The map grows exchange by exchange next to your conversation.</li>
+<li>Click any requirement node to jump straight to the exact words where you or the AI introduced it.</li>
+</ul>
+
+<hr />
+<h2>Limitations</h2>
+<ul>
+<li><strong>Cost:</strong> Running the mapping calls Google Gemini in the background. Because it makes multiple model calls per exchange, it costs real money: about $0.02 for a short 3-exchange chat, and around $0.30 for a long 21-exchange chat.</li>
+<li><strong>Time:</strong> As the dialogue grows, the pipeline takes longer because it re-checks earlier decisions to keep the map consistent. A 3-exchange chat maps in about 1 minute, but a 21-exchange chat can take 8 to 10 minutes.</li>
+<li><strong>The Brain view is early:</strong> The Brain page is still a rough prototype. The grouping and visual layout need to be redesigned to show large libraries of chats clearly.</li>
+</ul>
+
+<h2>Future upgrades</h2>
+<ul>
+<li><strong>Live inside your chats:</strong> The main goal is for people to use Symbiot directly while chatting with ChatGPT or Claude, instead of mapping it afterwards.</li>
+<li><strong>Browser extension:</strong> Turn this standalone app into a browser extension that works on top of any AI chat interface.</li>
+<li><strong>A better Brain view:</strong> Improve how the Brain page categorises chats by topic and visualises the balance across all of them.</li>
+<li><strong>UI polish:</strong> Refine the interface, smooth out the transitions, and make timeline scrubbing feel better.</li>
+</ul>
+
+    </main>
+  </div>
+</body>
+</html>
