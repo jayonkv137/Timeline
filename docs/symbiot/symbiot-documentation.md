@@ -120,6 +120,8 @@ A real chat with three exchanges:
 
 **CoTrace:** Kim, Mindel, Kim and Wu, *Measuring AI Contributions to Goal Shaping*, arXiv 2605.21363. Code: github.com/rladmstn1714/CoTrace.
 
+**Project Repository:** [github.com/jayonkv137/Timeline](https://github.com/jayonkv137/Timeline)
+
 CoTrace is a research method that analyses a finished chat afterwards. Symbiot adds three things on top of it:
 
 - a map next to the chat
@@ -133,6 +135,7 @@ CoTrace is a research method that analyses a finished chat afterwards. Symbiot a
 If you want to run Symbiot locally on your machine with your own data and API key:
 
 1. **Start the app:**
+   - Clone the repository: `git clone https://github.com/jayonkv137/Timeline.git symbiot`
    - In your terminal, run `./cotrace start`.
    - It will open your browser at `http://localhost:8765`.
    - Ten reference chats are already loaded so you can explore the interface right away without setting anything up.
