@@ -116,6 +116,14 @@ A real chat with three exchanges:
 
 ---
 
+## Product demo
+
+A product demo showcasing the problem statement and the product features. Uses songs from *The Social Network* movie soundtrack, and the visuals were made using motion graphics effects from Claude Opus 5.5.
+
+- **Video:** [Product Demo Video](./video/symbiot-demo.mp4)
+
+---
+
 ## Built on
 
 **CoTrace:** Kim, Mindel, Kim and Wu, *Measuring AI Contributions to Goal Shaping*, arXiv 2605.21363. Code: github.com/rladmstn1714/CoTrace.

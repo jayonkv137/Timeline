@@ -38,6 +38,7 @@ data/Claude Manifest*.json
 .DS_Store
 Thumbs.db
 *.mov
+*.mp4
 docs/symbiot/*.pdf
 
 # Chrome temp
