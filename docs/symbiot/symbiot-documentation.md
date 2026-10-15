@@ -177,3 +177,10 @@ If you want to run Symbiot locally on your machine with your own data and API ke
 - **Browser extension:** Turn this standalone app into a browser extension that works on top of any AI chat interface.
 - **A better Brain view:** Improve how the Brain page categorises chats by topic and visualises the balance across all of them.
 - **UI polish:** Refine the interface, smooth out the transitions, and make timeline scrubbing feel better.
+
+---
+
+## Credits
+
+Claude Code and other LLM tools were used to write the documentation, develop the application throughout the design process, and create the product demo video.
+
